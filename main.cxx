@@ -58,7 +58,7 @@ int main(void) {
 void InitializeRunManager(G4RunManager *runManager) {
 
 	runManager->SetUserInitialization(new DetectorConstruction());
-	//runManager->SetUserInitialization(new PhysicsList());
+	runManager->SetUserInitialization(new PhysicsList());
 	//runManager->SetUserAction(new PrimaryGeneratorAction(""));
 	
 	runManager->Initialize();
