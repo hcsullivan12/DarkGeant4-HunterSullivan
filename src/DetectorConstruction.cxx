@@ -34,7 +34,7 @@ DetectorConstruction::DetectorConstruction() {
 	
 	this->Air         = new Material("G4_AIR");
     this->LiquidArgon = new Material("LiquidArgon", 18., 39.95 * g/mole,
-														 1.390 * g/cm3);
+                                                         1.390 * g/cm3);
 	
 }
 
@@ -71,8 +71,8 @@ void DetectorConstruction::InitializeWorld() {
 	 * */
 	 
 	this->worldLog = new G4LogicalVolume(this->worldBox, 
-										 this->Air->GetMaterialPointer(), 
-										 "World");
+                                         this->Air->GetMaterialPointer(), 
+                                         "World");
 	
 }
 
@@ -90,11 +90,11 @@ void DetectorConstruction::InitializeDetector() {
 	G4double spanningAngle = 360.*deg;
 	
 	this->trackerTube = new G4Tubs("Tracker",
-									innerRadius,
-									outerRadius,
-									hz,
-									startAngle,
-									spanningAngle);
+                                    innerRadius,
+                                    outerRadius,
+                                    hz,
+                                    startAngle,
+                                    spanningAngle);
 									
 	/*
 	 * With the defined object, you can create an object with made
@@ -105,24 +105,24 @@ void DetectorConstruction::InitializeDetector() {
 	 * 
 	 * */									
 	this->trackerLog = new G4LogicalVolume(this->trackerTube, 
-										   this->LiquidArgon->GetMaterialPointer(), 
-										   "Tracker");
+                                           this->LiquidArgon->GetMaterialPointer(),
+                                           "Tracker");
 	
 }
 
 void DetectorConstruction::InitializePhysicalVolume() {
 	
 	this->WorldPhysicalVolume = new G4PVPlacement(0, G4ThreeVector(), 
-										  this->worldLog, "World",
-										  0, false, 0);
+                                             this->worldLog, "World",
+                                             0, false, 0);
 									
 	G4VPhysicalVolume *TrackerPhysical = new G4PVPlacement(0, 
-											 G4ThreeVector(), 
-										     this->trackerLog,
-										     "Detector",
-										     this->worldLog,
-										     false,
-										     0);
+                                             G4ThreeVector(), 
+                                             this->trackerLog,
+                                             "Detector",
+                                             this->worldLog,
+                                             false,
+                                             0);
 	
 	if (TrackerPhysical == NULL)
 		cout << "Tracker physical volume could not be initialized\n";

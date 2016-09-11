@@ -58,13 +58,17 @@ void PhysicsList::ConstructParticle() {
 }
 
 
+//Proton Headers
+#include "G4ProtonInelasticProcess.hh"
+#include
+
+
 typedef struct {
 	
 	G4String Name;
 	void (*Function)(G4ProcessManager *);
 	
 } FunctionTable;
-
 
 //Function Prototypes
 void Particle_Gamma(G4ProcessManager *pm);
