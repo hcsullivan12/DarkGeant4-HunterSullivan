@@ -24,6 +24,19 @@
 #ifndef PHYSICSLIST_H
 #define PHYSICSLIST_H
 
+#include "G4VUserPhysicsList.hh"
 
+class PhysicsList : public G4VUserPhysicsList {
+	
+	public:
+	
+		PhysicsList();
+		~PhysicsList();
+		
+		void ConstructParticle();
+		void ConstructProcess();
+	
+	
+};
 
 #endif

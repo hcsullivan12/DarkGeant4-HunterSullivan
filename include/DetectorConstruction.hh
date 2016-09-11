@@ -58,12 +58,14 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 		G4LogicalVolume *worldLog;
 		G4LogicalVolume *trackerLog;
 		
+		G4VPhysicalVolume *WorldPhysicalVolume;
+		
 		Material *Air;
 		Material *LiquidArgon;
 	
 		void InitializeWorld();
 		void InitializeDetector();
-		void InitializePhysicalSpace();
+		void InitializePhysicalVolume();
 		
 };
 

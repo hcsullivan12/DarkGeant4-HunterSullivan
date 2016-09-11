@@ -22,3 +22,42 @@
  */
 
 #include "PhysicsList.hh"
+
+#include "G4ParticleDefinition.hh"
+
+//Particle Constructors
+#include "G4LeptonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BosonConstructor.hh"
+
+//Process Related Headers
+#include "G4VProcess"
+#include "G4ProcessManager"
+
+PhysicsList::PhysicsList() {
+	
+	
+	
+}
+
+PhysicsList::~PhysicsList() {
+	
+	
+	
+}
+
+void PhysicsList::ConstructParticle() {
+	
+	G4BaryonConstructor::ConstructParticle();
+	G4MesonConstructor::ConstructParticle();
+	G4BosonConstructor::ConstructParticle();
+	G4LeptonConstructor::ConstructParticle();
+	
+}
+
+void PhysicsList::ConstructProcess() {
+	
+	
+	
+}

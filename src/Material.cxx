@@ -27,7 +27,7 @@
 #include "G4NistManager.hh"
 
 
-static G4NistManager *NistManager = G4NistManager::Instance();
+static G4NistManager *NistManager = NULL;
 
 /*
  *
@@ -36,6 +36,16 @@ static G4NistManager *NistManager = G4NistManager::Instance();
  * */
  
 Material::Material(G4String name) {
+	
+	/*
+	 * 
+	 * Fixes SEGFAULT if NistManager is set during runtime and not
+	 * at compile time.
+	 * 
+	 * */
+	if (NistManager == NULL) {
+		NistManager = G4NistManager::Instance();
+	}
 	
 	this->DefinedMaterial = NistManager->FindOrBuildMaterial(name);
 	
@@ -52,7 +62,6 @@ Material::Material(G4String name, G4double z, G4double a, G4double density) {
 										   z = this->z, 
 								           this->a, 
 								           this->density);
-	
 }
 
 Material::~Material() {

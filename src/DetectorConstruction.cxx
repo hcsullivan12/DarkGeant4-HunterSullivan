@@ -25,13 +25,16 @@
 
 //Geant4
 #include "G4Material.hh"
+#include "G4PVPlacement.hh"
+#include "G4ThreeVector.hh"
+
+using std::cout;
 
 DetectorConstruction::DetectorConstruction() {
 	
-	this->Air = new Material("G4_AIR");
+	this->Air         = new Material("G4_AIR");
     this->LiquidArgon = new Material("LiquidArgon", 18., 39.95 * g/mole,
 														 1.390 * g/cm3);
-	
 	
 }
 
@@ -45,8 +48,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct() {
 
 	InitializeWorld();
 	InitializeDetector();
+	InitializePhysicalVolume();
 	
-	return NULL;
+	return this->WorldPhysicalVolume;
 }
 
 void DetectorConstruction::InitializeWorld() {
@@ -106,8 +110,21 @@ void DetectorConstruction::InitializeDetector() {
 	
 }
 
-void DetectorConstruction::InitializePhysicalSpace() {
+void DetectorConstruction::InitializePhysicalVolume() {
 	
+	this->WorldPhysicalVolume = new G4PVPlacement(0, G4ThreeVector(), 
+										  this->worldLog, "World",
+										  0, false, 0);
+									
+	G4VPhysicalVolume *TrackerPhysical = new G4PVPlacement(0, 
+											 G4ThreeVector(), 
+										     this->trackerLog,
+										     "Detector",
+										     this->worldLog,
+										     false,
+										     0);
 	
+	if (TrackerPhysical == NULL)
+		cout << "Tracker physical volume could not be initialized\n";
 	
 }
