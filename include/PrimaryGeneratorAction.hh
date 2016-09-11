@@ -1,5 +1,5 @@
 /*
- * ActionInitialization.cxx
+ * PrimaryGeneratorAction.hh
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
@@ -21,7 +21,11 @@
  * 
  */
 
-#include "ActionInitialization.hh"
+
+#ifndef PRIMARYGENERATORACTION_H
+#define PRIMARYGENERATORACTION_H
 
 
+
+#endif
 
