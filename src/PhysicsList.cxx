@@ -32,8 +32,9 @@
 #include "G4BosonConstructor.hh"
 
 //Process Related Headers
-#include "G4VProcess"
-#include "G4ProcessManager"
+#include "G4VProcess.hh"
+#include "G4ProcessManager.hh"
+
 
 PhysicsList::PhysicsList() {
 	
@@ -56,7 +57,68 @@ void PhysicsList::ConstructParticle() {
 	
 }
 
+
+typedef struct {
+	
+	G4String Name;
+	void (*Function)(G4ProcessManager *);
+	
+} FunctionTable;
+
+
+//Function Prototypes
+void Particle_Gamma(G4ProcessManager *pm);
+void Particle_Electron(G4ProcessManager *pm);
+void Particle_Proton(G4ProcessManager *pm);
+
+static const int NumRecordsInTable = 3;
+
+static FunctionTable Table[NumRecordsInTable] = 
+{{"gamma" ,  &Particle_Gamma},
+ {"e-"    ,  &Particle_Electron},
+ {"proton",  &Particle_Proton}};
+
 void PhysicsList::ConstructProcess() {
+	
+	/*
+	 * Mandatory function call. Describes a particle's motion in
+	 * space and time.
+	 * 
+	 * */
+	AddTransportation();
+	
+	
+	theParticleIterator->reset();
+	
+	while ((*theParticleIterator)()) {
+	
+		G4ParticleDefinition *particle = theParticleIterator->value();
+		G4ProcessManager *pm = particle->GetProcessManager();
+		G4String particleName = particle->GetParticleName();
+		
+		//A bit of indirection leads to cleaner code overall.
+		for (int i = 0; i < NumRecordsInTable;i++)
+			if (particleName == Table[i].Name)
+				Table[i].Function(pm);
+			
+		
+	}
+	
+}
+
+void Particle_Gamma(G4ProcessManager *pm) {
+	
+	
+	
+}
+
+void Particle_Electron(G4ProcessManager *pm) {
+	
+	
+	
+}
+
+void Particle_Proton(G4ProcessManager *pm) {
 	
 	
 	
