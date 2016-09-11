@@ -57,10 +57,22 @@ void PhysicsList::ConstructParticle() {
 	
 }
 
+//Generic Headers
+#include "G4LElastic.hh"
+#include "G4LCapture.hh"
+
+//Hadron Headers
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronCaptureProcess.hh"
 
 //Proton Headers
 #include "G4ProtonInelasticProcess.hh"
-#include
+
+//Muon Headers
+#include "G4MuMultipleScattering.hh"
+#include "G4MuIonisation.hh" 
+#include "G4MuBremsstrahlung.hh" 
+#include "G4MuPairProduction.hh" 
 
 
 typedef struct {
@@ -74,13 +86,16 @@ typedef struct {
 void Particle_Gamma(G4ProcessManager *pm);
 void Particle_Electron(G4ProcessManager *pm);
 void Particle_Proton(G4ProcessManager *pm);
+void Particle_Muon(G4ProcessManager *pm);
 
-static const int NumRecordsInTable = 3;
+static const int NumRecordsInTable = 5;
 
 static FunctionTable Table[NumRecordsInTable] = 
 {{"gamma" ,  &Particle_Gamma},
  {"e-"    ,  &Particle_Electron},
- {"proton",  &Particle_Proton}};
+ {"proton",  &Particle_Proton},
+ {"mu+"   ,  &Particle_Muon},
+ {"mu-"   ,  &Particle_Muon}};
 
 void PhysicsList::ConstructProcess() {
 	
@@ -125,5 +140,12 @@ void Particle_Electron(G4ProcessManager *pm) {
 void Particle_Proton(G4ProcessManager *pm) {
 	
 	
+	
+}
+
+void Particle_Muon(G4ProcessManager *pm) {
+
+	pm->AddProcess(new G4MuMultipleScattering(), -1, 1, 1);
+	pm->AddProcess(new G4MuIonisation(), -1, 2, 2);
 	
 }
