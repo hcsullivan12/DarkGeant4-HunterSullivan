@@ -24,3 +24,61 @@
 
 #include "PrimaryGeneratorAction.hh"
 
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+
+PrimaryGeneratorAction::PrimaryGeneratorAction() 
+/*
+ * Calls the G4VUserPrimaryGeneratorAction constructor which will halt
+ * the execution of the program if PrimaryGeneratorAction is initialized
+ * to the runManager before PhysicsList is.
+ * 
+ * */
+ : G4VUserPrimaryGeneratorAction()
+
+{
+	
+	/*
+	 * 
+	 * Default constructor just makes a single particle gun with a
+	 * muon as the primary particle.
+	 * 
+	 * It starts at the origin and moves in the positive z direction
+	 * */
+	G4int numParticles = 1;
+	this->ParticleGun = new G4ParticleGun(numParticles);
+	
+	G4ParticleTable *ParticleTable = G4ParticleTable::GetParticleTable();
+	
+	
+	this->ParticleGun->SetParticleDefinition(ParticleTable->FindParticle("mu+"));
+	this->ParticleGun->SetParticleEnergy(1.*MeV);
+	this->ParticleGun->SetParticlePosition(G4ThreeVector(0, 0, 0));
+	this->ParticleGun->SetParticleMomentumDirection(G4ThreeVector(0, 0, 1));
+	
+}
+
+PrimaryGeneratorAction::PrimaryGeneratorAction(G4String ParticleName,
+                                               G4double Energy,
+                                               G4ThreeVector Position,
+                                               G4ThreeVector MomentumDirection) 
+ : G4VUserPrimaryGeneratorAction()
+{
+	
+	
+   
+}
+
+PrimaryGeneratorAction::~PrimaryGeneratorAction() {
+	
+	delete this->ParticleGun;
+	
+}
+
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
+	
+	this->ParticleGun->GeneratePrimaryVertex(event);
+	
+}

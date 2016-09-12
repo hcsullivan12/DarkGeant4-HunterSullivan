@@ -25,7 +25,30 @@
 #ifndef PRIMARYGENERATORACTION_H
 #define PRIMARYGENERATORACTION_H
 
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ThreeVector.hh"
 
+class G4ParticleGun;
+class G4Event;
+
+class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+	
+	public:
+	
+		PrimaryGeneratorAction();
+		PrimaryGeneratorAction(G4String ParticleName,
+                               G4double Energy,
+                               G4ThreeVector Position,
+                               G4ThreeVector MomentumDirection);
+		~PrimaryGeneratorAction();
+		
+		void GeneratePrimaries(G4Event *event);
+		
+	private:
+	
+		G4ParticleGun *ParticleGun;
+	
+};
 
 #endif
 
