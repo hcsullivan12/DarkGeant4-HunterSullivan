@@ -24,8 +24,6 @@
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -60,13 +58,22 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 	
 }
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(G4String ParticleName,
+PrimaryGeneratorAction::PrimaryGeneratorAction(G4int NumParticles,
+                                               G4String ParticleName,
                                                G4double Energy,
                                                G4ThreeVector Position,
                                                G4ThreeVector MomentumDirection) 
  : G4VUserPrimaryGeneratorAction()
 {
 	
+	this->ParticleGun = new G4ParticleGun(NumParticles);
+	
+	G4ParticleTable *ParticleTable = G4ParticleTable::GetParticleTable();
+	
+	this->ParticleGun->SetParticleDefinition(ParticleTable->FindParticle(ParticleName));
+	this->ParticleGun->SetParticleEnergy(Energy);
+	this->ParticleGun->SetParticlePosition(Position);
+	this->ParticleGun->SetParticleMomentumDirection(MomentumDirection);
 	
    
 }
