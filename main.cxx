@@ -21,36 +21,56 @@
  * 
  */
 
-#include "G4UImanager.hh"
+//Geant4 Headers
 #include "G4RunManager.hh"
 #include "G4ThreeVector.hh"
-#include "G4VisExecutive.hh"
 #include "G4VUserDetectorConstruction.hh"
 
+
+#ifdef G4VIS_USE
+
+	#include "G4VisExecutive.hh"
+	void InitializeVisManager(G4VisManager *vis);
+	
+#endif
+#ifdef G4UI_USE
+
+	#include "G4UImanager.hh"
+	void InitializeUIManager(G4UImanager *ui);
+	
+#endif
+
+//User Headers
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "ActionInitialization.hh"
+#include "PrimaryGeneratorAction.hh"
 
+
+//Function Prototypes
 void InitializeRunManager(G4RunManager *runManager);
-void InitializeUIManager(G4UImanager *ui);
-void InitializeVisManager(G4VisManager *vis);
 
 int main(void) {
 	
 	G4RunManager *runManager = new G4RunManager();
-	G4UImanager  *ui         = G4UImanager::GetUIpointer();
-	G4VisManager *vis        = new G4VisExecutive();
-	
 	InitializeRunManager(runManager);
-	InitializeUIManager(ui);
-	InitializeVisManager(vis);
 	
-	/*
-	 * 
-	 * I will presently not delete anything unless I know it can be
-	 * destroyed.
-	 * 
-	 * */
+#ifdef G4VIS_USE
+	G4VisManager *vis = new G4VisExecutive();
+	InitializeVisManager(vis);
+#endif
+#ifdef G4UI_USE
+	G4UImanager  *ui = G4UImanager::GetUIpointer();
+	InitializeUIManager(ui);
+#endif
+
+	std::cin.get();
+
+#ifdef G4UI_USE
+	delete ui;
+#endif
+#ifdef G4VIS_USE
+	delete vis;
+#endif	
 	
 	return 0;
 }
@@ -59,23 +79,27 @@ void InitializeRunManager(G4RunManager *runManager) {
 
 	runManager->SetUserInitialization(new DetectorConstruction());
 	runManager->SetUserInitialization(new PhysicsList());
-	//runManager->SetUserAction(new PrimaryGeneratorAction(""));
+	runManager->SetUserAction(new PrimaryGeneratorAction());
 	
 	runManager->Initialize();
 	
 }
-
+#ifdef G4UI_USE
 void InitializeUIManager(G4UImanager *ui) {
 
 	ui->ApplyCommand("/run/verbose 1");
 	ui->ApplyCommand("/event/verbose 1");
 	ui->ApplyCommand("/tracking/verbose 1");
 	
+	ui->ApplyCommand("/control/execute vis.mac");
 }
+#endif
 
+#ifdef G4VIS_USE
 void InitializeVisManager(G4VisManager *vis) {
 
 	vis->Initialize();
 	
 }
+#endif
 
