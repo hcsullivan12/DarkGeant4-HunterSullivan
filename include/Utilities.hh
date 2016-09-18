@@ -36,7 +36,7 @@
 using std::string;
 
 template <typename T>
-struct VectorG4doubleStruct {
+struct FourVectorStruct {
 	
 	int x_length;
 	int y_length;
@@ -62,19 +62,19 @@ void Initialize2dArray(int x_length, int y_length, T **array) {
 }
 
 template <typename T>
-VectorG4doubleStruct<T> *Get_VectorStruct_FromFile(string filename) {
+FourVectorStruct<T> *Get_VectorStruct_FromFile(string filename) {
 
 	int FileLength = DetermineFileLength(filename);
 	
 	if (FileLength <= 0) {
 	
-		printf("File %s invalid. Unable to create VectorG4doubleStruct\n",
+		printf("File %s invalid. Unable to create FourVectorStruct\n",
 				filename.c_str());
 		return NULL;
 		
 	}
 	
-	VectorG4doubleStruct<T> *ThisStruct = new VectorG4doubleStruct<T>;
+	FourVectorStruct<T> *ThisStruct = new FourVectorStruct<T>;
 	ThisStruct->x_length = 4;
 	ThisStruct->y_length = FileLength;
 	Initialize2dArray(ThisStruct->x_length,

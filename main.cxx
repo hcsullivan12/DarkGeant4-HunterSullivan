@@ -55,10 +55,10 @@
 using std::string;
 using std::vector;
 using std::cout;
-using stdd:cin;
+using std::cin;
 
 static vector<G4String> ExecutionVector;
-static VectorG4doubleStruct<G4double> *JBStruct = NULL;
+static FourVectorStruct<G4double> *JBStruct = NULL;
 
 //Function Prototypes
 void Clean();
