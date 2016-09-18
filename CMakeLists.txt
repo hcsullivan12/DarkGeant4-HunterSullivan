@@ -36,10 +36,13 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 add_executable(main main.cxx ${sources} ${headers})
 target_link_libraries(main ${Geant4_LIBRARIES})
 
-MESSAGE("${PROJECT_SOURCE_DIRECTORY}")
-
 add_custom_command(TARGET main PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                    ${PROJECT_SOURCE_DIR}/vis.mac
                    ${PROJECT_BINARY_DIR}/vis.mac
+)
+add_custom_command(TARGET main PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                   ${PROJECT_SOURCE_DIR}/basicrun.mac
+                   ${PROJECT_BINARY_DIR}/basicrun.mac
 )
