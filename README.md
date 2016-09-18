@@ -21,6 +21,6 @@ The following command is subject to change with time.
 ./DarkGeant4 -execute basicrun.mac
 ```
 
-A window should be rendered on your screen with a basic cylindrical volume which is made of Liquid Argon.
+A window should be rendered on your screen with a basic cylindrical volume (Presently made out of liquid argon).
 
 To see some action happen on screen, select your terminal and press enter. The code is presently waiting for a carriage return before it executes the run phase.`
