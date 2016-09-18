@@ -33,15 +33,15 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(main main.cxx ${sources} ${headers})
-target_link_libraries(main ${Geant4_LIBRARIES})
+add_executable(DarkGeant4 main.cxx ${sources} ${headers})
+target_link_libraries(DarkGeant4 ${Geant4_LIBRARIES})
 
-add_custom_command(TARGET main PRE_BUILD
+add_custom_command(TARGET DarkGeant4 PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                    ${PROJECT_SOURCE_DIR}/vis.mac
                    ${PROJECT_BINARY_DIR}/vis.mac
 )
-add_custom_command(TARGET main PRE_BUILD
+add_custom_command(TARGET DarkGeant4 PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                    ${PROJECT_SOURCE_DIR}/basicrun.mac
                    ${PROJECT_BINARY_DIR}/basicrun.mac
