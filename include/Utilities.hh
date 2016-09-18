@@ -41,8 +41,7 @@ struct VectorG4doubleStruct {
 	int x_length;
 	int y_length;
 	
-	T **array;
-	
+	T **array;	
 	
 };
 
@@ -69,7 +68,7 @@ VectorG4doubleStruct<T> *Get_VectorStruct_FromFile(string filename) {
 	
 	if (FileLength <= 0) {
 	
-		printf("File %s invalid. Unable to create VectorG4doubleStruct",
+		printf("File %s invalid. Unable to create VectorG4doubleStruct\n",
 				filename.c_str());
 		return NULL;
 		

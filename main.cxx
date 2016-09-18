@@ -55,6 +55,7 @@
 using std::string;
 using std::vector;
 using std::cout;
+using stdd:cin;
 
 static vector<G4String> ExecutionVector;
 static VectorG4doubleStruct<G4double> *JBStruct = NULL;
@@ -63,28 +64,53 @@ static VectorG4doubleStruct<G4double> *JBStruct = NULL;
 void Clean();
 void HandleArguments(int argc, char *argv[]);
 void InitializeRunManager(G4RunManager *runManager);
+void InitializeState();
 
 int main(int argc, char *argv[]) {
 	
 	if (argc > 1)
 		HandleArguments(argc, argv);
 	
-	G4RunManager *runManager = new G4RunManager();
-	InitializeRunManager(runManager);
-	
-#ifdef G4VIS_USE
-	InitializeVisManager();
-#endif
-#ifdef G4UI_USE
-	InitializeUIManager();
-#endif
-
+	InitializeState();
 	std::cin.get();
-	
 	Clean();
 	
 	return 0;
 }
+
+void InitializeState() {
+	
+	G4RunManager *runManager = new G4RunManager();
+	InitializeRunManager(runManager);
+	
+#ifdef G4VIS_USE
+
+	InitializeVisManager();
+	
+#endif
+#ifdef G4UI_USE
+
+	InitializeUIManager();
+	if (ExecutionVector.size() != 0)
+		cin.get();
+	for (size_t i = 0; i < ExecutionVector.size();i++)
+		ui->ApplyCommand(ExecutionVector[i]);
+		
+#endif
+	
+	if (JBStruct != NULL) {
+	
+		/*
+		 * TODO
+		 * 
+		 * Implement Functionality
+		 * 
+		 * */
+		
+	}
+	
+}
+
 void Clean() {
 	
 #ifdef G4UI_USE
@@ -117,9 +143,6 @@ void InitializeUIManager() {
 	
 	ui->ApplyCommand("/control/execute vis.mac");
 	
-	std::cin.get();
-	for (size_t i = 0; i < ExecutionVector.size();i++)
-		ui->ApplyCommand(ExecutionVector[i]);
 }
 #endif
 

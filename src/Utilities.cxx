@@ -30,7 +30,7 @@ int DetermineFileLength(string filename) {
 	
 	if (fp == NULL) {
 	
-		printf("File %s not found", filename.c_str());
+		printf("File %s not found\n", filename.c_str());
 		return -1;
 		
 	}
