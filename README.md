@@ -9,16 +9,14 @@ In the working directory, type the following commands to build the application. 
 ```
 mkdir build
 cd build
-```
-
-```
-cd build
-```
-
-```
 cmake -DGeant4_DIR=/path/to/Geant4/dir ../
+make
 ```
 
+## Basic muon run.
+
+The following command is subject to change with time
+
 ```
-make
+./DarkGeant4 -execute basicrun.mac
 ```
