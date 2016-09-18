@@ -8,6 +8,7 @@ In the working directory, type the following commands to build the application. 
 
 ```
 mkdir build
+cd build
 ```
 
 ```
