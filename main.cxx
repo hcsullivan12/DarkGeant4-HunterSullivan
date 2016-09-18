@@ -29,13 +29,15 @@
 #ifdef G4VIS_USE
 
 	#include "G4VisExecutive.hh"
-	void InitializeVisManager(G4VisManager *vis);
+	void InitializeVisManager();
+	static G4VisManager *vis = new G4VisExecutive();
 	
 #endif
 #ifdef G4UI_USE
 
 	#include "G4UImanager.hh"
-	void InitializeUIManager(G4UImanager *ui);
+	void InitializeUIManager();
+	static G4UImanager  *ui = G4UImanager::GetUIpointer();
 	
 #endif
 
@@ -43,6 +45,7 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "Utilities.hh"
 
 // C & C++ Headers
 #include <cstring>
@@ -54,8 +57,10 @@ using std::vector;
 using std::cout;
 
 static vector<G4String> ExecutionVector;
+static VectorG4doubleStruct<G4double> *JBStruct = NULL;
 
 //Function Prototypes
+void Clean();
 void HandleArguments(int argc, char *argv[]);
 void InitializeRunManager(G4RunManager *runManager);
 
@@ -68,26 +73,30 @@ int main(int argc, char *argv[]) {
 	InitializeRunManager(runManager);
 	
 #ifdef G4VIS_USE
-	G4VisManager *vis = new G4VisExecutive();
-	InitializeVisManager(vis);
+	InitializeVisManager();
 #endif
 #ifdef G4UI_USE
-	G4UImanager  *ui = G4UImanager::GetUIpointer();
-	InitializeUIManager(ui);
+	InitializeUIManager();
 #endif
 
 	std::cin.get();
-	runManager->BeamOn(30);
-	std::cin.get();
-
+	
+	Clean();
+	
+	return 0;
+}
+void Clean() {
+	
 #ifdef G4UI_USE
 	delete ui;
 #endif
 #ifdef G4VIS_USE
 	delete vis;
 #endif	
+
+	delete JBStruct->array;
+	delete JBStruct;
 	
-	return 0;
 }
 
 void InitializeRunManager(G4RunManager *runManager) {
@@ -100,7 +109,7 @@ void InitializeRunManager(G4RunManager *runManager) {
 	
 }
 #ifdef G4UI_USE
-void InitializeUIManager(G4UImanager *ui) {
+void InitializeUIManager() {
 
 	ui->ApplyCommand("/run/verbose 1");
 	ui->ApplyCommand("/event/verbose 1");
@@ -108,36 +117,45 @@ void InitializeUIManager(G4UImanager *ui) {
 	
 	ui->ApplyCommand("/control/execute vis.mac");
 	
+	std::cin.get();
 	for (size_t i = 0; i < ExecutionVector.size();i++)
 		ui->ApplyCommand(ExecutionVector[i]);
 }
 #endif
 
 #ifdef G4VIS_USE
-void InitializeVisManager(G4VisManager *vis) {
+void InitializeVisManager() {
 
 	vis->Initialize();
 	
 }
 #endif
 
-// String-Function structure
-typedef struct {
+
+
+
+
+struct ArgumentTable {
 	
 	string name;
 	void (*Function)(int argc, char *argv[], int index);
 	
-} ArgumentTable;
+};
+
 
 
 //Argument Function Prototypes
 void Execute_Argument(int argc, char *argv[], int index);
+void JBInput_Argument(int argc, char *argv[], int index);
 
 
-//Argument Function table
-static const int numHandledArguments = 1;
+
+static const int numHandledArguments = 2;
 static const ArgumentTable Table[numHandledArguments] =
-{{"-execute", &Execute_Argument}};
+{{"-execute", &Execute_Argument},
+ {"-JBInput", &JBInput_Argument}};
+
+
 
 /*
  * 
@@ -165,6 +183,22 @@ void Execute_Argument(int argc, char *argv[], int index) {
 	
 	G4String CharLiteralToString(argv[index + 1]);
 	ExecutionVector.push_back("/control/execute " + CharLiteralToString);
+	
+}
+
+void JBInput_Argument(int argc, char *argv[], int index) {
+
+	/*
+	 * Output.dat is not a permanent filename in Josh's code, however
+	 * I don't see much reason to change it to something else so
+	 * I'm going to pretend it's just Output.dat always.
+	 * 
+	 * Subject to change.
+	 * 
+	 * */
+	string filename("Output.dat");
+	
+	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
 	
 }
 

@@ -25,27 +25,78 @@
 #ifndef UTILITIES_H
 #define UTILITIES_H
 
+// C/C++ Headers
+#include <string>
+#include <cstdio>
+
+
 //Geant4 Headers
 #include "G4ThreeVector.hh"
 
 using std::string;
 
-typedef struct {
+template <typename T>
+struct VectorG4doubleStruct {
 	
 	int x_length;
 	int y_length;
 	
-	G4double **array;
+	T **array;
 	
 	
-} VectorG4doubleStruct;
+};
 
 int DetermineFileLength(string filename);
 
-VectorG4doubleStruct *Get_VectorStruct_FromFile(string filename, G4double dummy);
 
 template <typename T>
-void Initialize2dArray(int x_length, int y_length, T **array);
+void Initialize2dArray(int x_length, int y_length, T **array) {
+	
+	array = new T*[y_length];
+	
+	for (int x = 0;x < y_length;x++) {
+	
+		array[x] = new T[x_length];
+		
+	}
+
+}
+
+template <typename T>
+VectorG4doubleStruct<T> *Get_VectorStruct_FromFile(string filename) {
+
+	int FileLength = DetermineFileLength(filename);
+	
+	if (FileLength <= 0) {
+	
+		printf("File %s invalid. Unable to create VectorG4doubleStruct",
+				filename.c_str());
+		return NULL;
+		
+	}
+	
+	VectorG4doubleStruct<T> *ThisStruct = new VectorG4doubleStruct<T>;
+	ThisStruct->x_length = 4;
+	ThisStruct->y_length = FileLength;
+	Initialize2dArray(ThisStruct->x_length,
+                      ThisStruct->y_length,
+                      ThisStruct->array);
+	
+	FILE *fp = fopen(filename.c_str(), "r");
+	
+	for (int i = 0; i < FileLength;i++) {
+	
+		fscanf(fp, "%lf%lf%lf%lf", &ThisStruct->array[i][0],
+                                   &ThisStruct->array[i][1],
+                                   &ThisStruct->array[i][2],
+                                   &ThisStruct->array[i][3]);
+		
+	}
+	fclose(fp);
+	
+	return ThisStruct;
+	
+}
 
 #endif
 

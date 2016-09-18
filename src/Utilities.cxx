@@ -21,9 +21,6 @@
  * 
  */
 
-// C/C++ Headers
-#include <cstdio>
-
 #include "Utilities.hh"
 
 
@@ -47,50 +44,4 @@ int DetermineFileLength(string filename) {
 	return i;
 	
 }
-VectorG4doubleStruct *Get_VectorStruct_FromFile(string filename, G4double dummy) {
-	
-	int FileLength = DetermineFileLength(filename);
-	
-	if (FileLength <= 0) {
-	
-		printf("File %s invalid. Unable to create VectorG4doubleStruct",
-				filename.c_str());
-		return NULL;
-		
-	}
-	
-	VectorG4doubleStruct *ThisStruct = new VectorG4doubleStruct;
-	ThisStruct->x_length = 4;
-	ThisStruct->y_length = FileLength;
-	Initialize2dArray(ThisStruct->x_length,
-                      ThisStruct->y_length,
-                      ThisStruct->array);
-	
-	FILE *fp = fopen(filename.c_str(), "r");
-	
-	for (int i = 0; i < FileLength;i++) {
-	
-		fscanf(fp, "%lf%lf%lf%lf", &ThisStruct->array[i][0],
-                                   &ThisStruct->array[i][1],
-                                   &ThisStruct->array[i][2],
-                                   &ThisStruct->array[i][3]);
-		
-	}
-	fclose(fp);
-	
-	return ThisStruct;
-	
-}
 
-template <typename T>
-void Initialize2dArray(int x_length, int y_length, T **array) {
-
-	array = new T*[y_length];
-	
-	for (int x = 0;x < y_length;x++) {
-	
-		array[x] = new T[x_length];
-		
-	}
-	
-}
