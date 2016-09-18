@@ -28,6 +28,7 @@
 //Geant4 Headers
 #include "G4ThreeVector.hh"
 
+using std::string;
 
 typedef struct {
 	
@@ -39,9 +40,9 @@ typedef struct {
 	
 } VectorG4doubleStruct;
 
-int DetermineFileLength(char *filename);
+int DetermineFileLength(string filename);
 
-VectorG4doubleStruct *Get_VectorStruct_FromFile(char *filename, G4double dummy);
+VectorG4doubleStruct *Get_VectorStruct_FromFile(string filename, G4double dummy);
 
 template <typename T>
 void Initialize2dArray(int x_length, int y_length, T **array);

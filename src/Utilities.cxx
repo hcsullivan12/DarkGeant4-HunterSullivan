@@ -27,13 +27,13 @@
 #include "Utilities.hh"
 
 
-int DetermineFileLength(char *filename) {
+int DetermineFileLength(string filename) {
 	
-	FILE *fp = fopen(filename, "r");
+	FILE *fp = fopen(filename.c_str(), "r");
 	
 	if (fp == NULL) {
 	
-		printf("File %s not found", filename);
+		printf("File %s not found", filename.c_str());
 		return -1;
 		
 	}
@@ -43,17 +43,18 @@ int DetermineFileLength(char *filename) {
 	while (fgets(tempbuffer, 256, fp) != NULL)
 		i++;
 		
+	fclose(fp);
 	return i;
 	
 }
-VectorG4doubleStruct *Get_VectorStruct_FromFile(char *filename, G4double dummy) {
+VectorG4doubleStruct *Get_VectorStruct_FromFile(string filename, G4double dummy) {
 	
 	int FileLength = DetermineFileLength(filename);
 	
 	if (FileLength <= 0) {
 	
 		printf("File %s invalid. Unable to create VectorG4doubleStruct",
-				filename);
+				filename.c_str());
 		return NULL;
 		
 	}
@@ -64,12 +65,18 @@ VectorG4doubleStruct *Get_VectorStruct_FromFile(char *filename, G4double dummy) 
 	Initialize2dArray(ThisStruct->x_length,
                       ThisStruct->y_length,
                       ThisStruct->array);
-	 
+	
+	FILE *fp = fopen(filename.c_str(), "r");
+	
 	for (int i = 0; i < FileLength;i++) {
 	
-		
+		fscanf(fp, "%lf%lf%lf%lf", &ThisStruct->array[i][0],
+                                   &ThisStruct->array[i][1],
+                                   &ThisStruct->array[i][2],
+                                   &ThisStruct->array[i][3]);
 		
 	}
+	fclose(fp);
 	
 	return ThisStruct;
 	
