@@ -30,6 +30,15 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cxx)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
+#
+# Release and Debug Commands
+#
+# Use by -DCMAKE_BUILD_TYPE=Debug/Release
+#
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
