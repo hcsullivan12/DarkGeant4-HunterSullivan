@@ -232,6 +232,5 @@ void JBInput_Argument(int argc, char *argv[], int index) {
 	
 	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
 	
-	cout << "FINE!\n";
 }
 
