@@ -130,7 +130,6 @@ void Clean() {
 	delete vis;
 #endif	
 
-	delete JBStruct->array;
 	delete JBStruct;
 	
 }
