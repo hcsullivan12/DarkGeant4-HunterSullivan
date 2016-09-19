@@ -78,6 +78,16 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 
+/*
+ * InitializeState
+ * 
+ * Initializes important runtime variables, calls several important
+ * functions that initialize the UI and VIS functions (if compiled in),
+ * and changes runtime state depending on user input
+ * 
+ * 
+ * */
+
 void InitializeState() {
 	
 	G4RunManager *runManager = new G4RunManager();
@@ -219,9 +229,10 @@ void JBInput_Argument(int argc, char *argv[], int index) {
 	 * Subject to change.
 	 * 
 	 * */
-	string filename("Output.dat");
+	string filename("output.dat");
 	
 	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
 	
+	cout << "FINE!\n";
 }
 

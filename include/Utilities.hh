@@ -26,14 +26,17 @@
 #define UTILITIES_H
 
 // C/C++ Headers
-#include <string>
+#include <iostream>
 #include <cstdio>
+#include <string>
 
 
 //Geant4 Headers
 #include "G4ThreeVector.hh"
 
 using std::string;
+using std::printf;
+using std::fscanf;
 
 template <typename T>
 struct FourVectorStruct {
@@ -53,9 +56,9 @@ void Initialize2dArray(int x_length, int y_length, T **array) {
 	
 	array = new T*[y_length];
 	
-	for (int x = 0;x < y_length;x++) {
+	for (int y = 0;y < y_length;y++) {
 	
-		array[x] = new T[x_length];
+		array[y] = new T[x_length];
 		
 	}
 
@@ -83,12 +86,19 @@ FourVectorStruct<T> *Get_VectorStruct_FromFile(string filename) {
 	
 	FILE *fp = fopen(filename.c_str(), "r");
 	
+	if (fp == NULL) {
+	
+		printf("File %s not open for some reason", filename.c_str());
+		return NULL;
+		
+	}
+	
 	for (int i = 0; i < FileLength;i++) {
 	
-		fscanf(fp, "%lf%lf%lf%lf", &ThisStruct->array[i][0],
-                                   &ThisStruct->array[i][1],
-                                   &ThisStruct->array[i][2],
-                                   &ThisStruct->array[i][3]);
+		fscanf(fp, "%lf\t%lf\t%lf\t%lf\n", &ThisStruct->array[i][0],
+                                           &ThisStruct->array[i][1],
+                                           &ThisStruct->array[i][2],
+                                           &ThisStruct->array[i][3]);
 		
 	}
 	fclose(fp);
