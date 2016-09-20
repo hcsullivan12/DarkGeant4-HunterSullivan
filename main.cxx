@@ -47,6 +47,7 @@
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "Utilities.hh"
+#include "LuaPlugin.hh"
 
 // C & C++ Headers
 #include <cstring>
