@@ -25,6 +25,7 @@
 #include "G4RunManager.hh"
 #include "G4ThreeVector.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "QGSP_BERT.hh"
 
 #ifdef G4VIS_USE
 
@@ -139,7 +140,12 @@ void Clean() {
 void InitializeRunManager(G4RunManager *runManager) {
 
 	runManager->SetUserInitialization(new DetectorConstruction());
-	runManager->SetUserInitialization(new PhysicsList());
+	
+	if (JBStruct == NULL)
+		runManager->SetUserInitialization(new PhysicsList());
+	else
+		runManager->SetUserInitialization(new QGSP_BERT());
+	
 	runManager->SetUserAction(new PrimaryGeneratorAction());
 	
 	runManager->Initialize();
