@@ -130,6 +130,8 @@ void Clean() {
 	delete vis;
 #endif	
 
+	if (JBStruct != NULL)
+		delete JBStruct->array;
 	delete JBStruct;
 	
 }
@@ -223,13 +225,12 @@ void JBInput_Argument(int argc, char *argv[], int index) {
 	/*
 	 * Output.dat is not a permanent filename in Josh's code, however
 	 * I don't see much reason to change it to something else so
-	 * I'm going to pretend it's just Output.dat always.
+	 * I'm going to pretend it's just output.dat always.
 	 * 
 	 * Subject to change.
 	 * 
 	 * */
 	string filename("output.dat");
-	
 	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
 	
 }

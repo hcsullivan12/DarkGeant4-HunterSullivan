@@ -52,13 +52,13 @@ int DetermineFileLength(string filename);
 
 
 template <typename T>
-void Initialize2dArray(int x_length, int y_length, T **array) {
+void Initialize2dArray(int x_length, int y_length, T ***array) {
 	
-	array = new T*[y_length];
+	*array = new T*[y_length];
 	
 	for (int y = 0;y < y_length;y++) {
 	
-		array[y] = new T[x_length];
+		(*array)[y] = new T[x_length];
 		
 	}
 
@@ -82,7 +82,7 @@ FourVectorStruct<T> *Get_VectorStruct_FromFile(string filename) {
 	ThisStruct->y_length = FileLength;
 	Initialize2dArray(ThisStruct->x_length,
                       ThisStruct->y_length,
-                      ThisStruct->array);
+                      &ThisStruct->array);
 	
 	FILE *fp = fopen(filename.c_str(), "r");
 	
