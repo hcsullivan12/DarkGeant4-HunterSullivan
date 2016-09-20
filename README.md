@@ -2,6 +2,10 @@
 
 DarkGeant4 is a Geant4 application whose purpose is to provide a generic runtime framework for testing the various Dark Matter models. This software is presently being built and features may vary over time.
 
+## Dependencies
+
+Geant4 and lua5.2+ is required. Please be sure to have lua5.2-dev packages installed on your computer, otherwise the program simply won't compile.
+
 ## Building DarkGeant4
 
 In the working directory, type the following commands to build the application. Be aware the commands may need some modifications to suit your particular environment.
