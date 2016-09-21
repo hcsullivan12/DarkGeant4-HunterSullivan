@@ -24,15 +24,27 @@
 #ifndef LUAPLUGIN_H
 #define LUAPLUGIN_H
 
+// Third Party Headers
 #include "lua.hpp"
 
+// C/C++ Headers
 #include <iostream>
 #include <string>
+#include <exception>
+
+// Geant 4 Headers
+#include "G4VUserPhysicsList.hh"
 
 using std::cout;
 using std::string;
 
-void ReadDefaultConfigFile();
+struct DefaultConfigStruct {
+	
+	G4VUserPhysicsList *Physics;
+	
+};
+
+DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory);
 
 #endif
 

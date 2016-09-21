@@ -55,17 +55,19 @@ add_executable(DarkGeant4 main.cxx ${sources} ${headers})
 target_link_libraries(DarkGeant4 ${Geant4_LIBRARIES} ${LUA_LIBRARIES})
 
 add_custom_command(TARGET DarkGeant4 PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                   ${PROJECT_SOURCE_DIR}/vis.mac
-                   ${PROJECT_BINARY_DIR}/vis.mac
-)
-add_custom_command(TARGET DarkGeant4 PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy
-                   ${PROJECT_SOURCE_DIR}/basicrun.mac
-                   ${PROJECT_BINARY_DIR}/basicrun.mac
-)
-add_custom_command(TARGET DarkGeant4 PRE_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy
+                   COMMAND ${CMAKE_COMMAND} -E copy_directory
                    ${PROJECT_SOURCE_DIR}/config
                    ${PROJECT_BINARY_DIR}/config
 )
+
+set(COPY_FILES
+    vis.mac
+    basicrun.mac)
+
+foreach(_script ${COPY_FILES})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_script}
+    ${PROJECT_BINARY_DIR}/${_sccript}
+    COPYONLY
+    )
+endforeach()

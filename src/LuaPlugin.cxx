@@ -23,33 +23,71 @@
 
 #include "LuaPlugin.hh"
 
-void ReadDefaultConfigFile() {
+void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config);
+
+static const int NumConfigFunctions = 1;
+void (*ConfigFunctions[NumConfigFunctions])(lua_State *L, DefaultConfigStruct *Config) = 
+{&PhysicsList_Config};
+
+static const string DefaultConfigDirectory = "config";
+
+DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory) {
 	
+	
+	string ConfigFile = ConfigDirectory + "/config.lua";
+	/*
+	 * Loads state. Need to do a check here.
+	 * 
+	 * */
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
-	luaL_loadfile(L, "config/config.lua");
+	luaL_loadfile(L,  ConfigFile.c_str());
 	lua_pcall(L, 0, 0, 0);
 	
+	DefaultConfigStruct *ThisDefaultConfigStruct = new DefaultConfigStruct;
+	
+	/*
+	 * Loads ConfigTable and checks to see that it's an appropriate 
+	 * structure.
+	 * 
+	 * */
 	lua_getglobal(L, "ConfigTable");
 	if (!lua_istable(L,-1)) {
 	
 		cout << "ConfigTable is not a table!\n";
+		throw;
 		
 	}
+	for (int i = 0;i < NumConfigFunctions;i++)
+		ConfigFunctions[i](L, ThisDefaultConfigStruct);
 	
-	string PhysicsList;
+	lua_close(L);
+	return ThisDefaultConfigStruct;
+	
+}
+
+
+/*
+ * Gets the value of ConfigTable.PhysicsList
+ * 
+ * */
+void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config) {
+	
+	string physicslist;
 	lua_pushstring(L, "PhysicsList");
 	lua_gettable(L, -2);
 	if (lua_type(L,-1) != LUA_TSTRING) {
 		
 		cout << "Error with PhysicsList parameter\n";
 		cout << "Using default value\n";
-		PhysicsList = "Default";
+		physicslist = "Default";
 		
 	}
-	PhysicsList = lua_tostring(L, -1);
+	physicslist = lua_tostring(L, -1);
 	
-	cout << "PhysicsList = " << PhysicsList;
+	/*
+	 * Determine appropriate physics list from string.
+	 * 
+	 * */
 	
-	lua_close(L);
 }
