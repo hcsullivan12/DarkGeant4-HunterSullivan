@@ -22,6 +22,7 @@ endif()
 #
 find_package(Lua 5.2 REQUIRED)
 include_directories(${LUA_INCLUDE_DIR})
+message(${LUA_INCLUDE_DIR})
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
@@ -62,4 +63,9 @@ add_custom_command(TARGET DarkGeant4 PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy
                    ${PROJECT_SOURCE_DIR}/basicrun.mac
                    ${PROJECT_BINARY_DIR}/basicrun.mac
+)
+add_custom_command(TARGET DarkGeant4 PRE_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy
+                   ${PROJECT_SOURCE_DIR}/config
+                   ${PROJECT_BINARY_DIR}/config
 )

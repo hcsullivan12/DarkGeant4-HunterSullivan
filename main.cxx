@@ -59,6 +59,7 @@ using std::vector;
 using std::cout;
 using std::cin;
 
+static string Module = "config";
 static vector<G4String> ExecutionVector;
 static FourVectorStruct<G4double> *JBStruct = NULL;
 
@@ -91,6 +92,8 @@ int main(int argc, char *argv[]) {
  * */
 
 void InitializeState() {
+	
+	ReadDefaultConfigFile(Module);
 	
 	G4RunManager *runManager = new G4RunManager();
 	InitializeRunManager(runManager);
@@ -188,13 +191,15 @@ struct ArgumentTable {
 //Argument Function Prototypes
 void Execute_Argument(int argc, char *argv[], int index);
 void JBInput_Argument(int argc, char *argv[], int index);
+void Module_Argument (int argc, char *argv[], int index);
 
 
 
-static const int numHandledArguments = 2;
+static const int numHandledArguments = 3;
 static const ArgumentTable Table[numHandledArguments] =
 {{"-execute", &Execute_Argument},
- {"-JBInput", &JBInput_Argument}};
+ {"-JBInput", &JBInput_Argument},
+ {"-module" , &Module_Argument}};
 
 
 
@@ -217,7 +222,7 @@ void Execute_Argument(int argc, char *argv[], int index) {
 
 	if ( (index+1) == argc) {
 	
-		cout << "Did not give a good execution argument";
+		cout << "Did not give a good execution argument\n";
 		return;
 		
 	}
@@ -239,6 +244,18 @@ void JBInput_Argument(int argc, char *argv[], int index) {
 	 * */
 	string filename("output.dat");
 	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
+	
+}
+
+void Module_Argument (int argc, char *argv[], int index) {
+
+	if ((index+1) == argc) {
+	
+		cout << "Need to specify a module!\n";
+		return;
+		
+	}
+	Module = "Config/Module/" + string(argv[index+1]);
 	
 }
 
