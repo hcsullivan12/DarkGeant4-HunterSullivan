@@ -3,6 +3,8 @@
 Config
 ~~~~~~~~~~~~~~~~~~
 
+*ModuleName specifies the name of this module
+
 *PhysicsList specifies which PhysicsList ought to be loaded at 
 runtime. Options include the following
 
@@ -12,9 +14,10 @@ runtime. Options include the following
 
 *<Other parameters>
 
-  ]]--
-ConfigTable = { PhysicsList = "QGSP_BERT"}
+]]--
 
+ConfigTable = { ModuleName  = "JB",
+                PhysicsList = "QGSP_BERT" }
 
 --[[
 
@@ -30,5 +33,6 @@ executable's standpoint
 2. ...
 
 ]]--
+
 FileTable   = { File = "config/module/JB/output.dat",
-                Type = "Fourvector"}
+                Type = "Fourvector" }
