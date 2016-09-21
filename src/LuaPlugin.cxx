@@ -29,11 +29,15 @@
 // Geant4 Headers
 #include "QGSP_BERT.hh"
 
+void ModuleName_Config (lua_State *L, DefaultConfigStruct *Config);
 void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config);
 
-static const int NumConfigFunctions = 1;
+static const int NumConfigFunctions = 2;
 void (*ConfigFunctions[NumConfigFunctions])(lua_State *L, DefaultConfigStruct *Config) = 
-{&PhysicsList_Config};
+{   
+	&ModuleName_Config,
+	&PhysicsList_Config
+};
 
 static const string DefaultConfigDirectory = "config";
 
@@ -83,25 +87,62 @@ DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory) {
 
 
 /*
+ * 
+ * Assumes that the table is at the top of the stack prior to
+ * calling this function
+ * 
+ * */
+void SetStringPointerFromPreopenedTable(lua_State *L, 
+                                        string element,
+                                        string *pointer,
+                                        string ErrorMessage,
+                                        string DefaultValue)
+{
+
+	lua_pushstring(L, element.c_str());
+	lua_gettable(L, -2);
+	if (lua_type(L, -1) != LUA_TSTRING) {
+	
+		cout << ErrorMessage;
+		*pointer = DefaultValue;
+		
+	} else {
+	
+		*pointer = lua_tostring(L, -1);
+		
+	}
+	lua_pop(L, -1);
+	
+}
+
+
+void ModuleName_Config (lua_State *L, DefaultConfigStruct *Config) {
+	
+	SetStringPointerFromPreopenedTable(L,
+                                       "ModuleName",
+                                       &Config->modulename,
+                                       "Error with ModuleName parameter\n",
+                                       "Error_with_ModuleName");
+	
+	cout << "Module name set to = " << Config->modulename << "\n";
+}
+
+/*
  * Gets the value of ConfigTable.PhysicsList
  * 
  * */
 void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config) {
 	
 	string physicslist;
-	lua_pushstring(L, "PhysicsList");
-	lua_gettable(L, -2);
-	if (lua_type(L,-1) != LUA_TSTRING) {
-		
-		cout << "Error with PhysicsList parameter\n";
-		cout << "Using default value\n";
-		physicslist = "Default";
-		
-	} else {
-		
-		physicslist = lua_tostring(L, -1);
-		
-	}
+	
+	SetStringPointerFromPreopenedTable(L,
+                                       "PhysicsList",
+                                       &physicslist,
+                                       string("Error with PhysicsList")
+                                       + string("parameter\nUsing")
+                                       + string("default value\n"),
+                                       "Default");
+	
 	
 	if (physicslist == "Default")
 		Config->physicslist = new PhysicsList();
@@ -109,7 +150,5 @@ void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config) {
 		Config->physicslist = new QGSP_BERT();
 	
 	cout << physicslist << " Physics List loaded\n";
-	
-	lua_pop(L, 1);
 	
 }

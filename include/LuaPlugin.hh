@@ -38,16 +38,32 @@
 using std::cout;
 using std::string;
 
+enum FileType {
+	
+	FOURVECTOR = 0,
+	PLACEHOLDER
+	
+};
+
 struct DefaultConfigStruct {
 	
 	string modulename;
 	string File;
+	
+	FileType Type;
 	
 	G4VUserPhysicsList *physicslist;
 	
 };
 
 lua_State *InitializeLuaInterpreter(string file);
+
+void SetStringPointerFromPreopenedTable(lua_State *L, 
+                                        string element,
+                                        string *pointer,
+                                        string ErrorMessage,
+                                        string DefaultValue);
+
 DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory);
 
 #endif
