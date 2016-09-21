@@ -13,4 +13,4 @@ runtime. Options include the following
 *<Other parameters>
 
   ]]--
-ConfigTable = { PhysicsList = "Default"}
+ConfigTable = { PhysicsList = "QGSP_BERT"}

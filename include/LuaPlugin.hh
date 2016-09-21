@@ -40,7 +40,7 @@ using std::string;
 
 struct DefaultConfigStruct {
 	
-	G4VUserPhysicsList *Physics;
+	G4VUserPhysicsList *physicslist;
 	
 };
 

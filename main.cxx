@@ -61,7 +61,9 @@ using std::cin;
 
 static string Module = "config";
 static vector<G4String> ExecutionVector;
+
 static FourVectorStruct<G4double> *JBStruct = NULL;
+static DefaultConfigStruct *ConfigStruct = NULL;
 
 //Function Prototypes
 void Clean();
@@ -93,9 +95,9 @@ int main(int argc, char *argv[]) {
 
 void InitializeState() {
 	
-	ReadDefaultConfigFile(Module);
-	
 	G4RunManager *runManager = new G4RunManager();
+	ConfigStruct = ReadDefaultConfigFile(Module);
+	
 	InitializeRunManager(runManager);
 	
 #ifdef G4VIS_USE
@@ -138,20 +140,14 @@ void Clean() {
 	if (JBStruct != NULL)
 		delete JBStruct->array;
 	delete JBStruct;
-	
+	delete ConfigStruct;
 }
 
 void InitializeRunManager(G4RunManager *runManager) {
 
 	runManager->SetUserInitialization(new DetectorConstruction());
-	
-	if (JBStruct == NULL)
-		runManager->SetUserInitialization(new PhysicsList());
-	else
-		runManager->SetUserInitialization(new QGSP_BERT());
-	
+	runManager->SetUserInitialization(ConfigStruct->physicslist);
 	runManager->SetUserAction(new PrimaryGeneratorAction());
-	
 	runManager->Initialize();
 	
 }
@@ -255,7 +251,7 @@ void Module_Argument (int argc, char *argv[], int index) {
 		return;
 		
 	}
-	Module = "Config/Module/" + string(argv[index+1]);
+	Module = "config/module/" + string(argv[index+1]);
 	
 }
 

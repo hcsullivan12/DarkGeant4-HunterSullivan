@@ -23,6 +23,12 @@
 
 #include "LuaPlugin.hh"
 
+// User Headers
+#include "PhysicsList.hh"
+
+// Geant4 Headers
+#include "QGSP_BERT.hh"
+
 void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config);
 
 static const int NumConfigFunctions = 1;
@@ -82,12 +88,19 @@ void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config) {
 		cout << "Using default value\n";
 		physicslist = "Default";
 		
+	} else {
+		
+		physicslist = lua_tostring(L, -1);
+		
 	}
-	physicslist = lua_tostring(L, -1);
 	
-	/*
-	 * Determine appropriate physics list from string.
-	 * 
-	 * */
+	if (physicslist == "Default")
+		Config->physicslist = new PhysicsList();
+	else if (physicslist == "QGSP_BERT")
+		Config->physicslist = new QGSP_BERT();
+	
+	cout << physicslist << " Physics List loaded\n";
+	
+	
 	
 }
