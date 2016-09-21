@@ -23,35 +23,33 @@
 
 #include "LuaPlugin.hh"
 
-static lua_State *L = NULL;
-
-void InitializeLuaInterpreter() {
-	
-	L = luaL_newstate();
-	luaL_openlibs(L);
-	
-}
-
-void ShutdownLuaInterpreter() {
-
-	lua_close(L);
-	
-}
-
 void ReadDefaultConfigFile() {
-
-	string DefaultFilePath("config/config.lua");
-	luaL_loadfile(L, DefaultFilePath.c_str());
+	
+	lua_State *L = luaL_newstate();
+	luaL_openlibs(L);
+	luaL_loadfile(L, "config/config.lua");
+	lua_pcall(L, 0, 0, 0);
 	
 	lua_getglobal(L, "ConfigTable");
-	
 	if (!lua_istable(L,-1)) {
 	
 		cout << "ConfigTable is not a table!\n";
 		
 	}
 	
+	string PhysicsList;
 	lua_pushstring(L, "PhysicsList");
-	//lua_gettable(L, );
+	lua_gettable(L, -2);
+	if (lua_type(L,-1) != LUA_TSTRING) {
+		
+		cout << "Error with PhysicsList parameter\n";
+		cout << "Using default value\n";
+		PhysicsList = "Default";
+		
+	}
+	PhysicsList = lua_tostring(L, -1);
 	
+	cout << "PhysicsList = " << PhysicsList;
+	
+	lua_close(L);
 }

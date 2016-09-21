@@ -32,9 +32,6 @@
 using std::cout;
 using std::string;
 
-void InitializeLuaInterpreter();
-void ShutdownLuaInterpreter();
-
 void ReadDefaultConfigFile();
 
 #endif
