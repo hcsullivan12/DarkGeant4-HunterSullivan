@@ -40,10 +40,14 @@ using std::string;
 
 struct DefaultConfigStruct {
 	
+	string modulename;
+	string File;
+	
 	G4VUserPhysicsList *physicslist;
 	
 };
 
+lua_State *InitializeLuaInterpreter(string file);
 DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory);
 
 #endif

@@ -37,18 +37,27 @@ void (*ConfigFunctions[NumConfigFunctions])(lua_State *L, DefaultConfigStruct *C
 
 static const string DefaultConfigDirectory = "config";
 
-DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory) {
-	
-	
-	string ConfigFile = ConfigDirectory + "/config.lua";
-	/*
-	 * Loads state. Need to do a check here.
-	 * 
-	 * */
+
+/*
+ * Initializes Lua interpreter with zero stack elements.
+ * 
+ * */
+lua_State *InitializeLuaInterpreter(string file) {
+
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
-	luaL_loadfile(L,  ConfigFile.c_str());
+	luaL_loadfile(L, file.c_str());
 	lua_pcall(L, 0, 0, 0);
+	
+	return L;
+	
+}
+
+DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory) {
+	
+	string ConfigFile = ConfigDirectory + "/config.lua";
+	
+	lua_State *L = InitializeLuaInterpreter(ConfigFile);
 	
 	DefaultConfigStruct *ThisDefaultConfigStruct = new DefaultConfigStruct;
 	
@@ -101,6 +110,6 @@ void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config) {
 	
 	cout << physicslist << " Physics List loaded\n";
 	
-	
+	lua_pop(L, 1);
 	
 }
