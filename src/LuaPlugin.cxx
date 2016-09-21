@@ -29,11 +29,11 @@
 // Geant4 Headers
 #include "QGSP_BERT.hh"
 
-void ModuleName_Config (lua_State *L, DefaultConfigStruct *Config);
-void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config);
+void ModuleName_Config (lua_State *L, ConfigTableStruct *Config);
+void PhysicsList_Config(lua_State *L, ConfigTableStruct *Config);
 
 static const int NumConfigFunctions = 2;
-void (*ConfigFunctions[NumConfigFunctions])(lua_State *L, DefaultConfigStruct *Config) = 
+void (*ConfigFunctions[NumConfigFunctions])(lua_State *L, ConfigTableStruct *Config) = 
 {   
 	&ModuleName_Config,
 	&PhysicsList_Config
@@ -57,13 +57,13 @@ lua_State *InitializeLuaInterpreter(string file) {
 	
 }
 
-DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory) {
+ConfigTableStruct *ReadDefaultConfigFile(string ConfigDirectory) {
 	
 	string ConfigFile = ConfigDirectory + "/config.lua";
 	
 	lua_State *L = InitializeLuaInterpreter(ConfigFile);
 	
-	DefaultConfigStruct *ThisDefaultConfigStruct = new DefaultConfigStruct;
+	ConfigTableStruct *ThisConfigTableStruct = new ConfigTableStruct;
 	
 	/*
 	 * Loads ConfigTable and checks to see that it's an appropriate 
@@ -78,10 +78,11 @@ DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory) {
 		
 	}
 	for (int i = 0;i < NumConfigFunctions;i++)
-		ConfigFunctions[i](L, ThisDefaultConfigStruct);
+		ConfigFunctions[i](L, ThisConfigTableStruct);
+	lua_pop(L, 1);
 	
 	lua_close(L);
-	return ThisDefaultConfigStruct;
+	return ThisConfigTableStruct;
 	
 }
 
@@ -116,7 +117,7 @@ void SetStringPointerFromPreopenedTable(lua_State *L,
 }
 
 
-void ModuleName_Config (lua_State *L, DefaultConfigStruct *Config) {
+void ModuleName_Config (lua_State *L, ConfigTableStruct *Config) {
 	
 	SetStringPointerFromPreopenedTable(L,
                                        "ModuleName",
@@ -131,7 +132,7 @@ void ModuleName_Config (lua_State *L, DefaultConfigStruct *Config) {
  * Gets the value of ConfigTable.PhysicsList
  * 
  * */
-void PhysicsList_Config(lua_State *L, DefaultConfigStruct *Config) {
+void PhysicsList_Config(lua_State *L, ConfigTableStruct *Config) {
 	
 	string physicslist;
 	

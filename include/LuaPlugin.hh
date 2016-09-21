@@ -45,14 +45,17 @@ enum FileType {
 	
 };
 
-struct DefaultConfigStruct {
+struct ConfigTableStruct {
 	
 	string modulename;
-	string File;
-	
-	FileType Type;
-	
 	G4VUserPhysicsList *physicslist;
+	
+};
+
+struct FileTableStruct {
+	
+	string File;
+	FileType Type;
 	
 };
 
@@ -64,7 +67,7 @@ void SetStringPointerFromPreopenedTable(lua_State *L,
                                         string ErrorMessage,
                                         string DefaultValue);
 
-DefaultConfigStruct *ReadDefaultConfigFile(string ConfigDirectory);
+ConfigTableStruct *ReadDefaultConfigFile(string ConfigDirectory);
 
 #endif
 

@@ -38,6 +38,12 @@ DetectorConstruction::DetectorConstruction() {
 	
 }
 
+DetectorConstruction::DetectorConstruction(vector<Volume> Volumes) {
+
+	this->Volumes = Volumes;
+	
+}
+
 DetectorConstruction::~DetectorConstruction() {
 
 
@@ -46,9 +52,23 @@ DetectorConstruction::~DetectorConstruction() {
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
 
-	InitializeWorld();
-	InitializeDetector();
-	InitializePhysicalVolume();
+	if (this->Volumes.size() == 0) {
+		
+		InitializeWorld();
+		InitializeDetector();
+		InitializePhysicalVolume();
+		
+	} else {
+	
+		/*
+		 * TODO
+		 * 
+		 * Implement vector<Volume> Volumes functions and initialize
+		 * stuff
+		 * 
+		 * */
+		
+	}
 	
 	return this->WorldPhysicalVolume;
 }

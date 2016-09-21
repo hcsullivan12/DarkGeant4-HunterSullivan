@@ -37,8 +37,50 @@ class G4Material;
 #include "G4ThreeVector.hh"
 #include "G4VUserDetectorConstruction.hh"
 
+// C/C++ headers
+#include <vector>
+
 //User Headers
 #include "Material.hh"
+
+using std::vector;
+
+enum VolumeDefinition {
+
+	WORLD = 0,
+	DETECTOR_COMPONENT
+	
+};
+
+enum VolumeType {
+
+	BOX = 0,
+	CYLINDER
+	
+};
+
+struct Volume {
+	
+	VolumeType Type;
+	VolumeDefinition Definition;
+	
+	//Generic Volume Vars
+	G4String name;
+	Material ThisMaterial;
+	
+	//Box Vars
+	G4double x;
+	G4double y;
+	G4double z;
+	
+	//Cylinder Vars
+	G4double InnerRadius;
+	G4double OuterRadius;
+	G4double Half_z;
+	G4double StartAngle;
+	G4double EndAngle;
+	
+};
 
 class DetectorConstruction : public G4VUserDetectorConstruction 
 {
@@ -46,6 +88,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 	public:
 	
 		DetectorConstruction();
+		DetectorConstruction(vector<Volume> Volumes);
 		~DetectorConstruction();
 		
 		G4VPhysicalVolume* Construct();
@@ -62,6 +105,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 		
 		Material *Air;
 		Material *LiquidArgon;
+		
+		vector<Volume> Volumes;
 	
 		void InitializeWorld();
 		void InitializeDetector();

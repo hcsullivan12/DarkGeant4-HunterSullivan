@@ -63,7 +63,7 @@ static string Module = "config";
 static vector<G4String> ExecutionVector;
 
 static FourVectorStruct<G4double> *JBStruct = NULL;
-static DefaultConfigStruct *ConfigStruct = NULL;
+static ConfigTableStruct *ConfigStruct = NULL;
 
 //Function Prototypes
 void Clean();
