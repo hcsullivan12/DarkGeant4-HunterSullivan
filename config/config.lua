@@ -34,5 +34,5 @@ executable's standpoint
 
 ]]--
 
-FileTable   = { File = nil,
-                Type = nil }
+FileTable = { File = nil,
+              Type = nil }
