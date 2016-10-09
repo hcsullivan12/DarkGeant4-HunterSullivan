@@ -86,6 +86,16 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
+	
+	/*
+	 * 
+	 * TODO
+	 * 
+	 * 		Code from the JB Branch should be ported and made more
+	 * 		generic.
+	 * 
+	 * */
+	
 	this->ParticleGun->GeneratePrimaryVertex(event);
 	
 }

@@ -30,6 +30,7 @@
 #include "QGSP_BERT.hh"
 
 const char *lua_tostring_shim(lua_State *L, int index);
+int lua_tointeger_shim(lua_State *L, int index);
 
 
 static const string DefaultConfigDirectory = "config";
@@ -43,6 +44,12 @@ static const string DefaultConfigDirectory = "config";
 const char *lua_tostring_shim(lua_State *L, int index) {
 		
 	return lua_tostring(L, index);
+	
+}
+
+int lua_tointeger_shim(lua_State *L, int index) {
+
+	return lua_tointeger(L, index);
 	
 }
 
@@ -119,8 +126,12 @@ void LuaInstance::CloseLuaState() {
 
 LuaInstance::~LuaInstance() {
 	
-	PopLuaStack();
-	lua_close(this->L);
+	if (this->L != NULL) {
+		
+		PopLuaStack();
+		lua_close(this->L);
+		
+	}
 	
 }
 
@@ -199,11 +210,36 @@ DetectorConfigLuaInstance::DetectorConfigLuaInstance(string ModulePath)
 : LuaInstance(ModulePath + string("/DetectorConfig.lua"))
 {
 	
+	LoadTable("DetectorConfig");
+	
+	Initialize_number_of_detector_components();
 	
 }
 
 DetectorConfigLuaInstance::~DetectorConfigLuaInstance() 
 {
 		
+	
+}
+
+void DetectorConfigLuaInstance::Initialize_number_of_detector_components() {
+	
+	this->Number_of_Dectector_Components = GetElementFromTable(
+	                            "Number_of_Detector_Components",
+	                            "Missing Number_of_Detector_Components",
+	                            0,
+	                            LUA_TNUMBER,
+	                            &lua_tointeger_shim);
+	                            
+	if (this->Number_of_Dectector_Components <= 0) {
+	
+		cout << "You did not define the variable ";
+		cout << "Number_of_Detector_Components.\n";
+		cout << "Please be sure you set it to an integer.\n";
+		
+		cout << "Halting execution\n";
+		exit(0);
+		
+	}
 	
 }

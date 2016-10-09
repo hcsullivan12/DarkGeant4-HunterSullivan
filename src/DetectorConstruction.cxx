@@ -137,7 +137,7 @@ void DetectorConstruction::InitializePhysicalVolume() {
                                              0, false, 0);
 									
 	G4VPhysicalVolume *TrackerPhysical = new G4PVPlacement(0, 
-                                             G4ThreeVector(), 
+                                             G4ThreeVector(0, 0, 0), 
                                              this->trackerLog,
                                              "Detector",
                                              this->worldLog,

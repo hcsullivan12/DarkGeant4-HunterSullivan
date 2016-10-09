@@ -153,6 +153,15 @@ class ConfigLuaInstance : public LuaInstance {
 class DetectorConfigLuaInstance : public LuaInstance {
 	
 	
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
+	public:
+	
+		int Number_of_Dectector_Components;
+	
 	
 	/*
 	 * 
@@ -164,6 +173,9 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		DetectorConfigLuaInstance(string ModulePath);
 		~DetectorConfigLuaInstance();
 	
+	private:
+	
+		void Initialize_number_of_detector_components();
 	/*
 	 * 
 	 * TODO
