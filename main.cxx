@@ -63,7 +63,6 @@ static string Module = "config";
 static vector<G4String> ExecutionVector;
 
 static FourVectorStruct<G4double> *JBStruct = NULL;
-static ConfigTableStruct *ConfigStruct = NULL;
 
 //Function Prototypes
 void Clean();
@@ -96,8 +95,6 @@ int main(int argc, char *argv[]) {
 void InitializeState() {
 	
 	G4RunManager *runManager = new G4RunManager();
-	ConfigStruct = ReadDefaultConfigFile(Module);
-	
 	InitializeRunManager(runManager);
 	
 #ifdef G4VIS_USE
@@ -140,13 +137,11 @@ void Clean() {
 	if (JBStruct != NULL)
 		delete JBStruct->array;
 	delete JBStruct;
-	delete ConfigStruct;
 }
 
 void InitializeRunManager(G4RunManager *runManager) {
 
 	runManager->SetUserInitialization(new DetectorConstruction());
-	runManager->SetUserInitialization(ConfigStruct->physicslist);
 	runManager->SetUserAction(new PrimaryGeneratorAction());
 	runManager->Initialize();
 	

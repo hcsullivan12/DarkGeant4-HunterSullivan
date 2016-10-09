@@ -38,37 +38,14 @@
 using std::cout;
 using std::string;
 
-enum FileType {
-	
-	FOURVECTOR = 0,
-	PLACEHOLDER
-	
-};
+enum POPELEMENTS {
 
-struct ConfigTableStruct {
-	
-	string modulename;
-	G4VUserPhysicsList *physicslist;
+	ALL = -1,
+	ONE = 1,
+	TWO = 2,
+	THREE = 3	
 	
 };
-
-struct FileTableStruct {
-	
-	string File;
-	FileType Type;
-	
-};
-
-lua_State *InitializeLuaInterpreter(string file);
-
-void SetStringPointerFromPreopenedTable(lua_State *L, 
-                                        string element,
-                                        string *pointer,
-                                        string ErrorMessage,
-                                        string DefaultValue);
-
-ConfigTableStruct *ReadDefaultConfigFile(string ConfigDirectory);
-
 
 class LuaInstance {
 	
@@ -127,7 +104,7 @@ class LuaInstance {
 	
 			if (lua_type(this->L, -1) != VAR_TYPE) {
 		
-				cout << ErrorMessage;
+				cout << ErrorMessage << "\n";
 				return DefaultValue;
 		
 			}
@@ -139,6 +116,11 @@ class LuaInstance {
 
 class ConfigLuaInstance : public LuaInstance {
 	
+	public:
+	
+		string modulename;
+		G4VUserPhysicsList *physicslist;
+	
 	/*
 	 * 
 	 * Class member functions
@@ -148,7 +130,11 @@ class ConfigLuaInstance : public LuaInstance {
 	
 		ConfigLuaInstance(string FilePath);
 		~ConfigLuaInstance();
+		
+	private:
 	
+		void Initialize_modulename();
+		void Initialize_physicslist();
 	/*
 	 * 
 	 * TODO

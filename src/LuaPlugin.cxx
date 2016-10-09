@@ -29,130 +29,23 @@
 // Geant4 Headers
 #include "QGSP_BERT.hh"
 
-void ModuleName_Config (lua_State *L, ConfigTableStruct *Config);
-void PhysicsList_Config(lua_State *L, ConfigTableStruct *Config);
+const char *lua_tostring_shim(lua_State *L, int index);
 
-static const int NumConfigFunctions = 2;
-void (*ConfigFunctions[NumConfigFunctions])(lua_State *L, ConfigTableStruct *Config) = 
-{   
-	&ModuleName_Config,
-	&PhysicsList_Config
-};
 
 static const string DefaultConfigDirectory = "config";
 
-
 /*
- * Initializes Lua interpreter with zero stack elements.
+ * Since lua_tostring is just a macro of lua_tolstring and because
+ * I initially intended to use function pointers for the various
+ * lua_toxxx functions, I had to create this shim around the macro.
  * 
  * */
-lua_State *InitializeLuaInterpreter(string file) {
-
-	lua_State *L = luaL_newstate();
-	luaL_openlibs(L);
-	luaL_loadfile(L, file.c_str());
-	lua_pcall(L, 0, 0, 0);
-	
-	return L;
-	
-}
-
-ConfigTableStruct *ReadDefaultConfigFile(string ConfigDirectory) {
-	
-	string ConfigFile = ConfigDirectory + "/config.lua";
-	
-	lua_State *L = InitializeLuaInterpreter(ConfigFile);
-	
-	ConfigTableStruct *ThisConfigTableStruct = new ConfigTableStruct;
-	
-	/*
-	 * Loads ConfigTable and checks to see that it's an appropriate 
-	 * structure.
-	 * 
-	 * */
-	lua_getglobal(L, "ConfigTable");
-	if (!lua_istable(L,-1)) {
-	
-		cout << "ConfigTable is not a table!\n";
-		throw;
+const char *lua_tostring_shim(lua_State *L, int index) {
 		
-	}
-	for (int i = 0;i < NumConfigFunctions;i++)
-		ConfigFunctions[i](L, ThisConfigTableStruct);
-	lua_pop(L, 1);
-	
-	lua_close(L);
-	return ThisConfigTableStruct;
+	return lua_tostring(L, index);
 	
 }
 
-
-/*
- * 
- * Assumes that the table is at the top of the stack prior to
- * calling this function
- * 
- * */
-void SetStringPointerFromPreopenedTable(lua_State *L, 
-                                        string element,
-                                        string *pointer,
-                                        string ErrorMessage,
-                                        string DefaultValue)
-{
-
-	lua_pushstring(L, element.c_str());
-	lua_gettable(L, -2);
-	if (lua_type(L, -1) != LUA_TSTRING) {
-	
-		cout << ErrorMessage;
-		*pointer = DefaultValue;
-		
-	} else {
-	
-		*pointer = lua_tostring(L, -1);
-		
-	}
-	lua_pop(L, -1);
-	
-}
-
-
-void ModuleName_Config (lua_State *L, ConfigTableStruct *Config) {
-	
-	SetStringPointerFromPreopenedTable(L,
-                                       "ModuleName",
-                                       &Config->modulename,
-                                       "Error with ModuleName parameter\n",
-                                       "Error_with_ModuleName");
-	
-	cout << "Module name set to = " << Config->modulename << "\n";
-}
-
-/*
- * Gets the value of ConfigTable.PhysicsList
- * 
- * */
-void PhysicsList_Config(lua_State *L, ConfigTableStruct *Config) {
-	
-	string physicslist;
-	
-	SetStringPointerFromPreopenedTable(L,
-                                       "PhysicsList",
-                                       &physicslist,
-                                       string("Error with PhysicsList")
-                                       + string("parameter\nUsing")
-                                       + string("default value\n"),
-                                       "Default");
-	
-	
-	if (physicslist == "Default")
-		Config->physicslist = new PhysicsList();
-	else if (physicslist == "QGSP_BERT")
-		Config->physicslist = new QGSP_BERT();
-	
-	cout << physicslist << " Physics List loaded\n";
-	
-}
 
 /*
  * 
@@ -224,12 +117,49 @@ ConfigLuaInstance::ConfigLuaInstance(string FilePath)
 : LuaInstance(FilePath)
 {
 	
-	
+	LoadTable("ConfigTable");
+	Initialize_modulename();
+	Initialize_physicslist();
 	
 }
 ConfigLuaInstance::~ConfigLuaInstance()
 {
 	
+	
+}
+
+void ConfigLuaInstance::Initialize_modulename() {
+	
+	this->modulename = GetElementFromTable("Module_Name",
+                                     "No Module_Name set",
+                                     "Default Module Name",
+                                     LUA_TSTRING,
+                                     &lua_tostring_shim);
+   PopLuaStack(ONE);
+	
+}
+
+/*
+ * 
+ * TODO
+ * 
+ * Add other physics lists
+ * 
+ * */
+void ConfigLuaInstance::Initialize_physicslist() {
+	
+	string PhysicsListString = GetElementFromTable("PhysicsList",
+                                                   "No PhysicsList set",
+                                                   "Default set",
+                                                   LUA_TSTRING,
+                                                   &lua_tostring_shim);
+                                            
+	PopLuaStack(ONE);
+	
+	if (PhysicsListString == "Default")
+		this->physicslist = new PhysicsList();
+	else if (PhysicsListString == "QGSP_BERT")
+		this->physicslist = new QGSP_BERT();
 	
 }
 
