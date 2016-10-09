@@ -59,28 +59,8 @@ enum VolumeType {
 	
 };
 
-struct Volume {
-	
-	VolumeType Type;
-	VolumeDefinition Definition;
-	
-	//Generic Volume Vars
-	G4String name;
-	Material ThisMaterial;
-	
-	//Box Vars
-	G4double x;
-	G4double y;
-	G4double z;
-	
-	//Cylinder Vars
-	G4double InnerRadius;
-	G4double OuterRadius;
-	G4double Half_z;
-	G4double StartAngle;
-	G4double EndAngle;
-	
-};
+
+void InitializeMaterials();
 
 class DetectorConstruction : public G4VUserDetectorConstruction 
 {
@@ -103,7 +83,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 		Material *Air;
 		Material *LiquidArgon;
 		
-		vector<Volume> Volumes;
 
 
 	/*
@@ -114,7 +93,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 	public:
 	
 		DetectorConstruction();
-		DetectorConstruction(vector<Volume> Volumes);
 		~DetectorConstruction();
 		
 		G4VPhysicalVolume* Construct();
@@ -129,6 +107,16 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
 class DetectorComponent {
 	
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
+	public:
+	
+		VolumeType Type;
+		G4ThreeVector Position;
+		Material *DetectorComponentMaterial;
 	
 	/*
 	 * 
@@ -137,8 +125,15 @@ class DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent();
+		DetectorComponent(VolumeType Type, 
+                          G4ThreeVector Position,
+                          G4String MaterialString);
 		~DetectorComponent();
+		
+		
+	protected:
+	
+		void SetMaterialPointer(G4String MaterialString);
 	
 	/*
 	 * 
@@ -147,6 +142,68 @@ class DetectorComponent {
 	 * 		Finish this class
 	 * 
 	 * */
+	
+};
+
+class DetectorComponent_Cylinder : public DetectorComponent {
+	
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
+	public:
+	
+		G4double InnerRadius;
+		G4double OuterRadius;
+		G4double StartAngle;
+		G4double EndAngle;
+		G4double HalfLength;
+		
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		DetectorComponent_Cylinder(G4double InnerRadius,
+                                   G4double OuterRadius,
+                                   G4double StartAngle,
+                                   G4double EndAngle,
+                                   G4double HalfLength,
+                                   G4ThreeVector Position,
+                                   G4String MaterialString);
+		~DetectorComponent_Cylinder();
+	
+};
+
+class DetectorComponent_Box : public DetectorComponent {
+	
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
+	public:
+	
+		G4double x;
+		G4double y;
+		G4double z;
+	
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		DetectorComponent_Box(G4double x,
+                              G4double y,
+                              G4double z,
+                              G4ThreeVector Position,
+                              G4String MaterialString);
+		~DetectorComponent_Box();
 	
 };
 

@@ -30,17 +30,23 @@
 
 using std::cout;
 
+
+static Material *Air;
+static Material *LiquidArgon;
+
+void InitializeMaterials() {
+	
+	Air         = new Material("G4_AIR");
+	LiquidArgon = new Material("Liquid Argon", 18., 39.95 * g/mole,
+                                                         1.390 * g/cm3);
+	
+}
+
 DetectorConstruction::DetectorConstruction() {
 	
 	this->Air         = new Material("G4_AIR");
     this->LiquidArgon = new Material("LiquidArgon", 18., 39.95 * g/mole,
                                                          1.390 * g/cm3);
-	
-}
-
-DetectorConstruction::DetectorConstruction(vector<Volume> Volumes) {
-
-	this->Volumes = Volumes;
 	
 }
 
@@ -52,23 +58,10 @@ DetectorConstruction::~DetectorConstruction() {
 
 G4VPhysicalVolume* DetectorConstruction::Construct() {
 
-	if (this->Volumes.size() == 0) {
-		
-		InitializeWorld();
-		InitializeDetector();
-		InitializePhysicalVolume();
-		
-	} else {
-	
-		/*
-		 * TODO
-		 * 
-		 * Implement vector<Volume> Volumes functions and initialize
-		 * stuff
-		 * 
-		 * */
-		
-	}
+
+	InitializeWorld();
+	InitializeDetector();
+	InitializePhysicalVolume();
 	
 	return this->WorldPhysicalVolume;
 }
@@ -158,13 +151,84 @@ void DetectorConstruction::InitializePhysicalVolume() {
  * */
  
  
-DetectorComponent::DetectorComponent() {
+DetectorComponent::DetectorComponent(VolumeType Type, 
+                                     G4ThreeVector Position,
+                                     G4String MaterialString) 
+{
 	
 	
 	
 }
 
 DetectorComponent::~DetectorComponent() {
+
+	
+	
+}
+
+/*
+ * 
+ * TODO
+ * 
+ * 		It might be fruitful to introduce an array of Material object 
+ * 		pointers so that this function can just loop over the objects
+ * 
+ * */
+void DetectorComponent::SetMaterialPointer(G4String MaterialString) {
+	
+	
+	
+}
+
+
+/*
+ * 
+ * Class DetectorComponent_Cylinder member functions
+ * 
+ * */
+ 
+DetectorComponent_Cylinder::DetectorComponent_Cylinder(
+                                   G4double InnerRadius,
+                                   G4double OuterRadius,
+                                   G4double StartAngle,
+                                   G4double EndAngle,
+                                   G4double HalfLength,
+                                   G4ThreeVector Position,
+                                   G4String MaterialString)
+ : DetectorComponent(CYLINDER, Position, MaterialString)
+{
+	
+	
+	
+}
+
+DetectorComponent_Cylinder::~DetectorComponent_Cylinder() {
+	
+	
+}
+
+
+/*
+ * 
+ * Class DetectorComponent_Box member functions
+ * 
+ * */
+
+DetectorComponent_Box::DetectorComponent_Box(G4double x,
+                              G4double y,
+                              G4double z,
+                              G4ThreeVector Position,
+                              G4String MaterialString)
+ : DetectorComponent(BOX, Position, MaterialString) 
+{
+	
+	
+	
+}
+
+
+DetectorComponent_Box::~DetectorComponent_Box() {
+	
 
 	
 	
