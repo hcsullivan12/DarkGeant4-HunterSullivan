@@ -1,8 +1,12 @@
 --[[
 
-	TODO
+	* Detector_Name
 	
-		Finish Design and Document code
+		"Anything you want" (Default value of "Detector")
+		
+	* Number_of_Detector_Components
+	
+		A *Integer* greater than 0
 
 ]]--
 DetectorConfig = {Detector_Name = "Detector",
@@ -10,7 +14,26 @@ DetectorConfig = {Detector_Name = "Detector",
 
 --[[
 
+	* Material
+	
+		"Liquid Argon"
+		"Air"
 
+	* Volume_Type
+	
+		"Cylinder"
+		
+			InnerRadius (Default value of 0.0)
+			OuterRadius (No Default Value)
+			Half_Length (No Default Value)
+			Start_Angle (Default Value of 0.0)
+			End_Angle   (Default Value of 360.)
+		
+		"Box"
+		
+			X (No Default Value) (Width) -> Usually
+			Y (No Default Value) (Height)-> Usually
+			Z (No Default Value) (Length)-> Usually
 
 ]]--
 DetectorComponent_1 = {Material = "Liquid Argon",
