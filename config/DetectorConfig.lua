@@ -23,8 +23,8 @@ DetectorConfig = {Detector_Name = "Detector",
 	
 		"Cylinder"
 		
-			InnerRadius (Default value of 0.0)
-			OuterRadius (No Default Value)
+			Inner_Radius (Default value of 0.0)
+			Outer_Radius (No Default Value)
 			Half_Length (No Default Value)
 			Start_Angle (Default Value of 0.0)
 			End_Angle   (Default Value of 360.)
@@ -38,7 +38,7 @@ DetectorConfig = {Detector_Name = "Detector",
 ]]--
 DetectorComponent_1 = {Material = "Liquid Argon",
                        Volume_Type = "Cylinder",
-                       InnerRadius = 0.0,
-                       OuterRadius = .6,
+                       Inner_Radius = 0.0,
+                       Outer_Radius = .6,
                        Half_Length = .5,
                        Position = {0, 0, 0}}

@@ -31,6 +31,7 @@
 #include <iostream>
 #include <string>
 #include <exception>
+#include <vector>
 
 // Geant 4 Headers
 #include "G4VUserPhysicsList.hh"
@@ -40,6 +41,7 @@
 
 using std::cout;
 using std::string;
+using std::vector;
 
 enum POPELEMENTS {
 
@@ -100,7 +102,8 @@ class LuaInstance {
                               string ErrorMessage,
                               T DefaultValue,
                               int VAR_TYPE,
-                              U (*lua_Function)(lua_State *L, int index))
+                              U (*lua_Function)(lua_State *L, int index),
+                              bool HaltExecution)
                               
         {
 			
@@ -110,6 +113,10 @@ class LuaInstance {
 			if (lua_type(this->L, -1) != VAR_TYPE) {
 		
 				cout << ErrorMessage << "\n";
+				
+				if (HaltExecution == true)
+					exit(0);
+					
 				return DefaultValue;
 		
 			}
@@ -161,7 +168,9 @@ class DetectorConfigLuaInstance : public LuaInstance {
 	public:
 	
 		int Number_of_Dectector_Components;
-	
+		vector<DetectorComponent_Cylinder> CylinderComponents;
+		vector<DetectorComponent_Box> BoxComponents;
+		
 	
 	/*
 	 * 
@@ -176,6 +185,9 @@ class DetectorConfigLuaInstance : public LuaInstance {
 	private:
 	
 		void Initialize_number_of_detector_components();
+		void Initialize_detector_components();
+		void MakeDetectorComponent_Cylinder();
+		void MakeDetectorComponent_Box();
 	/*
 	 * 
 	 * TODO
