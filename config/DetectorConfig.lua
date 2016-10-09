@@ -15,7 +15,7 @@ DetectorConfig = {Detector_Name = "Detector",
 ]]--
 DetectorComponent_1 = {Material = "Liquid Argon",
                        Volume_Type = "Cylinder",
-                       InnerRadius = 0.0
-                       OuterRadius = .6
-                       Half_Length = .5
+                       InnerRadius = 0.0,
+                       OuterRadius = .6,
+                       Half_Length = .5,
                        Position = {0, 0, 0}}
