@@ -81,3 +81,20 @@ G4Material *Material::GetMaterialPointer() {
 	return this->DefinedMaterial;	
 	
 }
+
+void Material::SetAdditionalNames() {
+	
+	/*
+	 * 
+	 * Since users might want the option to use different names,
+	 * it might be fruitful to add this functionality.
+	 * 
+	 * TODO
+	 * 
+	 * 		Finish this function and create another function that
+	 * 		can compare arbitrary strings against the set name and
+	 * 		these alternative names
+	 * 
+	 * */
+	
+}

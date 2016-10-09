@@ -24,24 +24,43 @@
 #ifndef ELEMENT_H
 #define ELEMENT_H
 
+// User Headers
 #include "G4Material.hh"
+
+// C/C++ Headers
+#include <vector>
+
+using std::vector;
 
 class Material {
 	
+	
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
+	private:
+	
+		G4String name;
+		vector<G4String> OtherPossibleNames;
+		G4double z, a, density;
+	
+		G4Material *DefinedMaterial;
+	
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
 	public:
 	
 		Material(G4String name);
 		Material(G4String name, G4double z, G4double a, G4double density);
 		~Material();
 		
-	G4Material *GetMaterialPointer();
-	
-	private:
-	
-		G4String name;
-		G4double z, a, density;
-	
-		G4Material *DefinedMaterial;
+		G4Material *GetMaterialPointer();
+		void SetAdditionalNames();
 		
 };
 
