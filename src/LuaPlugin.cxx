@@ -110,7 +110,7 @@ void LuaInstance::LoadTable(string table) {
  * 		grants that ability.
  *  
  * */
-void CloseLuaState() {
+void LuaInstance::CloseLuaState() {
 
 	PopLuaStack();
 	lua_close(this->L);
@@ -157,6 +157,7 @@ void ConfigLuaInstance::Initialize_modulename() {
                                      LUA_TSTRING,
                                      &lua_tostring_shim);
    PopLuaStack(ONE);
+   cout << "Module name = " << this->modulename;
 	
 }
 
