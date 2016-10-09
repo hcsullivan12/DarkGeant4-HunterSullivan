@@ -61,22 +61,32 @@ using std::cin;
 
 static string Module = "config";
 static vector<G4String> ExecutionVector;
-
 static FourVectorStruct<G4double> *JBStruct = NULL;
 
-//Function Prototypes
-void Clean();
+static ConfigLuaInstance *ConfigFileInstance;
+static DetectorConfigLuaInstance *DetectorConfigFileInstance;
+
+/*
+ * 
+ * Function Prototypes
+ * 
+ * */
+
 void HandleArguments(int argc, char *argv[]);
-void InitializeRunManager(G4RunManager *runManager);
+
 void InitializeState();
+void InitializeLuaInstances();
+void InitializeRunManager(G4RunManager *runManager);
+
+void Clean();
 
 int main(int argc, char *argv[]) {
 	
-	if (argc > 1)
-		HandleArguments(argc, argv);
-	
+	HandleArguments(argc, argv);
 	InitializeState();
+	
 	std::cin.get();
+	
 	Clean();
 	
 	return 0;
@@ -95,33 +105,21 @@ int main(int argc, char *argv[]) {
 void InitializeState() {
 	
 	G4RunManager *runManager = new G4RunManager();
+	
+	
+	InitializeLuaInstances();
 	InitializeRunManager(runManager);
-	
 #ifdef G4VIS_USE
-
 	InitializeVisManager();
-	
 #endif
 #ifdef G4UI_USE
-
 	InitializeUIManager();
 	if (ExecutionVector.size() != 0)
 		cin.get();
 	for (size_t i = 0; i < ExecutionVector.size();i++)
-		ui->ApplyCommand(ExecutionVector[i]);
-		
+		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
-	if (JBStruct != NULL) {
-	
-		/*
-		 * TODO
-		 * 
-		 * Implement Functionality
-		 * 
-		 * */
-		
-	}
 	
 }
 
@@ -137,11 +135,43 @@ void Clean() {
 	if (JBStruct != NULL)
 		delete JBStruct->array;
 	delete JBStruct;
+	
+	delete ConfigFileInstance;
+	delete DetectorConfigFileInstance;
+}
+
+void InitializeLuaInstances() {
+
+	/*
+	 * 
+	 * uses openmp to introduce parallelization for the lua state
+	 * config files
+	 * 
+	 * */
+	#pragma omp parallel sections
+	{
+		#pragma omp section
+		{
+	
+			ConfigFileInstance = new ConfigLuaInstance(Module);
+			ConfigFileInstance->CloseLuaState();
+		
+		}
+		#pragma omp section
+		{
+		
+			DetectorConfigFileInstance = new DetectorConfigLuaInstance(Module);
+			DetectorConfigFileInstance->CloseLuaState();
+		
+		}
+	}	
+	
 }
 
 void InitializeRunManager(G4RunManager *runManager) {
 
 	runManager->SetUserInitialization(new DetectorConstruction());
+	runManager->SetUserInitialization(ConfigFileInstance->physicslist);
 	runManager->SetUserAction(new PrimaryGeneratorAction());
 	runManager->Initialize();
 	
@@ -176,8 +206,6 @@ struct ArgumentTable {
 	void (*Function)(int argc, char *argv[], int index);
 	
 };
-
-
 
 //Argument Function Prototypes
 void Execute_Argument(int argc, char *argv[], int index);

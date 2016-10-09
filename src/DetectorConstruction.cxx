@@ -148,3 +148,24 @@ void DetectorConstruction::InitializePhysicalVolume() {
 		cout << "Tracker physical volume could not be initialized\n";
 	
 }
+
+
+/*
+ * 
+ * Class DetectorComponent member functions
+ * 
+ * 
+ * */
+ 
+ 
+DetectorComponent::DetectorComponent() {
+	
+	
+	
+}
+
+DetectorComponent::~DetectorComponent() {
+
+	
+	
+}

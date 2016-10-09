@@ -16,7 +16,7 @@ runtime. Options include the following
 
 ]]--
 
-ConfigTable = { Module_Name  = "Default",
+ConfigTable = { Module_Name = "Default",
                 PhysicsList = "Default" }
 
 --[[

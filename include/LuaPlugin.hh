@@ -35,6 +35,9 @@
 // Geant 4 Headers
 #include "G4VUserPhysicsList.hh"
 
+// User Headers
+#include "DetectorConstruction.hh"
+
 using std::cout;
 using std::string;
 
@@ -67,6 +70,8 @@ class LuaInstance {
 	
 		LuaInstance(string FilePath);
 		~LuaInstance();
+		
+		void CloseLuaState();
 		
 	protected:
 	
@@ -128,7 +133,7 @@ class ConfigLuaInstance : public LuaInstance {
 	 * */
 	public:
 	
-		ConfigLuaInstance(string FilePath);
+		ConfigLuaInstance(string ModulePath);
 		~ConfigLuaInstance();
 		
 	private:
@@ -147,6 +152,8 @@ class ConfigLuaInstance : public LuaInstance {
 
 class DetectorConfigLuaInstance : public LuaInstance {
 	
+	
+	
 	/*
 	 * 
 	 * Class member functions
@@ -154,7 +161,7 @@ class DetectorConfigLuaInstance : public LuaInstance {
 	 * */
 	public:
 	
-		DetectorConfigLuaInstance(string FilePath);
+		DetectorConfigLuaInstance(string ModulePath);
 		~DetectorConfigLuaInstance();
 	
 	/*

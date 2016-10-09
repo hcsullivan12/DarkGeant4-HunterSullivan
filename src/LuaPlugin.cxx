@@ -69,6 +69,7 @@ LuaInstance::LuaInstance(string FilePath) {
 	if (luaL_loadfile(L, FilePath.c_str()) || lua_pcall(L, 0, 0, 0)) {
 		
 		cout << "Cannot run " << FilePath << "\n";
+		cout << lua_tostring(this->L, -1) << "\n";
 		throw;
 		
 	}
@@ -77,7 +78,7 @@ LuaInstance::LuaInstance(string FilePath) {
 	
 }
 
-void LuaInstance::PopLuaStack(int StackIndex = 1) {
+void LuaInstance::PopLuaStack(int StackIndex = -1) {
 
 	lua_pop(this->L, StackIndex);
 	
@@ -93,6 +94,26 @@ void LuaInstance::LoadTable(string table) {
 		throw;
 		
 	}
+	
+}
+
+/*
+ * 
+ * CloseLuaState()
+ * 
+ * * Comment
+ * 	
+ * 		This function is practically identical to the class destructor
+ * 		in function. So why then implement it? Suppose you want the 
+ * 		object to stay in memory to access it's member functions 
+ * 		but you no longer need the lua instance. This function
+ * 		grants that ability.
+ *  
+ * */
+void CloseLuaState() {
+
+	PopLuaStack();
+	lua_close(this->L);
 	
 }
 
@@ -113,8 +134,8 @@ LuaInstance::~LuaInstance() {
  * 
  * */
  
-ConfigLuaInstance::ConfigLuaInstance(string FilePath) 
-: LuaInstance(FilePath)
+ConfigLuaInstance::ConfigLuaInstance(string ModulePath) 
+: LuaInstance(ModulePath + string("/Config.lua"))
 {
 	
 	LoadTable("ConfigTable");
@@ -156,6 +177,7 @@ void ConfigLuaInstance::Initialize_physicslist() {
                                             
 	PopLuaStack(ONE);
 	
+	cout << "Physics list is " << PhysicsListString << "\n";
 	if (PhysicsListString == "Default")
 		this->physicslist = new PhysicsList();
 	else if (PhysicsListString == "QGSP_BERT")
@@ -172,8 +194,8 @@ void ConfigLuaInstance::Initialize_physicslist() {
  * 
  * */
 
-DetectorConfigLuaInstance::DetectorConfigLuaInstance(string FilePath)
-: LuaInstance(FilePath)
+DetectorConfigLuaInstance::DetectorConfigLuaInstance(string ModulePath)
+: LuaInstance(ModulePath + string("/DetectorConfig.lua"))
 {
 	
 	

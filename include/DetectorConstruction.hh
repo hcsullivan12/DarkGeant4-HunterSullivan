@@ -85,14 +85,11 @@ struct Volume {
 class DetectorConstruction : public G4VUserDetectorConstruction 
 {
 
-	public:
-	
-		DetectorConstruction();
-		DetectorConstruction(vector<Volume> Volumes);
-		~DetectorConstruction();
-		
-		G4VPhysicalVolume* Construct();
-		
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
 	private:
 	
 		G4Box *worldBox;
@@ -107,11 +104,50 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 		Material *LiquidArgon;
 		
 		vector<Volume> Volumes;
+
+
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		DetectorConstruction();
+		DetectorConstruction(vector<Volume> Volumes);
+		~DetectorConstruction();
+		
+		G4VPhysicalVolume* Construct();
+		
+	private:
 	
 		void InitializeWorld();
 		void InitializeDetector();
 		void InitializePhysicalVolume();
 		
+};
+
+class DetectorComponent {
+	
+	
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		DetectorComponent();
+		~DetectorComponent();
+	
+	/*
+	 * 
+	 * TODO
+	 * 
+	 * 		Finish this class
+	 * 
+	 * */
+	
 };
 
 #endif
