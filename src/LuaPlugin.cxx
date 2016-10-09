@@ -153,3 +153,104 @@ void PhysicsList_Config(lua_State *L, ConfigTableStruct *Config) {
 	cout << physicslist << " Physics List loaded\n";
 	
 }
+
+/*
+ * 
+ * Class LuaInstance member functions
+ * 
+ * * Comment
+ * 
+ * 		Later on it might be useful to load one of the default
+ * 		files, or have a parameter in one of the scripts to point
+ * 		to a default file.
+ * 
+ * 		For now I'll just throw an unhandled exception.
+ * 
+ * */
+
+LuaInstance::LuaInstance(string FilePath) {
+
+	this->L = luaL_newstate();
+	luaL_openlibs(L);
+	
+	if (luaL_loadfile(L, FilePath.c_str()) || lua_pcall(L, 0, 0, 0)) {
+		
+		cout << "Cannot run " << FilePath << "\n";
+		throw;
+		
+	}
+	
+	
+	
+}
+
+void LuaInstance::PopLuaStack(int StackIndex = 1) {
+
+	lua_pop(this->L, StackIndex);
+	
+}
+
+void LuaInstance::LoadTable(string table) {
+
+	lua_getglobal(this->L, table.c_str());
+	
+	if (!lua_istable(this->L, -1)) {
+	
+		cout << "Table " << table << " does not exist\n";
+		throw;
+		
+	}
+	
+}
+
+LuaInstance::~LuaInstance() {
+	
+	PopLuaStack();
+	lua_close(this->L);
+	
+}
+
+
+
+/*
+ * 
+ * 
+ * 	Class ConfigLuaInstance member functions
+ * 
+ * 
+ * */
+ 
+ConfigLuaInstance::ConfigLuaInstance(string FilePath) 
+: LuaInstance(FilePath)
+{
+	
+	
+	
+}
+ConfigLuaInstance::~ConfigLuaInstance()
+{
+	
+	
+}
+
+
+/*
+ * 
+ * 
+ * 	Class DetectorConfigLuaInstance member functions
+ * 
+ * 
+ * */
+
+DetectorConfigLuaInstance::DetectorConfigLuaInstance(string FilePath)
+: LuaInstance(FilePath)
+{
+	
+	
+}
+
+DetectorConfigLuaInstance::~DetectorConfigLuaInstance() 
+{
+		
+	
+}

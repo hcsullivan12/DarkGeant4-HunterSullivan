@@ -69,5 +69,117 @@ void SetStringPointerFromPreopenedTable(lua_State *L,
 
 ConfigTableStruct *ReadDefaultConfigFile(string ConfigDirectory);
 
+
+class LuaInstance {
+	
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
+	protected:
+	
+		lua_State *L;
+	
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		LuaInstance(string FilePath);
+		~LuaInstance();
+		
+	protected:
+	
+		void PopLuaStack(int StackIndex);
+		void LoadTable(string table);
+			
+		/*
+		* 
+		* Functions include
+		* 
+		* lua_toboolean
+		* lua_tolstring or lua_tostring (Read in the lua docs)
+		* lua_tonumber
+		* lua_tointeger
+		* lua_tounsigned
+		* 
+		* Types include
+		* 
+		* LUA_TBOOLEAN
+		* LUA_TNUMBER
+		* LUA_TSTRING
+		* 
+		* */
+		template<typename T, typename U>
+		T GetElementFromTable(string element, 
+                              string ErrorMessage,
+                              T DefaultValue,
+                              int VAR_TYPE,
+                              U (*lua_Function)(lua_State *L, int index))
+                              
+        {
+			
+			lua_pushstring(this->L, element.c_str());
+			lua_gettable(this->L, -2);
+	
+			if (lua_type(this->L, -1) != VAR_TYPE) {
+		
+				cout << ErrorMessage;
+				return DefaultValue;
+		
+			}
+			return lua_Function(this->L, -1);
+			
+		}
+	
+};
+
+class ConfigLuaInstance : public LuaInstance {
+	
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		ConfigLuaInstance(string FilePath);
+		~ConfigLuaInstance();
+	
+	/*
+	 * 
+	 * TODO
+	 * 
+	 * Finish class
+	 * 
+	 * */
+	
+};
+
+class DetectorConfigLuaInstance : public LuaInstance {
+	
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		DetectorConfigLuaInstance(string FilePath);
+		~DetectorConfigLuaInstance();
+	
+	/*
+	 * 
+	 * TODO
+	 * 
+	 * Finish class
+	 * 
+	 * */
+	
+};
+
 #endif
 
