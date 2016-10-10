@@ -32,7 +32,12 @@
 // Geant4 Headers
 #include "QGSP_BERT.hh"
 
-// Macro's
+/*
+ * 
+ * Useful Macro's that help increase code readibility by eliminating
+ * a lot of boiler plate code when calling GetElementFromTable.
+ * 
+ * */
 #define GetNumberFromTable_WithHalt(element, ErrorMessage) \
                             GetElementFromTable(element, \
                             ErrorMessage, 0.0, LUA_TNUMBER, \
@@ -76,7 +81,9 @@ static const string DefaultConfigDirectory = "config";
  * 
  * Since lua_toxxxx is just are just macros, I can't easily use
  * function pointers to simplify the template function in LuaPlugin.hh
+ * 
  * */
+ 
 const char *lua_tostring_shim(lua_State *L, int index) {
 		
 	return lua_tostring(L, index);
@@ -97,8 +104,9 @@ double lua_tonumber_shim(lua_State *L, int index) {
 
 
 /*
- * 
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Class LuaInstance member functions
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * * Comment
  * 
@@ -154,6 +162,7 @@ void LuaInstance::LoadTable(string table) {
  * 		grants that ability.
  *  
  * */
+ 
 void LuaInstance::CloseLuaState() {
 
 	lua_pop(this->L, -1);
@@ -176,12 +185,19 @@ LuaInstance::~LuaInstance() {
 
 /*
  * 
- * 
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 	Class ConfigLuaInstance member functions
- * 
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
  
+/*
+ * ConfigLuaInstance::ConfigLuaInstance(string ModulePath)
+ * 
+ * 
+ * 
+ * */
+
 ConfigLuaInstance::ConfigLuaInstance(string ModulePath) 
 : LuaInstance(ModulePath + string("/Config.lua"))
 {
@@ -191,11 +207,24 @@ ConfigLuaInstance::ConfigLuaInstance(string ModulePath)
 	Initialize_physicslist();
 	
 }
+
+/*
+ * ConfigLuaInstance::~ConfigLuaInstance()
+ * 
+ * 
+ * */
+
 ConfigLuaInstance::~ConfigLuaInstance()
 {
 	
 	
 }
+
+/*
+ * ConfigLuaInstance::Initialize_modulename()
+ * 
+ * 
+ * */
 
 void ConfigLuaInstance::Initialize_modulename() {
 	
@@ -206,10 +235,12 @@ void ConfigLuaInstance::Initialize_modulename() {
 }
 
 /*
+ * ConfigLuaInstance::Initialize_physicslist()
+ * 
  * 
  * TODO
  * 
- * Add other physics lists
+ * 		Add other physics lists
  * 
  * */
 void ConfigLuaInstance::Initialize_physicslist() {
@@ -228,8 +259,14 @@ void ConfigLuaInstance::Initialize_physicslist() {
 
 /*
  * 
- * 
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 	Class DetectorConfigLuaInstance member functions
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * 
+ * */
+
+/*
+ * DetectorConfigLuaInstane::DetectorConfigLuaInstance(string ModulePath)
  * 
  * 
  * */
@@ -245,11 +282,24 @@ DetectorConfigLuaInstance::DetectorConfigLuaInstance(string ModulePath)
 	
 }
 
+/*
+ * DetectorConfigLuaInstance::~DetectorConfigLuaInstance()
+ * 
+ * 
+ * */
+
 DetectorConfigLuaInstance::~DetectorConfigLuaInstance() 
 {
 		
 	
 }
+
+/*
+ * DetectorConfigLuaInstance::Initialize_number_of_detector_components()
+ * 
+ * 
+ * 
+ * */
 
 void DetectorConfigLuaInstance::Initialize_number_of_detector_components() {
 	
@@ -270,6 +320,13 @@ void DetectorConfigLuaInstance::Initialize_number_of_detector_components() {
 	}
 	
 }
+
+/*
+ * DetectorConfigLuaInstance::Initialize_detector_components()
+ * 
+ * 
+ * 
+ * */
 
 void DetectorConfigLuaInstance::Initialize_detector_components() {
 	
@@ -308,11 +365,9 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 
 
 /*
+ * DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder()
  * 
- * TODO
  * 
- * 		This function requires a refactoring. Also it would be
- * 		nice if the errors included the DetectorComponent_x number.
  * 
  * 
  * */
@@ -320,12 +375,12 @@ void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
 	
 	
 	
-    G4String MaterialString = GetStringFromTable_WithHalt("Material",
+	G4String MaterialString = GetStringFromTable_WithHalt("Material",
                                         "No Material found."
                                         + string(" Halting Execution"));
 	     
 	                                      
-    G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
+	G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
                                              "No Inner_Radius found."
                                              + string(" Set to 0.0"),
                                              0.0);
@@ -335,7 +390,7 @@ void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
                                              "No Outer_Radiys found."
                                         + string(" Halting Execution"));
                                       
-    G4double Start_Angle = GetNumberFromTable_NoHalt("Start_Angle",
+	G4double Start_Angle = GetNumberFromTable_NoHalt("Start_Angle",
                                              "No Start_Angle found."
                                              + string(" Set to 0.0"),
                                              0.0);
@@ -363,6 +418,43 @@ void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
                                       
    
 }
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_Box()
+ * 
+ * 
+ * 
+ * */
+
+void DetectorConfigLuaInstance::MakeDetectorComponent_Box() {
+    
+	G4double X = GetNumberFromTable_WithHalt("X", "Did not provide X "+
+                                    string("value. Halting Execution"));
+	
+    G4double Y = GetNumberFromTable_WithHalt("Y", "Did not provide Y "+
+                                    string("value. Halting Execution"));
+                                     
+	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
+                                    string("value. Halting Execution"));
+                                     
+                                     
+	G4String MaterialString = GetStringFromTable_WithHalt("Material",
+                               "Did not provide a valid material");
+                                     
+	G4ThreeVector Position = MakePositionG4ThreeVector();
+	
+	this->BoxComponents.push_back(DetectorComponent_Box(X, Y, Z,
+	                              Position, MaterialString));
+	
+}
+
+/*
+ * DetectorConfigLuaInstance::MakePositionG4ThreeVector()
+ * 
+ * 
+ * 
+ * */
+
 G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 
 	lua_pushstring(this->L, "Position");
@@ -396,26 +488,4 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 	return G4ThreeVector(PositionArray[0], 
                          PositionArray[1], 
                          PositionArray[2]);
-}
-
-void DetectorConfigLuaInstance::MakeDetectorComponent_Box() {
-    
-    G4double X = GetNumberFromTable_WithHalt("X", "Did not provide X "+
-                                     string("value. Halting Execution"));
-	
-	G4double Y = GetNumberFromTable_WithHalt("Y", "Did not provide Y "+
-                                     string("value. Halting Execution"));
-                                     
-	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
-                                     string("value. Halting Execution"));
-                                     
-                                     
-    G4String MaterialString = GetStringFromTable_WithHalt("Material",
-                               "Did not provide a valid material");
-                                     
-	G4ThreeVector Position = MakePositionG4ThreeVector();
-	
-	this->BoxComponents.push_back(DetectorComponent_Box(X, Y, Z,
-	                              Position, MaterialString));
-	
 }

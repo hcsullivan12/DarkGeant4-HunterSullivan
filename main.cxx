@@ -54,10 +54,23 @@
 #include <string>
 #include <vector>
 
+/* 
+ * ~~~~~~~~~~
+ * namespaces
+ * ~~~~~~~~~~
+ * 
+ * */
 using std::string;
 using std::vector;
 using std::cout;
 using std::cin;
+
+/*
+ * ~~~~~~~~~~~~~~~~
+ * Static variables
+ * ~~~~~~~~~~~~~~~~
+ * 
+ * */
 
 static string Module = "config";
 static vector<G4String> ExecutionVector;
@@ -67,17 +80,16 @@ static ConfigLuaInstance *ConfigFileInstance;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance;
 
 /*
- * 
- * Function Prototypes
+ *  ~~~~~~~~~~~~~~~~~~~
+ *  Function Prototypes
+ *  ~~~~~~~~~~~~~~~~~~~
  * 
  * */
 
 void HandleArguments(int argc, char *argv[]);
-
 void InitializeState();
 void InitializeLuaInstances();
 void InitializeRunManager(G4RunManager *runManager);
-
 void Clean();
 
 int main(int argc, char *argv[]) {
@@ -95,9 +107,12 @@ int main(int argc, char *argv[]) {
 /*
  * InitializeState
  * 
- * Initializes important runtime variables, calls several important
- * functions that initialize the UI and VIS functions (if compiled in),
- * and changes runtime state depending on user input
+ * * Description
+ * 
+ * 		Initializes important runtime variables, calls several important
+ * 		functions that initialize the UI and VIS functions 
+ * 		(if compiled in), and changes runtime state depending on user 
+ * 		input.
  * 
  * 
  * */
@@ -123,6 +138,15 @@ void InitializeState() {
 	
 }
 
+/*
+ * Clean()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 void Clean() {
 	
 #ifdef G4UI_USE
@@ -139,6 +163,22 @@ void Clean() {
 	delete ConfigFileInstance;
 	delete DetectorConfigFileInstance;
 }
+
+/*
+ * InitializeLuaInstances()
+ * 
+ * * Description
+ * 
+ * 		Uses openmp to introduce parallelization for the lua state
+ * 		config files.
+ * 
+ * * Comment
+ * 
+ * 		Be sure to define the build type as release!
+ * 
+ * 		cmake -DCMAKE_BUILD_TYPE=Release -DGeant4_DIR=/path/to/G4 ../
+ * 
+ * */
 
 void InitializeLuaInstances() {
 
@@ -167,6 +207,15 @@ void InitializeLuaInstances() {
 	}	
 	
 }
+
+/*
+ * InitializeRunManager(G4RunManager *runManager)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 void InitializeRunManager(G4RunManager *runManager) {
 
@@ -223,11 +272,15 @@ static const ArgumentTable Table[numHandledArguments] =
 
 
 /*
+ * HandleArguments(int argc, char *argv[])
  * 
- * Checks each provided runtime argument provided by the user
- * against known runtime arguments and acts accordingly.
+ * * Description
+ * 
+ * 		Checks each provided runtime argument provided by the user
+ * 		against known runtime arguments and acts accordingly.
  * 
  * */
+ 
 void HandleArguments(int argc, char *argv[]) {
 	
 	for (int y = 1;y < argc;y++)
@@ -237,9 +290,18 @@ void HandleArguments(int argc, char *argv[]) {
 		
 }
 
+/*
+ * Execute_Argument(int argc, char *argv[], int index)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+ 
 void Execute_Argument(int argc, char *argv[], int index) {
 
-	if ( (index+1) == argc) {
+	if ((index + 1) == argc) {
 	
 		cout << "Did not give a good execution argument\n";
 		return;
@@ -251,20 +313,30 @@ void Execute_Argument(int argc, char *argv[], int index) {
 	
 }
 
+/*
+ * JBInput_Arguments(int argc, char *argv[], int index)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 void JBInput_Argument(int argc, char *argv[], int index) {
 
-	/*
-	 * Output.dat is not a permanent filename in Josh's code, however
-	 * I don't see much reason to change it to something else so
-	 * I'm going to pretend it's just output.dat always.
-	 * 
-	 * Subject to change.
-	 * 
-	 * */
 	string filename("output.dat");
 	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
 	
 }
+
+/*
+ * Module_Argument(int argc, char *argv[], int index)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 void Module_Argument (int argc, char *argv[], int index) {
 
