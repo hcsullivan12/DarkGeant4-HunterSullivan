@@ -123,6 +123,7 @@ class LuaInstance {
 			return lua_Function(this->L, -1);
 			
 		}
+		
 	
 };
 
@@ -188,6 +189,7 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		void Initialize_detector_components();
 		void MakeDetectorComponent_Cylinder();
 		void MakeDetectorComponent_Box();
+		G4ThreeVector MakePositionG4ThreeVector();
 	/*
 	 * 
 	 * TODO

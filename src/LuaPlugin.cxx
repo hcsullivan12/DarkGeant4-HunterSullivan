@@ -298,6 +298,16 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 	
 }
 
+
+/*
+ * 
+ * TODO
+ * 
+ * 		This function requires a refactoring. Also it would be
+ * 		nice if the errors included the DetectorComponent_x number.
+ * 
+ * 
+ * */
 void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
 	
 	G4double Inner_Radius = GetElementFromTable("Inner_Radius",
@@ -338,18 +348,67 @@ void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
    PopLuaStack(ONE);
    G4double Half_Length = GetElementFromTable("Half_Length",
                                          "No Half_Length found."
-                                         + string(" Halting exectuion"),
+                                         + string(" Halting exectution"),
                                          0.0,
                                          LUA_TNUMBER,
                                          &lua_tonumber_shim,
                                          true);
-
-	/*
-	 * 
-	 * G4Three vector
-	 * 
-	 * */
+                                         
+    PopLuaStack(ONE);
+    G4String MaterialString = GetElementFromTable("Material",
+                                         "No Material found."
+                                         + string(" Halting execution"),
+                                         "",
+                                         LUA_TSTRING,
+                                         &lua_tostring_shim,
+                                         true);
+                                         
+	PopLuaStack(ONE);
+	G4ThreeVector Position = MakePositionG4ThreeVector();
    
+   CylinderComponents.push_back(DetectorComponent_Cylinder(
+                                Inner_Radius,
+                                Outer_Radius,
+                                Start_Angle,
+                                End_Angle,
+                                Half_Length,
+                                Position,
+                                MaterialString));
+   
+}
+G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
+
+	lua_pushstring(this->L, "Position");
+	lua_gettable(this->L, -2);
+	
+	if (lua_type(this->L, -1) != LUA_TTABLE) {
+		
+		cout << "Something went wrong";
+		throw;
+		
+	}
+	
+	G4double PositionArray[3];
+	for (int i = 1;i <= 3;i++) {
+		lua_pushnumber(this->L, 1);
+		lua_gettable(this->L, -2);
+		if (lua_type(this->L, -1) != LUA_TNUMBER) {
+	
+			cout << "The elements of DetectorComponent.Position should"
+			+ string("be a number!\n");
+			throw;
+		
+		}
+		PositionArray[i-1] = lua_tonumber(this->L, -1);
+		// Pops number
+		lua_pop(this->L, 1);
+	}
+	// Pops second table.
+	lua_pop(this->L, 1);
+	
+	return G4ThreeVector(PositionArray[0], 
+                         PositionArray[1], 
+                         PositionArray[2]);
 }
 
 void DetectorConfigLuaInstance::MakeDetectorComponent_Box() {
