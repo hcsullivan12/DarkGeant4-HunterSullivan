@@ -10,7 +10,7 @@
 
 ]]--
 DetectorConfig = {Detector_Name = "Detector",
-                  Number_of_Detector_Components = 1}
+                  Number_of_Detector_Components = 2}
 
 --[[
 
@@ -42,3 +42,10 @@ DetectorComponent_1 = { Material = "Liquid Argon",
                         Outer_Radius = .6,
                         Half_Length = .5,
                         Position = { 0, 0, 0 } }
+                        
+DetectorComponent_2 = { Material = "Air",
+                        Volume_Type = "Box",
+                        X = 1.0,
+                        Y = 1.0,
+                        Z = 1.0,
+                        Position = { 0, 1, 0}}

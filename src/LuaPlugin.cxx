@@ -312,7 +312,7 @@ void DetectorConfigLuaInstance::Initialize_number_of_detector_components() {
 	
 		cout << "You did not define the variable ";
 		cout << "Number_of_Detector_Components sufficiently.\n";
-		cout << "Please be sure you set it to an integer greater than 0"
+		cout << "Please be sure you set it to an integer greater than 0";
 		cout << ".\n";
 		cout << "Halting execution\n";
 		exit(0);
@@ -338,7 +338,7 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 		char tempstring[126] = {'\0'};
 		sprintf(tempstring, "%d", i);
 		
-		cout << "DetectorComponent_" + string(tempstring) << ":\n";
+		cout << "\nDetectorComponent_" + string(tempstring) << ":\n";
 		LoadTable("DetectorComponent_" + string(tempstring));
 		
 		string Volume_Type = GetStringFromTable_WithHalt("Volume_Type",
@@ -360,6 +360,7 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
             MakeDetectorComponent_Box();
 		
 	}
+	cout << "\n";
 	
 }
 
