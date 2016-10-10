@@ -32,6 +32,38 @@
 // Geant4 Headers
 #include "QGSP_BERT.hh"
 
+// Macro's
+#define GetNumberFromTable_WithHalt(element, ErrorMessage) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, 0.0, LUA_TNUMBER, \
+                            &lua_tonumber_shim, true)
+                            
+#define GetNumberFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, DefaultValue, LUA_TNUMBER, \
+                            &lua_tonumber_shim, false)
+                            
+#define GetIntegerFromTable_WithHalt(element, ErrorMessage) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, 0, LUA_TNUMBER, \
+                            &lua_tointeger_shim, true)
+                            
+#define GetIntegerFromTable_NoHalt(element, ErrorMessage) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, 0, LUA_TNUMBER, \
+                            &lua_tointeger_shim, false)
+                            
+#define GetStringFromTable_WithHalt(element, ErrorMessage) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, "", LUA_TSTRING, \
+                            &lua_tostring_shim, true)
+                            
+#define GetStringFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, "", LUA_TSTRING, \
+                            &lua_tostring_shim, false)
+
+
 const char *lua_tostring_shim(lua_State *L, int index);
 int lua_tointeger_shim(lua_State *L, int index);
 double lua_tonumber_shim(lua_State *L, int index);
@@ -40,10 +72,10 @@ double lua_tonumber_shim(lua_State *L, int index);
 static const string DefaultConfigDirectory = "config";
 
 /*
- * Since lua_tostring is just a macro of lua_tolstring and because
- * I initially intended to use function pointers for the various
- * lua_toxxx functions, I had to create this shim around the macro.
+ * * Comment
  * 
+ * Since lua_toxxxx is just are just macros, I can't easily use
+ * function pointers to simplify the template function in LuaPlugin.hh
  * */
 const char *lua_tostring_shim(lua_State *L, int index) {
 		
@@ -95,11 +127,6 @@ LuaInstance::LuaInstance(string FilePath) {
 	
 }
 
-void LuaInstance::PopLuaStack(int StackIndex = -1) {
-
-	lua_pop(this->L, StackIndex);
-	
-}
 
 void LuaInstance::LoadTable(string table) {
 
@@ -129,7 +156,7 @@ void LuaInstance::LoadTable(string table) {
  * */
 void LuaInstance::CloseLuaState() {
 
-	PopLuaStack();
+	lua_pop(this->L, -1);
 	lua_close(this->L);
 	
 }
@@ -138,7 +165,7 @@ LuaInstance::~LuaInstance() {
 	
 	if (this->L != NULL) {
 		
-		PopLuaStack();
+		lua_pop(this->L, -1);
 		lua_close(this->L);
 		
 	}
@@ -172,15 +199,10 @@ ConfigLuaInstance::~ConfigLuaInstance()
 
 void ConfigLuaInstance::Initialize_modulename() {
 	
-	this->modulename = GetElementFromTable("Module_Name",
-                                     "No Module_Name set",
-                                     "Default Module Name",
-                                     LUA_TSTRING,
-                                     &lua_tostring_shim,
-                                     false);
-   PopLuaStack(ONE);
-   cout << "Module name = " << this->modulename;
-	
+	this->modulename = GetStringFromTable_NoHalt("Module_Name",
+                                             "No Module_Name set",
+                                             "Default Module_Name set");
+
 }
 
 /*
@@ -192,16 +214,10 @@ void ConfigLuaInstance::Initialize_modulename() {
  * */
 void ConfigLuaInstance::Initialize_physicslist() {
 	
-	string PhysicsListString = GetElementFromTable("PhysicsList",
+	string PhysicsListString = GetStringFromTable_NoHalt("PhysicsList",
                                                    "No PhysicsList set",
-                                                   "Default",
-                                                   LUA_TSTRING,
-                                                   &lua_tostring_shim,
-                                                   false);
-                                            
-	PopLuaStack(ONE);
+                                                   "Default");
 	
-	cout << "Physics list is " << PhysicsListString << "\n";
 	if (PhysicsListString == "Default")
 		this->physicslist = new PhysicsList();
 	else if (PhysicsListString == "QGSP_BERT")
@@ -237,25 +253,21 @@ DetectorConfigLuaInstance::~DetectorConfigLuaInstance()
 
 void DetectorConfigLuaInstance::Initialize_number_of_detector_components() {
 	
-	this->Number_of_Dectector_Components = GetElementFromTable(
-	                            "Number_of_Detector_Components",
-	                            "Missing Number_of_Detector_Components",
-	                            0,
-	                            LUA_TNUMBER,
-	                            &lua_tointeger_shim,
-	                            true);
+	this->Number_of_Dectector_Components = GetNumberFromTable_WithHalt(
+                                "Number_of_Detector_Components",
+                                "Missing Number_of_Detector_Components"
+                                + string(" in DetectorConfig table."));
 	                            
 	if (this->Number_of_Dectector_Components <= 0) {
 	
 		cout << "You did not define the variable ";
-		cout << "Number_of_Detector_Components.\n";
-		cout << "Please be sure you set it to an integer.\n";
-		
+		cout << "Number_of_Detector_Components sufficiently.\n";
+		cout << "Please be sure you set it to an integer greater than 0"
+		cout << ".\n";
 		cout << "Halting execution\n";
 		exit(0);
 		
 	}
-	PopLuaStack(1);
 	
 }
 
@@ -264,23 +276,19 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 	for (int i = 1; i <= this->Number_of_Dectector_Components;i++) {
 	
 		//Pop entire stack
-		PopLuaStack(ALL);
+		lua_pop(this->L, -1);
 		
 		char tempstring[126] = {'\0'};
 		sprintf(tempstring, "%d", i);
 		
+		cout << "DetectorComponent_" + string(tempstring) << ":\n";
 		LoadTable("DetectorComponent_" + string(tempstring));
 		
-		string Volume_Type = GetElementFromTable("Volume_Type",
-                             "You didn't define a detector type for " 
-                             + string(" DetectorComponent") 
-                             + string(tempstring),
-                             "Nothing",
-                             LUA_TSTRING,
-                             &lua_tostring_shim,
-                             true);
+		string Volume_Type = GetStringFromTable_WithHalt("Volume_Type",
+		                     "You didn't define an appropriate volume "
+		                     + string("for DetectorComponent_"
+		                     + string(tempstring)));
                              
-        PopLuaStack(ONE);
        /*
         * * Comment
         * 
@@ -290,9 +298,9 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
         * */
         
         if (Volume_Type == "Cylinder")
-			MakeDetectorComponent_Cylinder();
-		else if (Volume_Type == "Box")
-			MakeDetectorComponent_Box();
+            MakeDetectorComponent_Cylinder();
+        else if (Volume_Type == "Box")
+            MakeDetectorComponent_Box();
 		
 	}
 	
@@ -310,70 +318,49 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
  * */
 void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
 	
-	G4double Inner_Radius = GetElementFromTable("Inner_Radius",
-                                               "No Inner_Radius found."
-                                               + string(" Set to 0.0"),
-                                               0.0,
-                                               LUA_TNUMBER,
-                                               &lua_tonumber_shim,
-                                               false);
+	
+	
+    G4String MaterialString = GetStringFromTable_WithHalt("Material",
+                                        "No Material found."
+                                        + string(" Halting Execution"));
+	     
+	                                      
+    G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
+                                             "No Inner_Radius found."
+                                             + string(" Set to 0.0"),
+                                             0.0);
                                                
-    PopLuaStack(ONE);
-	G4double Outer_Radius = GetElementFromTable("Outer_Radius",
-                                         "No Outer_Radius found."
-                                         + string(" Halting execution"),
-                                         0.0,
-                                         LUA_TNUMBER,
-                                         &lua_tonumber_shim,
-                                         true);
-       
-    PopLuaStack(ONE);                                  
-    G4double Start_Angle = GetElementFromTable("Start_Angle",
-                                               "No Start_Angle found."
-                                               + string(" Set to 0.0"),
-                                               0.0,
-                                               LUA_TNUMBER,
-                                               &lua_tonumber_shim,
-                                               false);
+                                       
+	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
+                                             "No Outer_Radiys found."
+                                        + string(" Halting Execution"));
+                                      
+    G4double Start_Angle = GetNumberFromTable_NoHalt("Start_Angle",
+                                             "No Start_Angle found."
+                                             + string(" Set to 0.0"),
+                                             0.0);
                                                
-   PopLuaStack(ONE);
-   G4double End_Angle = GetElementFromTable("End_Angle",
-                                            "No End_Angle found."
-                                            + string(" Set to 360."),
-                                            360.,
-                                            LUA_TNUMBER,
-                                            &lua_tonumber_shim,
-                                            false);
+	G4double End_Angle = GetNumberFromTable_NoHalt("End_Angle",
+                                             "No End_Angle found."
+                                             + string(" Set to 360."),
+                                             360.);
                                             
-   PopLuaStack(ONE);
-   G4double Half_Length = GetElementFromTable("Half_Length",
-                                         "No Half_Length found."
-                                         + string(" Halting exectution"),
-                                         0.0,
-                                         LUA_TNUMBER,
-                                         &lua_tonumber_shim,
-                                         true);
+	G4double Half_Length = GetNumberFromTable_WithHalt("Half_Length",
+                                             "No Half_Length found."
+                                        + string(" Halting Execution"));
                                          
-    PopLuaStack(ONE);
-    G4String MaterialString = GetElementFromTable("Material",
-                                         "No Material found."
-                                         + string(" Halting execution"),
-                                         "",
-                                         LUA_TSTRING,
-                                         &lua_tostring_shim,
-                                         true);
                                          
-	PopLuaStack(ONE);
 	G4ThreeVector Position = MakePositionG4ThreeVector();
    
-   CylinderComponents.push_back(DetectorComponent_Cylinder(
-                                Inner_Radius,
-                                Outer_Radius,
-                                Start_Angle,
-                                End_Angle,
-                                Half_Length,
-                                Position,
-                                MaterialString));
+	this->CylinderComponents.push_back(DetectorComponent_Cylinder(
+                                      Inner_Radius,
+                                      Outer_Radius,
+                                      Start_Angle,
+                                      End_Angle,
+                                      Half_Length,
+                                      Position,
+                                      MaterialString));
+                                      
    
 }
 G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
@@ -383,7 +370,7 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 	
 	if (lua_type(this->L, -1) != LUA_TTABLE) {
 		
-		cout << "Something went wrong";
+		cout << "Something went wrong with DetectorComponent.Position";
 		throw;
 		
 	}
@@ -412,7 +399,23 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 }
 
 void DetectorConfigLuaInstance::MakeDetectorComponent_Box() {
+    
+    G4double X = GetNumberFromTable_WithHalt("X", "Did not provide X "+
+                                     string("value. Halting Execution"));
 	
+	G4double Y = GetNumberFromTable_WithHalt("Y", "Did not provide Y "+
+                                     string("value. Halting Execution"));
+                                     
+	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
+                                     string("value. Halting Execution"));
+                                     
+                                     
+    G4String MaterialString = GetStringFromTable_WithHalt("Material",
+                               "Did not provide a valid material");
+                                     
+	G4ThreeVector Position = MakePositionG4ThreeVector();
 	
+	this->BoxComponents.push_back(DetectorComponent_Box(X, Y, Z,
+	                              Position, MaterialString));
 	
 }

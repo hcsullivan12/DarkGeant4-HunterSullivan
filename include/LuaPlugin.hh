@@ -77,7 +77,6 @@ class LuaInstance {
 		
 	protected:
 	
-		void PopLuaStack(int StackIndex);
 		void LoadTable(string table);
 			
 		/*
@@ -114,13 +113,17 @@ class LuaInstance {
 		
 				cout << ErrorMessage << "\n";
 				
+				lua_pop(this->L, 1);
 				if (HaltExecution == true)
 					exit(0);
 					
 				return DefaultValue;
 		
 			}
-			return lua_Function(this->L, -1);
+			T ReturnValue = lua_Function(this->L, -1);
+			lua_pop(this->L, 1);
+			cout << element << " = " << ReturnValue << "\n";
+			return ReturnValue;
 			
 		}
 		
