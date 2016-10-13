@@ -48,12 +48,13 @@ except ImportError:
 
 '''
 
-PrimaryParticleEnergyList = []
-IonizationEnergyList = []
+PrimaryKineticEnergyList = []
+PrimaryIonizationList = []
 SecondaryEnergyList  = []
 TotalSecondaryEnergyList = []
 DifferenceList = []
 dEdxlist = []
+TotalIonizationList = []
 
 
 '''
@@ -86,20 +87,27 @@ def main():
 
 def InitializeHistogramObjects():
 	
-	global PrimaryParticleEnergyList
-	global IonizationEnergyList
+	global PrimaryKineticEnergyList
+	global PrimaryIonizationList
 	global dEdxlist
+	global TotalIonizationList
 	
 	HistogramObjs = []
 
-	PrimaryHistogram = HistogramPlotter(PrimaryParticleEnergyList,
+	PrimaryHistogram = HistogramPlotter(PrimaryKineticEnergyList,
 								"Initial Proton Kinetic Energy",
 								"Kinetic Energy (MeV)",
 								"Amount",
 								XRange = [0,1200])
 								
-	IonizationHistogram = HistogramPlotter(IonizationEnergyList,
-								"Total Ionization Energy",
+	TotalIonizationHistogram = HistogramPlotter(TotalIonizationList,
+                                 "Total Ionization Energy",
+                                 "Energy (MeV)",
+                                 "Amount",
+                                 XRange = [0,1200])
+								
+	PrimaryIonizationHistogram = HistogramPlotter(PrimaryIonizationList,
+								"Primary Ionization Energy",
 								"Energy (MeV)",
 								"Amount",
 								XRange = [0,1200])
@@ -112,7 +120,8 @@ def InitializeHistogramObjects():
 								Bins = 9000)
 								
 	HistogramObjs.append(PrimaryHistogram)
-	HistogramObjs.append(IonizationHistogram)
+	HistogramObjs.append(TotalIonizationHistogram)
+	HistogramObjs.append(PrimaryIonizationHistogram)
 	HistogramObjs.append(dEdxHistogram)
 	
 	return HistogramObjs
@@ -198,9 +207,10 @@ def SecondaryListChunkProcesses():
 
 def ReadIonizationFileAndPopulateLists():
 		
-	global PrimaryParticleEnergyList
-	global IonizationEnergyList
+	global PrimaryKineticEnergyList
+	global PrimaryIonizationList
 	global TotalSecondaryEnergyList
+	global TotalIonizationList
 		
 	File = []
 	
@@ -213,9 +223,10 @@ def ReadIonizationFileAndPopulateLists():
 		print("Halting Execution")
 		exit(0)
 			
-	MakeList(File, "Primary particle energy", PrimaryParticleEnergyList)
-	MakeList(File, "Ionization Energy", IonizationEnergyList)
+	MakeList(File, "Primary particle kinetic energy", PrimaryKineticEnergyList)
+	MakeList(File, "Primary Ionization Energy", PrimaryIonizationList)
 	MakeList(File, "Total Secondary Energy", TotalSecondaryEnergyList)
+	MakeList(File, "Total Ionization Energy", TotalIonizationList)
 	
 	MakeSecondaryEnergyList(File)
 	MakedEdxList(File)
@@ -292,21 +303,21 @@ def MakeSecondaryEnergyList(File):
 				
 def FindDifferenceBetweenIonizationAndTotalSecondary():
 	
-	global IonizationEnergyList
+	global PrimaryIonizationList
 	global TotalSecondaryEnergyList
 	global DifferenceList
 	
-	if len(IonizationEnergyList) != len(TotalSecondaryEnergyList):
+	if len(PrimaryIonizationList) != len(TotalSecondaryEnergyList):
 		print("The length of the Ionization and Total Secondary energy" +
 			" lists do not match.")
 		print("Halting execution")
-		print(len(IonizationEnergyList))
+		print(len(PrimaryIonizationList))
 		print(len(TotalSecondaryEnergyList))
 		exit(0)
 	
-	for i in range(len(IonizationEnergyList)):
+	for i in range(len(PrimaryIonizationList)):
 		DifferenceList.append(abs(
-		IonizationEnergyList[i] - TotalSecondaryEnergyList[i]))
+		PrimaryIonizationList[i] - TotalSecondaryEnergyList[i]))
 
 class HistogramPlotter(object):
 	

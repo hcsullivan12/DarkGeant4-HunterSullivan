@@ -24,7 +24,12 @@
 
 '''
 
-	Parses Event_x Files generated from the SplitGeant4Ouput.py script
+	ParseSplitGeant4Output.py
+	
+	* Description
+
+		Parses Event_x Files generated from the SplitGeant4Ouput.py 
+		script
 	
 	
 
@@ -70,7 +75,9 @@ def main():
 
 	HandleArguments(args)
 	
-	Parses the sys.argv list
+	* Description
+	
+		Parses the sys.argv list
 	
 
 '''
@@ -99,9 +106,11 @@ def HandleArguments(args):
 
 	Content(object)
 	
-	This class handles a large subset of the parsing for this file,
-	however I suspect it has grown to big and bloated and goes
-	beyond the scope of it's initial design.
+	* Description
+	
+		This class handles a large subset of the parsing for this file,
+		however I suspect it has grown to big and bloated and goes
+		beyond the scope of it's initial design.
 	
 	TODO
 	
@@ -276,7 +285,8 @@ class DarkGeant4Data(object):
 		self.GetPrimaryParticleInitialKineticEnergy()
 		self.GetTotalSecondaryEnergyAtFirstStep()
 		self.CalculateIonizationEnergyOfPrimaryParticle()
-		self.Find_dEdx()
+		self.CalculateTotalIonizationEnergy()
+		self.Find_dEdx_through_detector()
 		
 	'''
 	
@@ -377,9 +387,25 @@ class DarkGeant4Data(object):
 					
 					break
 					
-				elif "hIoni" in self.FileContents[i]:
+				elif "Detector hIoni" in self.FileContents[i]:
 					
 					self.PrimaryParticleIonizationEnergy += float(
+					self.FileContents[i].split()[5])
+				
+			except IndexError:
+				pass
+				
+				
+	def CalculateTotalIonizationEnergy(self):
+		
+		self.TotalIonizationEnergy = 0.0
+		for i in range(5, len(self.FileContents)):
+			try:
+				
+				if ("Detector" in self.FileContents[i] and
+					"Ioni" in self.FileContents[i]):
+					
+					self.TotalIonizationEnergy += float(
 					self.FileContents[i].split()[5])
 				
 			except IndexError:
@@ -387,23 +413,23 @@ class DarkGeant4Data(object):
 	
 	'''
 	
-		Find_dEdx(self)
+		Find_dEdx_through_detector(self)
 		
 		...
 	
 	'''
-	def Find_dEdx(self):
+	def Find_dEdx_through_detector(self):
 		
-		self.dEdxList = []
+		self.dEdXDetector = []
 		for i in range(5, len(self.FileContents)):
 			try:
 				
 				if "Particle" in self.FileContents[i]:
 					break
-				elif "hIoni" in self.FileContents[i]:
+				elif "Detector hIoni" in self.FileContents[i]:
 					dE = float(self.FileContents[i].split()[5])
 					StepLength = float(self.FileContents[i].split()[6])/10.0
-					self.dEdxList.append(dE/StepLength)
+					self.dEdXDetector.append(dE/StepLength)
 					
 			except IndexError:
 				pass
@@ -438,20 +464,22 @@ class DarkGeant4Data(object):
 		
 		fp = open(OutputIonizationFile, "w")
 		
-		fp.write("Primary particle energy\n")
+		fp.write("Primary particle kinetic energy\n")
 		fp.write("%f\n" % (self.PrimaryParticleEnergy))
 		fp.write("Ionization particle of immediate daughter secondaries\n")
 		for element in self.SecondaryParticleEnergies:
 			fp.write("%f\n" % (element))
 		
 		fp.write("dE/dx\n")
-		for element in self.dEdxList:
+		for element in self.dEdXDetector:
 			fp.write("%f\n" % (element))
 		
-		fp.write("Ionization Energy\n")
+		fp.write("Primary Ionization Energy\n")
 		fp.write("%f\n" % (self.PrimaryParticleIonizationEnergy))
 		fp.write("Total Secondary Energy\n")
 		fp.write("%f\n" % (self.TotalSecondaryParticleEnergy))
+		fp.write("Total Ionization Energy\n")
+		fp.write("%f\n" % (self.TotalIonizationEnergy))
 		
 		fp.close()
 		
