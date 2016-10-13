@@ -52,19 +52,9 @@ def main():
 	
 	global ReadFilename
 	global OutputIonizationFile
-	global PrintTree
 		
-	if ReadFilename == None:
-		print("You need to pass an Event file to read -read <Event file>")
-		return -1
-		
-	obj = Content(ReadFilename, PrintTree)
-
-	if PrintTree is True:	
-		obj.PrintHeirarchy(0, 0, 0)
-	
-	DarkGeant4DataObj = DarkGeant4Data(
-	obj.FileContents)
+	obj = Content(ReadFilename)	
+	DarkGeant4DataObj = DarkGeant4Data(obj.FileContents)
 	
 	if OutputIonizationFile != None:
 		DarkGeant4DataObj.SaveDarkGeant4Data(OutputIonizationFile)
@@ -120,16 +110,17 @@ def HandleArguments(args):
 class Content(object):
 	
 	#Get ready for a hefty amount of computation
-	def __init__(self, Filename, PrintTree = True):
+	def __init__(self, Filename, PrintTree = False):
 		
-		self.ParentName = ""
-		self.ParticleList = []
-		self.levelslist = [""]
-		self.PrintTree = PrintTree
+		#self.ParentName = ""
+		#self.ParticleList = []
+		#self.levelslist = [""]
+		#self.PrintTree = PrintTree
+		self.FileContents = []
 		
-		self.PopulateLevelsList()
 		self.ReadFile(Filename)
-		self.ParseFileContents()
+		#self.PopulateLevelsList()
+		#self.ParseFileContents()
 		
 		
 	def PopulateLevelsList(self):
@@ -142,11 +133,12 @@ class Content(object):
 		
 		# Loads the entire content of the file specified by filename
 		# and places it into a list.
-		fp = open(Filename, "r")
-		self.FileContents = []
-		for line in fp:
-			self.FileContents.append(line)
-		fp.close()
+		try:
+			with open(Filename, "r") as fp:
+				for line in fp:
+					self.FileContents.append(line)
+		except FileNotFoundError:
+			print("You need to pass an Event file -read <Event file>")
 		
 	def ParseFileContents(self):
 		
@@ -287,7 +279,38 @@ class DarkGeant4Data(object):
 		self.CalculateIonizationEnergyOfPrimaryParticle()
 		self.CalculateTotalIonizationEnergy()
 		self.Find_dEdx_through_detector()
+		self.GetPrimaryPositionPerStep()
 		
+		
+	'''
+	
+		GetPrimaryPositionPerStep(self)
+		
+		* Description
+		
+			...
+	
+	'''
+	def GetPrimaryPositionPerStep(self):
+		
+		self.PositionList = []
+		Pos = 0
+		for i in range(4, len(self.FileContents)):
+			
+			if "*" in self.FileContents[i]:
+				
+				break
+				
+			self.PositionList.append([])
+			TempSplit = self.FileContents[i].split()
+			
+			for t in range(3):
+				
+				self.PositionList[Pos].append(float(
+				TempSplit[t+1]))
+				
+			Pos += 1
+			
 	'''
 	
 		GetPrimaryParticleInitialKineticEnergy(self)
@@ -395,7 +418,16 @@ class DarkGeant4Data(object):
 			except IndexError:
 				pass
 				
-				
+			
+	'''
+	
+		CalculateTotalIonizationEnergy(self)
+		
+		* Description
+		
+			...
+	
+	'''	
 	def CalculateTotalIonizationEnergy(self):
 		
 		self.TotalIonizationEnergy = 0.0
@@ -480,6 +512,15 @@ class DarkGeant4Data(object):
 		fp.write("%f\n" % (self.TotalSecondaryParticleEnergy))
 		fp.write("Total Ionization Energy\n")
 		fp.write("%f\n" % (self.TotalIonizationEnergy))
+		fp.write("Primary Particle Position\n")
+		
+		for i in range(len(self.PositionList)):
+			for t in range(3):
+				if t != 2:
+					fp.write("%f " % self.PositionList[i][t])
+				else:
+					fp.write("%f" % self.PositionList[i][t])
+			fp.write("\n")
 		
 		fp.close()
 		
