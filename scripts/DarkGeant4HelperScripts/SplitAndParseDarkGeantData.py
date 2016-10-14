@@ -38,8 +38,6 @@ from multiprocessing import Process
 
 
 FileToSplit = "Output.txt"
-ReadFilename = None
-OutputIonizationFile = None
 PrintTree = False
 NumberOfEvents = 0
 
@@ -94,6 +92,15 @@ def SpawnProcesses():
 		ProcessList[i].join()
 	
 	
+'''
+
+	EventLoop(Group)
+	
+	* Description
+	
+		...
+
+'''
 def EventLoop(Group):
 	
 	for i in range(Group[0], Group[1]+1):
@@ -172,8 +179,6 @@ def SplitFile():
 	
 def HandleArguments(args):
 	
-	global ReadFilename
-	global OutputIonizationFile
 	global FileToSplit
 	global PrintTree
 	
@@ -183,17 +188,9 @@ def HandleArguments(args):
 			
 			FileToSplit = args[i+1]
 			
-		elif "-read" == args[i] and len(args) != i+1:
-			
-			ReadFilename = args[i+1]
-			
 		elif "-tree" == args[i]:
 			
 			PrintTree = True
-			
-		elif "-output-ionization" and len(args) != i+1:
-			
-			OutputIonizationFile = args[i+1]
 		
 '''
 
@@ -407,10 +404,14 @@ class DarkGeant4Data(object):
 			self.PositionList.append([])
 			TempSplit = self.FileContents[i].split()
 			
+			# X, Y and Z coordinates in mm
 			for t in range(3):
 				
 				self.PositionList[Pos].append(float(
 				TempSplit[t+1]))
+				
+			# Step length
+			self.PositionList[Pos].append(float(TempSplit[6]))
 				
 			Pos += 1
 			
@@ -618,8 +619,8 @@ class DarkGeant4Data(object):
 		fp.write("Primary Particle Position\n")
 		
 		for i in range(len(self.PositionList)):
-			for t in range(3):
-				if t != 2:
+			for t in range(4):
+				if t != 3:
 					fp.write("%f " % self.PositionList[i][t])
 				else:
 					fp.write("%f" % self.PositionList[i][t])
