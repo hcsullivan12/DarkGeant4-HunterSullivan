@@ -31,14 +31,14 @@
 
 	#include "G4VisExecutive.hh"
 	void InitializeVisManager();
-	static G4VisManager *vis = new G4VisExecutive();
+	static G4VisManager *vis;
 	
 #endif
 #ifdef G4UI_USE
 
 	#include "G4UImanager.hh"
 	void InitializeUIManager();
-	static G4UImanager  *ui = G4UImanager::GetUIpointer();
+	static G4UImanager  *ui;
 	
 #endif
 
@@ -78,6 +78,9 @@ static FourVectorStruct<G4double> *JBStruct = NULL;
 
 static ConfigLuaInstance *ConfigFileInstance;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance;
+
+
+static G4RunManager *runManager;
 
 /*
  *  ~~~~~~~~~~~~~~~~~~~
@@ -119,8 +122,7 @@ int main(int argc, char *argv[]) {
 
 void InitializeState() {
 	
-	G4RunManager *runManager = new G4RunManager();
-	
+	runManager = new G4RunManager();
 	
 	InitializeLuaInstances();
 	InitializeRunManager(runManager);
@@ -155,6 +157,19 @@ void Clean() {
 #ifdef G4VIS_USE
 	delete vis;
 #endif	
+
+	/*
+	 * 
+	 * There might be a memory leak upon exiting, but it's nothing
+	 * to worry about too much. Any modern operating system should
+	 * just reclaim that memory.
+	 * 
+	 * TODO
+	 * 
+	 * 		FIX memory leak and possibly the segmentation fault.
+	 * 
+	 * */
+	//delete runManager;
 
 	if (JBStruct != NULL)
 		delete JBStruct->array;
@@ -228,10 +243,10 @@ void InitializeRunManager(G4RunManager *runManager) {
 #ifdef G4UI_USE
 void InitializeUIManager() {
 
+	ui = G4UImanager::GetUIpointer();
 	ui->ApplyCommand("/run/verbose 1");
 	ui->ApplyCommand("/event/verbose 1");
 	ui->ApplyCommand("/tracking/verbose 1");
-	
 	ui->ApplyCommand("/control/execute vis.mac");
 	
 }
@@ -240,6 +255,7 @@ void InitializeUIManager() {
 #ifdef G4VIS_USE
 void InitializeVisManager() {
 
+	vis = new G4VisExecutive();
 	vis->Initialize();
 	
 }

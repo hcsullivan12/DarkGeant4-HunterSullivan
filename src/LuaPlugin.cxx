@@ -167,6 +167,7 @@ void LuaInstance::CloseLuaState() {
 
 	lua_pop(this->L, -1);
 	lua_close(this->L);
+	this->L = NULL;
 	
 }
 
