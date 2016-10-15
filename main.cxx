@@ -48,6 +48,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "Utilities.hh"
 #include "LuaPlugin.hh"
+#include "SteppingAction.hh"
 
 // C & C++ Headers
 #include <cstring>
@@ -237,6 +238,7 @@ void InitializeRunManager(G4RunManager *runManager) {
 	runManager->SetUserInitialization(new DetectorConstruction());
 	runManager->SetUserInitialization(ConfigFileInstance->physicslist);
 	runManager->SetUserAction(new PrimaryGeneratorAction());
+	runManager->SetUserAction(new SteppingAction());
 	runManager->Initialize();
 	
 }
