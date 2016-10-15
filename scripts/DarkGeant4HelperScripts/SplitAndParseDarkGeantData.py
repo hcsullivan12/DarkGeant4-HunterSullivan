@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-#  ParseSplitGeant4Ouput.py
+#  SplitAndParseDarkGeantData.py
 #  
 #  Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
 #  
@@ -20,49 +20,149 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 #  MA 02110-1301, USA.
 #  
-#  
+#
+
+from multiprocessing import Process
 
 '''
 
-	Parses Event_x Files generated from the SplitGeant4Ouput.py script
+	ParseSplitGeant4Output.py
+	
+	* Description
+
+		Split and parses data outputted by DarkGeant
 	
 	
 
 '''
 
 
-ReadFilename = None
-OutputIonizationFile = None
+FileToSplit = "Output.txt"
 PrintTree = False
+NumberOfEvents = 0
 
 
 '''
 
 	main()
 	
+	* Description
+	
+		...
 
 '''
 
 def main():
 	
-	global ReadFilename
-	global OutputIonizationFile
-	global PrintTree
-		
-	if ReadFilename == None:
-		print("You need to pass an Event file to read -read <Event file>")
-		return -1
-		
-	obj = Content(ReadFilename, PrintTree)
+	global FileToSplit
+	
+	print("Splitting %s." % (FileToSplit))
+	SplitFile()
+	print("Done!")
+	
+	print("Parsing Event Files.")
+	SpawnProcesses()
+	print("Done!")
+	
+	return 0
+	
+	
+'''
 
-	if PrintTree is True:	
-		obj.PrintHeirarchy(0, 0, 0)
+	SpawnProcesses()
 	
-	DarkGeant4DataObj = DarkGeant4Data(
-	obj.FileContents)
+	* Description
 	
-	if OutputIonizationFile != None:
-		DarkGeant4DataObj.SaveDarkGeant4Data(OutputIonizationFile)
+		...
+
+'''
+def SpawnProcesses():
+	
+	global NumberOfEvents
+	
+	FirstGroup = [1, int(NumberOfEvents/2)]
+	SecondGroup = [int(NumberOfEvents/2)+1, NumberOfEvents]
+	
+	ProcessList = []
+	ProcessList.append(Process(target=EventLoop, args=(FirstGroup,)))
+	ProcessList.append(Process(target=EventLoop, args=(SecondGroup,)))
+	for i in range(2):
+		ProcessList[i].start()
+	for i in range(2):
+		ProcessList[i].join()
+	
+	
+'''
+
+	EventLoop(Group)
+	
+	* Description
+	
+		...
+
+'''
+def EventLoop(Group):
+	
+	for i in range(Group[0], Group[1]+1):
+		ContentObj = Content("Event_" + str(i))
+		DarkGeant4DataObj = DarkGeant4Data(ContentObj.FileContents)
+		DarkGeant4DataObj.SaveDarkGeant4Data("DarkGeantData_" + str(i))
+	
+'''
+
+	SplitFile()
+	
+	* Description
+	
+		...
+
+'''
+def SplitFile():
+	
+	global FileToSplit
+	global NumberOfEvents
+	
+	try:
+		fp  = open(FileToSplit, "r")
+	except FileNotFoundError:
+		print("No file called %s found" % (FileToSplit))
+		print("Please pass a valid file using -file <filename>")
+		exit(0)
+		
+	fpp = None
+	
+	IsAtEvent = False
+	temp = None
+	for line in fp:
+		temp = line.split()
+		try:
+			if temp[0] == "Event" and temp[1] == "=":
+				
+				# Number of Events from 1 -> temp[2]
+				NumberOfEvents = int(temp[2])
+				
+				if IsAtEvent is False:
+					
+					fpp = open("Event_" + str(temp[2]), "w")
+					IsAtEvent = True
+					
+				elif IsAtEvent is True:
+					
+					fpp.close()
+					fpp = open("Event_" + str(temp[2]), "w")
+					
+			else:
+				
+				if fpp != None:
+					fpp.write(line)
+					
+		except IndexError:
+			pass
+	
+	if fpp != None:
+		fpp.close()
+	
+	fp.close()
 	
 	return 0
 	
@@ -70,38 +170,37 @@ def main():
 
 	HandleArguments(args)
 	
-	Parses the sys.argv list
+	* Description
+	
+		Parses the sys.argv list
 	
 
 '''
 	
 def HandleArguments(args):
 	
-	global ReadFilename
-	global OutputIonizationFile
+	global FileToSplit
 	global PrintTree
 	
 	for i in range(1, len(args)):
 		
-		if "-read" == args[i] and len(args) != i+1:
+		if "-split" == args[i] and len(args) != i+1:
 			
-			ReadFilename = args[i+1]
+			FileToSplit = args[i+1]
 			
 		elif "-tree" == args[i]:
 			
 			PrintTree = True
-			
-		elif "-output-ionization" and len(args) != i+1:
-			
-			OutputIonizationFile = args[i+1]
 		
 '''
 
 	Content(object)
 	
-	This class handles a large subset of the parsing for this file,
-	however I suspect it has grown to big and bloated and goes
-	beyond the scope of it's initial design.
+	* Description
+	
+		This class handles a large subset of the parsing for this file,
+		however I suspect it has grown to big and bloated and goes
+		beyond the scope of it's initial design.
 	
 	TODO
 	
@@ -111,16 +210,17 @@ def HandleArguments(args):
 class Content(object):
 	
 	#Get ready for a hefty amount of computation
-	def __init__(self, Filename, PrintTree = True):
+	def __init__(self, Filename, PrintTree = False):
 		
-		self.ParentName = ""
-		self.ParticleList = []
-		self.levelslist = [""]
-		self.PrintTree = PrintTree
+		#self.ParentName = ""
+		#self.ParticleList = []
+		#self.levelslist = [""]
+		#self.PrintTree = PrintTree
+		self.FileContents = []
 		
-		self.PopulateLevelsList()
 		self.ReadFile(Filename)
-		self.ParseFileContents()
+		#self.PopulateLevelsList()
+		#self.ParseFileContents()
 		
 		
 	def PopulateLevelsList(self):
@@ -133,11 +233,12 @@ class Content(object):
 		
 		# Loads the entire content of the file specified by filename
 		# and places it into a list.
-		fp = open(Filename, "r")
-		self.FileContents = []
-		for line in fp:
-			self.FileContents.append(line)
-		fp.close()
+		try:
+			with open(Filename, "r") as fp:
+				for line in fp:
+					self.FileContents.append(line)
+		except FileNotFoundError:
+			print("You need to pass an Event file -read <Event file>")
 		
 	def ParseFileContents(self):
 		
@@ -276,8 +377,44 @@ class DarkGeant4Data(object):
 		self.GetPrimaryParticleInitialKineticEnergy()
 		self.GetTotalSecondaryEnergyAtFirstStep()
 		self.CalculateIonizationEnergyOfPrimaryParticle()
-		self.Find_dEdx()
+		self.CalculateTotalIonizationEnergy()
+		self.Find_dEdx_through_detector()
+		self.GetPrimaryPositionPerStep()
 		
+		
+	'''
+	
+		GetPrimaryPositionPerStep(self)
+		
+		* Description
+		
+			...
+	
+	'''
+	def GetPrimaryPositionPerStep(self):
+		
+		self.PositionList = []
+		Pos = 0
+		for i in range(4, len(self.FileContents)):
+			
+			if "*" in self.FileContents[i]:
+				
+				break
+				
+			self.PositionList.append([])
+			TempSplit = self.FileContents[i].split()
+			
+			# X, Y and Z coordinates in mm
+			for t in range(3):
+				
+				self.PositionList[Pos].append(float(
+				TempSplit[t+1]))
+				
+			# Step length
+			self.PositionList[Pos].append(float(TempSplit[6]))
+				
+			Pos += 1
+			
 	'''
 	
 		GetPrimaryParticleInitialKineticEnergy(self)
@@ -377,9 +514,34 @@ class DarkGeant4Data(object):
 					
 					break
 					
-				elif "hIoni" in self.FileContents[i]:
+				elif "Detector hIoni" in self.FileContents[i]:
 					
 					self.PrimaryParticleIonizationEnergy += float(
+					self.FileContents[i].split()[5])
+				
+			except IndexError:
+				pass
+				
+			
+	'''
+	
+		CalculateTotalIonizationEnergy(self)
+		
+		* Description
+		
+			...
+	
+	'''	
+	def CalculateTotalIonizationEnergy(self):
+		
+		self.TotalIonizationEnergy = 0.0
+		for i in range(5, len(self.FileContents)):
+			try:
+				
+				if ("Detector" in self.FileContents[i] and
+					"Ioni" in self.FileContents[i]):
+					
+					self.TotalIonizationEnergy += float(
 					self.FileContents[i].split()[5])
 				
 			except IndexError:
@@ -387,23 +549,23 @@ class DarkGeant4Data(object):
 	
 	'''
 	
-		Find_dEdx(self)
+		Find_dEdx_through_detector(self)
 		
 		...
 	
 	'''
-	def Find_dEdx(self):
+	def Find_dEdx_through_detector(self):
 		
-		self.dEdxList = []
+		self.dEdXDetector = []
 		for i in range(5, len(self.FileContents)):
 			try:
 				
 				if "Particle" in self.FileContents[i]:
 					break
-				elif "hIoni" in self.FileContents[i]:
+				elif "Detector hIoni" in self.FileContents[i]:
 					dE = float(self.FileContents[i].split()[5])
 					StepLength = float(self.FileContents[i].split()[6])/10.0
-					self.dEdxList.append(dE/StepLength)
+					self.dEdXDetector.append(dE/StepLength)
 					
 			except IndexError:
 				pass
@@ -438,20 +600,31 @@ class DarkGeant4Data(object):
 		
 		fp = open(OutputIonizationFile, "w")
 		
-		fp.write("Primary particle energy\n")
+		fp.write("Primary particle kinetic energy\n")
 		fp.write("%f\n" % (self.PrimaryParticleEnergy))
 		fp.write("Ionization particle of immediate daughter secondaries\n")
 		for element in self.SecondaryParticleEnergies:
 			fp.write("%f\n" % (element))
 		
 		fp.write("dE/dx\n")
-		for element in self.dEdxList:
+		for element in self.dEdXDetector:
 			fp.write("%f\n" % (element))
 		
-		fp.write("Ionization Energy\n")
+		fp.write("Primary Ionization Energy\n")
 		fp.write("%f\n" % (self.PrimaryParticleIonizationEnergy))
 		fp.write("Total Secondary Energy\n")
 		fp.write("%f\n" % (self.TotalSecondaryParticleEnergy))
+		fp.write("Total Ionization Energy\n")
+		fp.write("%f\n" % (self.TotalIonizationEnergy))
+		fp.write("Primary Particle Position\n")
+		
+		for i in range(len(self.PositionList)):
+			for t in range(4):
+				if t != 3:
+					fp.write("%f " % self.PositionList[i][t])
+				else:
+					fp.write("%f" % self.PositionList[i][t])
+			fp.write("\n")
 		
 		fp.close()
 		

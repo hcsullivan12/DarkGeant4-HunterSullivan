@@ -1,16 +1,7 @@
 #!/bin/bash
 
-./SplitGeant4Output.py
 
-N=2
-(
-for i in `seq 1 10000`;
-do
-
-	./ParseSplitGeant4Output.py -read Event_${i} -tree -output-ionization DarkGeantData_${i} > tree_${i} &
-
-done
-)
+./SplitAndParseDarkGeantData.py
 
 touch DarkGeantData
 
