@@ -10,7 +10,7 @@
 
 ]]--
 DetectorConfig = {Detector_Name = "Detector",
-                  Number_of_Detector_Components = 1}
+                  Number_of_Detector_Components = 2}
 
 --[[
 
@@ -36,9 +36,16 @@ DetectorConfig = {Detector_Name = "Detector",
 			Z (No Default Value) (Length)-> Usually
 
 ]]--
-DetectorComponent_1 = {Material = "Liquid Argon",
-                       Volume_Type = "Cylinder",
-                       Inner_Radius = 0.0,
-                       Outer_Radius = .6,
-                       Half_Length = .5,
-                       Position = {0, 0, 0}}
+DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Cylinder",
+                        Inner_Radius = 0.0,
+                        Outer_Radius = .6,
+                        Half_Length = .5,
+                        Position = { 0, 0, 0 } }
+                        
+DetectorComponent_2 = { Material = "Air",
+                        Volume_Type = "Box",
+                        X = 1.0,
+                        Y = 1.0,
+                        Z = 1.0,
+                        Position = { 0, 1, 0}}

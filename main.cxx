@@ -31,14 +31,14 @@
 
 	#include "G4VisExecutive.hh"
 	void InitializeVisManager();
-	static G4VisManager *vis = new G4VisExecutive();
+	static G4VisManager *vis;
 	
 #endif
 #ifdef G4UI_USE
 
 	#include "G4UImanager.hh"
 	void InitializeUIManager();
-	static G4UImanager  *ui = G4UImanager::GetUIpointer();
+	static G4UImanager  *ui;
 	
 #endif
 
@@ -55,10 +55,23 @@
 #include <string>
 #include <vector>
 
+/* 
+ * ~~~~~~~~~~
+ * namespaces
+ * ~~~~~~~~~~
+ * 
+ * */
 using std::string;
 using std::vector;
 using std::cout;
 using std::cin;
+
+/*
+ * ~~~~~~~~~~~~~~~~
+ * Static variables
+ * ~~~~~~~~~~~~~~~~
+ * 
+ * */
 
 static string Module = "config";
 static vector<G4String> ExecutionVector;
@@ -67,18 +80,20 @@ static FourVectorStruct<G4double> *JBStruct = NULL;
 static ConfigLuaInstance *ConfigFileInstance;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance;
 
+
+static G4RunManager *runManager;
+
 /*
- * 
- * Function Prototypes
+ *  ~~~~~~~~~~~~~~~~~~~
+ *  Function Prototypes
+ *  ~~~~~~~~~~~~~~~~~~~
  * 
  * */
 
 void HandleArguments(int argc, char *argv[]);
-
 void InitializeState();
 void InitializeLuaInstances();
 void InitializeRunManager(G4RunManager *runManager);
-
 void Clean();
 
 int main(int argc, char *argv[]) {
@@ -96,17 +111,19 @@ int main(int argc, char *argv[]) {
 /*
  * InitializeState
  * 
- * Initializes important runtime variables, calls several important
- * functions that initialize the UI and VIS functions (if compiled in),
- * and changes runtime state depending on user input
+ * * Description
+ * 
+ * 		Initializes important runtime variables, calls several important
+ * 		functions that initialize the UI and VIS functions 
+ * 		(if compiled in), and changes runtime state depending on user 
+ * 		input.
  * 
  * 
  * */
 
 void InitializeState() {
 	
-	G4RunManager *runManager = new G4RunManager();
-	
+	runManager = new G4RunManager();
 	
 	InitializeLuaInstances();
 	InitializeRunManager(runManager);
@@ -124,6 +141,15 @@ void InitializeState() {
 	
 }
 
+/*
+ * Clean()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 void Clean() {
 	
 #ifdef G4UI_USE
@@ -133,6 +159,19 @@ void Clean() {
 	delete vis;
 #endif	
 
+	/*
+	 * 
+	 * There might be a memory leak upon exiting, but it's nothing
+	 * to worry about too much. Any modern operating system should
+	 * just reclaim that memory.
+	 * 
+	 * TODO
+	 * 
+	 * 		FIX memory leak and possibly the segmentation fault.
+	 * 
+	 * */
+	//delete runManager;
+
 	if (JBStruct != NULL)
 		delete JBStruct->array;
 	delete JBStruct;
@@ -140,6 +179,22 @@ void Clean() {
 	delete ConfigFileInstance;
 	delete DetectorConfigFileInstance;
 }
+
+/*
+ * InitializeLuaInstances()
+ * 
+ * * Description
+ * 
+ * 		Uses openmp to introduce parallelization for the lua state
+ * 		config files.
+ * 
+ * * Comment
+ * 
+ * 		Be sure to define the build type as release!
+ * 
+ * 		cmake -DCMAKE_BUILD_TYPE=Release -DGeant4_DIR=/path/to/G4 ../
+ * 
+ * */
 
 void InitializeLuaInstances() {
 
@@ -169,6 +224,15 @@ void InitializeLuaInstances() {
 	
 }
 
+/*
+ * InitializeRunManager(G4RunManager *runManager)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 void InitializeRunManager(G4RunManager *runManager) {
 
 	runManager->SetUserInitialization(new DetectorConstruction());
@@ -181,10 +245,10 @@ void InitializeRunManager(G4RunManager *runManager) {
 #ifdef G4UI_USE
 void InitializeUIManager() {
 
+	ui = G4UImanager::GetUIpointer();
 	ui->ApplyCommand("/run/verbose 1");
 	ui->ApplyCommand("/event/verbose 1");
 	ui->ApplyCommand("/tracking/verbose 1");
-	
 	ui->ApplyCommand("/control/execute vis.mac");
 	
 }
@@ -193,6 +257,7 @@ void InitializeUIManager() {
 #ifdef G4VIS_USE
 void InitializeVisManager() {
 
+	vis = new G4VisExecutive();
 	vis->Initialize();
 	
 }
@@ -225,11 +290,15 @@ static const ArgumentTable Table[numHandledArguments] =
 
 
 /*
+ * HandleArguments(int argc, char *argv[])
  * 
- * Checks each provided runtime argument provided by the user
- * against known runtime arguments and acts accordingly.
+ * * Description
+ * 
+ * 		Checks each provided runtime argument provided by the user
+ * 		against known runtime arguments and acts accordingly.
  * 
  * */
+ 
 void HandleArguments(int argc, char *argv[]) {
 	
 	for (int y = 1;y < argc;y++)
@@ -239,9 +308,18 @@ void HandleArguments(int argc, char *argv[]) {
 		
 }
 
+/*
+ * Execute_Argument(int argc, char *argv[], int index)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+ 
 void Execute_Argument(int argc, char *argv[], int index) {
 
-	if ( (index+1) == argc) {
+	if ((index + 1) == argc) {
 	
 		cout << "Did not give a good execution argument\n";
 		return;
@@ -253,20 +331,30 @@ void Execute_Argument(int argc, char *argv[], int index) {
 	
 }
 
+/*
+ * JBInput_Arguments(int argc, char *argv[], int index)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 void JBInput_Argument(int argc, char *argv[], int index) {
 
-	/*
-	 * Output.dat is not a permanent filename in Josh's code, however
-	 * I don't see much reason to change it to something else so
-	 * I'm going to pretend it's just output.dat always.
-	 * 
-	 * Subject to change.
-	 * 
-	 * */
 	string filename("output.dat");
 	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
 	
 }
+
+/*
+ * Module_Argument(int argc, char *argv[], int index)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 void Module_Argument (int argc, char *argv[], int index) {
 
