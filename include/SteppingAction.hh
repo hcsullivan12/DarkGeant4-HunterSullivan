@@ -33,8 +33,6 @@
 // C/C++ Headers
 #include <cstdio>
 
-
-
 class SteppingAction : public G4UserSteppingAction {
 	
 	
@@ -63,6 +61,7 @@ class SteppingAction : public G4UserSteppingAction {
 	
 		void SaveBanner(const G4Step *Step, G4Track *Track);
 		void SaveFormat();
+		void Save0StepData(const G4Step *Step);
 		void SaveStepData(const G4Step *Step, G4Track *Track);
 	
 };

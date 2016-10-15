@@ -27,6 +27,7 @@
 
 // Geant4 Headers
 #include "G4Track.hh"
+#include "G4VProcess.hh"
 
 SteppingAction::SteppingAction()
 : G4UserSteppingAction()
@@ -50,7 +51,7 @@ void SteppingAction::UserSteppingAction(const G4Step* Step) {
 	
 		SaveBanner(Step, Track);
 		SaveFormat();
-		//SaveStepData(Step->GetPreStepPoint(), Step->GetPreStepPoint()->GetTrack());
+		Save0StepData(Step);
 		
 	}
 	SaveStepData(Step, Track);
@@ -59,13 +60,13 @@ void SteppingAction::UserSteppingAction(const G4Step* Step) {
 
 void SteppingAction::SaveBanner(const G4Step *Step, G4Track *Track) {
 	
-	fprintf(this->fp, "************************************\n");
+	fprintf(this->fp, "*********************************************\n");
 	fprintf(this->fp, "* G4Track Information: Particle = %s,", 
 	Track->GetDefinition()->GetParticleName().c_str());
 	
 	fprintf(this->fp, " Track ID = %d,", Track->GetTrackID());
 	fprintf(this->fp, " Parent ID = %d\n", Track->GetParentID());
-	fprintf(this->fp, "************************************\n");
+	fprintf(this->fp, "*********************************************\n");
 	
 }
 
@@ -84,6 +85,20 @@ void SteppingAction::SaveFormat() {
 	
 }
 
+void SteppingAction::Save0StepData(const G4Step *Step) {
+	
+	G4StepPoint *PreStepPoint = Step->GetPreStepPoint();
+	
+	fprintf(this->fp,"0\t");
+	fprintf(this->fp,"%.15f\t", PreStepPoint->GetPosition().x());
+	fprintf(this->fp,"%.15f\t", PreStepPoint->GetPosition().y());
+	fprintf(this->fp,"%.15f\t", PreStepPoint->GetPosition().z());
+	fprintf(this->fp,"%.15f\t", PreStepPoint->GetKineticEnergy());
+	fprintf(this->fp,"0.0\t0.0\t0.0\t");
+	fprintf(this->fp,"Detector InitStep\n");
+		
+}
+
 void SteppingAction::SaveStepData(const G4Step *Step, G4Track *Track) {
 	
 	fprintf(this->fp, "%d\t", Track->GetCurrentStepNumber());
@@ -96,8 +111,19 @@ void SteppingAction::SaveStepData(const G4Step *Step, G4Track *Track) {
 	fprintf(this->fp, "%.15f\t", Track->GetTrackLength());
 	
 	if (Track->GetNextVolume())
-		fprintf(this->fp, "%s\n", Track->GetNextVolume()->GetName().c_str());
+		fprintf(this->fp, "%s ", Track->GetNextVolume()->GetName().c_str());
 	else
-		fprintf(this->fp, "OutOfWorld\n");
+		fprintf(this->fp, "OutOfWorld ");
 	
+	G4StepPoint *PostStepPoint = Step->GetPostStepPoint();
+	if (PostStepPoint->GetProcessDefinedStep() != 0) {
+		
+		fprintf(this->fp,"%s\n",
+		PostStepPoint->GetProcessDefinedStep()->GetProcessName().c_str());
+		
+	} else {
+	
+		fprintf(this->fp,"User Limit\n");
+		
+	}
 }
