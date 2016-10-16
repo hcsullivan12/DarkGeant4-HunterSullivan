@@ -98,7 +98,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
 	
-	
+	this->Stepping->SaveEvent();
 	this->ParticleGun->GeneratePrimaryVertex(event);
 	
 }
@@ -117,6 +117,6 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
  
 SteppingAction *PrimaryGeneratorAction::GetSteppingAction() {
 	
-	return this->Stepping();
+	return this->Stepping;
 	
 }

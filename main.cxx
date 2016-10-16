@@ -73,7 +73,7 @@ using std::cin;
  * 
  * */
  
-static bool TerminalOutput = true
+static bool TerminalOutput = true;
 
 static string Module = "config";
 static vector<G4String> ExecutionVector;
