@@ -34,6 +34,7 @@ SteppingAction::SteppingAction()
 {
 	
 	this->fp = fopen("DarkGeantOutput.dat", "w");
+	this->CurrentEvent = 1;
 	
 }
 
@@ -55,6 +56,13 @@ void SteppingAction::UserSteppingAction(const G4Step* Step) {
 		
 	}
 	SaveStepData(Step, Track);
+	
+}
+
+void SteppingAction::SaveEvent() {
+	
+	fprintf(this->fp,"\nEvent = %d\n", this->CurrentEvent);
+	this->CurrentEvent++;
 	
 }
 

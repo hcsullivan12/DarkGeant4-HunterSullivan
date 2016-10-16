@@ -44,6 +44,7 @@ class SteppingAction : public G4UserSteppingAction {
 	private:
 		
 		FILE *fp;
+		int CurrentEvent;
 	
 	/*
 	 * Class Member Functions
@@ -56,6 +57,7 @@ class SteppingAction : public G4UserSteppingAction {
 		~SteppingAction();
 		
 		void UserSteppingAction(const G4Step *Step);
+		void SaveEvent();
 		
 	private:
 	

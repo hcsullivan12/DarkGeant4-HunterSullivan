@@ -25,14 +25,35 @@
 #ifndef PRIMARYGENERATORACTION_H
 #define PRIMARYGENERATORACTION_H
 
+// Geant4 Headers
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ThreeVector.hh"
 
+// User Headers
+#include "SteppingAction.hh"
+
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
+	
+	private:
+	
+		SteppingAction *Stepping;
+	
+	
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	 
 	public:
 	
 		PrimaryGeneratorAction();
@@ -44,6 +65,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 		~PrimaryGeneratorAction();
 		
 		void GeneratePrimaries(G4Event *event);
+		SteppingAction *GetSteppingAction();
 		
 	private:
 	

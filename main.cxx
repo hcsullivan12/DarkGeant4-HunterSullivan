@@ -72,6 +72,8 @@ using std::cin;
  * ~~~~~~~~~~~~~~~~
  * 
  * */
+ 
+static bool TerminalOutput = true
 
 static string Module = "config";
 static vector<G4String> ExecutionVector;
@@ -79,7 +81,6 @@ static FourVectorStruct<G4double> *JBStruct = NULL;
 
 static ConfigLuaInstance *ConfigFileInstance;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance;
-
 
 static G4RunManager *runManager;
 
@@ -237,8 +238,11 @@ void InitializeRunManager(G4RunManager *runManager) {
 
 	runManager->SetUserInitialization(new DetectorConstruction());
 	runManager->SetUserInitialization(ConfigFileInstance->physicslist);
-	runManager->SetUserAction(new PrimaryGeneratorAction());
-	runManager->SetUserAction(new SteppingAction());
+	
+	PrimaryGeneratorAction *Generator = new PrimaryGeneratorAction();
+	runManager->SetUserAction(Generator);
+	runManager->SetUserAction(Generator->GetSteppingAction());
+	
 	runManager->Initialize();
 	
 }
@@ -246,9 +250,13 @@ void InitializeRunManager(G4RunManager *runManager) {
 void InitializeUIManager() {
 
 	ui = G4UImanager::GetUIpointer();
-	ui->ApplyCommand("/run/verbose 1");
-	ui->ApplyCommand("/event/verbose 1");
-	ui->ApplyCommand("/tracking/verbose 1");
+	if (TerminalOutput) {
+		
+		ui->ApplyCommand("/run/verbose 1");
+		ui->ApplyCommand("/event/verbose 1");
+		ui->ApplyCommand("/tracking/verbose 1");
+		
+	}
 	ui->ApplyCommand("/control/execute vis.mac");
 	
 }
@@ -278,14 +286,16 @@ struct ArgumentTable {
 void Execute_Argument(int argc, char *argv[], int index);
 void JBInput_Argument(int argc, char *argv[], int index);
 void Module_Argument (int argc, char *argv[], int index);
+void Limit_T_Argument(int argc, char *argv[], int index);
 
 
 
-static const int numHandledArguments = 3;
+static const int numHandledArguments = 4;
 static const ArgumentTable Table[numHandledArguments] =
 {{"-execute", &Execute_Argument},
  {"-JBInput", &JBInput_Argument},
- {"-module" , &Module_Argument}};
+ {"-module" , &Module_Argument},
+ {"-lim-t-output", &Limit_T_Argument}};
 
 
 
@@ -365,6 +375,12 @@ void Module_Argument (int argc, char *argv[], int index) {
 		
 	}
 	Module = "config/module/" + string(argv[index+1]);
+	
+}
+
+void Limit_T_Argument(int argc, char *argv[], int index) {
+
+	TerminalOutput = false;
 	
 }
 

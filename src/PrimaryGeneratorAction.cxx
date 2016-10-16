@@ -38,6 +38,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
 {
 	
+	this->Stepping = new SteppingAction();
 	/*
 	 * 
 	 * Default constructor just makes a single particle gun with a
@@ -84,18 +85,38 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 	
 }
 
+/*
+ * GeneratePrimaries(G4Event *event)
+ * 
+ * TODO
+ * 
+ * 		Code from the JB branch should be ported and made more generic.
+ * 
+ * 
+ * */
+
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
 	
-	/*
-	 * 
-	 * TODO
-	 * 
-	 * 		Code from the JB Branch should be ported and made more
-	 * 		generic.
-	 * 
-	 * */
 	
 	this->ParticleGun->GeneratePrimaryVertex(event);
+	
+}
+
+
+/*
+ * GetSteppingAction()
+ * 
+ * * Comment
+ * 
+ * 		This code is very ad hoc/hackish by at the moment, it's
+ * 		literally the only way I can think of introducing
+ * 		"Event = %d" lines in the outputted DarkGeantOutput.dat file
+ * 
+ * */
+ 
+SteppingAction *PrimaryGeneratorAction::GetSteppingAction() {
+	
+	return this->Stepping();
 	
 }
