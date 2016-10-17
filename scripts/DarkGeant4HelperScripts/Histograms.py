@@ -25,6 +25,7 @@
 from sys import exit
 from multiprocessing import Process
 from math import floor
+from time import clock
 
 try:
 	import numpy as np
@@ -55,14 +56,18 @@ TotalSecondaryEnergyList = []
 DifferenceList = []
 dEdxlist = []
 TotalIonizationList = []
+PositionList = []
+PathReconstructionObjs = []
 
 
 '''
 
 	HandleArguments
 	
-	Presently doesn't handle any arguments. Subject to change in
-	the future!
+	* Comment
+	
+		Presently doesn't handle any arguments. Subject to change in
+		the future!
 
 '''
 def HandleArguments(args):
@@ -80,8 +85,10 @@ def main():
 
 	InitializeHistogramObjects()
 	
-	Initializes a list of HistogramPlotter objects and returns
-	a list of these objects.
+	* Description
+	
+		Initializes a list of HistogramPlotter objects and returns
+		a list of these objects.
 
 '''
 
@@ -130,8 +137,11 @@ def InitializeHistogramObjects():
 
 	PlotHistogramsWithProcesses()
 	
-	Takes in a list of HistogramPlotter objects and spawns several
-	processes to plot each of the HistogramPlotter objects concurrently.
+	* Description
+	
+		Takes in a list of HistogramPlotter objects and spawns several
+		processes to plot each of the HistogramPlotter objects 
+		concurrently.
 	
 	* Warning
 	
@@ -144,7 +154,7 @@ def PlotHistogramsWithProcesses(HistogramObjs):
 	
 	Processes = []
 	for obj in HistogramObjs:
-		Processes.append(Process(target = obj.PlotHistogram, args=()))
+		Processes.append(Process(target=obj.PlotHistogram, args=()))
 	for ProcessObj in Processes:
 		ProcessObj.start()
 	for ProcessObj in Processes:
@@ -155,10 +165,12 @@ def PlotHistogramsWithProcesses(HistogramObjs):
 
 	SecondarListChunkProcesses()
 	
-	For HistogramPlotter objects with a large data set, it might
-	be useful to spread the data around to several plots. This
-	might be the only way that the data is plottable and some idea
-	of any trends might be discernible using this function.
+	* Description
+	
+		For HistogramPlotter objects with a large data set, it might
+		be useful to spread the data around to several plots. This
+		might be the only way that the data is plottable and some idea
+		of any trends might be discernible using this function.
 	
 	* Warning
 	
@@ -199,9 +211,11 @@ def SecondaryListChunkProcesses():
 
 	ReadIonizationFileAndPopulateLists()
 	
-	Loads the entire IonizationEnergy file and places the data line by
-	line in an list called File. It then calls several functions who
-	expect this File list to be passed as a parameter.
+	* Description
+	
+		Loads the entire IonizationEnergy file and places the data line 
+		by line in an list called File. It then calls several functions 
+		who expect this File list to be passed as a parameter.
 
 '''
 
@@ -211,27 +225,40 @@ def ReadIonizationFileAndPopulateLists():
 	global PrimaryIonizationList
 	global TotalSecondaryEnergyList
 	global TotalIonizationList
+	global PathReconstructionObjs
 		
-	File = []
-	
+	File = []	
 	try:
 		with open("DarkGeantData") as fp:
+			
 			for line in fp:
 				File.append(line)
+				
 	except FileNotFoundError:
-		print("FileNotFoundError;Is IonizationEnergy in the same directory?")
+		
+		print("FileNotFoundError;Is DarkGeantData in the same directory?")
 		print("Halting Execution")
 		exit(0)
-			
+	
 	MakeList(File, "Primary particle kinetic energy", PrimaryKineticEnergyList)
 	MakeList(File, "Primary Ionization Energy", PrimaryIonizationList)
 	MakeList(File, "Total Secondary Energy", TotalSecondaryEnergyList)
 	MakeList(File, "Total Ionization Energy", TotalIonizationList)
-	
 	MakeSecondaryEnergyList(File)
 	MakedEdxList(File)
-	FindDifferenceBetweenIonizationAndTotalSecondary()
 	
+	PositionList = MakePositionList(File)
+	for List in PositionList:
+		PathReconstructionObjs.append(PathReconstruction)
+	
+	'''
+	
+		...
+	
+	PositionList = MakePositionList(File)
+	for List in PositionList:
+		PathReconstructionObjs.append(PathReconstruction(List))
+	'''
 	
 '''
 
@@ -240,6 +267,7 @@ def ReadIonizationFileAndPopulateLists():
 	...
 
 '''
+
 def MakeList(File, StringConditional, List):
 	
 	for i in range(len(File)):
@@ -292,7 +320,7 @@ def MakeSecondaryEnergyList(File):
 			except ValueError:
 				print(len(File[i]))
 				print("Error with string %s" % (File[i]))
-
+				
 '''
 
 	FindDifferenceBetweenIonizationAndTotalSecondary()
@@ -308,17 +336,61 @@ def FindDifferenceBetweenIonizationAndTotalSecondary():
 	global DifferenceList
 	
 	if len(PrimaryIonizationList) != len(TotalSecondaryEnergyList):
-		print("The length of the Ionization and Total Secondary energy" +
-			" lists do not match.")
+		
+		print("The length of the Ionization and Total Secondary energy" 
+		+ " lists do not match.")
 		print("Halting execution")
 		print(len(PrimaryIonizationList))
 		print(len(TotalSecondaryEnergyList))
 		exit(0)
 	
 	for i in range(len(PrimaryIonizationList)):
+		
 		DifferenceList.append(abs(
 		PrimaryIonizationList[i] - TotalSecondaryEnergyList[i]))
+		
+		
+	'''
 
+	MakePositionList(File)
+	
+	* Description
+	
+		...
+		
+	TODO
+	
+		This might need a three dimensional array to handle
+		appropriately. As of right now, it's not correct.
+
+	'''
+def MakePositionList(File):
+	
+	PositionList = []
+	TempPositionList = []
+	
+	AtPosition = False
+	for i in range(len(File)):
+		if "Primary Particle Position" in File[i]:
+			AtPosition = True
+		elif len(File[i]) <= 1:
+			AtPosition = False
+			PositionList.append(TempPositionList)
+			TempPositionList = []
+		elif AtPosition is True:
+			TempPositionList.append(list(map(float, File[i].split())))
+			
+	return PositionList
+
+'''
+
+	class HistogramPlotter(object)
+	
+	* Description
+	
+		...
+
+'''
 class HistogramPlotter(object):
 	
 	def __init__(self,Data = None, 
@@ -340,6 +412,16 @@ class HistogramPlotter(object):
 		self.YRange = YRange
 		self.Bins = Bins
 		
+		
+	'''
+	
+		PlotHistogram()
+		
+		* Description
+		
+			...
+	
+	'''
 	def PlotHistogram(self):
 		
 		plt.rcParams['font.size'] = 24.0
@@ -359,9 +441,134 @@ class HistogramPlotter(object):
 			plt.gca().set_ylim(self.YRange)
 			
 		plt.show()
-		
 		plt.close()
+		
+		
+'''
 
+	class PathReconstruction(object)
+	
+	* Description
+	
+		...
+
+'''
+class PathReconstruction(object):
+	
+	def __init__(self, List):
+		
+		self.PathList = []
+		
+		self.List = List
+		self.AveragingRadius = 3.0
+		self.MakePathReconstruction()
+				
+	'''
+	
+		MakePathReconstruction(self)
+		
+		* Description
+		
+			Obtains a set of displacement vectors from self.List
+	
+	'''
+	def MakePathReconstruction(self):
+		
+		GenericDisplacementVectors = []
+		for i in range(len(self.List) - 1):
+			GenericDisplacementVectors.append(
+			self.MakeDisplacementVector(self.List[i], self.List[i+1]))
+		
+		self.GroupDisplacementVectors(GenericDisplacementVectors)
+		
+		self.PseudoPoyntingVector = self.PseudoPath()
+		
+	'''
+	
+		PseudoPath(self)
+		
+		* Description
+		
+			...
+	
+	'''
+	def PseudoPath(self):
+		
+		PoyntingVector = [self.List[0][0], self.List[0][1], self.List[0][1]]
+		for DisplacementVector in self.DisplacementVectors:
+			for i in range(3):
+				PoyntingVector[i] += DisplacementVector[i]
+			
+		return PoyntingVector
+	
+	def GroupDisplacementVectors(self, GenDisplacementVectors):
+		
+		self.DisplacementVectors = []
+		
+		Temp_Magnitude = 0.0
+		Temp_NumberOfDisplacementVectors = 0
+		Temp_DisplacementVector = [0.0, 0.0, 0.0]
+		for i in range(len(GenDisplacementVectors)):
+			'''
+			
+				If the Magnitude(GenDisplacementVector[i]) < 3.0
+				
+				Remember, the magnitude of the displacement vector
+				is stored in the 4th column.
+			
+			'''
+			if (self.List[i+1][3] < self.AveragingRadius 
+				and Temp_Magnitude < 3.0):
+					
+				Temp_Magnitude += self.List[i+1][3]
+				# TODO Something looks wrong here.
+				for elem in range(3):
+					Temp_DisplacementVector[elem] += GenDisplacementVectors[i][elem]
+					
+				Temp_NumberOfDisplacementVectors += 1
+				
+				
+			elif (self.List[i+1][3] < self.AveragingRadius 
+				and Temp_Magnitude >= 3.0):
+				
+				print(Temp_Magnitude)
+				for elem in range(3):
+					Temp_DisplacementVector[elem] /= Temp_NumberOfDisplacementVectors
+			
+				self.DisplacementVectors.append(Temp_DisplacementVector)
+				Temp_DisplacementVector = [0.0, 0.0, 0.0]
+				Temp_NumberOfDisplacementVectors = 0
+				Temp_Magnitude = 0.0
+				
+				
+			else:
+				
+				self.DisplacementVectors.append(GenDisplacementVectors[i])
+				Temp_DisplacementVector = [0.0, 0.0, 0.0]
+				Temp_NumberOfDisplacementVectors = 0
+				Temp_Magnitude = 0.0
+				
+	'''
+	
+		MakeDisplacementVector(self, V1, V2)
+		
+		* Description
+		
+			Returns a displacement vector of the form
+			
+			V = V2 - V1
+	
+	'''
+	def MakeDisplacementVector(self, V1, V2):
+		
+		DisplacementVector = []
+		for i in range(3):
+			DisplacementVector.append((V2[i] - V1[i]))
+			
+		return DisplacementVector
+				
+		
+		
 if __name__ == '__main__':
     import sys
     HandleArguments(sys.argv)
