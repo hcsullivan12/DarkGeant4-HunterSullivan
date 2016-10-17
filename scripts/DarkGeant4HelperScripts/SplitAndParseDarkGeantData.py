@@ -37,7 +37,7 @@ from multiprocessing import Process
 '''
 
 
-FileToSplit = "Output.txt"
+FileToSplit = "DarkGeantOutput.dat"
 PrintTree = False
 NumberOfEvents = 0
 
