@@ -32,6 +32,12 @@ from math import sqrt
 	
 		This class is used to create pseudopath reconstruction
 		vectors.
+		
+	TODO
+	
+		1. Copy relevant comments to PathReconstructionV2
+		2. Remove Class
+		3. Rename PathReconstructionV2 to PathReconstruction
 
 '''
 class PathReconstruction(object):
@@ -299,10 +305,8 @@ class PathReconstructionV2(object):
 			Threshold = 0.5
 			for V in Temp_List:
 				Magnitude += self.MagnitudeOfVector(V)
-			if Magnitude >= 3.0 - Threshold:
-				return True
-			else:
-				return False
+				
+			return Magnitude >= (3.0 - Threshold)
 				
 		def AverageTempList(Temp_List):
 			
