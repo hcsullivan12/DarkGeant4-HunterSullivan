@@ -57,7 +57,8 @@ PathReconstructionObjs = []
 
 '''
 def HandleArguments(args):
-	return 0
+	
+	print("STUB: HandleArguments")
 
 def main():
 	
