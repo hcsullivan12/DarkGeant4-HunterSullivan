@@ -62,7 +62,7 @@ def HandleArguments(args):
 
 def main():
 	
-	ReadIonizationFileAndPopulateLists()
+	MakeLists(ReadDarkGeantData())
 	PlotHistogramsWithProcesses(InitializeHistogramObjects())
 	
 	return 0
@@ -74,32 +74,31 @@ def main():
 	
 	* Description
 	
-		Loads the entire IonizationEnergy file and places the data line 
+		Reads the DarkGeantData file and places the data line 
 		by line in an list called File. It then calls several functions 
 		who expect this File list to be passed as a parameter.
 
-'''
-
-def ReadIonizationFileAndPopulateLists():
+'''	
+def ReadDarkGeantData():
+	
+	File = []
+	try:
+		with open("DarkGeantData") as fp:
+			File = fp.readlines()
+	except FileNotFoundError:
+		print("FileNotFoundError;Is DarkGeantData in the same directory?")
+		print("Halting Execution")
+		exit(0)
 		
+	return File
+	
+def MakeLists(File):
+	
 	global PrimaryKineticEnergyList
 	global PrimaryIonizationList
 	global TotalSecondaryEnergyList
 	global TotalIonizationList
 	global PathReconstructionObjs
-		
-	File = []	
-	try:
-		with open("DarkGeantData") as fp:
-			
-			for line in fp:
-				File.append(line)
-				
-	except FileNotFoundError:
-		
-		print("FileNotFoundError;Is DarkGeantData in the same directory?")
-		print("Halting Execution")
-		exit(0)
 	
 	MakeList(File, "Primary particle kinetic energy", PrimaryKineticEnergyList)
 	MakeList(File, "Primary Ionization Energy", PrimaryIonizationList)
@@ -109,7 +108,6 @@ def ReadIonizationFileAndPopulateLists():
 	MakedEdxList(File)
 	
 	PositionList = MakePositionList(File)
-	print(PositionList[0])
 	for List in PositionList:
 		PathReconstructionObjs.append(PathReconstructionV2(List))
 	
@@ -153,7 +151,7 @@ def InitializeHistogramObjects():
 								
 	dEdxHistogram = HistogramPlotter(dEdxlist,
 								"dE/dX Histogram",
-								" dE/dX (Mev/cm)",
+								"dE/dX (Mev/cm)",
 								"Amount",
 								XRange = [0,1200],
 								Bins = 9000)

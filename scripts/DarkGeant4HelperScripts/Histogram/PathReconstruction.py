@@ -255,20 +255,20 @@ class PathReconstructionV2(object):
 		self.InitialPosition = [PositionList[0][0], 
 								PositionList[0][1], 
 								PositionList[0][2]]
-		self.PsuedoPath = []
+		self.PseudoPath = []
 		
-		self.PsuedoPathReconstruction()
+		self.PseudoPathReconstruction()
 		
 	'''
 	
-		PsuedoPathReconstruction(self)
+		PseudoPathReconstruction(self)
 		
 		* Description
 		
 			...
 	
 	'''
-	def PsuedoPathReconstruction(self):
+	def PseudoPathReconstruction(self):
 		
 		def ReconstructPath(GroupedVectors):
 			
@@ -286,7 +286,7 @@ class PathReconstructionV2(object):
 		GroupedVectors = self.GroupNearbyDisplacementVectors(
 							self.Make_DisplacementVectorsList())
 							
-		self.PsuedoPath = ReconstructPath(GroupedVectors)
+		self.PseudoPath = ReconstructPath(GroupedVectors)
 		
 	'''
 	
@@ -329,13 +329,19 @@ class PathReconstructionV2(object):
 		Temp_List = []
 		GroupedDisplacementVectors = []
 		for i in range(len(DisplacementVectorsList)):
+			
 			if self.MagnitudeOfVector(DisplacementVectorsList[i]) < 3.0:
+				
 				Temp_List.append(DisplacementVectorsList[i])
+				
 				if (CheckTempListTotalMagnitude(Temp_List) is True):
+					
 					GroupedDisplacementVectors.append(
 					AverageTempList(Temp_List))
 					Temp_List = []
+					
 			else:
+				
 				GroupedDisplacementVectors.append(
 				DisplacementVectorsList[i])
 				
