@@ -249,8 +249,9 @@ class PathReconstructionV2(object):
 		self.InitialPosition = [PositionList[0][0], 
 								PositionList[0][1], 
 								PositionList[0][2]]
-								
 		self.PsuedoPath = []
+		
+		self.PsuedoPathReconstruction()
 		
 	'''
 	
@@ -269,8 +270,6 @@ class PathReconstructionV2(object):
 			
 			# Copies by value not by reference!
 			Vector = self.InitialPosition[:]
-			if TotalGroupedVectors == 1:
-				print("STUB: TotalGroupedVectors == 1")
 				
 			for i in range(TotalGroupedVectors):
 				for x in range(3):
@@ -299,7 +298,7 @@ class PathReconstructionV2(object):
 			Magnitude = 0.0
 			Threshold = 0.5
 			for V in Temp_List:
-				Magnitude += MagnitudeOfVector(V)
+				Magnitude += self.MagnitudeOfVector(V)
 			if Magnitude >= 3.0 - Threshold:
 				return True
 			else:
@@ -326,14 +325,18 @@ class PathReconstructionV2(object):
 		Temp_List = []
 		GroupedDisplacementVectors = []
 		for i in range(len(DisplacementVectorsList)):
-			if MagnitudeOfVector(DisplacementVectorsList[i]) < 3.0:
+			if self.MagnitudeOfVector(DisplacementVectorsList[i]) < 3.0:
 				Temp_List.append(DisplacementVectorsList[i])
 				if (CheckTempListTotalMagnitude(Temp_List) is True):
-					GroupDisplacementVectors.append(
+					GroupedDisplacementVectors.append(
 					AverageTempList(Temp_List))
 					Temp_List = []
 			else:
-				GroupDisplacementVectors.append(DisplacementVectorsList[i])
+				GroupedDisplacementVectors.append(
+				DisplacementVectorsList[i])
+				
+		return GroupedDisplacementVectors
+		
 	'''
 	
 		Make_DisplacementVectorsList(self)
@@ -349,7 +352,7 @@ class PathReconstructionV2(object):
 		DisplacementVectorsList = []
 		for i in range(len(self.PositionList) - 1):
 			DisplacementVectorsList.append(
-			Make_DisplacementVector(
+			self.Make_DisplacementVector(
 			self.PositionList[i], self.PositionList[i+1]))
 		return DisplacementVectorsList
 			
@@ -381,4 +384,4 @@ class PathReconstructionV2(object):
 	'''
 	def MagnitudeOfVector(self, V1):
 		
-		return sqrt(V1[0]**2 + V2[1]**2 + V1[2]**2)
+		return sqrt(V1[0]**2 + V1[1]**2 + V1[2]**2)

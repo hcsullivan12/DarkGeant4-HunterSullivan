@@ -70,6 +70,51 @@ def main():
 	
 '''
 
+	ReadIonizationFileAndPopulateLists()
+	
+	* Description
+	
+		Loads the entire IonizationEnergy file and places the data line 
+		by line in an list called File. It then calls several functions 
+		who expect this File list to be passed as a parameter.
+
+'''
+
+def ReadIonizationFileAndPopulateLists():
+		
+	global PrimaryKineticEnergyList
+	global PrimaryIonizationList
+	global TotalSecondaryEnergyList
+	global TotalIonizationList
+	global PathReconstructionObjs
+		
+	File = []	
+	try:
+		with open("DarkGeantData") as fp:
+			
+			for line in fp:
+				File.append(line)
+				
+	except FileNotFoundError:
+		
+		print("FileNotFoundError;Is DarkGeantData in the same directory?")
+		print("Halting Execution")
+		exit(0)
+	
+	MakeList(File, "Primary particle kinetic energy", PrimaryKineticEnergyList)
+	MakeList(File, "Primary Ionization Energy", PrimaryIonizationList)
+	MakeList(File, "Total Secondary Energy", TotalSecondaryEnergyList)
+	MakeList(File, "Total Ionization Energy", TotalIonizationList)
+	MakeSecondaryEnergyList(File)
+	MakedEdxList(File)
+	
+	PositionList = MakePositionList(File)
+	print(PositionList[0])
+	for List in PositionList:
+		PathReconstructionObjs.append(PathReconstructionV2(List))
+	
+'''
+
 	InitializeHistogramObjects()
 	
 	* Description
@@ -193,59 +238,6 @@ def SecondaryListChunkProcesses():
 		for x in range(3):
 			SubProcess[x].join()
 			
-
-'''
-
-	ReadIonizationFileAndPopulateLists()
-	
-	* Description
-	
-		Loads the entire IonizationEnergy file and places the data line 
-		by line in an list called File. It then calls several functions 
-		who expect this File list to be passed as a parameter.
-
-'''
-
-def ReadIonizationFileAndPopulateLists():
-		
-	global PrimaryKineticEnergyList
-	global PrimaryIonizationList
-	global TotalSecondaryEnergyList
-	global TotalIonizationList
-	global PathReconstructionObjs
-		
-	File = []	
-	try:
-		with open("DarkGeantData") as fp:
-			
-			for line in fp:
-				File.append(line)
-				
-	except FileNotFoundError:
-		
-		print("FileNotFoundError;Is DarkGeantData in the same directory?")
-		print("Halting Execution")
-		exit(0)
-	
-	MakeList(File, "Primary particle kinetic energy", PrimaryKineticEnergyList)
-	MakeList(File, "Primary Ionization Energy", PrimaryIonizationList)
-	MakeList(File, "Total Secondary Energy", TotalSecondaryEnergyList)
-	MakeList(File, "Total Ionization Energy", TotalIonizationList)
-	MakeSecondaryEnergyList(File)
-	MakedEdxList(File)
-	
-	PositionList = MakePositionList(File)
-	for List in PositionList:
-		PathReconstructionObjs.append(PathReconstruction)
-	
-	'''
-	
-		...
-	
-	PositionList = MakePositionList(File)
-	for List in PositionList:
-		PathReconstructionObjs.append(PathReconstruction(List))
-	'''
 	
 '''
 
@@ -373,7 +365,7 @@ def MakePositionList(File):
 	for i in range(len(File)):
 		if "Primary Particle Position" in File[i]:
 			AtPosition = True
-		elif len(File[i]) <= 1:
+		elif len(File[i]) <= 1 and AtPosition is True:
 			AtPosition = False
 			PositionList.append(TempPositionList)
 			TempPositionList = []
