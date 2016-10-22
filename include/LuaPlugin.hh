@@ -38,19 +38,11 @@
 
 // User Headers
 #include "DetectorConstruction.hh"
+#include "Material.hh"
 
 using std::cout;
 using std::string;
 using std::vector;
-
-enum POPELEMENTS {
-
-	ALL = -1,
-	ONE = 1,
-	TWO = 2,
-	THREE = 3	
-	
-};
 
 class LuaInstance {
 	
@@ -77,8 +69,7 @@ class LuaInstance {
 		
 	protected:
 	
-		void LoadTable(string table);
-			
+	
 		/*
 		* 
 		* Functions include
@@ -96,6 +87,37 @@ class LuaInstance {
 		* LUA_TSTRING
 		* 
 		* */
+		void LoadTable(string table);
+		
+		template<typename T, typename U>
+		T GetGlobalVariable(string var,
+		                    int VAR_TYPE,
+		                    T DefaultValue,
+                            U (*lua_Function)(lua_State *L, int index),
+                            bool HaltExecution)
+        {
+			
+			lua_getglobal(this->L, var.c_str());
+			
+			if (lua_type(this->L, -1) != VAR_TYPE) {
+				
+				cout << var << " wrong type\n";
+				lua_pop(this->L, 1);
+				if (HaltExecution) {
+					
+					cout << "Halting execution";
+					exit(0);
+					
+				}
+				return DefaultValue;
+				
+			}
+			T ReturnValue = lua_Function(this->L, -1);
+			lua_pop(this->L, 1);
+			return ReturnValue;
+			
+		}
+			
 		template<typename T, typename U>
 		T GetElementFromTable(string element, 
                               string ErrorMessage,
@@ -130,6 +152,15 @@ class LuaInstance {
 	
 };
 
+
+
+
+
+
+
+
+
+
 class ConfigLuaInstance : public LuaInstance {
 	
 	public:
@@ -160,6 +191,14 @@ class ConfigLuaInstance : public LuaInstance {
 	 * */
 	
 };
+
+
+
+
+
+
+
+
 
 class DetectorConfigLuaInstance : public LuaInstance {
 	
@@ -207,6 +246,41 @@ class DetectorConfigLuaInstance : public LuaInstance {
 	 * Finish class
 	 * 
 	 * */
+	
+};
+
+
+
+
+
+class MaterialConfigLua : public LuaInstance {
+	
+	/*
+	 * 
+	 * 
+	 * */
+	public:
+	
+		vector<Material *> Materials;
+		
+	private:
+	
+		int NumberOfMaterials;
+	
+	/*
+	 * Class member functions
+	 * 
+	 * 
+	 * */
+	public:
+	
+		MaterialConfigLua(string ModulePath);
+		~MaterialConfigLua();
+		
+	private:
+	
+		void Initialize_NumberOfMaterials();
+		void Initialize_MaterialsVector();
 	
 };
 

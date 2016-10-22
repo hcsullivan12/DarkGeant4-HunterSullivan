@@ -32,6 +32,31 @@
 // Geant4 Headers
 #include "QGSP_BERT.hh"
 
+
+#define GetNumberFromGlobal_NoHalt(var, DefaultValue) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            DefaultValue, &lua_tonumber_shim, false)
+                            
+#define GetNumberFromGlobal_WithHalt(var) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            0.0, &lua_tonumber_shim, true)
+                            
+#define GetIntegerFromGlobal_NoHalt(var, DefaultValue) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            DefaultValue, &lua_tointeger_shim, false)
+                            
+#define GetIntegerFromGlobal_WithHalt(var) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            0, &lua_tointeger_shim, true)
+                            
+#define GetStringFromGlobal_NoHalt(var, DefaultValue) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            DefaultValue, &lua_tostring_shim, false)
+                            
+#define GetStringFromGlobal_WithHalt(var) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                           "", &lua_tostring_shim, true)
+
 /*
  * 
  * Useful Macro's that help increase code readibility by eliminating
@@ -69,6 +94,7 @@
                             &lua_tostring_shim, false)
 
 
+
 const char *lua_tostring_shim(lua_State *L, int index);
 int lua_tointeger_shim(lua_State *L, int index);
 double lua_tonumber_shim(lua_State *L, int index);
@@ -103,6 +129,13 @@ double lua_tonumber_shim(lua_State *L, int index) {
 }
 
 
+
+
+
+
+
+
+
 /*
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Class LuaInstance member functions
@@ -117,6 +150,14 @@ double lua_tonumber_shim(lua_State *L, int index) {
  * 		For now I'll just throw an unhandled exception.
  * 
  * */
+
+
+
+
+
+
+
+
 
 LuaInstance::LuaInstance(string FilePath) {
 
@@ -184,6 +225,12 @@ LuaInstance::~LuaInstance() {
 
 
 
+
+
+
+
+
+
 /*
  * 
  *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -191,6 +238,16 @@ LuaInstance::~LuaInstance() {
  *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
 /*
  * ConfigLuaInstance::ConfigLuaInstance(string ModulePath)
@@ -258,6 +315,14 @@ void ConfigLuaInstance::Initialize_physicslist() {
 }
 
 
+
+
+
+
+
+
+
+
 /*
  * 
  *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -265,6 +330,15 @@ void ConfigLuaInstance::Initialize_physicslist() {
  *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
 /*
  * DetectorConfigLuaInstane::DetectorConfigLuaInstance(string ModulePath)
@@ -461,7 +535,7 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4St
 	G4double X = GetNumberFromTable_WithHalt("X", "Did not provide X "+
                                     string("value. Halting Execution"));
 	
-    G4double Y = GetNumberFromTable_WithHalt("Y", "Did not provide Y "+
+	G4double Y = GetNumberFromTable_WithHalt("Y", "Did not provide Y "+
                                     string("value. Halting Execution"));
                                      
 	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
@@ -521,4 +595,54 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 	return G4ThreeVector(PositionArray[0], 
                          PositionArray[1], 
                          PositionArray[2]);
+}
+
+
+
+
+
+
+
+
+
+/*
+ * 
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * class MaterialConfigLua member functions
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * 
+ * */
+
+
+
+
+
+
+MaterialConfigLua::MaterialConfigLua(string ModulePath)
+ : LuaInstance(ModulePath) 
+{
+	
+	Initialize_NumberOfMaterials();
+	Initialize_MaterialsVector();
+	
+}
+
+MaterialConfigLua::~MaterialConfigLua() {
+	
+	
+	
+}
+
+void MaterialConfigLua::Initialize_NumberOfMaterials() {
+	
+	this->NumberOfMaterials = GetIntegerFromGlobal_WithHalt(
+	                                             "Number_Of_Materials");
+	
+	
+}
+
+void MaterialConfigLua::Initialize_MaterialsVector() {
+	
+	cout << "Initialize_MaterialsVector STUB\n";
+	
 }
