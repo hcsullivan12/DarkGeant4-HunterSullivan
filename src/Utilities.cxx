@@ -23,6 +23,13 @@
 
 #include "Utilities.hh"
 
+string ConvertIntToString(int integer) {
+
+	char tempstring[128] = {'\0'};
+	sprintf(tempstring, "%d", integer);
+	return string(tempstring);
+	
+}
 
 int DetermineFileLength(string filename) {
 	

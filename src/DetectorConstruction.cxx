@@ -370,13 +370,6 @@ void DetectorConstructionV2::InitializePhysicalVolume() {
 			
 		delete ComponentPhysical;
 	}
-	/*	G4VPhysicalVolume *TrackerPhysical = new G4PVPlacement(0, 
-                                             G4ThreeVector(0, 0, 0), 
-                                             this->trackerLog,
-                                             "Detector",
-                                             this->worldLog,
-                                             false,
-                                             0);*/
 	
 }
 

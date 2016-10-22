@@ -28,6 +28,7 @@
 // C/C++ Headers
 #include <iostream>
 #include <cstdio>
+#include <cstring>
 #include <string>
 
 
@@ -49,7 +50,7 @@ struct FourVectorStruct {
 };
 
 int DetermineFileLength(string filename);
-
+string ConvertIntToString(int integer);
 
 template <typename T>
 void Initialize2dArray(int x_length, int y_length, T ***array) {

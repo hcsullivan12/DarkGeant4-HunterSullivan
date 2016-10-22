@@ -25,6 +25,7 @@
 
 // User Headers
 #include "PhysicsList.hh"
+#include "Utilities.hh"
 
 // C/C++ Headers
 #include <cstring>
@@ -424,19 +425,18 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 		//Pop entire stack
 		lua_pop(this->L, -1);
 		
-		char tempstring[126] = {'\0'};
-		sprintf(tempstring, "%d", i);
+		string tempstring = ConvertIntToString(i);
 		
-		cout << "\nDetectorComponent_" + string(tempstring) << ":\n";
-		LoadTable("DetectorComponent_" + string(tempstring));
+		cout << "\nDetectorComponent_" + tempstring << ":\n";
+		LoadTable("DetectorComponent_" + tempstring);
 		
 		G4String Volume_Type = GetStringFromTable_WithHalt("Volume_Type",
 		                     "You didn't define an appropriate volume "
 		                     + string("for DetectorComponent_"
-		                     + string(tempstring)));
+		                     + tempstring));
         G4String Name = GetStringFromTable_NoHalt("Component_Name",
                                           "Default Component_Name Used",
-                             "DetectorComponent_" + string(tempstring));            
+                             "DetectorComponent_" + tempstring);            
        /*
         * * Comment
         * 
@@ -651,6 +651,13 @@ void MaterialConfigLua::Initialize_NumberOfMaterials() {
 
 void MaterialConfigLua::Initialize_MaterialsVector() {
 	
-	cout << "Initialize_MaterialsVector STUB\n";
+	for (int i = 0; i < this->NumberOfMaterials;i++) {
+	
+		LoadTable("Material_" + ConvertIntToString(i));
+		
+		//TODO Finish
+		
+		lua_pop(this->L, 1);
+	}
 	
 }
