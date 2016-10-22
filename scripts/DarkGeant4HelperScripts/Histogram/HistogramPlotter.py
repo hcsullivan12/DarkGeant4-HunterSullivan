@@ -97,5 +97,3 @@ class HistogramPlotter(object):
 			
 		plt.show()
 		plt.close()
-					
-	

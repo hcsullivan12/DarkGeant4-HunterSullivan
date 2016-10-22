@@ -138,7 +138,6 @@ def InitializeHistogramObjects():
 	global PathReconstructionMagnitude
 	
 	HistogramObjs = []
-
 	PrimaryHistogram = HistogramPlotter(PrimaryKineticEnergyList,
 								"Initial Proton Kinetic Energy",
 								"Kinetic Energy (MeV)",
@@ -158,7 +157,7 @@ def InitializeHistogramObjects():
 								XRange = [0,1200])
 								
 	dEdxHistogram = HistogramPlotter(dEdxlist,
-								"dE/dX Histogram",
+								"dE/dX",
 								"dE/dX (Mev/cm)",
 								"Amount",
 								XRange = [0,1200],
@@ -168,7 +167,8 @@ def InitializeHistogramObjects():
 								PathReconstructionMagnitude,
 								"Magnitude of displacement per step",
 								"Distance (mm)",
-								"Amount")
+								"Amount",
+								Bins = 6000)
 								
 	HistogramObjs.append(PrimaryHistogram)
 	HistogramObjs.append(TotalIonizationHistogram)
