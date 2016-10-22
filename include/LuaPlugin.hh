@@ -172,6 +172,8 @@ class DetectorConfigLuaInstance : public LuaInstance {
 	public:
 	
 		int Number_of_Dectector_Components;
+		DetectorComponent *World;
+		vector<DetectorComponent *> Components;
 		vector<DetectorComponent_Cylinder> CylinderComponents;
 		vector<DetectorComponent_Box> BoxComponents;
 		
@@ -188,10 +190,15 @@ class DetectorConfigLuaInstance : public LuaInstance {
 	
 	private:
 	
+		void Initialize_world();
 		void Initialize_number_of_detector_components();
 		void Initialize_detector_components();
-		void MakeDetectorComponent_Cylinder();
-		void MakeDetectorComponent_Box();
+		
+		DetectorComponent *WithVolumeGetDetectorComponent(G4String Volume_Type, G4String Name);
+		
+		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(G4String Name);
+		DetectorComponent_Box *MakeDetectorComponent_Box(G4String Name);
+		
 		G4ThreeVector MakePositionG4ThreeVector();
 	/*
 	 * 

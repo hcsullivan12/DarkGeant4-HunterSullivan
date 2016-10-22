@@ -125,7 +125,8 @@ class DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent(VolumeType Type, 
+		DetectorComponent(G4String Name,
+		                  VolumeType Type, 
                           G4ThreeVector Position,
                           G4String MaterialString);
 		~DetectorComponent();
@@ -167,7 +168,8 @@ class DetectorComponent_Cylinder : public DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent_Cylinder(G4double InnerRadius,
+		DetectorComponent_Cylinder(G4String Name,
+                                   G4double InnerRadius,
                                    G4double OuterRadius,
                                    G4double StartAngle,
                                    G4double EndAngle,
@@ -198,7 +200,8 @@ class DetectorComponent_Box : public DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent_Box(G4double x,
+		DetectorComponent_Box(G4String Name,
+                              G4double x,
                               G4double y,
                               G4double z,
                               G4ThreeVector Position,

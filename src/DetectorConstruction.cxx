@@ -151,7 +151,8 @@ void DetectorConstruction::InitializePhysicalVolume() {
  * */
  
  
-DetectorComponent::DetectorComponent(VolumeType Type, 
+DetectorComponent::DetectorComponent(G4String Name,
+                                     VolumeType Type, 
                                      G4ThreeVector Position,
                                      G4String MaterialString) 
 {
@@ -188,6 +189,7 @@ void DetectorComponent::SetMaterialPointer(G4String MaterialString) {
  * */
  
 DetectorComponent_Cylinder::DetectorComponent_Cylinder(
+                                   G4String Name,
                                    G4double InnerRadius,
                                    G4double OuterRadius,
                                    G4double StartAngle,
@@ -195,7 +197,7 @@ DetectorComponent_Cylinder::DetectorComponent_Cylinder(
                                    G4double HalfLength,
                                    G4ThreeVector Position,
                                    G4String MaterialString)
- : DetectorComponent(CYLINDER, Position, MaterialString)
+ : DetectorComponent(Name, CYLINDER, Position, MaterialString)
 {
 	
 	
@@ -214,12 +216,14 @@ DetectorComponent_Cylinder::~DetectorComponent_Cylinder() {
  * 
  * */
 
-DetectorComponent_Box::DetectorComponent_Box(G4double x,
+DetectorComponent_Box::DetectorComponent_Box(
+                              G4String Name,
+                              G4double x,
                               G4double y,
                               G4double z,
                               G4ThreeVector Position,
                               G4String MaterialString)
- : DetectorComponent(BOX, Position, MaterialString) 
+ : DetectorComponent(Name, BOX, Position, MaterialString) 
 {
 	
 	

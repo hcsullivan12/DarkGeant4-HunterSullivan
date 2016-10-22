@@ -275,9 +275,10 @@ void ConfigLuaInstance::Initialize_physicslist() {
 DetectorConfigLuaInstance::DetectorConfigLuaInstance(string ModulePath)
 : LuaInstance(ModulePath + string("/DetectorConfig.lua"))
 {
+	LoadTable("World");
+	Initialize_world();
 	
 	LoadTable("DetectorConfig");
-	
 	Initialize_number_of_detector_components();
 	Initialize_detector_components();
 	
@@ -293,6 +294,17 @@ DetectorConfigLuaInstance::~DetectorConfigLuaInstance()
 {
 		
 	
+}
+
+void DetectorConfigLuaInstance::Initialize_world() {
+	
+	G4String Volume_Type = GetStringFromTable_WithHalt("Volume_Type",
+                                  "No Volume_Type specified for world");
+                              
+    G4String Name = GetStringFromTable_NoHalt("World_Name",
+                                              "Default World Name",
+                                              "World");
+    this->World = WithVolumeGetDetectorComponent(Volume_Type, Name);    
 }
 
 /*
@@ -322,6 +334,8 @@ void DetectorConfigLuaInstance::Initialize_number_of_detector_components() {
 	
 }
 
+
+
 /*
  * DetectorConfigLuaInstance::Initialize_detector_components()
  * 
@@ -342,11 +356,13 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 		cout << "\nDetectorComponent_" + string(tempstring) << ":\n";
 		LoadTable("DetectorComponent_" + string(tempstring));
 		
-		string Volume_Type = GetStringFromTable_WithHalt("Volume_Type",
+		G4String Volume_Type = GetStringFromTable_WithHalt("Volume_Type",
 		                     "You didn't define an appropriate volume "
 		                     + string("for DetectorComponent_"
 		                     + string(tempstring)));
-                             
+        G4String Name = GetStringFromTable_NoHalt("Component_Name",
+                                          "Default Component_Name Used",
+                             "DetectorComponent_" + string(tempstring));            
        /*
         * * Comment
         * 
@@ -354,14 +370,23 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
         * 		assume that the value that Volume_Type is valid.
         * 
         * */
-        
-        if (Volume_Type == "Cylinder")
-            MakeDetectorComponent_Cylinder();
-        else if (Volume_Type == "Box")
-            MakeDetectorComponent_Box();
+		this->Components.push_back(WithVolumeGetDetectorComponent(Volume_Type, Name));
 		
 	}
 	cout << "\n";
+	
+}
+
+
+DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(G4String Volume_Type, G4String Name) {
+	
+	DetectorComponent *Component;
+	if (Volume_Type == "Cylinder")
+		Component = MakeDetectorComponent_Cylinder(Name);
+    else if (Volume_Type == "Box")
+		Component = MakeDetectorComponent_Box(Name);
+	
+	return Component;
 	
 }
 
@@ -373,8 +398,8 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
  * 
  * 
  * */
-void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
-	
+ 
+DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder(G4String Name) {
 	
 	
 	G4String MaterialString = GetStringFromTable_WithHalt("Material",
@@ -409,17 +434,20 @@ void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
                                          
 	G4ThreeVector Position = MakePositionG4ThreeVector();
    
-	this->CylinderComponents.push_back(DetectorComponent_Cylinder(
+   
+	return new DetectorComponent_Cylinder(Name,
                                       Inner_Radius,
                                       Outer_Radius,
                                       Start_Angle,
                                       End_Angle,
                                       Half_Length,
                                       Position,
-                                      MaterialString));
-                                      
+                                      MaterialString);
    
 }
+
+
+
 
 /*
  * DetectorConfigLuaInstance::MakeDectorComponent_Box()
@@ -428,7 +456,7 @@ void DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder() {
  * 
  * */
 
-void DetectorConfigLuaInstance::MakeDetectorComponent_Box() {
+DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4String Name) {
     
 	G4double X = GetNumberFromTable_WithHalt("X", "Did not provide X "+
                                     string("value. Halting Execution"));
@@ -445,10 +473,13 @@ void DetectorConfigLuaInstance::MakeDetectorComponent_Box() {
                                      
 	G4ThreeVector Position = MakePositionG4ThreeVector();
 	
-	this->BoxComponents.push_back(DetectorComponent_Box(X, Y, Z,
-	                              Position, MaterialString));
-	
+	return new DetectorComponent_Box(Name, X, Y, Z, 
+                                     Position, MaterialString);
+                                     
 }
+
+
+
 
 /*
  * DetectorConfigLuaInstance::MakePositionG4ThreeVector()
