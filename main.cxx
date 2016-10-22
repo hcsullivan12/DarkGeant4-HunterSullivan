@@ -232,6 +232,19 @@ void InitializeLuaInstances() {
  * 
  * 		...
  * 
+ * * Comment
+ * 
+ * 		You might notice something a bit odd with 
+ * 		PrimaryGeneratorAction and SteppingAction. I wasn't able to
+ * 		find a good solution for delimiting events in the
+ * 		DarkGeantOutput.dat file without having 
+ * 		PrimaryGeneratorAction::GeneratePrimaries increment a variable
+ * 		in the SteppingAction instance.
+ * 
+ * 		This seems a bit hackish and I certainly don't like how
+ * 		interconnected this code is, so a better solution would be
+ *		ideal.
+ * 
  * */
 
 void InitializeRunManager(G4RunManager *runManager) {
@@ -365,6 +378,7 @@ void JBInput_Argument(int argc, char *argv[], int index) {
  * 		...
  * 
  * */
+
 
 void Module_Argument (int argc, char *argv[], int index) {
 
