@@ -59,8 +59,10 @@ class Material {
 		Material(G4String name, G4double z, G4double a, G4double density);
 		~Material();
 		
-		G4Material *GetMaterialPointer();
 		void SetAdditionalNames();
+		
+		G4Material *GetMaterialPointer();
+		G4String GetMaterialName();
 		
 };
 

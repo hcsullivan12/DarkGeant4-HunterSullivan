@@ -23,7 +23,7 @@
 
 #include "DetectorConstruction.hh"
 
-//Geant4
+// Geant4 Headers
 #include "G4Material.hh"
 #include "G4PVPlacement.hh"
 #include "G4ThreeVector.hh"
@@ -142,22 +142,32 @@ void DetectorConstruction::InitializePhysicalVolume() {
 	
 }
 
-
 /*
- * 
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Class DetectorComponent member functions
- * 
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
+ 
+ 
+ 
+ 
  
  
 DetectorComponent::DetectorComponent(G4String Name,
                                      VolumeType Type, 
                                      G4ThreeVector Position,
-                                     G4String MaterialString) 
+                                     G4String MaterialString,
+                                     G4String Inside) 
 {
 	
-	
+	this->Name = Name;
+	this->Type = Type;
+	this->Position = Position;
+	this->MaterialString = MaterialString;
+	this->Inside = Inside;
+	// TODO design of Materials must change to accomodate lua config.
+	//this->MaterialString
 	
 }
 
@@ -196,11 +206,15 @@ DetectorComponent_Cylinder::DetectorComponent_Cylinder(
                                    G4double EndAngle,
                                    G4double HalfLength,
                                    G4ThreeVector Position,
-                                   G4String MaterialString)
- : DetectorComponent(Name, CYLINDER, Position, MaterialString)
+                                   G4String MaterialString,
+                                   G4String Inside)
+ : DetectorComponent(Name, CYLINDER, Position, MaterialString, Inside)
 {
 	
-	
+	this->InnerRadius = InnerRadius;
+	this->OuterRadius = OuterRadius;
+	this->StartAngle = StartAngle;
+	this->EndAngle = EndAngle;
 	
 }
 
@@ -210,11 +224,31 @@ DetectorComponent_Cylinder::~DetectorComponent_Cylinder() {
 }
 
 
+void DetectorComponent_Cylinder::ConstructVolume() {
+	
+	G4Tubs *VirtualVolume = new G4Tubs(this->Name,
+                                       this->InnerRadius * m,
+                                       this->OuterRadius * m,
+                                       this->HalfLength * m,
+                                       this->StartAngle * deg,
+                                       this->EndAngle * deg);
+	
+	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
+                 this->DetectorComponentMaterial->GetMaterialPointer(),
+                 this->Name);
+
+}
+
+
+
 /*
  * 
  * Class DetectorComponent_Box member functions
  * 
  * */
+ 
+ 
+ 
 
 DetectorComponent_Box::DetectorComponent_Box(
                               G4String Name,
@@ -222,11 +256,14 @@ DetectorComponent_Box::DetectorComponent_Box(
                               G4double y,
                               G4double z,
                               G4ThreeVector Position,
-                              G4String MaterialString)
- : DetectorComponent(Name, BOX, Position, MaterialString) 
+                              G4String MaterialString,
+                              G4String Inside)
+ : DetectorComponent(Name, BOX, Position, MaterialString, Inside) 
 {
 	
-	
+	this->x = x;
+	this->y = y;
+	this->z = z;
 	
 }
 
@@ -235,5 +272,134 @@ DetectorComponent_Box::~DetectorComponent_Box() {
 	
 
 	
+	
+}
+
+void DetectorComponent_Box::ConstructVolume() {
+	
+	G4Box *VirtualVolume = new G4Box(this->Name,
+                                     this->x * m,
+                                     this->y * m,
+                                     this->z * m);
+                                     
+	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
+                 this->DetectorComponentMaterial->GetMaterialPointer(),
+                 this->Name);
+	
+}
+
+
+
+
+
+/*
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * class DetectorConstructionV2 member functions
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * 
+ * */
+
+
+
+
+
+
+DetectorConstructionV2::DetectorConstructionV2(DetectorComponent *World,
+                               vector<DetectorComponent *> Components,
+                               vector<Material *> Materials)
+{
+
+	this->World = World;
+	this->Components = Components;
+	this->Materials = Materials;
+	
+}
+
+DetectorConstructionV2::~DetectorConstructionV2() {
+	
+	
+}
+
+G4VPhysicalVolume* DetectorConstructionV2::Construct() {
+	
+	InitializeWorld();
+	InitializeDetectorComponents();
+	InitializePhysicalVolume();
+	
+	return this->WorldPhysicalVolume;
+	
+}
+
+void DetectorConstructionV2::InitializeWorld() {
+	
+	FindMaterial(this->World);
+	this->World->ConstructVolume();	
+                                    
+}
+
+void DetectorConstructionV2::InitializeDetectorComponents() {
+	
+	for (size_t i = 0; i < this->Components.size();i++)
+		FindMaterial(this->Components[i]);
+	
+	for (size_t i = 0; i < this->Components.size();i++)
+		this->Components[i]->ConstructVolume();
+	
+}
+
+void DetectorConstructionV2::InitializePhysicalVolume() {
+	
+	this->WorldPhysicalVolume = new G4PVPlacement(0, 
+                                    G4ThreeVector(0, 0, 0),
+                                    this->World->LogicalVolume,
+                                    this->World->Name,
+                                    0, false, 0);
+	
+	for (size_t i = 0; i < this->Components.size();i++) {
+	
+		G4VPhysicalVolume *ComponentPhysical = new G4PVPlacement(0,
+                                     this->Components[i]->Position,
+                                     this->Components[i]->LogicalVolume,
+                                     this->Components[i]->Name,
+                                     this->World->LogicalVolume,
+                                     false,
+                                     0);     
+		
+		if (ComponentPhysical == NULL)
+			cout << "ComponentPhysical STUB\n";
+			
+		delete ComponentPhysical;
+	}
+	/*	G4VPhysicalVolume *TrackerPhysical = new G4PVPlacement(0, 
+                                             G4ThreeVector(0, 0, 0), 
+                                             this->trackerLog,
+                                             "Detector",
+                                             this->worldLog,
+                                             false,
+                                             0);*/
+	
+}
+
+void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
+
+	G4String ComponentString = Component->MaterialString;
+	for (size_t i = 0;i < this->Materials.size();i++) {
+	
+		G4String MaterialString = Materials[i]->GetMaterialName();
+		if (strcmp(ComponentString.c_str(), MaterialString.c_str()) == 0) {
+			
+			Component->DetectorComponentMaterial = Materials[i];
+			break;
+			
+		}
+		
+	}
+	cout << "Was not able to find material for ";
+	cout << Component->Name;
+	cout << ". Please be sure that you have no spelling mistakes and ";
+	cout << "be aware that this code is case sensitive.\n";
+	cout << "Halting execution.\n";
+	
+	exit(0);
 	
 }

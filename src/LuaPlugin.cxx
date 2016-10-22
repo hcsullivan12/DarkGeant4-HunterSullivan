@@ -485,8 +485,7 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                              "No Inner_Radius found."
                                              + string(" Set to 0.0"),
                                              0.0);
-                                               
-                                       
+                                                                               
 	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
                                              "No Outer_Radiys found."
                                         + string(" Halting Execution"));
@@ -504,6 +503,10 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
 	G4double Half_Length = GetNumberFromTable_WithHalt("Half_Length",
                                              "No Half_Length found."
                                         + string(" Halting Execution"));
+                                        
+	G4String Inside = GetStringFromTable_WithHalt("Inside",
+                                                 "Please define Inside."
+                                        + string(" Halting Execution"));
                                          
                                          
 	G4ThreeVector Position = MakePositionG4ThreeVector();
@@ -516,7 +519,8 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                       End_Angle,
                                       Half_Length,
                                       Position,
-                                      MaterialString);
+                                      MaterialString,
+                                      Inside);
    
 }
 
@@ -540,6 +544,10 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4St
                                      
 	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
                                     string("value. Halting Execution"));
+                                    
+	G4String Inside = GetStringFromTable_WithHalt("Inside",
+                                        "Please define Inside."
+                                        + string(" Halting Execution"));
                                      
                                      
 	G4String MaterialString = GetStringFromTable_WithHalt("Material",
@@ -548,7 +556,7 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4St
 	G4ThreeVector Position = MakePositionG4ThreeVector();
 	
 	return new DetectorComponent_Box(Name, X, Y, Z, 
-                                     Position, MaterialString);
+                                     Position, MaterialString, Inside);
                                      
 }
 

@@ -28,7 +28,7 @@ Number_Of_Materials = 2
 			If G4Database is set to true, please be sure to specify what
 			material in the Geant4 Database your material refers to.
 		
-			default = Name
+			default = nil. Will halt execution if not defined.
 			
 	If G4Database = false/nil
 	
@@ -51,9 +51,8 @@ Number_Of_Materials = 2
 		
 	
 ]]--
-Material_1 = { Name = "Air",
-              G4Database = true,
-              G4Name = "G4_AIR" }
+Material_1 = { G4Database = true,
+              G4Name = "G4_AIR"  }
               
               
 Material_2 = { Name = "Liquid Argon",

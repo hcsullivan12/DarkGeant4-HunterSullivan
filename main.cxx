@@ -79,8 +79,10 @@ static string Module = "config";
 static vector<G4String> ExecutionVector;
 static FourVectorStruct<G4double> *JBStruct = NULL;
 
-static ConfigLuaInstance *ConfigFileInstance;
-static DetectorConfigLuaInstance *DetectorConfigFileInstance;
+static ConfigLuaInstance *ConfigFileInstance = NULL;
+static DetectorConfigLuaInstance *DetectorConfigFileInstance = NULL;
+
+static DetectorConstruction *Detector = NULL;
 
 static G4RunManager *runManager;
 
@@ -95,6 +97,10 @@ void HandleArguments(int argc, char *argv[]);
 void InitializeState();
 void InitializeLuaInstances();
 void InitializeRunManager(G4RunManager *runManager);
+
+// Relies on DetectorConfigLua instance
+void InitializeDetectorGeometry();
+
 void Clean();
 
 int main(int argc, char *argv[]) {
@@ -235,6 +241,7 @@ void InitializeLuaInstances() {
  * * Comment
  * 
  * 		You might notice something a bit odd with 
+
  * 		PrimaryGeneratorAction and SteppingAction. I wasn't able to
  * 		find a good solution for delimiting events in the
  * 		DarkGeantOutput.dat file without having 
@@ -284,7 +291,11 @@ void InitializeVisManager() {
 }
 #endif
 
+void InitializeDetectorGeometry() {
 
+	
+	
+}
 
 
 

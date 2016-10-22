@@ -105,6 +105,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 		
 };
 
+
+
+
+
+
+
 class DetectorComponent {
 	
 	/*
@@ -114,9 +120,13 @@ class DetectorComponent {
 	 * */
 	public:
 	
+		G4String Name;
 		VolumeType Type;
 		G4ThreeVector Position;
+		G4String MaterialString;
 		Material *DetectorComponentMaterial;
+		G4String Inside;
+		G4LogicalVolume *LogicalVolume;
 	
 	/*
 	 * 
@@ -128,9 +138,11 @@ class DetectorComponent {
 		DetectorComponent(G4String Name,
 		                  VolumeType Type, 
                           G4ThreeVector Position,
-                          G4String MaterialString);
+                          G4String MaterialString,
+                          G4String Inside);
 		~DetectorComponent();
 		
+		virtual void ConstructVolume() {;}
 		
 	protected:
 	
@@ -145,6 +157,12 @@ class DetectorComponent {
 	 * */
 	
 };
+
+
+
+
+
+
 
 class DetectorComponent_Cylinder : public DetectorComponent {
 	
@@ -175,10 +193,18 @@ class DetectorComponent_Cylinder : public DetectorComponent {
                                    G4double EndAngle,
                                    G4double HalfLength,
                                    G4ThreeVector Position,
-                                   G4String MaterialString);
+                                   G4String MaterialString,
+                                   G4String Inside);
 		~DetectorComponent_Cylinder();
 	
+		void ConstructVolume();
+	
 };
+
+
+
+
+
 
 class DetectorComponent_Box : public DetectorComponent {
 	
@@ -205,8 +231,55 @@ class DetectorComponent_Box : public DetectorComponent {
                               G4double y,
                               G4double z,
                               G4ThreeVector Position,
-                              G4String MaterialString);
+                              G4String MaterialString,
+                              G4String Inside);
 		~DetectorComponent_Box();
+		
+		void ConstructVolume();
+	
+};
+
+
+
+
+
+class DetectorConstructionV2 : public G4VUserDetectorConstruction {
+	
+	/*
+	 * Class member variables
+	 * 
+	 * */
+	private:
+	
+		// Detector Components
+		DetectorComponent *World;
+		vector<DetectorComponent *> Components;
+		vector<Material *> Materials;
+		
+		G4VPhysicalVolume *WorldPhysicalVolume;
+	
+	/*
+	 * Class member functions
+	 * 
+	 * 
+	 * */
+	public:
+	
+		DetectorConstructionV2(DetectorComponent *World,
+                               vector<DetectorComponent *> Components,
+                               vector<Material *> Materials);
+		~DetectorConstructionV2();
+		
+		G4VPhysicalVolume* Construct();
+	
+	private:
+	
+		void InitializeWorld();
+		void InitializeDetectorComponents();
+		void InitializePhysicalVolume();
+		
+		void FindMaterial(DetectorComponent *Component);
+		
 	
 };
 

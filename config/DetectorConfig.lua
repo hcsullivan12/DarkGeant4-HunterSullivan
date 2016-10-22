@@ -7,6 +7,9 @@
 	* Number_of_Detector_Components
 	
 		A *Integer* greater than 0
+		
+			default = nil. Will halt execution of program if not 
+			defined.
 
 ]]--
 DetectorConfig = { Detector_Name = "Detector",
@@ -71,6 +74,14 @@ World = { Material = "Air",
 			X (No Default Value) (Width) -> Usually
 			Y (No Default Value) (Height)-> Usually
 			Z (No Default Value) (Length)-> Usually
+			
+	* Inside
+	
+		"World"
+		"DetectorComponent_x"
+		
+			default = nil. Will halt execution of program if not 
+			defined.
 
 ]]--
 DetectorComponent_1 = { Material = "Liquid Argon",
@@ -78,11 +89,13 @@ DetectorComponent_1 = { Material = "Liquid Argon",
                         Inner_Radius = 0.0,
                         Outer_Radius = .6,
                         Half_Length = .5,
-                        Position = { 0, 0, 0 } }
+                        Position = { 0, 0, 0 },
+                        Inside = "World" }
                         
 DetectorComponent_2 = { Material = "Air",
                         Volume_Type = "Box",
                         X = 1.0,
                         Y = 1.0,
                         Z = 1.0,
-                        Position = { 0, 1, 0 } }
+                        Position = { 0, 1, 0 },
+                        Inside = "World" }
