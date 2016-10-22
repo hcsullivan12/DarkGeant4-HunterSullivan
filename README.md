@@ -29,7 +29,7 @@ A window should be rendered on your screen with a basic cylindrical volume (Pres
 
 To see some action happen on screen, select your terminal and press enter. The code is presently waiting for a carriage return before it executes the run phase.
 
-## Using Python scripts for data analyse
+## Using Python scripts for data analysis
 
 The python scripts are written in python3, so be sure you have a python3 interpreter installed on your system with the necessary dependencies.
 
