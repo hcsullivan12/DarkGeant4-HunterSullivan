@@ -56,9 +56,9 @@
 #include <vector>
 
 /* 
- * ~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * namespaces
- * ~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
 using std::string;
@@ -67,12 +67,13 @@ using std::cout;
 using std::cin;
 
 /*
- * ~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Static variables
- * ~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
- 
+
+static const string VersionString = "0.3";
 static bool TerminalOutput = true;
 
 static string Module = "config";
@@ -81,15 +82,16 @@ static FourVectorStruct<G4double> *JBStruct = NULL;
 
 static ConfigLuaInstance *ConfigFileInstance = NULL;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance = NULL;
+static MaterialConfigLua *MaterialConfigFileInstance = NULL;
 
-static DetectorConstruction *Detector = NULL;
+static DetectorConstructionV2 *Detector = NULL;
 
 static G4RunManager *runManager;
 
 /*
- *  ~~~~~~~~~~~~~~~~~~~
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *  Function Prototypes
- *  ~~~~~~~~~~~~~~~~~~~
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
 
@@ -100,16 +102,16 @@ void InitializeRunManager(G4RunManager *runManager);
 
 // Relies on DetectorConfigLua instance
 void InitializeDetectorGeometry();
-
 void Clean();
 
 int main(int argc, char *argv[]) {
 	
+	cout << "DarkGeant4 version " << VersionString << "\n";
+	cout << "Written by Emma Davenport (UT Arlington)\n";
+	
 	HandleArguments(argc, argv);
 	InitializeState();
-	
 	std::cin.get();
-	
 	Clean();
 	
 	return 0;
@@ -185,6 +187,7 @@ void Clean() {
 	
 	delete ConfigFileInstance;
 	delete DetectorConfigFileInstance;
+	delete MaterialConfigFileInstance;
 }
 
 /*
@@ -227,6 +230,13 @@ void InitializeLuaInstances() {
 			DetectorConfigFileInstance->CloseLuaState();
 		
 		}
+		#pragma omp section
+		{
+		
+			MaterialConfigFileInstance = new MaterialConfigLua(Module);
+			MaterialConfigFileInstance->CloseLuaState();
+			
+		}
 	}	
 	
 }
@@ -256,7 +266,7 @@ void InitializeLuaInstances() {
 
 void InitializeRunManager(G4RunManager *runManager) {
 
-	runManager->SetUserInitialization(new DetectorConstruction());
+	runManager->SetUserInitialization(Detector);
 	runManager->SetUserInitialization(ConfigFileInstance->physicslist);
 	
 	PrimaryGeneratorAction *Generator = new PrimaryGeneratorAction();
@@ -293,7 +303,10 @@ void InitializeVisManager() {
 
 void InitializeDetectorGeometry() {
 
-	
+	Detector = new DetectorConstructionV2(
+	               DetectorConfigFileInstance->World,
+	               DetectorConfigFileInstance->Components,
+	               MaterialConfigFileInstance->Materials);
 	
 }
 

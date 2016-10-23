@@ -82,6 +82,12 @@ G4Material *Material::GetMaterialPointer() {
 	
 }
 
+G4String Material::GetMaterialName() {
+
+	return this->name;
+	
+}
+
 void Material::SetAdditionalNames() {
 	
 	/*

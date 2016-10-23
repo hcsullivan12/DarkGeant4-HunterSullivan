@@ -281,6 +281,8 @@ class MaterialConfigLua : public LuaInstance {
 	
 		void Initialize_NumberOfMaterials();
 		void Initialize_MaterialsVector();
+		Material *ConstructMaterial_ByDatabase();
+		Material *ConstructMaterial_ByHand();
 	
 };
 

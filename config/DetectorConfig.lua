@@ -42,11 +42,12 @@ DetectorConfig = { Detector_Name = "Detector",
 			Z (No Default Value) (Length)-> Usually
 
 ]]--
-World = { Material = "Air",
+World = { Material = "G4_AIR",
           Volume_Type = "Box",
           X = 20.0,
           Y = 20.0,
-          Z = 20.0 }
+          Z = 20.0,
+          Inside = "None" }
 
 --[[
 
@@ -92,7 +93,7 @@ DetectorComponent_1 = { Material = "Liquid Argon",
                         Position = { 0, 0, 0 },
                         Inside = "World" }
                         
-DetectorComponent_2 = { Material = "Air",
+DetectorComponent_2 = { Material = "G4_AIR",
                         Volume_Type = "Box",
                         X = 1.0,
                         Y = 1.0,

@@ -94,6 +94,10 @@
                             ErrorMessage, "", LUA_TSTRING, \
                             &lua_tostring_shim, false)
 
+#define GetBooleanFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, 0, LUA_TBOOLEAN, \
+                            &lua_toboolean_shim, false)
 
 
 const char *lua_tostring_shim(lua_State *L, int index);
@@ -123,6 +127,13 @@ int lua_tointeger_shim(lua_State *L, int index) {
 	
 }
 
+// Returns 0 if false/nil, 1 if true.
+int lua_toboolean_shim(lua_State *L, int index) {
+	
+	return lua_toboolean(L, index);
+	
+}
+
 double lua_tonumber_shim(lua_State *L, int index) {
 
 	return lua_tonumber(L, index);
@@ -138,9 +149,9 @@ double lua_tonumber_shim(lua_State *L, int index) {
 
 
 /*
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Class LuaInstance member functions
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * * Comment
  * 
@@ -234,9 +245,9 @@ LuaInstance::~LuaInstance() {
 
 /*
  * 
- *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 	Class ConfigLuaInstance member functions
- *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
  
@@ -326,9 +337,9 @@ void ConfigLuaInstance::Initialize_physicslist() {
 
 /*
  * 
- *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 	Class DetectorConfigLuaInstance member functions
- *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ *  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
  
@@ -615,9 +626,9 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 
 /*
  * 
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * class MaterialConfigLua member functions
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
 
@@ -627,7 +638,7 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 
 
 MaterialConfigLua::MaterialConfigLua(string ModulePath)
- : LuaInstance(ModulePath) 
+ : LuaInstance(ModulePath + string("/Materials.lua")) 
 {
 	
 	Initialize_NumberOfMaterials();
@@ -651,13 +662,57 @@ void MaterialConfigLua::Initialize_NumberOfMaterials() {
 
 void MaterialConfigLua::Initialize_MaterialsVector() {
 	
-	for (int i = 0; i < this->NumberOfMaterials;i++) {
+	for (int i = 1; i <= this->NumberOfMaterials;i++) {
 	
-		LoadTable("Material_" + ConvertIntToString(i));
+		string IterationString = ConvertIntToString(i);
+		LoadTable("Material_" + IterationString);
 		
-		//TODO Finish
+		cout << "Material_" + IterationString << "\n";
+		if(GetBooleanFromTable_NoHalt("G4Database", 
+           "No G4Database element found. Assuming False", 0))
+        {
+		
+			Materials.push_back(ConstructMaterial_ByDatabase());
+			
+		} else {
+		
+			Materials.push_back(ConstructMaterial_ByHand());
+			
+		}
 		
 		lua_pop(this->L, 1);
 	}
+	
+}
+
+Material *MaterialConfigLua::ConstructMaterial_ByDatabase() {
+
+	G4String DatabaseName = GetStringFromTable_WithHalt("G4Name",
+                                "Make sure you have a G4Name variable!"
+                                + string(" Halting Execution.\n"));
+	
+	return new Material(DatabaseName);
+	
+}
+
+
+
+Material *MaterialConfigLua::ConstructMaterial_ByHand() {
+	
+	G4String Name = GetStringFromTable_WithHalt("Name",
+                                "Make sure you have a Name variable!"
+                                + string(" Halting execution.\n"));
+	G4double NumberOfProtons = GetNumberFromTable_WithHalt(
+	                  "Number_Of_Protons",
+	                  "Make sure you have a Number_Of_Protons variable!"
+	                  + string(" Halting execution.\n"));      
+	G4double AtomicMass = GetNumberFromTable_WithHalt("Atomic_Mass",
+	                      "Make sure you have a Atomic_Mass variable!"
+	                      + string(" Halting execution.\n"));
+	G4double Density = GetNumberFromTable_WithHalt("Density",
+                          "Make sure you have a Density variable!"
+                          + string(" Halting execution.\n"));
+	
+	return new Material(Name, NumberOfProtons, AtomicMass, Density);
 	
 }
