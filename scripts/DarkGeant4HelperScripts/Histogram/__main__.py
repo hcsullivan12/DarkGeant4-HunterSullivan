@@ -117,7 +117,7 @@ def MakeLists(File):
 	
 	PathReconstructionMagnitude = ConsolidateDataFromPathObjs(
 									PathReconstructionObjs)
-	
+									
 '''
 
 	InitializeHistogramObjects()
