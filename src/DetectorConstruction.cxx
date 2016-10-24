@@ -382,7 +382,7 @@ void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
 		if (strcmp(ComponentString.c_str(), MaterialString.c_str()) == 0) {
 			
 			Component->DetectorComponentMaterial = Materials[i];
-			break;
+			return;
 			
 		}
 		

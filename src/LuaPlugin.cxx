@@ -91,7 +91,7 @@
                             
 #define GetStringFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
                             GetElementFromTable(element, \
-                            ErrorMessage, "", LUA_TSTRING, \
+                            ErrorMessage, DefaultValue, LUA_TSTRING, \
                             &lua_tostring_shim, false)
 
 #define GetBooleanFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
@@ -588,7 +588,7 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 	
 	if (lua_type(this->L, -1) != LUA_TTABLE) {
 		
-		cout << "Something went wrong with DetectorComponent.Position";
+		cout << "Something went wrong with DetectorComponent.Position\n";
 		throw;
 		
 	}
@@ -713,6 +713,6 @@ Material *MaterialConfigLua::ConstructMaterial_ByHand() {
                           "Make sure you have a Density variable!"
                           + string(" Halting execution.\n"));
 	
-	return new Material(Name, NumberOfProtons, AtomicMass, Density);
+	return new Material(Name, NumberOfProtons, AtomicMass * g/mole, Density * g/cm);
 	
 }

@@ -47,7 +47,8 @@ World = { Material = "G4_AIR",
           X = 20.0,
           Y = 20.0,
           Z = 20.0,
-          Inside = "None" }
+          Inside = "None",
+          Position = {0, 0, 0} }
 
 --[[
 

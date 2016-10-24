@@ -135,6 +135,7 @@ void InitializeState() {
 	runManager = new G4RunManager();
 	
 	InitializeLuaInstances();
+	InitializeDetectorGeometry();
 	InitializeRunManager(runManager);
 #ifdef G4VIS_USE
 	InitializeVisManager();

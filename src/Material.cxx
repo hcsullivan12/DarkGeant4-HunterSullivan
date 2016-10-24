@@ -47,6 +47,7 @@ Material::Material(G4String name) {
 		NistManager = G4NistManager::Instance();
 	}
 	
+	this->name = name;
 	this->DefinedMaterial = NistManager->FindOrBuildMaterial(name);
 	
 }
