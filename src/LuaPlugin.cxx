@@ -593,9 +593,9 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 		
 	}
 	
-	G4double PositionArray[3];
-	for (int i = 1;i <= 3;i++) {
-		lua_pushnumber(this->L, 1);
+	G4double PositionArray[3] = {0.0, 0.0, 0.0};
+	for (int i = 1;i < 4;i++) {
+		lua_pushinteger(this->L, i);
 		lua_gettable(this->L, -2);
 		if (lua_type(this->L, -1) != LUA_TNUMBER) {
 	
@@ -611,9 +611,9 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 	// Pops second table.
 	lua_pop(this->L, 1);
 	
-	return G4ThreeVector(PositionArray[0], 
-                         PositionArray[1], 
-                         PositionArray[2]);
+	return G4ThreeVector(PositionArray[0] * m, 
+                         PositionArray[1] * m, 
+                         PositionArray[2] * m);
 }
 
 
@@ -713,6 +713,6 @@ Material *MaterialConfigLua::ConstructMaterial_ByHand() {
                           "Make sure you have a Density variable!"
                           + string(" Halting execution.\n"));
 	
-	return new Material(Name, NumberOfProtons, AtomicMass * g/mole, Density * g/cm);
+	return new Material(Name, NumberOfProtons, AtomicMass * g/mole, Density * g/cm3);
 	
 }
