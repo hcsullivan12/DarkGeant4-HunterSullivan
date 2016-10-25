@@ -546,6 +546,9 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
  * */
 
 DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4String Name) {
+	
+	G4String MaterialString = GetStringFromTable_WithHalt("Material",
+                               "Did not provide a valid material");
     
 	G4double X = GetNumberFromTable_WithHalt("X", "Did not provide X "+
                                     string("value. Halting Execution"));
@@ -559,10 +562,6 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4St
 	G4String Inside = GetStringFromTable_WithHalt("Inside",
                                         "Please define Inside."
                                         + string(" Halting Execution"));
-                                     
-                                     
-	G4String MaterialString = GetStringFromTable_WithHalt("Material",
-                               "Did not provide a valid material");
                                      
 	G4ThreeVector Position = MakePositionG4ThreeVector();
 	
