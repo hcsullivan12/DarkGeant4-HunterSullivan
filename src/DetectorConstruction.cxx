@@ -214,6 +214,7 @@ DetectorComponent_Cylinder::DetectorComponent_Cylinder(
 	this->InnerRadius = InnerRadius;
 	this->OuterRadius = OuterRadius;
 	this->StartAngle = StartAngle;
+	this->HalfLength = HalfLength;
 	this->EndAngle = EndAngle;
 	
 }
@@ -368,7 +369,7 @@ void DetectorConstructionV2::InitializePhysicalVolume() {
 		if (ComponentPhysical == NULL)
 			cout << "ComponentPhysical STUB\n";
 			
-		delete ComponentPhysical;
+		//delete ComponentPhysical;
 	}
 	
 }
