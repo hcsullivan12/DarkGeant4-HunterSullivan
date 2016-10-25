@@ -645,11 +645,22 @@ MaterialConfigLua::MaterialConfigLua(string ModulePath)
 	
 }
 
+
 MaterialConfigLua::~MaterialConfigLua() {
 	
 	
 	
 }
+
+/*
+ * Initialize_NumberOfMaterials()
+ * 
+ * * Description
+ * 
+ *		...
+ * 
+ * 
+ * */
 
 void MaterialConfigLua::Initialize_NumberOfMaterials() {
 	
@@ -658,6 +669,16 @@ void MaterialConfigLua::Initialize_NumberOfMaterials() {
 	
 	
 }
+
+/*
+ * Initialize_MaterialsVector()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * 
+ * */
 
 void MaterialConfigLua::Initialize_MaterialsVector() {
 	
@@ -684,6 +705,15 @@ void MaterialConfigLua::Initialize_MaterialsVector() {
 	
 }
 
+/*
+ * ConstructMaterial_ByDatabase()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 Material *MaterialConfigLua::ConstructMaterial_ByDatabase() {
 
 	G4String DatabaseName = GetStringFromTable_WithHalt("G4Name",
@@ -694,24 +724,37 @@ Material *MaterialConfigLua::ConstructMaterial_ByDatabase() {
 	
 }
 
-
+/*
+ * ConstructMaterial_ByHand()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 Material *MaterialConfigLua::ConstructMaterial_ByHand() {
 	
 	G4String Name = GetStringFromTable_WithHalt("Name",
                                 "Make sure you have a Name variable!"
                                 + string(" Halting execution.\n"));
+                                
 	G4double NumberOfProtons = GetNumberFromTable_WithHalt(
 	                  "Number_Of_Protons",
 	                  "Make sure you have a Number_Of_Protons variable!"
-	                  + string(" Halting execution.\n"));      
+	                  + string(" Halting execution.\n"));
+	                        
 	G4double AtomicMass = GetNumberFromTable_WithHalt("Atomic_Mass",
 	                      "Make sure you have a Atomic_Mass variable!"
 	                      + string(" Halting execution.\n"));
+	                      
 	G4double Density = GetNumberFromTable_WithHalt("Density",
                           "Make sure you have a Density variable!"
                           + string(" Halting execution.\n"));
 	
-	return new Material(Name, NumberOfProtons, AtomicMass * g/mole, Density * g/cm3);
+	return new Material(Name, 
+                        NumberOfProtons, 
+                        AtomicMass * g/mole, 
+                        Density * g/cm3);
 	
 }
