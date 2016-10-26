@@ -90,14 +90,14 @@ DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Cylinder",
                         Inner_Radius = 0.0,
                         Outer_Radius = .6,
-                        Half_Length = .5,
+                        Half_Length = 1,
                         Position = { 0, 0, 0 },
                         Inside = "World" }
                         
-DetectorComponent_2 = { Material = "G4_AIR",
+DetectorComponent_2 = { Material = "Liquid Argon",
                         Volume_Type = "Box",
                         X = 1.0,
                         Y = 1.0,
                         Z = 1.0,
-                        Position = { 0, 1, 0 },
+                        Position = { 0, 0, 3 },
                         Inside = "World" }

@@ -39,11 +39,11 @@ Number_Of_Materials = 2
 		
 		default = nil. Will halt execution if not defined.
 		
-	* Atomic_Mass
+	* Atomic_Mass (g/mole)
 	
 		default = nil. Will halt execution if not defined.
 		
-	* Density
+	* Density (g/cm^3)
 	
 		default = nil. Will halt execution if not defined.
 		
