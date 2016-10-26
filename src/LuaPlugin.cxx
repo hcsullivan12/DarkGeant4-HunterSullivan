@@ -99,7 +99,6 @@
                             ErrorMessage, 0, LUA_TBOOLEAN, \
                             &lua_toboolean_shim, false)
 
-
 const char *lua_tostring_shim(lua_State *L, int index);
 int lua_tointeger_shim(lua_State *L, int index);
 double lua_tonumber_shim(lua_State *L, int index);
@@ -171,14 +170,18 @@ double lua_tonumber_shim(lua_State *L, int index) {
 
 
 
-LuaInstance::LuaInstance(string FilePath) {
+LuaInstance::LuaInstance(string Module_Path, string File) {
+
+	this->Module_Path = Module_Path;
+	this->File = File;
+	this->File_Total_Path = Module_Path + string("/") + File;
 
 	this->L = luaL_newstate();
 	luaL_openlibs(L);
 	
-	if (luaL_loadfile(L, FilePath.c_str()) || lua_pcall(L, 0, 0, 0)) {
+	if (luaL_loadfile(L, this->File_Total_Path.c_str()) || lua_pcall(L, 0, 0, 0)) {
 		
-		cout << "Cannot run " << FilePath << "\n";
+		cout << "Cannot run " << this->File_Total_Path << "\n";
 		cout << lua_tostring(this->L, -1) << "\n";
 		throw;
 		
@@ -199,6 +202,41 @@ void LuaInstance::LoadTable(string table) {
 		throw;
 		
 	}
+	
+}
+G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
+
+	lua_pushstring(this->L, TableName.c_str());
+	lua_gettable(this->L, -2);
+	
+	if (lua_type(this->L, -1) != LUA_TTABLE) {
+		
+		cout << "Is " << TableName << " a table?\n";
+		throw;
+		
+	}
+	
+	G4double PositionArray[3] = {0.0, 0.0, 0.0};
+	for (int i = 1;i < 4;i++) {
+		lua_pushinteger(this->L, i);
+		lua_gettable(this->L, -2);
+		if (lua_type(this->L, -1) != LUA_TNUMBER) {
+	
+			cout << "The elements of " << TableName << "should be ";
+			cout << "numbers!\n"; 
+			throw;
+		
+		}
+		PositionArray[i-1] = lua_tonumber(this->L, -1);
+		// Pops number
+		lua_pop(this->L, 1);
+	}
+	// Pops second table.
+	lua_pop(this->L, 1);
+	
+	return G4ThreeVector(PositionArray[0] * m, 
+                         PositionArray[1] * m, 
+                         PositionArray[2] * m);
 	
 }
 
@@ -269,7 +307,7 @@ LuaInstance::~LuaInstance() {
  * */
 
 ConfigLuaInstance::ConfigLuaInstance(string ModulePath) 
-: LuaInstance(ModulePath + string("/Config.lua"))
+: LuaInstance(ModulePath, "Config.lua")
 {
 	
 	LoadTable("ConfigTable");
@@ -359,7 +397,7 @@ void ConfigLuaInstance::Initialize_physicslist() {
  * */
 
 DetectorConfigLuaInstance::DetectorConfigLuaInstance(string ModulePath)
-: LuaInstance(ModulePath + string("/DetectorConfig.lua"))
+: LuaInstance(ModulePath, "DetectorConfig.lua")
 {
 	LoadTable("World");
 	Initialize_world();
@@ -520,7 +558,7 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                         + string(" Halting Execution"));
                                          
                                          
-	G4ThreeVector Position = MakePositionG4ThreeVector();
+	G4ThreeVector Position = GetG4ThreeVector("Position");
    
    
 	return new DetectorComponent_Cylinder(Name,
@@ -563,63 +601,12 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4St
                                         "Please define Inside."
                                         + string(" Halting Execution"));
                                      
-	G4ThreeVector Position = MakePositionG4ThreeVector();
+	G4ThreeVector Position = GetG4ThreeVector("Position");
 	
 	return new DetectorComponent_Box(Name, X, Y, Z, 
                                      Position, MaterialString, Inside);
                                      
 }
-
-
-
-
-/*
- * DetectorConfigLuaInstance::MakePositionG4ThreeVector()
- * 
- * 
- * 
- * */
-
-G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
-
-	lua_pushstring(this->L, "Position");
-	lua_gettable(this->L, -2);
-	
-	if (lua_type(this->L, -1) != LUA_TTABLE) {
-		
-		cout << "Something went wrong with DetectorComponent.Position\n";
-		throw;
-		
-	}
-	
-	G4double PositionArray[3] = {0.0, 0.0, 0.0};
-	for (int i = 1;i < 4;i++) {
-		lua_pushinteger(this->L, i);
-		lua_gettable(this->L, -2);
-		if (lua_type(this->L, -1) != LUA_TNUMBER) {
-	
-			cout << "The elements of DetectorComponent.Position should"
-			+ string("be a number!\n");
-			throw;
-		
-		}
-		PositionArray[i-1] = lua_tonumber(this->L, -1);
-		// Pops number
-		lua_pop(this->L, 1);
-	}
-	// Pops second table.
-	lua_pop(this->L, 1);
-	
-	return G4ThreeVector(PositionArray[0] * m, 
-                         PositionArray[1] * m, 
-                         PositionArray[2] * m);
-}
-
-
-
-
-
-
 
 
 
@@ -637,7 +624,7 @@ G4ThreeVector DetectorConfigLuaInstance::MakePositionG4ThreeVector() {
 
 
 MaterialConfigLua::MaterialConfigLua(string ModulePath)
- : LuaInstance(ModulePath + string("/Materials.lua")) 
+ : LuaInstance(ModulePath, "Materials.lua") 
 {
 	
 	Initialize_NumberOfMaterials();
@@ -756,5 +743,247 @@ Material *MaterialConfigLua::ConstructMaterial_ByHand() {
                         NumberOfProtons, 
                         AtomicMass * g/mole, 
                         Density * g/cm3);
+	
+}
+
+/*
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * class ParticlesConfigLua member functions
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * 
+ * */
+
+ParticlesConfigLua::ParticlesConfigLua(string ModulePath) 
+ : LuaInstance(ModulePath, "Particles.lua")
+{
+	
+	this->FourVectorFile = false;
+	this->FileHasPosition = false;
+	this->FileHasParticleNames = false;
+	
+	Initialize_ParticleFile();
+	
+	if (this->ParticleFile.length() == 0)
+		return;
+		
+	Initialize_ParticleFileType();
+	
+	if (this->FourVectorFile == true)
+		ReadFile_FourVector();
+	
+}
+
+ParticlesConfigLua::~ParticlesConfigLua() {
+	
+	
+	
+}
+
+/*
+ * Initialize_ParticleFile()
+ * 
+ * * Description
+ * 
+ *		...
+ * 
+ * */
+ 
+void ParticlesConfigLua::Initialize_ParticleFile() {
+	
+	this->ParticleFile = GetStringFromGlobal_NoHalt("Particle_File","");
+	
+}
+
+/*
+ * Initialize_ParticleFileType()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
+void ParticlesConfigLua::Initialize_ParticleFileType() {
+	
+	this->ParticleFileType = GetStringFromGlobal_WithHalt(
+                                                  "Particle_File_Type");
+	
+}
+
+/*
+ * Parse_ParticleFileType()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
+void ParticlesConfigLua::Parse_ParticleFileType() {
+	
+	if (this->ParticleFileType.find("Four Vector") != std::string::npos) {
+		
+		this->FourVectorFile = true;
+		Parse_ParticleFileType_FourVector();
+		
+	}
+	
+}
+
+/*
+ * Parse_ParticleFileType_FourVector()
+ * 
+ * * Description
+ * 
+ * 		If this->ParticleFileType was determined to contain the string
+ * 		"Four Vector" then this function is called to determine
+ * 		whether this->ParticleFileType has other attributes.
+ * 
+ * */
+
+void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
+	
+	/*
+	 * Determines whether the string "with name" can be found
+	 * within the string this->ParticleFileType.
+	 * 
+	 * If it doesn't find the string "with name", the user is expected
+	 * to give the name of the particles via the lua script.
+	 * 
+	 * */
+	 
+	if (this->ParticleFileType.find("with name") != std::string::npos) {
+		
+		this->FileHasParticleNames = true;
+		
+	} else {
+		
+		LoadTable("Four_Vector_Table");
+		this->PrimaryParticle_Name = GetStringFromTable_WithHalt(
+                                                        "Particle_Name",
+                                         "Must specify Particle_Name.");
+		lua_pop(this->L, 1);
+		
+	}
+	
+	/*
+	 * Determines whether the string "with position" can be found
+	 * within the string this->ParticleFileType.
+	 * 
+	 * If it doesn't find the string "with position", the user is
+	 * expected to give the position of the particles via the lua
+	 * script.
+	 * 
+	 * */
+	
+	if (this->ParticleFileType.find("with position") != std::string::npos) {
+		
+		this->FileHasPosition = true;
+		
+	} else {
+		
+		LoadTable("Four_Vector_Table");
+		this->Position = GetG4ThreeVector("Position");
+		lua_pop(this->L, 1);
+	}
+	
+}
+
+/*
+ * ReadFile_FourVector()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
+void ParticlesConfigLua::ReadFile_FourVector() {
+	
+	string path = this->Module_Path + "/" + this->ParticleFile;
+	FILE *fp = fopen(path.c_str(), "r");
+	
+	FourVector Temp_FourVector;
+	if (this->FileHasParticleNames && this->FileHasPosition) {
+	
+		string input = "%s %lf %lf %lf %lf %lf %lf %lf";
+		char Temp_ParticleName[256] = {'\0'};
+		while (fscanf(fp, input.c_str(), Temp_ParticleName,
+                                        &Temp_FourVector.E,
+                                        &Temp_FourVector.P_x,
+                                        &Temp_FourVector.P_y,
+                                        &Temp_FourVector.P_z,
+                                        &Temp_FourVector.X,
+                                        &Temp_FourVector.Y,
+                                        &Temp_FourVector.Z) != EOF) 
+		{
+			
+			Temp_FourVector.ParticleName = G4String(Temp_ParticleName);
+			this->FourVectors.push_back(Temp_FourVector);
+			
+		}
+		
+	} else if (this->FileHasParticleNames) {
+	
+		string input = "%s %lf %lf %lf %lf";
+		char Temp_ParticleName[256] = {'\0'};
+		
+		Temp_FourVector.X = this->Position.x();
+		Temp_FourVector.Y = this->Position.y();
+		Temp_FourVector.Z = this->Position.z();
+		
+		while (fscanf(fp, input.c_str(), Temp_ParticleName,
+                                        &Temp_FourVector.E,
+                                        &Temp_FourVector.P_x,
+                                        &Temp_FourVector.P_y,
+                                        &Temp_FourVector.P_z) != EOF) 
+		{
+			
+			Temp_FourVector.ParticleName = G4String(Temp_ParticleName);
+			
+			this->FourVectors.push_back(Temp_FourVector);
+			
+		}
+		
+	} else if (this->FileHasPosition) {
+		
+		string input = "%lf %lf %lf %lf %lf %lf %lf";
+		Temp_FourVector.ParticleName = this->PrimaryParticle_Name;
+		
+		while (fscanf(fp, input.c_str(), &Temp_FourVector.E,
+                                         &Temp_FourVector.P_x,
+                                         &Temp_FourVector.P_y,
+                                         &Temp_FourVector.P_z,
+                                         &Temp_FourVector.X,
+                                         &Temp_FourVector.Y,
+                                         &Temp_FourVector.Z) != EOF) 
+		{
+			
+			this->FourVectors.push_back(Temp_FourVector);
+			
+		}
+		
+	} else {
+		
+		string input = "%lf %lf %lf %lf";
+		
+		Temp_FourVector.ParticleName = this->PrimaryParticle_Name;
+		Temp_FourVector.X = this->Position.x();
+		Temp_FourVector.Y = this->Position.y();
+		Temp_FourVector.Z = this->Position.z();
+		
+		while (fscanf(fp, input.c_str(), &Temp_FourVector.E,
+                                         &Temp_FourVector.P_x,
+                                         &Temp_FourVector.P_y,
+                                         &Temp_FourVector.P_z) != EOF) 
+		{
+		
+			this->FourVectors.push_back(Temp_FourVector);
+			
+		}
+		
+	}
+	
+	fclose(fp);
 	
 }

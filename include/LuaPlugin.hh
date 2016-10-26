@@ -39,6 +39,7 @@
 // User Headers
 #include "DetectorConstruction.hh"
 #include "Material.hh"
+#include "Utilities.hh"
 
 using std::cout;
 using std::string;
@@ -54,6 +55,10 @@ class LuaInstance {
 	protected:
 	
 		lua_State *L;
+		
+		string Module_Path;
+		string File;
+		string File_Total_Path;
 	
 	/*
 	 * 
@@ -62,7 +67,7 @@ class LuaInstance {
 	 * */
 	public:
 	
-		LuaInstance(string FilePath);
+		LuaInstance(string Module_Path, string File);
 		~LuaInstance();
 		
 		void CloseLuaState();
@@ -148,7 +153,7 @@ class LuaInstance {
 			return ReturnValue;
 			
 		}
-		
+		G4ThreeVector GetG4ThreeVector(string TableName);
 	
 };
 
@@ -238,7 +243,6 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(G4String Name);
 		DetectorComponent_Box *MakeDetectorComponent_Box(G4String Name);
 		
-		G4ThreeVector MakePositionG4ThreeVector();
 	/*
 	 * 
 	 * TODO
@@ -283,6 +287,49 @@ class MaterialConfigLua : public LuaInstance {
 		void Initialize_MaterialsVector();
 		Material *ConstructMaterial_ByDatabase();
 		Material *ConstructMaterial_ByHand();
+	
+};
+
+class ParticlesConfigLua : public LuaInstance {
+
+
+	/*
+	 * Class member variables
+	 * 
+	 * */
+	private:
+	
+		bool FourVectorFile;
+		bool FileHasPosition;
+		bool FileHasParticleNames;
+		
+		string PrimaryParticle_Name;
+		
+		G4ThreeVector Position;
+	 
+	public:
+
+		string ParticleFile;
+		string ParticleFileType;
+		
+		vector<FourVector> FourVectors;
+
+	/*
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		ParticlesConfigLua(string ModulePath);
+		~ParticlesConfigLua();
+	
+	private:
+	
+		void Initialize_ParticleFile();
+		void Initialize_ParticleFileType();
+		void Parse_ParticleFileType();
+		void Parse_ParticleFileType_FourVector();
+		void ReadFile_FourVector();
 	
 };
 

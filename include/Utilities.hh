@@ -49,6 +49,15 @@ struct FourVectorStruct {
 	
 };
 
+struct FourVector {
+	
+	G4String ParticleName;
+	G4double P_x, P_y, P_z;
+	G4double X, Y, Z;
+	G4double E;
+	
+};
+
 int DetermineFileLength(string filename);
 string ConvertIntToString(int integer);
 
