@@ -27,4 +27,18 @@ The following command is subject to change with time.
 
 A window should be rendered on your screen with a basic cylindrical volume (Presently made out of liquid argon).
 
-To see some action happen on screen, select your terminal and press enter. The code is presently waiting for a carriage return before it executes the run phase.`
+To see some action happen on screen, select your terminal and press enter. The code is presently waiting for a carriage return before it executes the run phase.
+
+## Using Python scripts for data analysis
+
+The python scripts are written in python3, so be sure you have a python3 interpreter installed on your system with the necessary dependencies.
+
+As of the time of this writing, scripts are separated by directories and further split into separate files to increase maintainability. To run one a script, simply type the following
+
+```
+python3 <dir>
+ex.
+python3 Histogram
+```
+
+Be sure to place associated files in the top directory, ie if you path is scripts/DarkGeantHelperScripts/Histogram, be sure to place data in scripts/DarkGeantHelperScripts/
