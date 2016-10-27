@@ -64,18 +64,31 @@ Particle_File_Type = "Four Vector"
 
 --]]
 Four_Vector_Table = {Particle_Name = "mu+",
-                     Particles_Position = {0., 0., 0.}}
+                     Particles_Position = Particle_Position_Function}
 
 
 --[[
 
-	If Particle_Position
+	If Particle_Position is equal to a function named
+	Particle_Position_function, the C++ code will call the lua
+	function and allow the script to generate a unique set of
+	positions.
 	
-		...
+	The return value expected is a 2D array, where the number of
+	rows is equal to AmountOfPositionsToGenerate and the number of
+	columns is exactly 3.
 
 --]]
-function Particle_Positions()
+function Particle_Position_Function(AmountOfPositionsToGenerate)
 
-	print("STUB")
+	local PositionTable = {}
+	
+	do
+	
+		-- Do stuff
+	
+	end
+	
+	return PositionTable
 
 end
