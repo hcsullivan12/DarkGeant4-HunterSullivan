@@ -881,11 +881,56 @@ void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
 		this->FileHasPosition = true;
 		
 	} else {
-		
-		LoadTable("Four_Vector_Table");
-		this->Position = GetG4ThreeVector("Position");
-		lua_pop(this->L, 1);
+
+		Parse_ParticlePosition();
+
 	}
+	
+}
+
+void ParticlesConfigLua::Parse_ParticlePosition() {
+
+	LoadTable("Four_Vector_Table");
+	lua_pushstring(this->L, "Position");
+	lua_gettable(this->L, -2);
+	
+	switch (lua_type(this->L, -1)) {
+	
+		case LUA_TTABLE:
+		
+			/*
+			 * Position table is at top of stack but GetG4ThreeVector
+			 * assumes that Position isn't loaded so we have to pop
+			 * it before calling GetG4ThreeVector("Position")
+			 * 
+			 * */
+			
+			lua_pop(this->L, 1);
+			this->Position = GetG4ThreeVector("Position");
+		
+		break;
+		case LUA_TSTRING:
+		
+			if (strcasecmp(lua_tostring(this->L, 1), "Function") == 0) {
+			
+				// TODO maybe a pointer to a function instead?
+				
+			}
+		
+		break;
+		case LUA_TFUNCTION:
+		
+			//TODO Call Function
+		
+		break;
+		default:
+		
+		break;
+		
+	}
+	
+	// Pop Four_Vector_Table
+	lua_pop(this->L, 1);
 	
 }
 
