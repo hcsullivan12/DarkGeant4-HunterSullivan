@@ -143,9 +143,9 @@ void DetectorConstruction::InitializePhysicalVolume() {
 }
 
 /*
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Class DetectorComponent member functions
- * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
  
@@ -166,8 +166,6 @@ DetectorComponent::DetectorComponent(G4String Name,
 	this->Position = Position;
 	this->MaterialString = MaterialString;
 	this->Inside = Inside;
-	// TODO design of Materials must change to accomodate lua config.
-	//this->MaterialString
 	
 }
 
@@ -193,8 +191,9 @@ void DetectorComponent::SetMaterialPointer(G4String MaterialString) {
 
 
 /*
- * 
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Class DetectorComponent_Cylinder member functions
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
  
@@ -225,6 +224,15 @@ DetectorComponent_Cylinder::~DetectorComponent_Cylinder() {
 }
 
 
+/*
+ * DetectorComponent_Cylinder::ConstructVolume
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 void DetectorComponent_Cylinder::ConstructVolume() {
 	
 	G4Tubs *VirtualVolume = new G4Tubs(this->Name,
@@ -243,8 +251,9 @@ void DetectorComponent_Cylinder::ConstructVolume() {
 
 
 /*
- * 
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * Class DetectorComponent_Box member functions
+ * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  * 
  * */
  
@@ -275,6 +284,15 @@ DetectorComponent_Box::~DetectorComponent_Box() {
 	
 	
 }
+
+/*
+ * DetectorComponent_Box::ConstructVolume
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 void DetectorComponent_Box::ConstructVolume() {
 	
@@ -321,6 +339,15 @@ DetectorConstructionV2::~DetectorConstructionV2() {
 	
 }
 
+/*
+ * Construct()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 G4VPhysicalVolume* DetectorConstructionV2::Construct() {
 	
 	InitializeWorld();
@@ -331,12 +358,30 @@ G4VPhysicalVolume* DetectorConstructionV2::Construct() {
 	
 }
 
+/*
+ * InitializeWorld
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 void DetectorConstructionV2::InitializeWorld() {
 	
 	FindMaterial(this->World);
 	this->World->ConstructVolume();	
                                     
 }
+
+/*
+ * InitializeDetectorComponents()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 void DetectorConstructionV2::InitializeDetectorComponents() {
 	
@@ -347,6 +392,15 @@ void DetectorConstructionV2::InitializeDetectorComponents() {
 		this->Components[i]->ConstructVolume();
 	
 }
+
+/*
+ * InitializePhysicalVolume()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 void DetectorConstructionV2::InitializePhysicalVolume() {
 	
@@ -373,6 +427,15 @@ void DetectorConstructionV2::InitializePhysicalVolume() {
 	}
 	
 }
+
+/*
+ * FindMaterial(DetectorComponent *Component)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
 

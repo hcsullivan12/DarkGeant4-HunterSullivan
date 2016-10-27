@@ -760,6 +760,7 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 	this->FourVectorFile = false;
 	this->FileHasPosition = false;
 	this->FileHasParticleNames = false;
+	this->PositionDefinedByFunction = false;
 	
 	Initialize_ParticleFile();
 	
@@ -768,8 +769,11 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 		
 	Initialize_ParticleFileType();
 	
-	if (this->FourVectorFile == true)
+	if (this->FourVectorFile)
 		ReadFile_FourVector();
+	
+	if (this->PositionDefinedByFunction)
+		Initialize_ParticlePositions_byFunction();
 	
 }
 
@@ -807,6 +811,81 @@ void ParticlesConfigLua::Initialize_ParticleFileType() {
 	
 	this->ParticleFileType = GetStringFromGlobal_WithHalt(
                                                   "Particle_File_Type");
+	
+}
+
+/*
+ * Initialize_ParticlePositions_ByFunction()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
+void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
+	
+	Load_PositionFunction();
+	
+	for (int i = 1; i <= (int)this->FourVectors.size(); i++) {
+		
+		lua_pushinteger(this->L, i);
+		
+		G4double *PositionPointers[3] = {&this->FourVectors[i].X,
+                                         &this->FourVectors[i].Y,
+                                         &this->FourVectors[i].Z};
+                                         
+		for (int j = 1; j <= 3; j++) {
+		
+			lua_pushinteger(this->L, j);
+			lua_gettable(this->L, -3);
+			
+			if (lua_type(this->L, -1) != LUA_TNUMBER) {
+			
+				// TODO do something
+				
+			}
+			*(PositionPointers[j-1]) = lua_tonumber(this->L, -1);
+			//Pops value
+			lua_pop(this->L, 1);
+			
+		}
+		
+	}
+	
+	// Pops Four_Vector_Table
+	lua_pop(this->L, 1);
+}
+
+void ParticlesConfigLua::Load_PositionFunction() {
+	
+	/*
+	 * Loads Four_Vector_Table and pushes the position function
+	 * to the top of the stack.
+	 * 
+	 * */
+	
+	LoadTable("Four_Vector_Table");
+	lua_pushstring(this->L, "Position");
+	lua_gettable(this->L, -2);
+	
+	// Pushes how many elements we want to generate.
+	lua_pushinteger(this->L, (int)this->FourVectors.size());
+	
+	if (lua_pcall(this->L, 1, 1, 0) != 0) {
+	
+		cout << "Error running function " << lua_tostring(this->L, -1);
+		exit(0);
+		
+	}
+	
+	if (lua_type(this->L, -1) != LUA_TTABLE) {
+		
+		cout << "Expecting to obtain a table after calling position";
+		cout << " function.";
+		exit(0);
+			
+	}
 	
 }
 
@@ -888,6 +967,15 @@ void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
 	
 }
 
+/*
+ * Parse_ParticlePosition()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 void ParticlesConfigLua::Parse_ParticlePosition() {
 
 	LoadTable("Four_Vector_Table");
@@ -911,19 +999,25 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 		break;
 		case LUA_TSTRING:
 		
-			if (strcasecmp(lua_tostring(this->L, 1), "Function") == 0) {
+			if (strcasecmp(lua_tostring(this->L, 1), "distribution") == 0) {
 			
-				// TODO maybe a pointer to a function instead?
+				// TODO GEANT4 provides a distribution function.
 				
 			}
+			lua_pop(this->L, 1);
 		
 		break;
 		case LUA_TFUNCTION:
 		
-			//TODO Call Function
+			//Just saving for later.
+			this->Position = G4ThreeVector(0., 0., 0.);
+			this->PositionDefinedByFunction = true;
+			lua_pop(this->L, 1);
 		
 		break;
 		default:
+		
+			lua_pop(this->L, 1);
 		
 		break;
 		
@@ -949,6 +1043,20 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 	FILE *fp = fopen(path.c_str(), "r");
 	
 	FourVector Temp_FourVector;
+	
+	/*
+	 * this->ParticleFileType has the following substrings:
+	 * 
+	 * 		"with name"
+	 * 		"with position"
+	 * 
+	 * Reads a file with the following format:
+	 * 
+	 * <Particle Name> , <E/c, P_x, P_y, P_z> , <X, Y, Z>
+	 *      Name       ,      Four Vector     ,  Position
+	 * 
+	 * */
+	 
 	if (this->FileHasParticleNames && this->FileHasPosition) {
 	
 		string input = "%s %lf %lf %lf %lf %lf %lf %lf";
@@ -967,7 +1075,19 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 			this->FourVectors.push_back(Temp_FourVector);
 			
 		}
-		
+	
+	/*
+	 * this->ParticleFileType has the following substrings:
+	 * 
+	 * 		"with name"
+	 * 
+	 * Reads a file with the following format:
+	 * 
+	 * <Particle Name> , <E/c, P_x, P_y, P_z>
+	 *      Name       ,      Four Vector
+	 * 
+	 * */
+	
 	} else if (this->FileHasParticleNames) {
 	
 		string input = "%s %lf %lf %lf %lf";
@@ -990,6 +1110,18 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 			
 		}
 		
+	/*
+	 * this->ParticleFileType has the following substrings:
+	 * 
+	 * 		"with position"
+	 * 
+	 * Reads a file with the following format:
+	 * 
+	 * <E/c, P_x, P_y, P_z> , <X, Y, Z>
+	 *      Four Vector     , Position
+	 *  
+	 * */
+	
 	} else if (this->FileHasPosition) {
 		
 		string input = "%lf %lf %lf %lf %lf %lf %lf";
@@ -1007,6 +1139,19 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 			this->FourVectors.push_back(Temp_FourVector);
 			
 		}
+		
+	/*
+	 * this->ParticleFileType has ***none*** the following substrings:
+	 * 
+	 * 		"with name"
+	 * 		"with position"
+	 * 
+	 * 	Reads a file with the following format:	
+	 * 
+	 * <E/c, P_x, P_y, P_z>
+	 *      Four Vector
+	 * 
+	 * */	
 		
 	} else {
 		
