@@ -66,7 +66,6 @@ Particle_File_Type = "Four Vector"
 Four_Vector_Table = {Particle_Name = "mu+",
                      Particles_Position = Particle_Position_Function}
 
-
 --[[
 
 	If Particle_Position is equal to a function named
@@ -83,12 +82,36 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 
 	local PositionTable = {}
 	
+	for i = 1, AmountOfPositionsToGenerate 
 	do
 	
-		-- Do stuff
+		local x = 0
+		local y = 0
+		local z = PseudoRandomDistribution()
+		
+		PositionTable[i] = {x, y, z}
 	
 	end
 	
 	return PositionTable
+
+end
+
+glob_distribution_modifier = 0
+--math.random(low, high)  low <= z <= high
+function PseudoRandomDistribution()
+
+	--Forces a higher proportion of particles to be closer to the origin
+	if glob_distribution_modifier < 5 then
+
+		glob_distribution_modifier = glob_distribution_modifier + 1
+		return math.random() * 1.0
+	
+	else 
+	
+		glob_distribution_modifier = 0
+		return math.random() * 5.0
+	
+	end
 
 end
