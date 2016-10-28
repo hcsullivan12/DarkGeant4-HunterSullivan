@@ -37,14 +37,15 @@ endif()
 #
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
-
+include_directories(${PROJECT_SOURCE_DIR}/include/DetectorConstruction)
+include_directories(${PROJECT_SOURCE_DIR}/include/LuaPlugin)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
 #
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cxx)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+file(GLOB_RECURSE sources ${PROJECT_SOURCE_DIR}/src/*.cxx)
+file(GLOB_RECURSE headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #
 # Release and Debug Commands

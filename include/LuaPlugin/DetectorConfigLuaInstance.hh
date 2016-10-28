@@ -35,7 +35,12 @@
 
 // User Headers
 #include "LuaInstance.hh"
-#include "DetectorConstruction.hh"
+
+#include "DetectorConstructionV2.hh"
+#include "DetectorComponent.hh"
+#include "DetectorComponentBox.hh"
+#include "DetectorComponentCylinder.hh"
+
 #include "Utilities.hh"
 
 

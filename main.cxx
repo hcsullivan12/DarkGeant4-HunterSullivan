@@ -43,11 +43,17 @@
 #endif
 
 //User Headers
-#include "DetectorConstruction.hh"
+#include "DetectorConstructionV2.hh"
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "Utilities.hh"
-#include "LuaPlugin.hh"
+
+#include "LuaInstance.hh"
+#include "ConfigLuaInstance.hh"
+#include "DetectorConfigLuaInstance.hh"
+#include "MaterialConfigLuaInstance.hh"
+#include "ParticlesConfigLuaInstance.hh"
+
 #include "SteppingAction.hh"
 
 // C & C++ Headers

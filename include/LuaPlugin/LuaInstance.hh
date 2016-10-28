@@ -108,7 +108,7 @@ using std::vector;
                             
                             
 int lua_tointeger_shim(lua_State *L, int index);
-bool lua_toboolean_shim(lua_State *L, int index);
+int lua_toboolean_shim(lua_State *L, int index);
 double lua_tonumber_shim(lua_State *L, int index);
 const char *lua_tostring_shim(lua_State *L, int index);
 
