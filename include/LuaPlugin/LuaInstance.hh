@@ -1,5 +1,5 @@
 /*
- * LuaPlugin.hh
+ * LuaInstance.hh
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
@@ -21,8 +21,9 @@
  * 
  */
 
-#ifndef LUAPLUGIN_H
-#define LUAPLUGIN_H
+
+#ifndef LUAINSTANCE_HH
+#define LUAINSTANCE_HH
 
 // Third Party Headers
 #include "lua.hpp"
@@ -34,12 +35,7 @@
 #include <vector>
 
 // Geant 4 Headers
-#include "G4VUserPhysicsList.hh"
-
-// User Headers
-#include "DetectorConstruction.hh"
-#include "Material.hh"
-#include "Utilities.hh"
+#include "G4ThreeVector.hh"
 
 using std::cout;
 using std::string;
@@ -157,187 +153,6 @@ class LuaInstance {
 	
 };
 
-
-
-
-
-
-
-
-
-
-class ConfigLuaInstance : public LuaInstance {
-	
-	public:
-	
-		string modulename;
-		G4VUserPhysicsList *physicslist;
-	
-	/*
-	 * 
-	 * Class member functions
-	 * 
-	 * */
-	public:
-	
-		ConfigLuaInstance(string ModulePath);
-		~ConfigLuaInstance();
-		
-	private:
-	
-		void Initialize_modulename();
-		void Initialize_physicslist();
-	/*
-	 * 
-	 * TODO
-	 * 
-	 * Finish class
-	 * 
-	 * */
-	
-};
-
-
-
-
-
-
-
-
-
-class DetectorConfigLuaInstance : public LuaInstance {
-	
-	
-	/*
-	 * 
-	 * Class member variables
-	 * 
-	 * */
-	public:
-	
-		int Number_of_Dectector_Components;
-		DetectorComponent *World;
-		vector<DetectorComponent *> Components;
-		vector<DetectorComponent_Cylinder> CylinderComponents;
-		vector<DetectorComponent_Box> BoxComponents;
-		
-	
-	/*
-	 * 
-	 * Class member functions
-	 * 
-	 * */
-	public:
-	
-		DetectorConfigLuaInstance(string ModulePath);
-		~DetectorConfigLuaInstance();
-	
-	private:
-	
-		void Initialize_world();
-		void Initialize_number_of_detector_components();
-		void Initialize_detector_components();
-		
-		DetectorComponent *WithVolumeGetDetectorComponent(G4String Volume_Type, G4String Name);
-		
-		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(G4String Name);
-		DetectorComponent_Box *MakeDetectorComponent_Box(G4String Name);
-		
-	/*
-	 * 
-	 * TODO
-	 * 
-	 * Finish class
-	 * 
-	 * */
-	
-};
-
-
-
-
-
-class MaterialConfigLua : public LuaInstance {
-	
-	/*
-	 * 
-	 * 
-	 * */
-	public:
-	
-		vector<Material *> Materials;
-		
-	private:
-	
-		int NumberOfMaterials;
-	
-	/*
-	 * Class member functions
-	 * 
-	 * 
-	 * */
-	public:
-	
-		MaterialConfigLua(string ModulePath);
-		~MaterialConfigLua();
-		
-	private:
-	
-		void Initialize_NumberOfMaterials();
-		void Initialize_MaterialsVector();
-		Material *ConstructMaterial_ByDatabase();
-		Material *ConstructMaterial_ByHand();
-	
-};
-
-class ParticlesConfigLua : public LuaInstance {
-
-
-	/*
-	 * Class member variables
-	 * 
-	 * */
-	private:
-	
-		bool FourVectorFile;
-		bool FileHasPosition;
-		bool FileHasParticleNames;
-		bool PositionDefinedByFunction;
-		
-		string ParticleFile;
-		string ParticleFileType;
-		string PrimaryParticle_Name;
-		
-		G4ThreeVector Position;
-	 
-	public:
-		
-		vector<FourVector> FourVectors;
-
-	/*
-	 * Class member functions
-	 * 
-	 * */
-	public:
-	
-		ParticlesConfigLua(string ModulePath);
-		~ParticlesConfigLua();
-	
-	private:
-	
-		void Initialize_ParticleFile();
-		void Initialize_ParticleFileType();
-		void Initialize_ParticlePositions_byFunction();
-		
-		void Parse_ParticleFileType();
-		void Parse_ParticlePosition();
-		void Parse_ParticleFileType_FourVector();
-		
-		void Load_PositionFunction();
-		
-		void ReadFile_FourVector();
-	
-};
 
 #endif
 
