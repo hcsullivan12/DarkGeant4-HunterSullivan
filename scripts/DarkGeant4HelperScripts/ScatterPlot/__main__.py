@@ -36,21 +36,43 @@ def main(args):
 	
 	del File
 	
-	XList = ConvertToXList(pos_list)
+	#XList = ConvertToXList(pos_list)
 	
-	if len(XList) != len(dedx_list):
-		print("XList = %d, dedx = %d" % (len(XList), len(dedx_list)))
+	if len(pos_list) != len(dedx_list):
+		print("pos = %d, dedx = %d" % (len(pos_list), len(dedx_list)))
+		return
 	
-	SortedList = SortLists(dedx_list, XList)
+	#SortedList = SortLists(dedx_list, XList)
 	
+	PlotData(pos_list, dedx_list)
+	
+'''
+
+	PlotData(XAxis, YAxis)
+	
+	* Description
+	
+		...
+
+'''
+def PlotData(XAxis, YAxis):
+
 	plt.title("dE/dX vs residual range")
 	plt.rcParams['font.size'] = 16.0
 	plt.xlabel("residual range (mm)")
 	plt.ylabel("dE/dX (MeV/cm)")
-	plt.plot(SortedList[0], SortedList[1],)
+	plt.plot(XAxis, YAxis, 'go')
 	plt.show()
 	
+'''
+
+	SortLists(dedx, pos)
 	
+	* Description
+	
+		...
+
+'''
 def SortLists(dedx, pos):
 	
 	for y in range(len(pos)):
@@ -65,7 +87,17 @@ def SortLists(dedx, pos):
 				dedx[x] = temp
 				
 	return [pos, dedx]
-    
+	
+'''
+
+	ConvertToXList(pos)
+	
+	* Description
+	
+		...
+
+'''
+
 def ConvertToXList(pos):
 	
 	XList = []
@@ -74,14 +106,24 @@ def ConvertToXList(pos):
 		XList.append(pos[i+1][3])
 		
 	return XList
-    
+	
+	
+'''
+
+	Get_dEdX_List(File)
+	
+	* Description
+	
+		...
+
+'''
 def Get_dEdX_list(File):
 	
 	FoundLine = False
 	List = []
 	for line in File:
 		if "Primary Ionization Energy" in line:
-			break
+			FoundLine = False
 		elif "dE/dx" in line:
 			FoundLine = True
 		elif FoundLine is True:
@@ -89,19 +131,43 @@ def Get_dEdX_list(File):
 			
 	return List
 	
+'''
+
+	Get_Position_List(File)
+	
+	* Description
+	
+		...
+
+'''
 def Get_Position_List(File):
 	
+	SkippedFirstLine = False
 	FoundLine = False
 	List = []
 	for line in File:
 		if FoundLine is True and len(line) <= 1:
-			break
+			FoundLine = False
+			SkippedFirstLine = False
 		elif "Primary Particle Position" in line:
 			FoundLine = True
+		elif SkippedFirstLine is False and FoundLine is True:
+			SkippedFirstLine = True
 		elif FoundLine is True:
 			List.append(list(map(float, line.split())))
 			
 	return List
+
+'''
+
+	ReadFile()
+	
+	* Description
+	
+		Reads the entire DarkGeantData file and returns a list of the
+		file line by line.
+
+'''
 		
 def ReadFile():
 	
