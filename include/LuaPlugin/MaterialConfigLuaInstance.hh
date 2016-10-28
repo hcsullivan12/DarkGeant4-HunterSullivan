@@ -1,5 +1,5 @@
 /*
- * LuaPlugin.hh
+ * MaterialsConfigLuaInstance.hh
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
@@ -21,8 +21,8 @@
  * 
  */
 
-#ifndef LUAPLUGIN_H
-#define LUAPLUGIN_H
+#ifndef MATERIALCONFIGLUAINSTANCE_HH
+#define MATERIALCONFIGLUAINSTANCE_HH
 
 // Third Party Headers
 #include "lua.hpp"
@@ -37,14 +37,13 @@
 #include "G4VUserPhysicsList.hh"
 
 // User Headers
-#include "DetectorConstruction.hh"
+#include "LuaInstance.hh"
 #include "Material.hh"
 #include "Utilities.hh"
 
 using std::cout;
 using std::string;
 using std::vector;
-
 
 class MaterialConfigLua : public LuaInstance {
 	
@@ -76,55 +75,6 @@ class MaterialConfigLua : public LuaInstance {
 		void Initialize_MaterialsVector();
 		Material *ConstructMaterial_ByDatabase();
 		Material *ConstructMaterial_ByHand();
-	
-};
-
-class ParticlesConfigLua : public LuaInstance {
-
-
-	/*
-	 * Class member variables
-	 * 
-	 * */
-	private:
-	
-		bool FourVectorFile;
-		bool FileHasPosition;
-		bool FileHasParticleNames;
-		bool PositionDefinedByFunction;
-		
-		string ParticleFile;
-		string ParticleFileType;
-		string PrimaryParticle_Name;
-		
-		G4ThreeVector Position;
-	 
-	public:
-		
-		vector<FourVector> FourVectors;
-
-	/*
-	 * Class member functions
-	 * 
-	 * */
-	public:
-	
-		ParticlesConfigLua(string ModulePath);
-		~ParticlesConfigLua();
-	
-	private:
-	
-		void Initialize_ParticleFile();
-		void Initialize_ParticleFileType();
-		void Initialize_ParticlePositions_byFunction();
-		
-		void Parse_ParticleFileType();
-		void Parse_ParticlePosition();
-		void Parse_ParticleFileType_FourVector();
-		
-		void Load_PositionFunction();
-		
-		void ReadFile_FourVector();
 	
 };
 

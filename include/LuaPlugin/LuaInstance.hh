@@ -41,6 +41,78 @@ using std::cout;
 using std::string;
 using std::vector;
 
+#define GetNumberFromGlobal_NoHalt(var, DefaultValue) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            DefaultValue, &lua_tonumber_shim, false)
+                            
+#define GetNumberFromGlobal_WithHalt(var) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            0.0, &lua_tonumber_shim, true)
+                            
+#define GetIntegerFromGlobal_NoHalt(var, DefaultValue) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            DefaultValue, &lua_tointeger_shim, false)
+                            
+#define GetIntegerFromGlobal_WithHalt(var) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            0, &lua_tointeger_shim, true)
+                            
+#define GetStringFromGlobal_NoHalt(var, DefaultValue) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            DefaultValue, &lua_tostring_shim, false)
+                            
+#define GetStringFromGlobal_WithHalt(var) \
+                            GetGlobalVariable(var, LUA_TNUMBER, \
+                           "", &lua_tostring_shim, true)
+
+/*
+ * 
+ * Useful Macro's that help increase code readibility by eliminating
+ * a lot of boiler plate code when calling GetElementFromTable.
+ * 
+ * */
+#define GetNumberFromTable_WithHalt(element, ErrorMessage) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, 0.0, LUA_TNUMBER, \
+                            &lua_tonumber_shim, true)
+                            
+#define GetNumberFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, DefaultValue, LUA_TNUMBER, \
+                            &lua_tonumber_shim, false)
+                            
+#define GetIntegerFromTable_WithHalt(element, ErrorMessage) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, 0, LUA_TNUMBER, \
+                            &lua_tointeger_shim, true)
+                            
+#define GetIntegerFromTable_NoHalt(element, ErrorMessage) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, 0, LUA_TNUMBER, \
+                            &lua_tointeger_shim, false)
+                            
+#define GetStringFromTable_WithHalt(element, ErrorMessage) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, "", LUA_TSTRING, \
+                            &lua_tostring_shim, true)
+                            
+#define GetStringFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, DefaultValue, LUA_TSTRING, \
+                            &lua_tostring_shim, false)
+
+#define GetBooleanFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
+                            GetElementFromTable(element, \
+                            ErrorMessage, 0, LUA_TBOOLEAN, \
+                            &lua_toboolean_shim, false)
+                            
+                            
+int lua_tointeger_shim(lua_State *L, int index);
+bool lua_toboolean_shim(lua_State *L, int index);
+double lua_tonumber_shim(lua_State *L, int index);
+const char *lua_tostring_shim(lua_State *L, int index);
+
+
 class LuaInstance {
 	
 	/*
