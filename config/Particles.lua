@@ -2,7 +2,7 @@
 --[[
 
 --]]
-Particle_File = "Output.dat"
+Particle_File = nil
 
 --[[
 
@@ -39,11 +39,11 @@ Particle_File = "Output.dat"
 		default value = nil.
 
 --]]
-Particle_File_Type = "Four Vector"
+Particle_File_Type = nil
 
 --[[
 
-	Four_Vector_Table
+	Particle_Table
 	
 	* Values
 	
@@ -57,14 +57,15 @@ Particle_File_Type = "Four Vector"
 		Particles_Position
 		
 			Must be defined as a table with three numerical quantities
-			<X, Y, Z>
+			<X, Y, Z> or a function that generates a 2D list
 			
 			default = nil. Will halt execution if "with position" was
 			not a component of Particle_File_Type
 
 --]]
-Four_Vector_Table = {Particle_Name = "mu+",
-                     Particles_Position = Particle_Position_Function}
+Particle_Table = { Particle_Name = "mu+",
+                   Particles_Position = {0.0, 0.0, 0.0},
+                   Number_Of_Events = 20 }
 
 
 --[[
@@ -99,7 +100,6 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 end
 
 glob_distribution_modifier = 0
---math.random(low, high)  low <= z <= high
 function PseudoRandomDistribution()
 
 	--Forces a higher proportion of particles to be closer to the origin

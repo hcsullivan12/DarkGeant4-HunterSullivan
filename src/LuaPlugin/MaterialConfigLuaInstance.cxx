@@ -90,6 +90,7 @@ void MaterialConfigLua::Initialize_MaterialsVector() {
 		}
 		
 		lua_pop(this->L, 1);
+		cout << "\n";
 	}
 	
 }

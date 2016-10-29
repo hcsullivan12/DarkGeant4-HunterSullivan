@@ -34,16 +34,25 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 	
 	Initialize_ParticleFile();
 	
-	if (this->ParticleFile.length() == 0)
+	if (this->ParticleFile.length() == 0) {
+		
+		cout << "No Particle File specified\n";
 		return;
+	}
 		
 	Initialize_ParticleFileType();
-	
-	if (this->FourVectorFile)
+	if (this->FourVectorFile) {
+		
+		cout << "Reading Four Vector File " << this->ParticleFile << "\n";
 		ReadFile_FourVector();
-	
-	if (this->PositionDefinedByFunction)
+		
+	}
+	if (this->PositionDefinedByFunction) {
+		
+		cout << "Position is defined by function\n";
 		Initialize_ParticlePositions_byFunction();
+		
+	}
 	
 }
 
@@ -81,6 +90,7 @@ void ParticlesConfigLua::Initialize_ParticleFileType() {
 	
 	this->ParticleFileType = GetStringFromGlobal_WithHalt(
                                                   "Particle_File_Type");
+	Parse_ParticleFileType();
 	
 }
 
@@ -123,19 +133,19 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 		
 	}
 	
-	// Pops Four_Vector_Table
+	// Pops Particle_Table
 	lua_pop(this->L, 1);
 }
 
 void ParticlesConfigLua::Load_PositionFunction() {
 	
 	/*
-	 * Loads Four_Vector_Table and pushes the position function
+	 * Loads Particle_Table and pushes the position function
 	 * to the top of the stack.
 	 * 
 	 * */
 	
-	LoadTable("Four_Vector_Table");
+	LoadTable("Particle_Table");
 	lua_pushstring(this->L, "Position");
 	lua_gettable(this->L, -2);
 	
@@ -207,7 +217,7 @@ void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
 		
 	} else {
 		
-		LoadTable("Four_Vector_Table");
+		LoadTable("Particle_Table");
 		this->PrimaryParticle_Name = GetStringFromTable_WithHalt(
                                                         "Particle_Name",
                                          "Must specify Particle_Name.");
@@ -248,7 +258,7 @@ void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
 
 void ParticlesConfigLua::Parse_ParticlePosition() {
 
-	LoadTable("Four_Vector_Table");
+	LoadTable("Particle_Table");
 	lua_pushstring(this->L, "Position");
 	lua_gettable(this->L, -2);
 	
@@ -293,7 +303,7 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 		
 	}
 	
-	// Pop Four_Vector_Table
+	// Pop Particle_Table
 	lua_pop(this->L, 1);
 	
 }
