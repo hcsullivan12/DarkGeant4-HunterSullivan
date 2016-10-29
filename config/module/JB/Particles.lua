@@ -63,7 +63,7 @@ Particle_File_Type = "Four Vector"
 			not a component of Particle_File_Type
 
 --]]
-Four_Vector_Table = {Particle_Name = "proton",
+Particle_Table = {Particle_Name = "proton",
                      Particles_Position = {0., 0., 0.}}
 
 
