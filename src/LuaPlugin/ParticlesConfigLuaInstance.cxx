@@ -37,6 +37,7 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 	if (this->ParticleFile.length() == 0) {
 		
 		cout << "No Particle File specified\n";
+		Initialize_GenericFourVector();
 		return;
 	}
 		
@@ -135,6 +136,44 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 	
 	// Pops Particle_Table
 	lua_pop(this->L, 1);
+}
+
+void ParticlesConfigLua::Initialize_GenericFourVector() {
+
+	LoadTable("Particle_Table");
+	
+	cout << "Particle_Table\n";
+	G4String ParticleName = GetStringFromTable_WithHalt("Particle_Name",
+                                            "Particle_Name not found.");
+                                             
+	int NumberOfEvents = GetIntegerFromTable_WithHalt("Number_Of_Events",
+                                         "Number_Of_Events not found.");
+                                         
+	G4double Energy = GetNumberFromTable_WithHalt("Energy",
+                                                  "Energy not found.");
+                                                  
+	G4ThreeVector Positions = GetG4ThreeVector("Particles_Position");
+	G4ThreeVector Momentum  = GetG4ThreeVector("Momentum_Direction");
+	
+	//Pops Particle_Table
+	lua_pop(this->L, 1);
+	
+	FourVector Vector;
+	Vector.ParticleName = ParticleName;
+	Vector.X = Positions.x();
+	Vector.Y = Positions.y();
+	Vector.Z = Positions.z();
+	Vector.P_x = Momentum.x();
+	Vector.P_y = Momentum.y();
+	Vector.P_z = Momentum.z();
+	Vector.E = Energy;
+	Vector.T = GetParticleKineticEnergy(ParticleName, Energy); 
+	for (int i = 0;i < NumberOfEvents;i++) {
+	
+		this->FourVectors.push_back(Vector);
+		
+	}
+	
 }
 
 void ParticlesConfigLua::Load_PositionFunction() {

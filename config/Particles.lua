@@ -61,10 +61,16 @@ Particle_File_Type = nil
 			
 			default = nil. Will halt execution if "with position" was
 			not a component of Particle_File_Type
+			
+		Number_Of_Events
+		
+			...
 
 --]]
 Particle_Table = { Particle_Name = "mu+",
                    Particles_Position = {0.0, 0.0, 0.0},
+                   Momentum_Direction = {0.0, 0.0, 1.0},
+                   Energy = 100.0,
                    Number_Of_Events = 20 }
 
 
@@ -99,6 +105,11 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 
 end
 
+--[[
+
+
+
+--]]
 glob_distribution_modifier = 0
 function PseudoRandomDistribution()
 
