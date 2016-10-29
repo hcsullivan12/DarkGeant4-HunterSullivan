@@ -25,6 +25,8 @@
 #ifndef PRIMARYGENERATORACTION_H
 #define PRIMARYGENERATORACTION_H
 
+#include <vector>
+
 // Geant4 Headers
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -33,7 +35,9 @@
 
 // User Headers
 #include "SteppingAction.hh"
+#include "Utilities.hh"
 
+using std::vector;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	
@@ -46,7 +50,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	private:
 	
 		SteppingAction *Stepping;
-	
+		
+		int PresentIndex;
+		vector<FourVector> FourVectors;
+		
+		G4ParticleTable *ParticleTable;
 	
 	/*
 	 * 
@@ -62,6 +70,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
                                G4double Energy,
                                G4ThreeVector Position,
                                G4ThreeVector MomentumDirection);
+		PrimaryGeneratorAction(vector<FourVector> FourVectors);
 		~PrimaryGeneratorAction();
 		
 		void GeneratePrimaries(G4Event *event);

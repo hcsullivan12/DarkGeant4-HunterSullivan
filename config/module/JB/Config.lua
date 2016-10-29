@@ -15,8 +15,8 @@ Config
 
 ]]--
 
-ConfigTable = { Module_Name = "JB Simple Model",
-                PhysicsList = "QGSP_BERT" }
+ConfigTable = { Module_Name = "Default",
+                PhysicsList = "Default" }
 
 --[[
 

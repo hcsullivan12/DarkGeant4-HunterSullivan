@@ -89,6 +89,7 @@ static FourVectorStruct<G4double> *JBStruct = NULL;
 static ConfigLuaInstance *ConfigFileInstance = NULL;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance = NULL;
 static MaterialConfigLua *MaterialConfigFileInstance = NULL;
+static ParticlesConfigLua *ParticleConfigFileInstance = NULL;
 
 static DetectorConstructionV2 *Detector = NULL;
 
@@ -195,6 +196,7 @@ void Clean() {
 	delete ConfigFileInstance;
 	delete DetectorConfigFileInstance;
 	delete MaterialConfigFileInstance;
+	delete ParticleConfigFileInstance;
 }
 
 /*
@@ -244,6 +246,13 @@ void InitializeLuaInstances() {
 			MaterialConfigFileInstance->CloseLuaState();
 			
 		}
+		#pragma omp section
+		{
+			
+			ParticleConfigFileInstance = new ParticlesConfigLua(Module);
+			ParticleConfigFileInstance->CloseLuaState();
+			
+		}
 	}	
 	
 }
@@ -276,7 +285,8 @@ void InitializeRunManager(G4RunManager *runManager) {
 	runManager->SetUserInitialization(Detector);
 	runManager->SetUserInitialization(ConfigFileInstance->physicslist);
 	
-	PrimaryGeneratorAction *Generator = new PrimaryGeneratorAction();
+	PrimaryGeneratorAction *Generator = new PrimaryGeneratorAction(
+	                           ParticleConfigFileInstance->FourVectors);
 	runManager->SetUserAction(Generator);
 	runManager->SetUserAction(Generator->GetSteppingAction());
 	

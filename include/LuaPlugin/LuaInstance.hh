@@ -58,11 +58,11 @@ using std::vector;
                             0, &lua_tointeger_shim, true)
                             
 #define GetStringFromGlobal_NoHalt(var, DefaultValue) \
-                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            GetGlobalVariable(var, LUA_TSTRING, \
                             DefaultValue, &lua_tostring_shim, false)
                             
 #define GetStringFromGlobal_WithHalt(var) \
-                            GetGlobalVariable(var, LUA_TNUMBER, \
+                            GetGlobalVariable(var, LUA_TSTRING, \
                            "", &lua_tostring_shim, true)
 
 /*

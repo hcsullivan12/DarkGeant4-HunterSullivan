@@ -52,3 +52,28 @@ int DetermineFileLength(string filename) {
 	
 }
 
+struct ParticleMasses {
+	
+	G4String name;
+	G4double mass;
+	
+};
+
+static const int NumberOfMasses = 3;
+ParticleMasses Masses[NumberOfMasses] = 
+{{"proton"   , 938.2720813},
+ {"neutron"  , 939.5654133},
+ {"electron" , .5109989461}};
+ 
+G4double GetParticleKineticEnergy(string particle, G4double E) {
+	
+	for (int i = 0;i < NumberOfMasses; i++) {
+	
+		if (particle == Masses[i].name)
+			return E - Masses[i].mass;
+			
+	}
+	printf("Was unable to find kinetic energy of %s\n", particle.c_str());
+	return E;
+}
+

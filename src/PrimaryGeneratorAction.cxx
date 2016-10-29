@@ -79,6 +79,16 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int NumParticles,
    
 }
 
+PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> FourVectors) {
+	
+	this->ParticleGun = new G4ParticleGun(0);
+	ParticleTable = G4ParticleTable::GetParticleTable();
+	
+	this->PresentIndex = 0;
+	this->FourVectors = FourVectors;
+	
+}
+
 PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 	
 	delete this->ParticleGun;
@@ -97,8 +107,31 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
+	if (this->PresentIndex == (int)this->FourVectors.size())
+		return;
+	
 	this->Stepping->SaveEvent();
+	
+	int i = this->PresentIndex;
+	this->ParticleGun->SetParticleDefinition(
+	                     ParticleTable->FindParticle(
+	                     this->FourVectors[i].ParticleName));
+	                     
+	this->ParticleGun->SetParticleEnergy(this->FourVectors[i].T);
+	
+	this->ParticleGun->SetParticlePosition(
+                                 G4ThreeVector(this->FourVectors[i].X,
+                                               this->FourVectors[i].Y,
+                                               this->FourVectors[i].Z));
+                                               
+	this->ParticleGun->SetParticleMomentumDirection(G4ThreeVector(
+                                             this->FourVectors[i].P_x,
+                                             this->FourVectors[i].P_y,
+                                             this->FourVectors[i].P_z));
+	
 	this->ParticleGun->GeneratePrimaryVertex(event);
+	
+	this->PresentIndex++;
 	
 }
 

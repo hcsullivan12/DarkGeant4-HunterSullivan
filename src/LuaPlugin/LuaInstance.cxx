@@ -95,6 +95,14 @@ LuaInstance::LuaInstance(string Module_Path, string File) {
 	
 }
 
+/*
+ * LoadTable(string table)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
 
 void LuaInstance::LoadTable(string table) {
 
@@ -108,6 +116,16 @@ void LuaInstance::LoadTable(string table) {
 	}
 	
 }
+
+/*
+ * GetG4ThreeVector(string TableName)
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
 G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 
 	lua_pushstring(this->L, TableName.c_str());
