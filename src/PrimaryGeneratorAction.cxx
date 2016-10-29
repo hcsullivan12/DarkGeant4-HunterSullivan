@@ -82,6 +82,8 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(G4int NumParticles,
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> FourVectors) {
 	
+	this->Stepping = new SteppingAction();
+	
 	this->ParticleGun = new G4ParticleGun(0);
 	ParticleTable = G4ParticleTable::GetParticleTable();
 	
