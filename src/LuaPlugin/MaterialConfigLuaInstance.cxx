@@ -23,6 +23,8 @@
 
 #include "MaterialConfigLuaInstance.hh"
 
+#include "G4SystemOfUnits.hh"
+
 MaterialConfigLua::MaterialConfigLua(string ModulePath)
  : LuaInstance(ModulePath, "Materials.lua") 
 {

@@ -26,6 +26,7 @@
 
 #include "DetectorComponent.hh"
 
+
 class DetectorComponent_Box : public DetectorComponent {
 	
 	/*

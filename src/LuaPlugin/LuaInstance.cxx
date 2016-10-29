@@ -23,6 +23,8 @@
  
 #include "LuaInstance.hh"
 
+#include "G4SystemOfUnits.hh"
+
 static const string DefaultConfigDirectory = "config";
 
 /*

@@ -24,6 +24,7 @@
 #include "DetectorComponentBox.hh"
 
 //Geant4 Headers
+#include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 
