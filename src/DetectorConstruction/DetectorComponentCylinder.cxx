@@ -25,6 +25,7 @@
 #include "DetectorComponentCylinder.hh"
 
 //Geant4 Headers
+#include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 
