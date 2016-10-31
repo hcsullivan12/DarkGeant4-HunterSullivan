@@ -58,11 +58,13 @@ class ParticlesConfigLua : public LuaInstance {
 		bool FileHasParticleNames;
 		bool PositionDefinedByFunction;
 		
+		int NumberOfEvents;
+		
 		string ParticleFile;
 		string ParticleFileType;
 		string PrimaryParticle_Name;
 		
-		G4ThreeVector Position;
+		G4ThreeVector Position; 
 	 
 	public:
 		
@@ -82,6 +84,7 @@ class ParticlesConfigLua : public LuaInstance {
 		void Initialize_ParticleFile();
 		void Initialize_ParticleFileType();
 		void Initialize_ParticlePositions_byFunction();
+		void Initialize_GenericFourVector();
 		
 		void Parse_ParticleFileType();
 		void Parse_ParticlePosition();
