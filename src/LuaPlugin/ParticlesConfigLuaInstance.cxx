@@ -140,9 +140,10 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 
 void ParticlesConfigLua::Initialize_GenericFourVector() {
 
-	LoadTable("Particle_Table");
-	
 	cout << "Particle_Table\n";
+
+	Parse_ParticlePosition();
+	LoadTable("Particle_Table");
 	G4String ParticleName = GetStringFromTable_WithHalt("Particle_Name",
                                             "Particle_Name not found.");
                                              
@@ -152,7 +153,6 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	G4double Energy = GetNumberFromTable_WithHalt("Energy",
                                                   "Energy not found.");
                                                   
-	G4ThreeVector Positions = GetG4ThreeVector("Particles_Position");
 	G4ThreeVector Momentum  = GetG4ThreeVector("Momentum_Direction");
 	
 	//Pops Particle_Table
