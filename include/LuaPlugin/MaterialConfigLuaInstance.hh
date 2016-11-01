@@ -1,5 +1,5 @@
 /*
- * PrimaryGeneratorAction.hh
+ * MaterialsConfigLuaInstance.hh
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
@@ -21,64 +21,60 @@
  * 
  */
 
+#ifndef MATERIALCONFIGLUAINSTANCE_HH
+#define MATERIALCONFIGLUAINSTANCE_HH
 
-#ifndef PRIMARYGENERATORACTION_H
-#define PRIMARYGENERATORACTION_H
+// Third Party Headers
+#include "lua.hpp"
 
+// C/C++ Headers
+#include <iostream>
+#include <string>
+#include <exception>
 #include <vector>
 
-// Geant4 Headers
-#include "G4Event.hh"
-#include "G4ParticleGun.hh"
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ThreeVector.hh"
+// Geant 4 Headers
+#include "G4VUserPhysicsList.hh"
 
 // User Headers
-#include "SteppingAction.hh"
+#include "LuaInstance.hh"
+#include "Material.hh"
 #include "Utilities.hh"
 
+using std::cout;
+using std::string;
 using std::vector;
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class MaterialConfigLua : public LuaInstance {
 	
 	/*
 	 * 
-	 * Class member variables
 	 * 
 	 * */
-	
-	private:
-	
-		SteppingAction *Stepping;
-		
-		int PresentIndex;
-		vector<FourVector> FourVectors;
-		
-		G4ParticleTable *ParticleTable;
-	
-	/*
-	 * 
-	 * Class member functions
-	 * 
-	 * */
-	 
 	public:
 	
-		PrimaryGeneratorAction();
-		PrimaryGeneratorAction(G4int NumParticles,
-                               G4String ParticleName,
-                               G4double Energy,
-                               G4ThreeVector Position,
-                               G4ThreeVector MomentumDirection);
-		PrimaryGeneratorAction(vector<FourVector> FourVectors);
-		~PrimaryGeneratorAction();
-		
-		void GeneratePrimaries(G4Event *event);
-		SteppingAction *GetSteppingAction();
+		vector<Material *> Materials;
 		
 	private:
 	
-		G4ParticleGun *ParticleGun;
+		int NumberOfMaterials;
+	
+	/*
+	 * Class member functions
+	 * 
+	 * 
+	 * */
+	public:
+	
+		MaterialConfigLua(string ModulePath);
+		~MaterialConfigLua();
+		
+	private:
+	
+		void Initialize_NumberOfMaterials();
+		void Initialize_MaterialsVector();
+		Material *ConstructMaterial_ByDatabase();
+		Material *ConstructMaterial_ByHand();
 	
 };
 

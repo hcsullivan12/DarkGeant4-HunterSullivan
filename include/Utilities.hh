@@ -49,8 +49,19 @@ struct FourVectorStruct {
 	
 };
 
+struct FourVector {
+	
+	G4String ParticleName;
+	G4double P_x, P_y, P_z;
+	G4double X, Y, Z;
+	G4double E;
+	G4double T;
+	
+};
+
 int DetermineFileLength(string filename);
 string ConvertIntToString(int integer);
+G4double GetParticleKineticEnergy(string particle, G4double E);
 
 template <typename T>
 void Initialize2dArray(int x_length, int y_length, T ***array) {
