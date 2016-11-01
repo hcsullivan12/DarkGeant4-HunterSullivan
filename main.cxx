@@ -81,6 +81,7 @@ using std::cin;
 
 static const string VersionString = "0.3";
 static bool TerminalOutput = true;
+static bool ShowVis = false;
 
 static string Module = "config";
 static vector<G4String> ExecutionVector;
@@ -147,7 +148,8 @@ void InitializeState() {
 	InitializeDetectorGeometry();
 	InitializeRunManager(runManager);
 #ifdef G4VIS_USE
-	InitializeVisManager();
+	if (ShowVis == true)
+		InitializeVisManager();
 #endif
 #ifdef G4UI_USE
 	InitializeUIManager();
@@ -307,6 +309,8 @@ void InitializeUIManager() {
 		ui->ApplyCommand("/tracking/verbose 1");
 		
 	}
+	ui->ApplyCommand("/vis/scene/endOfEventAction accumulate 10000");
+	ui->ApplyCommand("/vis/ogl/set/displayListLimit 100000");
 	ui->ApplyCommand("/control/execute vis.mac");
 	
 }
@@ -344,15 +348,17 @@ void Execute_Argument(int argc, char *argv[], int index);
 void JBInput_Argument(int argc, char *argv[], int index);
 void Module_Argument (int argc, char *argv[], int index);
 void Limit_T_Argument(int argc, char *argv[], int index);
+void Show_Vis_Argument(int argc, char *argv[], int index);
 
 
 
-static const int numHandledArguments = 4;
+static const int numHandledArguments = 5;
 static const ArgumentTable Table[numHandledArguments] =
-{{"-execute", &Execute_Argument},
- {"-JBInput", &JBInput_Argument},
- {"-module" , &Module_Argument},
- {"-lim-t-output", &Limit_T_Argument}};
+{{"-execute"     , &Execute_Argument},
+ {"-JBInput"     , &JBInput_Argument},
+ {"-module"      , &Module_Argument},
+ {"-lim-t-output", &Limit_T_Argument},
+ {"-vis"         , &Show_Vis_Argument}};
 
 
 
@@ -439,6 +445,11 @@ void Module_Argument (int argc, char *argv[], int index) {
 void Limit_T_Argument(int argc, char *argv[], int index) {
 
 	TerminalOutput = false;
+	
+}
+
+void Show_Vis_Argument(int argc, char *argv[], int index) {
+	
 	
 }
 

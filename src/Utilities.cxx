@@ -61,9 +61,9 @@ struct ParticleMasses {
 
 static const int NumberOfMasses = 3;
 ParticleMasses Masses[NumberOfMasses] = 
-{{"proton"   , 938.2720813},
- {"neutron"  , 939.5654133},
- {"electron" , .5109989461}};
+{{"proton"   , .9382720813},
+ {"neutron"  , .9395654133},
+ {"electron" , .000510998946}};
  
 G4double GetParticleKineticEnergy(string particle, G4double E) {
 	

@@ -124,7 +124,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	                     ParticleTable->FindParticle(
 	                     this->FourVectors[i].ParticleName));
 	                     
-	this->ParticleGun->SetParticleEnergy(this->FourVectors[i].T * MeV);
+	this->ParticleGun->SetParticleEnergy(this->FourVectors[i].T * GeV);
 	
 	this->ParticleGun->SetParticlePosition(
                                  G4ThreeVector(this->FourVectors[i].X * m,
