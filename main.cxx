@@ -120,7 +120,7 @@ int main(int argc, char *argv[]) {
 	HandleArguments(argc, argv);
 	InitializeState();
 	
-	
+	cout << "Done! Press enter to exit\n";
 	std::cin.get();
 	Clean();
 	
@@ -159,6 +159,7 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
+	cout << "BeamOn!\n";
 	runManager->BeamOn(ParticleConfigFileInstance->FourVectors.size());
 	
 }
