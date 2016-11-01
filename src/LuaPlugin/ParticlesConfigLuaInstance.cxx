@@ -36,8 +36,16 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 	
 	if (this->ParticleFile.length() == 0) {
 		
-		cout << "No Particle File specified\n";
+		cout << "Particle_File = nil\n";
 		Initialize_GenericFourVector();
+		
+		if (this->PositionDefinedByFunction) {
+		
+			cout << "Position is defined by function\n";
+			Initialize_ParticlePositions_byFunction();
+			
+		}
+		
 		return;
 	}
 		
@@ -110,20 +118,21 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 	
 	for (int i = 1; i <= (int)this->FourVectors.size(); i++) {
 		
-		lua_pushinteger(this->L, i);
-		
 		G4double *PositionPointers[3] = {&this->FourVectors[i].X,
                                          &this->FourVectors[i].Y,
                                          &this->FourVectors[i].Z};
                                          
+		lua_pushinteger(this->L, i);
+		lua_gettable(this->L, -2);
+                                         
 		for (int j = 1; j <= 3; j++) {
 		
 			lua_pushinteger(this->L, j);
-			lua_gettable(this->L, -3);
+			lua_gettable(this->L, -2);
 			
 			if (lua_type(this->L, -1) != LUA_TNUMBER) {
 			
-				// TODO do something
+				//DO something
 				
 			}
 			*(PositionPointers[j-1]) = lua_tonumber(this->L, -1);
@@ -131,6 +140,8 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 			lua_pop(this->L, 1);
 			
 		}
+		//Pops table
+		lua_pop(this->L, 1);
 		
 	}
 	
@@ -140,7 +151,7 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 
 void ParticlesConfigLua::Initialize_GenericFourVector() {
 
-	cout << "Particle_Table\n";
+	cout << "\nParticle_Table\n";
 
 	Parse_ParticlePosition();
 	LoadTable("Particle_Table");
@@ -160,14 +171,20 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	
 	FourVector Vector;
 	Vector.ParticleName = ParticleName;
-	Vector.X = Positions.x();
-	Vector.Y = Positions.y();
-	Vector.Z = Positions.z();
 	Vector.P_x = Momentum.x();
 	Vector.P_y = Momentum.y();
 	Vector.P_z = Momentum.z();
 	Vector.E = Energy;
-	Vector.T = GetParticleKineticEnergy(ParticleName, Energy); 
+	Vector.T = GetParticleKineticEnergy(ParticleName, Energy);
+	
+	if (!this->PositionDefinedByFunction) {
+	
+		Vector.X = this->Position.x();
+		Vector.Y = this->Position.y();
+		Vector.Z = this->Position.z();
+		
+	}
+	
 	for (int i = 0;i < NumberOfEvents;i++) {
 	
 		this->FourVectors.push_back(Vector);
@@ -185,7 +202,7 @@ void ParticlesConfigLua::Load_PositionFunction() {
 	 * */
 	
 	LoadTable("Particle_Table");
-	lua_pushstring(this->L, "Position");
+	lua_pushstring(this->L, "Particles_Position");
 	lua_gettable(this->L, -2);
 	
 	// Pushes how many elements we want to generate.
@@ -298,7 +315,7 @@ void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
 void ParticlesConfigLua::Parse_ParticlePosition() {
 
 	LoadTable("Particle_Table");
-	lua_pushstring(this->L, "Position");
+	lua_pushstring(this->L, "Particles_Position");
 	lua_gettable(this->L, -2);
 	
 	switch (lua_type(this->L, -1)) {
@@ -308,16 +325,26 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 			/*
 			 * Position table is at top of stack but GetG4ThreeVector
 			 * assumes that Position isn't loaded so we have to pop
-			 * it before calling GetG4ThreeVector("Position")
+			 * it before calling GetG4ThreeVector("Particles_Position")
 			 * 
 			 * */
-			
+			cout << "LUA_TTABLE switch\n";
 			lua_pop(this->L, 1);
-			this->Position = GetG4ThreeVector("Position");
+			this->Position = GetG4ThreeVector("Particles_Position");
+		
+		break;
+		case LUA_TFUNCTION:
+		
+			cout << "LUA_TFUNCTION switch\n";
+			//Just saving for later.
+			this->Position = G4ThreeVector(0., 0., 0.);
+			this->PositionDefinedByFunction = true;
+			lua_pop(this->L, 1);
 		
 		break;
 		case LUA_TSTRING:
 		
+			cout << "LUA_TSTRING switch\n";
 			if (strcasecmp(lua_tostring(this->L, 1), "distribution") == 0) {
 			
 				// TODO GEANT4 provides a distribution function.
@@ -326,12 +353,10 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 			lua_pop(this->L, 1);
 		
 		break;
-		case LUA_TFUNCTION:
+		case LUA_TNIL:
 		
-			//Just saving for later.
-			this->Position = G4ThreeVector(0., 0., 0.);
-			this->PositionDefinedByFunction = true;
-			lua_pop(this->L, 1);
+			cout << "Error. Nil value for Particles_Position\n";
+			lua_pop(this->L, -1);
 		
 		break;
 		default:
