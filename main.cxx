@@ -118,6 +118,8 @@ int main(int argc, char *argv[]) {
 	
 	HandleArguments(argc, argv);
 	InitializeState();
+	
+	
 	std::cin.get();
 	Clean();
 	
@@ -155,6 +157,7 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
+	runManager->BeamOn(ParticleConfigFileInstance->FourVectors.size());
 	
 }
 
