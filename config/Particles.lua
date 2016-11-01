@@ -122,8 +122,8 @@ Particle_File_Type = nil
 
 --]]
 Particle_Table = { Particle_Name = "mu+",
-                   Particles_Position = {0.0, 0.0, 0.0},
+                   Particles_Position = Particle_Position_Function,
                    Momentum_Direction = {0.0, 0.0, 1.0},
-                   Energy = 100.0,
+                   Energy = 1000.0,
                    Number_Of_Events = 20 }
 
