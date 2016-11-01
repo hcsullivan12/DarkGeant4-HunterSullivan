@@ -34,19 +34,40 @@ end
 
 
 --]]
+math.randomseed(os.time())
 glob_distribution_modifier = 0
 function PseudoRandomDistribution()
+
+	local randnum = math.random()
 
 	--Forces a higher proportion of particles to be closer to the origin
 	if glob_distribution_modifier < 5 then
 
 		glob_distribution_modifier = glob_distribution_modifier + 1
-		return math.random() * 1.0
+		
+		if randnum <= .5 then
+		
+			return (-randnum) * 2.0
+		
+		else
+		
+			return randnum * 1.0
+		
+		end
 	
 	else 
 	
 		glob_distribution_modifier = 0
-		return math.random() * 5.0
+		
+		if randnum <= .5 then
+		
+			return (-randnum) * 10.0
+		
+		else
+		
+			return randnum * 5.0
+		
+		end
 	
 	end
 
