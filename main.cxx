@@ -310,8 +310,6 @@ void InitializeUIManager() {
 		ui->ApplyCommand("/tracking/verbose 1");
 		
 	}
-	ui->ApplyCommand("/vis/scene/endOfEventAction accumulate 10000");
-	ui->ApplyCommand("/vis/ogl/set/displayListLimit 100000");
 	ui->ApplyCommand("/control/execute vis.mac");
 	
 }
@@ -451,6 +449,7 @@ void Limit_T_Argument(int argc, char *argv[], int index) {
 
 void Show_Vis_Argument(int argc, char *argv[], int index) {
 	
+	ShowVis = true;
 	
 }
 
