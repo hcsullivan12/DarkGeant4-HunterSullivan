@@ -58,3 +58,6 @@
 #
 # For file-based drivers, use this to create an empty detector view:
 #/vis/viewer/flush
+
+/vis/scene/endOfEventAction accumulate 10000
+/vis/ogl/set/displayListLimit 10000000
