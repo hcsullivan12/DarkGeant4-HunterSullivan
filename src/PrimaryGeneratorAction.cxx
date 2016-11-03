@@ -28,58 +28,6 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
-PrimaryGeneratorAction::PrimaryGeneratorAction() 
-/*
- * Calls the G4VUserPrimaryGeneratorAction constructor which will halt
- * the execution of the program if PrimaryGeneratorAction is initialized
- * to the runManager before PhysicsList is.
- * 
- * */
- : G4VUserPrimaryGeneratorAction()
-
-{
-	
-	this->Stepping = new SteppingAction();
-	/*
-	 * 
-	 * Default constructor just makes a single particle gun with a
-	 * muon as the primary particle.
-	 * 
-	 * It starts at the origin and moves in the positive z direction
-	 * */
-	G4int numParticles = 1;
-	this->ParticleGun = new G4ParticleGun(numParticles);
-	
-	G4ParticleTable *ParticleTable = G4ParticleTable::GetParticleTable();
-	
-	
-	this->ParticleGun->SetParticleDefinition(ParticleTable->FindParticle("mu+"));
-	this->ParticleGun->SetParticleEnergy(1.*MeV);
-	this->ParticleGun->SetParticlePosition(G4ThreeVector(0, 0, 0));
-	this->ParticleGun->SetParticleMomentumDirection(G4ThreeVector(0, 0, 1));
-	
-}
-
-PrimaryGeneratorAction::PrimaryGeneratorAction(G4int NumParticles,
-                                               G4String ParticleName,
-                                               G4double Energy,
-                                               G4ThreeVector Position,
-                                               G4ThreeVector MomentumDirection) 
- : G4VUserPrimaryGeneratorAction()
-{
-	
-	this->ParticleGun = new G4ParticleGun(NumParticles);
-	
-	G4ParticleTable *ParticleTable = G4ParticleTable::GetParticleTable();
-	
-	this->ParticleGun->SetParticleDefinition(ParticleTable->FindParticle(ParticleName));
-	this->ParticleGun->SetParticleEnergy(Energy);
-	this->ParticleGun->SetParticlePosition(Position);
-	this->ParticleGun->SetParticleMomentumDirection(MomentumDirection);
-	
-   
-}
-
 PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> FourVectors) 
 
  : G4VUserPrimaryGeneratorAction()
@@ -105,10 +53,9 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 /*
  * GeneratePrimaries(G4Event *event)
  * 
- * TODO
+ * * Description
  * 
- * 		Code from the JB branch should be ported and made more generic.
- * 
+ * 		...
  * 
  * */
 
@@ -147,7 +94,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
  * 
  * * Comment
  * 
- * 		This code is very ad hoc/hackish by at the moment, it's
+ * 		This code is very ad hoc at the moment. It's
  * 		literally the only way I can think of introducing
  * 		"Event = %d" lines in the outputted DarkGeantOutput.dat file
  * 

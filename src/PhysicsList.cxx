@@ -57,10 +57,6 @@ void PhysicsList::ConstructParticle() {
 	
 }
 
-//Generic Headers
-//#include "G4LElastic.hh"
-//#include "G4LCapture.hh"
-
 //Hadron Headers
 #include "G4HadronElasticProcess.hh"
 #include "G4HadronCaptureProcess.hh"
