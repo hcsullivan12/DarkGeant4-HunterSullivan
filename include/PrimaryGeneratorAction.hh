@@ -49,12 +49,12 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	
 	private:
 	
-		SteppingAction *Stepping;
-		
 		int PresentIndex;
+		SteppingAction *Stepping;
 		vector<FourVector> FourVectors;
 		
 		G4ParticleTable *ParticleTable;
+		G4ParticleGun *ParticleGun;
 	
 	/*
 	 * 
@@ -64,21 +64,11 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	 
 	public:
 	
-		PrimaryGeneratorAction();
-		PrimaryGeneratorAction(G4int NumParticles,
-                               G4String ParticleName,
-                               G4double Energy,
-                               G4ThreeVector Position,
-                               G4ThreeVector MomentumDirection);
 		PrimaryGeneratorAction(vector<FourVector> FourVectors);
 		~PrimaryGeneratorAction();
 		
 		void GeneratePrimaries(G4Event *event);
 		SteppingAction *GetSteppingAction();
-		
-	private:
-	
-		G4ParticleGun *ParticleGun;
 	
 };
 
