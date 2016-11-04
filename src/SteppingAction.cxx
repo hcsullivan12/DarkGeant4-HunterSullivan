@@ -148,6 +148,7 @@ void SteppingAction::SaveFormat() {
  * 
  * 		Saves the step data for the very first step taking by a particle
  * 		in DarkGeantOutput.dat
+ * 
  * * Comment
  * 
  * 		The reason why this function and SaveStepData are split is

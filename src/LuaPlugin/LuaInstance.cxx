@@ -130,9 +130,23 @@ void LuaInstance::LoadTable(string table) {
 
 G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 
+	/*
+	 * Gets an element from a preloaded Table such that the equivalent
+	 * C/C++ code would look something like this:
+	 * 
+	 * Table[TableName.c_str()]
+	 * 
+	 * */
+	
 	lua_pushstring(this->L, TableName.c_str());
 	lua_gettable(this->L, -2);
 	
+	/*
+	 * If the element received is not a table, then throw an exception
+	 * which is typically unhandled.
+	 * 
+	 * */
+	 
 	if (lua_type(this->L, -1) != LUA_TTABLE) {
 		
 		cout << "Is " << TableName << " a table?\n";
@@ -140,10 +154,28 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 		
 	}
 	
+	/*
+	 * The following code assumes that the table received in the
+	 * previous code is a 1x3 array.
+	 * 
+	 * It reads the elements of the lua table and sets them to the
+	 * elements of the PositionArray G4double array.
+	 * 
+	 * */
+	
 	G4double PositionArray[3] = {0.0, 0.0, 0.0};
 	for (int i = 1;i < 4;i++) {
+		
+		// Gets element i from the table loaded.
 		lua_pushinteger(this->L, i);
 		lua_gettable(this->L, -2);
+		
+		/*
+		 * If the element i is not a number, throw an exception. The
+		 * exception is typically not handled to facilitate user
+		 * correction.
+		 * 
+		 * */
 		if (lua_type(this->L, -1) != LUA_TNUMBER) {
 	
 			cout << "The elements of " << TableName << "should be ";
@@ -151,6 +183,14 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 			throw;
 		
 		}
+		/*
+		 * So if the element is a number, get it and set
+		 * PositionArray[i-1] to it.
+		 * 
+		 * Remember lua tables begin with 1, instead of 0 which is
+		 * why we have the offset i-1.
+		 * */
+		
 		PositionArray[i-1] = lua_tonumber(this->L, -1);
 		// Pops number
 		lua_pop(this->L, 1);
@@ -170,8 +210,8 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
  * 
  * * Comment
  * 	
- * 		This function is practically identical to the class destructor
- * 		in function. So why then implement it? Suppose you want the 
+ * 		This function is practically identical to the class destructor.
+ * 		So why implement it then? Suppose you want the 
  * 		object to stay in memory to access it's member functions 
  * 		but you no longer need the lua instance. This function
  * 		grants that ability.
