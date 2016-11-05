@@ -138,13 +138,12 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 
 DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(G4String Volume_Type, G4String Name) {
 	
-	DetectorComponent *Component;
 	if (Volume_Type == "Cylinder")
-		Component = MakeDetectorComponent_Cylinder(Name);
+		return MakeDetectorComponent_Cylinder(Name);
     else if (Volume_Type == "Box")
-		Component = MakeDetectorComponent_Box(Name);
+		return MakeDetectorComponent_Box(Name);
 	
-	return Component;
+	return NULL;
 	
 }
 
