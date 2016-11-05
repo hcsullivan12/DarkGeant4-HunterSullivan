@@ -48,9 +48,10 @@ struct SharedAttributes {
 	G4String Name;
 	G4String Inside;
 	G4String Material;
+	G4String VolumeType;
 	G4ThreeVector Position;
 	
-}
+};
 
 
 class DetectorConfigLuaInstance : public LuaInstance {
@@ -86,10 +87,12 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		void Initialize_number_of_detector_components();
 		void Initialize_detector_components();
 		
-		DetectorComponent *WithVolumeGetDetectorComponent(G4String Volume_Type, G4String Name);
+		SharedAttributes SetSharedAttributes(string DetectorComponentIndex);
 		
-		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(G4String Name);
-		DetectorComponent_Box *MakeDetectorComponent_Box(G4String Name);
+		DetectorComponent *WithVolumeGetDetectorComponent(SharedAttributes Attribute);
+		
+		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(SharedAttributes Attribute);
+		DetectorComponent_Box *MakeDetectorComponent_Box(SharedAttributes Attribute);
 		
 	/*
 	 * 
