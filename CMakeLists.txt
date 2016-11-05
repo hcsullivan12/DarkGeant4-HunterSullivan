@@ -60,7 +60,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fopenmp")
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(DarkGeant4 main.cxx ${sources} ${headers})
-target_link_libraries(DarkGeant4 ${Geant4_LIBRARIES} ${LUA_LIBRARIES})
+target_link_libraries(DarkGeant4 -lGLU -ldl ${Geant4_LIBRARIES} ${LUA_LIBRARIES})
 
 add_custom_command(TARGET DarkGeant4 PRE_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
