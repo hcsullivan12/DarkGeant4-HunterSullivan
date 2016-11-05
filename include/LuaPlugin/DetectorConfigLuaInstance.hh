@@ -43,6 +43,15 @@
 
 #include "Utilities.hh"
 
+struct SharedAttributes {
+
+	G4String Name;
+	G4String Inside;
+	G4String Material;
+	G4ThreeVector Position;
+	
+}
+
 
 class DetectorConfigLuaInstance : public LuaInstance {
 	
