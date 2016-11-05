@@ -79,7 +79,7 @@ using std::cin;
  * 
  * */
 
-static const string VersionString = "0.3";
+static const string VersionString = "0.3 \"Zwicky\"";
 static bool TerminalOutput = true;
 static bool ShowVis = false;
 
@@ -159,6 +159,7 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
+	std::cin.get();
 	cout << "BeamOn!\n";
 	runManager->BeamOn(ParticleConfigFileInstance->FourVectors.size());
 	
