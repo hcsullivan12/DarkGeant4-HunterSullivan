@@ -24,7 +24,6 @@
 
 #include "DetectorConfigLuaInstance.hh"
 
-
 /*
  * DetectorConfigLuaInstane::DetectorConfigLuaInstance(string ModulePath)
  * 
@@ -92,8 +91,6 @@ void DetectorConfigLuaInstance::Initialize_number_of_detector_components() {
 	}
 	
 }
-
-
 
 /*
  * DetectorConfigLuaInstance::Initialize_detector_components()
