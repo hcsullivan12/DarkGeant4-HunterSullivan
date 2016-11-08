@@ -58,6 +58,7 @@
 
 // C & C++ Headers
 #include <cstring>
+#include <ctime>
 #include <string>
 #include <vector>
 
@@ -159,9 +160,16 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
+	clock_t start_time = clock();
+	
 	std::cin.get();
 	cout << "BeamOn!\n";
 	runManager->BeamOn(ParticleConfigFileInstance->FourVectors.size());
+	
+	double time_elapsed = difftime(clock(), start_time);
+	
+	cout << "Elapsed time = " << time_elapsed << "s\n";
+	cout << "Elapsed time = " << time_elapsed/60.0 << "min\n";
 	
 }
 
