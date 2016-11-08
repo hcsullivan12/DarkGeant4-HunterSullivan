@@ -1,5 +1,5 @@
 # DarkGeant4
-
+By Hunter Sullivan
 DarkGeant4 is a Geant4 application whose purpose is to provide a generic runtime framework for testing the various Dark Matter models. This software is presently being built and features may vary over time.
 
 ## Dependencies
