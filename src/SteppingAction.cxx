@@ -29,11 +29,20 @@
 #include "G4Track.hh"
 #include "G4VProcess.hh"
 
-SteppingAction::SteppingAction(string DarkGeantOutputPath)
+SteppingAction::SteppingAction(string DarkGeantOutputLocation)
 : G4UserSteppingAction()
 {
 	
-	this->fp = fopen(DarkGeantOutputPath.c_str(), "w");
+	this->fp = fopen(DarkGeantOutputLocation.c_str(), "w");
+	
+	if (this->fp == NULL) {
+	
+		printf("Was not able to open DarkGeantOutputLocation\n");
+		printf("File received = %s\n", DarkGeantOutputLocation.c_str());
+		exit(1);
+		
+	}
+	
 	this->CurrentEvent = 1;
 	
 }

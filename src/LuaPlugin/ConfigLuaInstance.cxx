@@ -113,8 +113,8 @@ void ConfigLuaInstance::Initialize_DarkGeantOutputFile() {
 void ConfigLuaInstance::Initialize_DarkGeantOutputLocation() {
 	
 	this->DarkGeantOutputLocation = GetStringFromTable_NoHalt("Location",
-                     "No output location specified. Using default path",
-                     this->Module_Path);
+                   "No output location specified. Using default path",
+                   this->Module_Path + "/" + this->DarkGeantOutputFile);
 	
 }
 
