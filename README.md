@@ -24,7 +24,7 @@ make
 The following command is subject to change with time.
 
 ```
-./DarkGeant4 -execute basicrun.mac
+./DarkGeant4 -vis
 ```
 
 A window should be rendered on your screen with a basic cylindrical volume (Presently made out of liquid argon).
