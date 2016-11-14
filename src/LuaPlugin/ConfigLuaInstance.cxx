@@ -102,6 +102,12 @@ void ConfigLuaInstance::Initialize_physicslist() {
 	
 }
 
+/*
+ * Initialize_DarkGeantOutputFile()
+ * 
+ * 
+ * */
+
 void ConfigLuaInstance::Initialize_DarkGeantOutputFile() {
 	
 	this->DarkGeantOutputFile = GetStringFromTable_NoHalt("Name",
@@ -110,7 +116,20 @@ void ConfigLuaInstance::Initialize_DarkGeantOutputFile() {
 	
 }
 
+/*
+ * Initialize_DarkGeantOutputLocation()
+ * 
+ * TODO
+ * 
+ * 		Make directories so the user doesn't have to do it?
+ * 		Requires a bit of parsing, or maybe just a simple mkdir
+ * 		function call.
+ * 
+ * 
+ * */
+
 void ConfigLuaInstance::Initialize_DarkGeantOutputLocation() {
+	
 	
 	this->DarkGeantOutputLocation = GetStringFromTable_NoHalt("Location",
                    "No output location specified. Using default path",
