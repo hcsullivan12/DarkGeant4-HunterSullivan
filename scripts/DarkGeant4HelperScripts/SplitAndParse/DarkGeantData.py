@@ -77,7 +77,8 @@ class DarkGeant4Data(object):
 		Pos = 0
 		for i in range(4, len(self.FileContents)):
 			
-			if "*" in self.FileContents[i]:
+			#World condition may help with dE/dX over residual range plots
+			if "*" in self.FileContents[i] or "World" in self.FileContents[i]:
 				
 				break
 				
