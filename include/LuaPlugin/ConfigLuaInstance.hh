@@ -44,8 +44,12 @@ class ConfigLuaInstance : public LuaInstance {
 	
 	public:
 	
+		//for table = Config_Table
 		string modulename;
 		G4VUserPhysicsList *physicslist;
+		
+		string DarkGeantOutputFile;
+		string DarkGeantOutputLocation;
 	
 	/*
 	 * 
@@ -59,8 +63,15 @@ class ConfigLuaInstance : public LuaInstance {
 		
 	private:
 	
+		//for table = Config_Table
 		void Initialize_modulename();
 		void Initialize_physicslist();
+		
+		//for table = DarkGeantOutputFile
+		void Initialize_DarkGeantOutputFile();
+		void Initialize_DarkGeantOutputLocation();
+		
+		
 	/*
 	 * 
 	 * TODO
