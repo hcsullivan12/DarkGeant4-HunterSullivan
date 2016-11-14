@@ -29,11 +29,11 @@
 #include "G4Track.hh"
 #include "G4VProcess.hh"
 
-SteppingAction::SteppingAction()
+SteppingAction::SteppingAction(string DarkGeantOutputPath)
 : G4UserSteppingAction()
 {
 	
-	this->fp = fopen("DarkGeantOutput.dat", "w");
+	this->fp = fopen(DarkGeantOutputPath.c_str(), "w");
 	this->CurrentEvent = 1;
 	
 }

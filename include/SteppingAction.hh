@@ -32,6 +32,9 @@
 
 // C/C++ Headers
 #include <cstdio>
+#include <string>
+
+using std::string;
 
 class SteppingAction : public G4UserSteppingAction {
 	
@@ -53,7 +56,7 @@ class SteppingAction : public G4UserSteppingAction {
 	 
 	public:
 	
-		SteppingAction();
+		SteppingAction(string DarkGeantOutputPath);
 		~SteppingAction();
 		
 		void UserSteppingAction(const G4Step *Step);
