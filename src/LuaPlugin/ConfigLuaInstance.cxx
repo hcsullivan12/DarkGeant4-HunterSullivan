@@ -46,6 +46,8 @@ ConfigLuaInstance::ConfigLuaInstance(string ModulePath)
 	Initialize_modulename();
 	Initialize_physicslist();
 	
+	lua_pop(this->L, -1);
+	
 }
 
 /*
