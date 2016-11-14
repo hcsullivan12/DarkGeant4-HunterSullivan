@@ -56,7 +56,7 @@ class SteppingAction : public G4UserSteppingAction {
 	 
 	public:
 	
-		SteppingAction(string DarkGeantOutputPath);
+		SteppingAction(string DarkGeantOutputLocation);
 		~SteppingAction();
 		
 		void UserSteppingAction(const G4Step *Step);
