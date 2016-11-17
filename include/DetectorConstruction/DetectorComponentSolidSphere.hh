@@ -1,5 +1,5 @@
 /*
- * DetectorComponentTrapezoid
+ * DetectorComponentSolidSphere
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -21,12 +21,12 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTTRAPEZOID_HH
-#define DETECTORCOMPONENTTRAPEZOID_HH
+#ifndef DETECTORCOMPONENTSOLIDSPHERE_HH
+#define DETECTORCOMPONENTSOLIDSPHERE_HH
 
 #include "DetectorComponent.hh"
 
-class DetectorComponent_Trapezoid : public DetectorComponent {
+class DetectorComponent_SolidSphere : public DetectorComponent {
 	
 	/*
 	 * 
@@ -35,29 +35,23 @@ class DetectorComponent_Trapezoid : public DetectorComponent {
 	 * */
 	public:
 	
-		G4double xHalfLengthAtBottom;
-		G4double xHalfLengthAtTop;
-		G4double yHalfLengthAtBottom;
-		G4double yHalfLengthAtTop;
-		G4double zHalfLength;
+		G4double Radius;
 		
 	/*
 	 * 
 	 * Class member functions
 	 * 
 	 * */
+
 	public:
 	
-		DetectorComponent_Trapezoid(G4String Name,
-				G4double xHalfLengthAtBottom,
-				G4double xHalfLengthAtTop,
-				G4double yHalfLengthAtBottom,
-				G4double yHalfLengthAtTop,
-				G4double zHalfLength
+		DetectorComponent_SolidSphere(G4String Name,
+				G4double Radius,
 				G4ThreeVector Position,
-				G4String Material,
-				G4String Inside);                                   
-		~DetectorComponent_Trapezoid();
+				G4String MaterialString,
+				G4String Inside);
+				
+		~DetectorComponent_SolidSphere();
 	
 		void ConstructVolume();
 	
