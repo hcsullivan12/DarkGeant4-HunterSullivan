@@ -1,5 +1,5 @@
 /*
- * DetectorComponentParallelepiped.hh
+ * DetectorComponentTrapezoid
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
@@ -21,47 +21,46 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTPARALLELEPIPED_HH
-#define DETECTORCOMPONENTPARALLELEPIPED_HH
+#ifndef DETECTORCOMPONENTTRAPEZOID_HH
+#define DETECTORCOMPONENTTRAPEZOID_HH
 
-class DetectorComponent_Parallelepiped : public DetectorComponent {
+#include "DetectorComponent.hh"
 
-	/*
-	 * Class Member variables
-	 *
-	 */
+class DetectorComponent_Trapezoid : public DetectorComponent {
 	
-	public:
-	
-		G4double xHalfLength;
-		G4double yHalfLength;
-		G4double zHalfLength;
-		G4double AngleOfXZFaces;
-		G4double PolarAngleOfXYFaces;
-		G4double AzimuthalAngleOfXYFaces;
-
 	/*
-	 * Public Class Member functions
+	 * 
+	 * Class member variables
 	 * 
 	 * */
-	 public:
-	 
-		//Constructor
-		DetectorComponent_Parallelpiped(G4String Name,
-				G4double xHalfLength,
-				G4double yHalfLength,
-				G4double zHalfLength,
-				G4double AngleOfXZFaces,
-				G4double PolarAngleOfXYFaces,
-				G4double AzimuthalAngleOfXYFaces,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
-		~DetectorComponent_Parallelepiped();
+	public:
+	
+		G4double xHalfLengthAtBottom;
+		G4double xHalfLengthAtTop;
+		G4double yHalfLengthAtBottom;
+		G4double yHalfLengthAtTop;
+		G4double zHalfLength;
 		
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+	public:
+	
+		DetectorComponent_Trapezoid(G4String Name,
+				G4double xHalfLengthAtBottom,
+				G4double xHalfLengthAtTop,
+				G4double yHalfLengthAtBottom,
+				G4double yHalfLengthAtTop,
+				G4double zHalfLength
+				G4ThreeVector Position,
+				G4String Material,
+				G4String Inside);                                   
+		~DetectorComponent_Trapezoid();
+	
 		void ConstructVolume();
 	
 };
 
 #endif
-
