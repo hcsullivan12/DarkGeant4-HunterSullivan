@@ -77,9 +77,8 @@ class DarkGeant4Data(object):
 		Pos = 0
 		for i in range(4, len(self.FileContents)):
 			
-			#World condition may help with dE/dX over residual range plots
-			if "*" in self.FileContents[i] or "World" in self.FileContents[i]:
-				
+			#if DetectorComponent in self.FileContents append.
+			if "*" in self.FileContents[i]:
 				break
 				
 			self.PositionList.append([])
@@ -91,11 +90,12 @@ class DarkGeant4Data(object):
 				self.PositionList[Pos].append(float(
 				TempSplit[t+1]))
 				
-			# Step length
-			self.PositionList[Pos].append(float(TempSplit[6]))
+			# Particle Action
+			self.PositionList[Pos].append(TempSplit[8])
+			self.PositionList[Pos].append(TempSplit[9])
 				
 			Pos += 1
-			
+		
 	'''
 	
 		GetPrimaryParticleInitialKineticEnergy(self)
@@ -241,9 +241,11 @@ class DarkGeant4Data(object):
 		for i in range(5, len(self.FileContents)):
 			try:
 				
-				if "Particle" in self.FileContents[i]:
+				if "*" in self.FileContents[i]:
 					break
-				elif "Detector hIoni" in self.FileContents[i]:
+				elif ("Detector" in self.FileContents[i] 
+					and "hIoni" in self.FileContents[i]):
+						
 					dE = float(self.FileContents[i].split()[5])
 					StepLength = float(self.FileContents[i].split()[6])/10.0
 					self.dEdXDetector.append(dE/StepLength)
@@ -300,11 +302,12 @@ class DarkGeant4Data(object):
 		fp.write("Primary Particle Position\n")
 		
 		for i in range(len(self.PositionList)):
-			for t in range(4):
-				if t != 3:
-					fp.write("%f " % self.PositionList[i][t])
+			for t in range(5):
+				if t != 4:
+					fp.write(str(self.PositionList[i][t]))
+					fp.write(" ")
 				else:
-					fp.write("%f" % self.PositionList[i][t])
+					fp.write(str(self.PositionList[i][t]))
 			fp.write("\n")
 		
 		fp.close()
