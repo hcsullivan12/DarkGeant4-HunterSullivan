@@ -38,9 +38,9 @@ class DetectorComponent_SphericalShell : public DetectorComponent {
 		G4double InnerRadius;
 		G4double OuterRadius;
 		G4double PhiStartAngle;
-		G4double PhiFinalAngle;
+		G4double PhiSpanningAngle;
 		G4double ThetaStartAngle;
-		G4double ThetaFinalAngle;
+		G4double ThetaSpanningAngle;
 	/*
 	 * 
 	 * Class member functions
@@ -51,10 +51,10 @@ class DetectorComponent_SphericalShell : public DetectorComponent {
 		DetectorComponent_SphericalShell(G4String Name,
 				G4double InnerRadius,
 				G4double OuterRadius,
-                                G4double PhiStartAngle,
-                                G4double PhiFinalAngle,
-                                G4double ThetaStartAngle,
-				G4double ThetaFinalAngle,
+                G4double PhiStartAngle,
+                G4double PhiSpanningAngle,
+                G4double ThetaStartAngle,
+				G4double ThetaSpanningAngle,
 				G4ThreeVector Position,
 				G4String MaterialString,
 				G4String Inside);

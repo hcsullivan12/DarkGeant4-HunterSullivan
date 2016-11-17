@@ -38,7 +38,7 @@ class DetectorComponent_Cylinder : public DetectorComponent {
 		G4double InnerRadius;
 		G4double OuterRadius;
 		G4double StartAngle;
-		G4double EndAngle;
+		G4double SpanningAngle;
 		G4double HalfLength;
 		
 	/*
@@ -52,7 +52,7 @@ class DetectorComponent_Cylinder : public DetectorComponent {
                                    G4double InnerRadius,
                                    G4double OuterRadius,
                                    G4double StartAngle,
-                                   G4double EndAngle,
+                                   G4double SpanningAngle,
                                    G4double HalfLength,
                                    G4ThreeVector Position,
                                    G4String MaterialString,
