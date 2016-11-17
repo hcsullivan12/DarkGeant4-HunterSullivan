@@ -1,7 +1,7 @@
 /*
  * DetectorComponentSphericalShell
  * 
- * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
+ * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,14 +50,14 @@ class DetectorComponent_SphericalShell : public DetectorComponent {
 	
 		DetectorComponent_SphericalShell(G4String Name,
 				G4double InnerRadius,
-                                G4double OuterRadius,
+				G4double OuterRadius,
                                 G4double PhiStartAngle,
                                 G4double PhiFinalAngle,
                                 G4double ThetaStartAngle,
-				G4double ThetaFinalAngle,		
-                                G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside);
+				G4double ThetaFinalAngle,
+				G4ThreeVector Position,
+				G4String MaterialString,
+				G4String Inside);
 		~DetectorComponent_SphericalShell();
 	
 		void ConstructVolume();
