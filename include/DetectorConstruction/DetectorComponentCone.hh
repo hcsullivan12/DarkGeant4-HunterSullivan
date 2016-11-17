@@ -27,14 +27,37 @@
 #include "DetectorComponent"
 
 class DetectorComponent_Cone : public DetectorComponent {
+
+	/*
+ 	 * Class Member Variables
+	 *
+	 * */
+	public:
+		G4double InnerRadiusAtTop;
+		G4double InnerRadiusAtBottom;
+		G4double OutsideRadiusAtTop;
+		G4double OutsideRadiusAtBottom;
+		G4double HalfLength;
+		G4double StartAngle;
+		G4double EndAngle;
 	
 	/*
 	 * Public Class Member functions
 	 * 
 	 * */
 	 public:
-	 
 		//Constructor
+		DetectorComponent_Cone(G4String Name;
+				G4double InnerRadiusAtTop,
+				G4double InnerRadiusAtBottom,
+				G4double OutsideRadiusAtTop,
+				G4double OutsideRadiusAtBottom,
+				G4double HalfLength,
+				G4double StartAngle,
+				G4double EndAngle,
+				G4ThreeVector Position,
+				G4String MaterialString,
+				G4String Inside);
 		~DetectorComponent_Cone();
 		
 		void ConstructVolume();
