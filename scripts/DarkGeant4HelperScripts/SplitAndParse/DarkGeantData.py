@@ -306,12 +306,15 @@ class DarkGeant4Data(object):
 		fp.write("Primary Particle Position\n")
 		
 		for i in range(len(self.PositionList)):
-			for t in range(6):
-				if t != 5:
-					fp.write(str(self.PositionList[i][t]))
+			
+			for t in range(len(self.PositionList[0])):
+				
+				fp.write(str(self.PositionList[i][t]))
+				
+				if t != (len(self.PositionList[0])-1):
+					
 					fp.write(" ")
-				else:
-					fp.write(str(self.PositionList[i][t]))
+					
 			fp.write("\n")
 		
 		fp.close()
