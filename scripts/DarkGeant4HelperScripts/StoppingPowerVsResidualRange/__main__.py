@@ -32,9 +32,9 @@ FileToRead = "DarkGeantData"
 
 def main():
 	
-	File = ReadFile()
+	File = ReadFileAndGetFileContents()
 	dedx_list = Get_dEdX_list(File)
-	pos_list = Get_Position_List(File)
+	pos_list = GetPositionListFromFileContents(File)
 	
 	del File
 	
@@ -48,6 +48,92 @@ def main():
 	
 	PlotData(ResidualRange, dedx_list)
 	
+'''
+
+	ReadFileAndGetFileContents()
+	
+	* Description
+	
+		Reads the entire DarkGeantData file and returns a list of the
+		file line by line.
+
+'''
+		
+def ReadFileAndGetFileContents():
+	
+	global FileToRead
+	
+	File = []
+	try:
+		with open(FileToRead) as fp:
+			File = fp.readlines()
+	except FileNotFoundError:
+		print("FileNotFoundError; Is"+  FileToRead + " in the parent directory?")
+		exit(0)
+		
+	return File	
+	
+'''
+
+	Get_dEdX_List(File)
+	
+	* Description
+	
+		...
+
+'''
+def Get_dEdX_list(File):
+	
+	FoundLine = False
+	List = []
+	for line in File:
+		if "Primary Ionization Energy" in line:
+			FoundLine = False
+		elif "dE/dx" in line:
+			FoundLine = True
+		elif FoundLine is True:
+			List.append(float(line))
+			
+	return List
+	
+'''
+
+	GetPositionListFromFileContents(File)
+	
+	* Description
+	
+		...
+
+'''
+def GetPositionListFromFileContents(File):
+	
+	Position = []
+	PositionChunk = []
+	
+	FoundPositionStart = False
+	for i in range(len(File)):
+		
+		if FoundPositionStart and len(File[i]) <= 1:
+			
+			FoundPositionStart = False
+			Position.append(list(ListChunk))
+			PositionChunk = []
+			
+		elif "Primary Particle Position" in File[i]:
+			
+			FoundPositionStart = True
+			i += 1
+			
+		elif FoundPositionStart:
+			
+			PositionChunk.Append(File[i].split())
+				
+	return Position
+	
+
+#def GetResidualRangeList():
+	
+
 '''
 
 	PlotData(XAxis, YAxis)
@@ -108,95 +194,6 @@ def ConvertToXList(pos):
 		XList.append(float(pos[i][3])/10.0)
 		
 	return XList
-	
-	
-'''
-
-	Get_dEdX_List(File)
-	
-	* Description
-	
-		...
-
-'''
-def Get_dEdX_list(File):
-	
-	FoundLine = False
-	List = []
-	for line in File:
-		if "Primary Ionization Energy" in line:
-			FoundLine = False
-		elif "dE/dx" in line:
-			FoundLine = True
-		elif FoundLine is True:
-			List.append(float(line))
-			
-	return List
-	
-'''
-
-	Get_Position_List(File)
-	
-	* Description
-	
-		...
-
-'''
-def Get_Position_List(File):
-	
-	List = []
-	
-	SkippedFirstLine = False
-	FoundLine = False
-	FoundWorld = False
-	
-	for i in range(len(File)):
-		
-		if FoundLine is True and len(File[i]) <= 1:
-			
-			FoundLine = False
-			FoundWorld = False
-			
-		elif "Primary Particle Position" in File[i]:
-			
-			FoundLine = True
-			i += 1
-			
-		elif FoundLine is True:
-			
-			if "Detector" in File[i] and "Ioni" in File[i]:
-				
-				List.Append(File[i].split())
-				
-			
-				
-			
-	return List
-
-'''
-
-	ReadFile()
-	
-	* Description
-	
-		Reads the entire DarkGeantData file and returns a list of the
-		file line by line.
-
-'''
-		
-def ReadFile():
-	
-	global FileToRead
-	
-	File = []
-	try:
-		with open(FileToRead) as fp:
-			File = fp.readlines()
-	except FileNotFoundError:
-		print("FileNotFoundError; Is"+  FileToRead + " in the parent directory?")
-		exit(0)
-		
-	return File
 	
 	
 def HandleArguments(argv):
