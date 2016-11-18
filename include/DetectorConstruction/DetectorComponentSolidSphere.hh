@@ -1,7 +1,7 @@
 /*
- * DetectorComponentParallelepiped.hh
+ * DetectorComponentSolidSphere
  * 
- * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
+ * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,47 +21,40 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTPARALLELEPIPED_HH
-#define DETECTORCOMPONENTPARALLELEPIPED_HH
+#ifndef DETECTORCOMPONENTSOLIDSPHERE_HH
+#define DETECTORCOMPONENTSOLIDSPHERE_HH
 
-class DetectorComponent_Parallelepiped : public DetectorComponent {
+#include "DetectorComponent.hh"
 
-	/*
-	 * Class Member variables
-	 *
-	 */
+class DetectorComponent_SolidSphere : public DetectorComponent {
 	
-	public:
-	
-		G4double xHalfLength;
-		G4double yHalfLength;
-		G4double zHalfLength;
-		G4double AngleOfXZFaces;
-		G4double PolarAngleOfXYFaces;
-		G4double AzimuthalAngleOfXYFaces;
-
 	/*
-	 * Public Class Member functions
+	 * 
+	 * Class member variables
 	 * 
 	 * */
-	 public:
-	 
-		//Constructor
-		DetectorComponent_Parallelpiped(G4String Name,
-				G4double xHalfLength,
-				G4double yHalfLength,
-				G4double zHalfLength,
-				G4double AngleOfXZFaces,
-				G4double PolarAngleOfXYFaces,
-				G4double AzimuthalAngleOfXYFaces,
+	public:
+	
+		G4double Radius;
+		
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */
+
+	public:
+	
+		DetectorComponent_SolidSphere(G4String Name,
+				G4double Radius,
 				G4ThreeVector Position,
 				G4String MaterialString,
 				G4String Inside);
-		~DetectorComponent_Parallelepiped();
-		
+				
+		~DetectorComponent_SolidSphere();
+	
 		void ConstructVolume();
 	
 };
 
 #endif
-

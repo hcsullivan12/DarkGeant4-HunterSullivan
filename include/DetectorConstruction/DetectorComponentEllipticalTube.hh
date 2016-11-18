@@ -1,7 +1,7 @@
 /*
- * DetectorComponentParallelepiped.hh
+ * DetectorComponentEllipticalTube
  * 
- * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
+ * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,47 +21,44 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTPARALLELEPIPED_HH
-#define DETECTORCOMPONENTPARALLELEPIPED_HH
+#ifndef DETECTORCOMPONENTELLIPTICALTUBE_HH
+#define DETECTORCOMPONENTELLIPTICALTUBE_HH
 
-class DetectorComponent_Parallelepiped : public DetectorComponent {
+#include "DetectorComponent.hh"
 
-	/*
-	 * Class Member variables
-	 *
-	 */
+class DetectorComponent_EllipticalTube : public DetectorComponent {
 	
+	/*
+	 * 
+	 * Class member variables
+	 * 
+	 * */
+
 	public:
 	
 		G4double xHalfLength;
 		G4double yHalfLength;
-		G4double zHalfLength;
-		G4double AngleOfXZFaces;
-		G4double PolarAngleOfXYFaces;
-		G4double AzimuthalAngleOfXYFaces;
-
+		G4double zHalflength;
+		
 	/*
-	 * Public Class Member functions
+	 * 
+	 * Class member functions
 	 * 
 	 * */
-	 public:
-	 
-		//Constructor
-		DetectorComponent_Parallelpiped(G4String Name,
-				G4double xHalfLength,
-				G4double yHalfLength,
-				G4double zHalfLength,
-				G4double AngleOfXZFaces,
-				G4double PolarAngleOfXYFaces,
-				G4double AzimuthalAngleOfXYFaces,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
-		~DetectorComponent_Parallelepiped();
-		
+
+	public:
+	
+		DetectorComponent_EllipticalTube(G4String Name,
+                                   G4double xHalfLength,
+                                   G4double yHalfLength,
+                                   G4double zHalfLength,
+                                   G4ThreeVector Position,
+                                   G4String MaterialString,
+                                   G4String Inside);
+		~DetectorComponent_EllipticalTube();
+	
 		void ConstructVolume();
 	
 };
 
 #endif
-

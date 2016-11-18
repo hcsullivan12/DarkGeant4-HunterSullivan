@@ -34,7 +34,7 @@ DetectorComponent_Cylinder::DetectorComponent_Cylinder(
                                    G4double InnerRadius,
                                    G4double OuterRadius,
                                    G4double StartAngle,
-                                   G4double EndAngle,
+                                   G4double SpanningAngle,
                                    G4double HalfLength,
                                    G4ThreeVector Position,
                                    G4String MaterialString,
@@ -46,7 +46,7 @@ DetectorComponent_Cylinder::DetectorComponent_Cylinder(
 	this->OuterRadius = OuterRadius;
 	this->StartAngle = StartAngle;
 	this->HalfLength = HalfLength;
-	this->EndAngle = EndAngle;
+	this->SpanningAngle = SpanningAngle;
 	
 }
 
@@ -72,7 +72,7 @@ void DetectorComponent_Cylinder::ConstructVolume() {
                                        this->OuterRadius * m,
                                        this->HalfLength * m,
                                        this->StartAngle * deg,
-                                       this->EndAngle * deg);
+                                       this->SpanningAngle * deg);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
