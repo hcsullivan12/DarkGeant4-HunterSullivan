@@ -90,6 +90,10 @@ class DarkGeant4Data(object):
 				self.PositionList[Pos].append(float(
 				TempSplit[t+1]))
 				
+			# Step length
+			self.PositionList[Pos].append(TempSplit[6])
+			# Track length
+			self.PositionList[Pos].append(TempSplit[7])
 			# Particle Action
 			self.PositionList[Pos].append(TempSplit[8])
 			self.PositionList[Pos].append(TempSplit[9])
@@ -302,8 +306,8 @@ class DarkGeant4Data(object):
 		fp.write("Primary Particle Position\n")
 		
 		for i in range(len(self.PositionList)):
-			for t in range(5):
-				if t != 4:
+			for t in range(6):
+				if t != 5:
 					fp.write(str(self.PositionList[i][t]))
 					fp.write(" ")
 				else:
