@@ -33,20 +33,15 @@ FileToRead = "DarkGeantData"
 def main():
 	
 	File = ReadFileAndGetFileContents()
-	dedx_list = Get_dEdX_list(File)
-	pos_list = GetPositionListFromFileContents(File)
+	dedxChunkList = Getdedx(File)
 	
-	ResidualRange = GetResidualRangeList(pos_list)
+	ResidualRangeChunkList = GetResidualRangeList(
+					GetPositionListFromFileContents(File))
 	
-	if len(pos_list) != len(dedx_list):
-		print("pos = %d, dedx = %d" % (len(pos_list), len(dedx_list)))
-		return
+	dedx = ConvertChunkListToList(dedxChunkList)
+	ResidualRange = ConvertChunkListToList(ResidualRangeChunkList)
 	
-	print("FINE")
-	
-	ResidualRange = ConvertToXList(pos_list)
-	
-	PlotData(ResidualRange, dedx_list)
+	PlotData(ResidualRange, dedx)
 	
 '''
 
@@ -82,19 +77,31 @@ def ReadFileAndGetFileContents():
 		...
 
 '''
-def Get_dEdX_list(File):
+def Getdedx(File):
+	
+	dedx = []
+	dedxChunk = []
 	
 	FoundLine = False
 	List = []
 	for line in File:
+		
 		if "Primary Ionization Energy" in line:
-			FoundLine = False
-		elif "dE/dx" in line:
-			FoundLine = True
-		elif FoundLine is True:
-			List.append(float(line))
 			
-	return List
+			FoundLine = False
+			#Drops the last index
+			dedx.append(dedxChunk[:-2])
+			dedxChunk = []
+			
+		elif "dE/dx" in line:
+			
+			FoundLine = True
+			
+		elif FoundLine:
+			
+			dedxChunk.append(float(line))
+			
+	return dedx
 	
 '''
 
@@ -116,7 +123,7 @@ def GetPositionListFromFileContents(File):
 		if FoundPositionStart and len(File[i]) <= 1:
 			
 			FoundPositionStart = False
-			Position.append(list(ListChunk))
+			Position.append(list(PositionChunk))
 			PositionChunk = []
 			
 		elif "Primary Particle Position" in File[i]:
@@ -126,7 +133,7 @@ def GetPositionListFromFileContents(File):
 			
 		elif FoundPositionStart:
 			
-			PositionChunk.Append(File[i].split())
+			PositionChunk.append(File[i].split())
 				
 	return Position
 	
@@ -136,7 +143,26 @@ def GetResidualRangeList(Position):
 	ResidualRange = []
 	ResidualRangeChunk = []
 	for chunk in Position:
+		
 		TotalTrackLength = float(chunk[-1][4])
+		
+		for i in range(1, len(chunk)-1):
+			
+			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][4]))
+			
+		ResidualRange.append(list(ResidualRangeChunk))
+		ResidualRangeChunk = []
+		
+	return ResidualRange
+	
+def ConvertChunkListToList(ChunkList):
+	
+	List = []
+	for chunk in ChunkList:
+		for element in chunk:
+			List.append(float(element))
+			
+	return List
 
 '''
 
