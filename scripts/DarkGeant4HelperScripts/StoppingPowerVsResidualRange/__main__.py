@@ -36,7 +36,7 @@ def main():
 	dedx_list = Get_dEdX_list(File)
 	pos_list = GetPositionListFromFileContents(File)
 	
-	del File
+	ResidualRange = GetResidualRangeList(pos_list)
 	
 	if len(pos_list) != len(dedx_list):
 		print("pos = %d, dedx = %d" % (len(pos_list), len(dedx_list)))
@@ -131,8 +131,12 @@ def GetPositionListFromFileContents(File):
 	return Position
 	
 
-#def GetResidualRangeList():
+def GetResidualRangeList(Position):
 	
+	ResidualRange = []
+	ResidualRangeChunk = []
+	for chunk in Position:
+		TotalTrackLength = float(chunk[-1][4])
 
 '''
 
