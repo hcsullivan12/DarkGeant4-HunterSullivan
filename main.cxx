@@ -209,15 +209,13 @@ struct ArgumentTable {
 
 //Argument Function Prototypes
 void Execute_Argument(int argc, char *argv[], int index);
-void JBInput_Argument(int argc, char *argv[], int index);
 void Module_Argument (int argc, char *argv[], int index);
 
 
 
-static const int numHandledArguments = 3;
+static const int numHandledArguments = 2;
 static const ArgumentTable Table[numHandledArguments] =
 {{"-execute", &Execute_Argument},
- {"-JBInput", &JBInput_Argument},
  {"-module" , &Module_Argument}};
 
 
@@ -248,21 +246,6 @@ void Execute_Argument(int argc, char *argv[], int index) {
 	
 	G4String CharLiteralToString(argv[index + 1]);
 	ExecutionVector.push_back("/control/execute " + CharLiteralToString);
-	
-}
-
-void JBInput_Argument(int argc, char *argv[], int index) {
-
-	/*
-	 * Output.dat is not a permanent filename in Josh's code, however
-	 * I don't see much reason to change it to something else so
-	 * I'm going to pretend it's just output.dat always.
-	 * 
-	 * Subject to change.
-	 * 
-	 * */
-	string filename("output.dat");
-	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
 	
 }
 
