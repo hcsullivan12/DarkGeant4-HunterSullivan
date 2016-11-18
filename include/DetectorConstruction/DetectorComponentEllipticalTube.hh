@@ -1,5 +1,5 @@
 /*
- * DetectorComponentSphericalShell
+ * DetectorComponentEllipticalTube
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -21,44 +21,41 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTSPHERICALSHELL_HH
-#define DETECTORCOMPONENTSPHERICALSHELL_HH
+#ifndef DETECTORCOMPONENTELLIPTICALTUBE_HH
+#define DETECTORCOMPONENTELLIPTICALTUBE_HH
 
 #include "DetectorComponent.hh"
 
-class DetectorComponent_SphericalShell : public DetectorComponent {
+class DetectorComponent_EllipticalTube : public DetectorComponent {
 	
 	/*
 	 * 
 	 * Class member variables
 	 * 
 	 * */
+
 	public:
 	
-		G4double InnerRadius;
-		G4double OuterRadius;
-		G4double PhiStart;
-		G4double DeltaPhi;
-		G4double ThetaStart;
-		G4double DeltaTheta;
+		G4double xHalfLength;
+		G4double yHalfLength;
+		G4double zHalflength;
+		
 	/*
 	 * 
 	 * Class member functions
 	 * 
 	 * */
+
 	public:
 	
-		DetectorComponent_SphericalShell(G4String Name,
-				G4double InnerRadius,
-				G4double OuterRadius,
-                G4double PhiStart,
-                G4double DeltaPhi,
-                G4double ThetaStart,
-				G4double DeltaTheta,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
-		~DetectorComponent_SphericalShell();
+		DetectorComponent_EllipticalTube(G4String Name,
+                                   G4double xHalfLength,
+                                   G4double yHalfLength,
+                                   G4double zHalfLength,
+                                   G4ThreeVector Position,
+                                   G4String MaterialString,
+                                   G4String Inside);
+		~DetectorComponent_EllipticalTube();
 	
 		void ConstructVolume();
 	

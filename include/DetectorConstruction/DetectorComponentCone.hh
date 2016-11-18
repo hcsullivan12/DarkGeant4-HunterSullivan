@@ -39,7 +39,7 @@ class DetectorComponent_Cone : public DetectorComponent {
 		G4double OutsideRadiusAtBottom;
 		G4double HalfLength;
 		G4double StartAngle;
-		G4double SpanningAngle;
+		G4double DeltaAngle;
 	
 	/*
 	 * Public Class Member functions
@@ -54,7 +54,7 @@ class DetectorComponent_Cone : public DetectorComponent {
 				G4double OutsideRadiusAtBottom,
 				G4double HalfLength,
 				G4double StartAngle,
-				G4double SpanningAngle,
+				G4double DeltaAngle,
 				G4ThreeVector Position,
 				G4String MaterialString,
 				G4String Inside);

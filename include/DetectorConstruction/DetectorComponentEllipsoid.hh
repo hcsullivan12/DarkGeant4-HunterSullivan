@@ -1,5 +1,5 @@
 /*
- * DetectorComponentSphericalShell
+ * DetectorComponentEllipsoid
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -21,44 +21,45 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTSPHERICALSHELL_HH
-#define DETECTORCOMPONENTSPHERICALSHELL_HH
+#ifndef DETECTORCOMPONENTELLIPSOID_HH
+#define DETECTORCOMPONENTELLIPSOID_HH
 
 #include "DetectorComponent.hh"
 
-class DetectorComponent_SphericalShell : public DetectorComponent {
+class DetectorComponent_Ellipsoid : public DetectorComponent {
 	
 	/*
 	 * 
 	 * Class member variables
 	 * 
 	 * */
+
 	public:
 	
-		G4double InnerRadius;
-		G4double OuterRadius;
-		G4double PhiStart;
-		G4double DeltaPhi;
-		G4double ThetaStart;
-		G4double DeltaTheta;
+		G4double xSemiAxis;
+		G4double ySemiAxis;
+		G4double zSemiAxis;
+		G4double zBottom;
+		G4double zTop;
+		
 	/*
 	 * 
 	 * Class member functions
 	 * 
 	 * */
+
 	public:
 	
-		DetectorComponent_SphericalShell(G4String Name,
-				G4double InnerRadius,
-				G4double OuterRadius,
-                G4double PhiStart,
-                G4double DeltaPhi,
-                G4double ThetaStart,
-				G4double DeltaTheta,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
-		~DetectorComponent_SphericalShell();
+		DetectorComponent_Ellipsoid(G4String Name,
+                                   G4double xSemiAxis,
+                                   G4double ySemiAxis,
+                                   G4double zSemiAxis,
+                                   G4double zBottom,
+                                   G4double zTop,
+                                   G4ThreeVector Position,
+                                   G4String MaterialString,
+                                   G4String Inside);
+		~DetectorComponent_Ellipsoid();
 	
 		void ConstructVolume();
 	
