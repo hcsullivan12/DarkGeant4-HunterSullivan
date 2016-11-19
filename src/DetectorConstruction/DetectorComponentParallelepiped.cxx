@@ -1,5 +1,5 @@
 /*
- * DetectorComponentHyperbolicTube.cxx
+ * DetectorComponentParallelepiped.cxx
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -22,48 +22,50 @@
  */
 
 
-#include "DetectorComponentHyperbolicTube.hh"
+#include "DetectorComponentParallelepiped.hh"
 
 //Geant4 Headers
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(
-                                G4String Name,
-								G4double InnerRadius;
-								G4double OuterRadius;
-								G4double InnerRadiusAngle;
-								G4double OuterRadiusAngle;
-								G4double zHalfLength;
+DetectorComponent_Parallelepiped::DetectorComponent_Parallelepiped(
+				G4String Name,
+				G4double xHalfLength,
+				G4double yHalfLength,
+				G4double zHalfLength,
+				G4double AngleOfXZFaces,
+				G4double PolarAngleOfXYFaces,
+				G4double AzimuthalAngleOfXYFaces,
                                 G4ThreeVector Position,
                                 G4String MaterialString,
                                 G4String Inside)
- : DetectorComponent(Name, HYPERBOLIC_TUBE, Position, MaterialString, Inside)
+ : DetectorComponent(Name, PARALLELEPIPED, Position, MaterialString, Inside)
 {
 	
-	this->InnerRadius = InnerRadius;
-	this->OuterRadius = OuterRadius;
-	this->InnerRadiusAngle = InnerRadiusAngle;
-	this->OuterRadiusAngle = OuterRadiusAngle;
+	this->xHalfLength = xHalfLength;
+	this->yHalfLength = yHalfLength;
 	this->zHalfLength = zHalfLength;
+	this->AngleOfXZFaces = AngleOfXZFaces;
+	this->PolarAngleOfXYFaces = PolarAngleOfXYFaces;
+	this->AzimuthalAngleOfXYFaces = AzimuthalAngleOfXYFaces;
 	
 }
 
-DetectorComponent_HyperbolicTube::~DetectorComponent_HyperbolicTube() {
+DetectorComponent_Parallelepiped::~DetectorComponent_Parallelepiped() {
 	
 	
 }
 
-
-void DetectorComponent_HyperbolicTube::ConstructVolume() {
+void DetectorComponent_Parallelepiped::ConstructVolume() {
 	
-	G4Hype *VirtualVolume = new G4Hype(this->Name,
-                                       this->InnerRadius * m,
-                                       this->OuterRadius * m,
-                                       this->InnerRadiusAngle * deg,
-                                       this->OuterRadiusAngle * deg,
-                                       this->zHalfLength * m);
+	G4Para *VirtualVolume = new G4Para(this->Name,
+					this->xHalfLength * m,
+                                        this->yHalfLength * m,
+                                        this->zHalfLength * m,
+                                        this->AngleOfXZFaces * deg,
+                                        this->PolarAngleOfXYFaces * deg,
+					this->AzimuthalAngleOfXYFaces * deg);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),

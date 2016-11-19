@@ -37,7 +37,7 @@ DetectorComponent_EllipticalTube::DetectorComponent_EllipticalTube(
                                    G4ThreeVector Position,
                                    G4String MaterialString,
                                    G4String Inside)
- : DetectorComponent(Name, ELLIPTICALTUBE, Position, MaterialString, Inside)
+ : DetectorComponent(Name, ELLIPTICAL_TUBE, Position, MaterialString, Inside)
 {
 	
 	this->xHalfLength = xHalfLength;

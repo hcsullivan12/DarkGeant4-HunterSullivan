@@ -38,7 +38,7 @@ DetectorComponent_EllipticalCone::DetectorComponent_EllipticalCone(
 				G4ThreeVector Position,
                 G4String MaterialString,
                 G4String Inside)
- : DetectorComponent(Name, ELLIPTICALCONE, Position, MaterialString, Inside)
+ : DetectorComponent(Name, ELLIPTICAL_CONE, Position, MaterialString, Inside)
 {
 	
 	this->xSemiAxis = xSemiAxis;

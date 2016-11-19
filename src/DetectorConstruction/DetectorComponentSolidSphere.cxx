@@ -1,5 +1,5 @@
 /*
- * DetectorComponentHyperbolicTube.cxx
+ * DetectorComponentSolidSphere.cxx
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -22,48 +22,35 @@
  */
 
 
-#include "DetectorComponentHyperbolicTube.hh"
+#include "DetectorComponentSolidSphere.hh"
 
 //Geant4 Headers
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(
-                                G4String Name,
-								G4double InnerRadius;
-								G4double OuterRadius;
-								G4double InnerRadiusAngle;
-								G4double OuterRadiusAngle;
-								G4double zHalfLength;
+DetectorComponent_SolidSphere::DetectorComponent_SolidSphere(
+				G4String Name,
+                                G4double Radius,
                                 G4ThreeVector Position,
                                 G4String MaterialString,
                                 G4String Inside)
- : DetectorComponent(Name, HYPERBOLIC_TUBE, Position, MaterialString, Inside)
+ : DetectorComponent(Name, SOLID_SPHERE, Position, MaterialString, Inside)
 {
 	
-	this->InnerRadius = InnerRadius;
-	this->OuterRadius = OuterRadius;
-	this->InnerRadiusAngle = InnerRadiusAngle;
-	this->OuterRadiusAngle = OuterRadiusAngle;
-	this->zHalfLength = zHalfLength;
+	this->Radius = Radius;
 	
 }
 
-DetectorComponent_HyperbolicTube::~DetectorComponent_HyperbolicTube() {
+DetectorComponent_SolidSphere::~DetectorComponent_SolidSphere() {
 	
 	
 }
 
-
-void DetectorComponent_HyperbolicTube::ConstructVolume() {
+void DetectorComponent_SolidSphere::ConstructVolume() {
 	
-	G4Hype *VirtualVolume = new G4Hype(this->Name,
-                                       this->InnerRadius * m,
-                                       this->OuterRadius * m,
-                                       this->InnerRadiusAngle * deg,
-                                       this->OuterRadiusAngle * deg,
-                                       this->zHalfLength * m);
+	G4Orb *VirtualVolume = new G4Orb(this->Name,
+				this->Radius * m);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
