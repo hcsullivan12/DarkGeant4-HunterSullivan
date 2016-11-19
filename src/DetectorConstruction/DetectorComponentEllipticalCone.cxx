@@ -31,13 +31,13 @@
 
 DetectorComponent_EllipticalCone::DetectorComponent_EllipticalCone(
 				G4String Name,
-                                G4double xSemiAxis;
+				G4double xSemiAxis;
 				G4double ySemiAxis;
 				G4double Height;
 				G4double zTop;
 				G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside)
+                G4String MaterialString,
+                G4String Inside)
  : DetectorComponent(Name, ELLIPTICALCONE, Position, MaterialString, Inside)
 {
 	
@@ -57,13 +57,13 @@ void DetectorComponent_EllipticalCone::ConstructVolume() {
 	
 	G4EllipticalCone *VirtualVolume = new G4EllipticalCone(this->Name,
 					this->xSemiAxis * m,
-                                        this->ySemiAxis * m,
-                                        this->Height * m,
-                                        this->zTop * m);
+                    this->ySemiAxis * m,
+                    this->Height * m,
+                    this->zTop * m);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
-		 this->DetectorComponentMaterial->GetMaterialPointer(),
-                 this->Name);
+				this->DetectorComponentMaterial->GetMaterialPointer(),
+                this->Name);
 
 }
 
