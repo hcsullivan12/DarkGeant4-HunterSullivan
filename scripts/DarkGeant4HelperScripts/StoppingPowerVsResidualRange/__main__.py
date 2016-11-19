@@ -38,10 +38,26 @@ def main():
 	ResidualRangeChunkList = GetResidualRangeList(
 					GetPositionListFromFileContents(File))
 	
+	print("Length of dedxChunk = %d\n" % LengthOfChunkList(dedxChunkList))
+	print("Length of ResidualRangeChunk = %d\n" % LengthOfChunkList(ResidualRangeChunkList))
+	
 	dedx = ConvertChunkListToList(dedxChunkList)
 	ResidualRange = ConvertChunkListToList(ResidualRangeChunkList)
 	
+	print("Length of dedx = %d\n" % len(dedx))
+	print("Length of residual range = %d\n" % len(ResidualRange))
+	
+	return
+	
 	PlotData(ResidualRange, dedx)
+	
+def LengthOfChunkList(ChunkList):
+	
+	Length = 0
+	for chunk in ChunkList:
+		Length += len(chunk)
+		
+	return Length
 	
 '''
 
@@ -83,14 +99,13 @@ def Getdedx(File):
 	dedxChunk = []
 	
 	FoundLine = False
-	List = []
 	for line in File:
 		
 		if "Primary Ionization Energy" in line:
 			
 			FoundLine = False
 			#Drops the last index
-			dedx.append(dedxChunk[:-2])
+			dedx.append(list(dedxChunk))
 			dedxChunk = []
 			
 		elif "dE/dx" in line:
@@ -133,8 +148,13 @@ def GetPositionListFromFileContents(File):
 			
 		elif FoundPositionStart:
 			
-			PositionChunk.append(File[i].split())
+			InsideDetector = "Detector" in File[i]
+			IonizedDetector = "Ioni" in File[i]
+			
+			if InsideDetector and IonizedDetector:
+				PositionChunk.append(File[i].split())
 				
+	print("Length of Position = %d" % LengthOfChunkList(Position))
 	return Position
 	
 
@@ -146,14 +166,25 @@ def GetResidualRangeList(Position):
 		
 		TotalTrackLength = float(chunk[-1][4])
 		
-		for i in range(1, len(chunk)-1):
-			
+		for i in range(1, len(chunk)):
 			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][4]))
 			
 		ResidualRange.append(list(ResidualRangeChunk))
 		ResidualRangeChunk = []
 		
 	return ResidualRange
+	
+def GetIndexOfLastDetectorIonization(chunk):
+	
+	for i in range(len(chunk)-1, 0, -1):
+		
+		DetectorInteraction = "Detector" in chunk[i][-2]
+		DetectorIonization = "Ioni" in chunk[i][-1]
+		
+		if DetectorInteraction and DetectorIonization:
+			return i
+			
+	return 0
 	
 def ConvertChunkListToList(ChunkList):
 	
@@ -182,56 +213,13 @@ def PlotData(XAxis, YAxis):
 	plt.plot(XAxis, YAxis, 'go')
 	plt.show()
 	
-'''
-
-	SortLists(dedx, pos)
-	
-	* Description
-	
-		...
-
-'''
-def SortLists(dedx, pos):
-	
-	for y in range(len(pos)):
-		for x in range(y+1, len(pos)):
-			if pos[y] > pos[x]:
-				temp = pos[y]
-				pos[y] = pos[x]
-				pos[x] = temp
-				
-				temp = dedx[y]
-				dedx[y] = dedx[x]
-				dedx[x] = temp
-				
-	return [pos, dedx]
-	
-'''
-
-	ConvertToXList(pos)
-	
-	* Description
-	
-		...
-
-'''
-
-def ConvertToXList(pos):
-	
-	XList = []
-		
-	for i in range(len(pos)):
-		XList.append(float(pos[i][3])/10.0)
-		
-	return XList
-	
 	
 def HandleArguments(argv):
 	
 	global FileToRead
 	
 	for i in range(1, len(argv)):
-		if "-split" in argv[i] and i+1 != len(argv):
+		if "-plot" in argv[i] and i+1 != len(argv):
 			FileToRead = argv[i+1]
 
 if __name__ == '__main__':
