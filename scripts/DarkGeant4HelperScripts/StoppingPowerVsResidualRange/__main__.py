@@ -46,6 +46,11 @@ def main():
 	dedx = ConvertChunkListToList(dedxChunkList)
 	ResidualRange = ConvertChunkListToList(ResidualRangeChunkList)
 	
+	#DeleteBadIndicies(dedx, ResidualRange)
+	
+	#print("Length of dedx = %d\n" % (len(dedx)))
+	#print("Length of ResidualRange = %d\n" % (len(ResidualRange)))
+	
 	PlotData(ResidualRange, dedx)
 	
 def LengthOfChunkList(ChunkList):
@@ -115,6 +120,8 @@ def Getdedx(File):
 		if "Primary Ionization Energy" in line:
 			
 			FoundLine = False
+			# len(dedxChunk) > 1 to skip last element
+			# del dedxChunk[-1]
 			if len(dedxChunk) != 0:
 				dedx.append(list(dedxChunk))
 			dedxChunk = []
@@ -185,6 +192,7 @@ def GetResidualRangeList(Position):
 			
 		TotalTrackLength = float(chunk[-1][4])
 		
+		# len(chunk)-1 to skip last elements
 		for i in range(0, len(chunk)):
 			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][4]))
 			
@@ -214,6 +222,16 @@ def ConvertChunkListToList(ChunkList):
 			
 	return List
 
+def DeleteBadIndicies(dedx, ResidualRange):
+	
+	indices = []
+	for i, element in enumerate(ResidualRange):
+		if element == 0.0:
+			indices.append(i)
+			
+	for i in range(len(indices)-1, 0, -1):
+		del dedx[indices[i]]
+		del ResidualRange[indices[i]]
 '''
 
 	PlotData(XAxis, YAxis)
