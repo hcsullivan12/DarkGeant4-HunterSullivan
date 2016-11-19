@@ -170,7 +170,7 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
 	
 	if (Attribute.VolumeType == "Cylinder")
 		return MakeDetectorComponent_Cylinder(Attribute);
-    else if (Attribute.VolumeType == "Box")
+	else if (Attribute.VolumeType == "Box")
 		return MakeDetectorComponent_Box(Attribute);
 	
 	return NULL;
@@ -194,7 +194,7 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                              0.0);
                                                                                
 	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
-                                             "No Outer_Radiys found."
+                                             "No Outer_Radius found."
                                         + string(" Halting Execution"));
                                       
 	G4double Start_Angle = GetNumberFromTable_NoHalt("Start_Angle",
@@ -202,8 +202,8 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                              + string(" Set to 0.0"),
                                              0.0);
                                                
-	G4double End_Angle = GetNumberFromTable_NoHalt("End_Angle",
-                                             "No End_Angle found."
+	G4double Delta_Angle = GetNumberFromTable_NoHalt("Delta_Angle",
+                                             "No Delta_Angle found."
                                              + string(" Set to 360."),
                                              360.);
                                             
@@ -216,7 +216,7 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                       Inner_Radius,
                                       Outer_Radius,
                                       Start_Angle,
-                                      End_Angle,
+                                      Delta_Angle,
                                       Half_Length,
                                       Attribute.Position,
                                       Attribute.Material,
