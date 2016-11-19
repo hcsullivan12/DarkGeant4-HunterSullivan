@@ -166,6 +166,7 @@ def GetPositionListFromFileContents(File):
 			if InsideDetector and IonizedDetector:
 				PositionChunk.append(File[i].split())
 				
+	# Fixes a super annoying bug
 	if len(PositionChunk) != 0:
 		Position.append(list(PositionChunk))
 				
