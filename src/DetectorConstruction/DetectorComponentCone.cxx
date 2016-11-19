@@ -53,7 +53,7 @@ DetectorComponent_Cone::DetectorComponent_Cone{G4String Name;
 
 void DetectorComponent_Cone::ConstructVolume() {
 
-	G4Tubs *VirtualVolume = new G4Tubs(this->Name,
+	G4Cons *VirtualVolume = new G4Cons(this->Name,
 					this->InnerRadiusAtTop * m,
 					this->InnerRadiusAtBottom * m,
 					this->OutsideRadiusAtTop * m,

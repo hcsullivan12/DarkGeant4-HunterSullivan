@@ -57,7 +57,7 @@ DetectorComponent_Ellipsoid::~DetectorComponent_Ellipsoid() {
 
 void DetectorComponent_Ellipsoid::ConstructVolume() {
 	
-	G4Tubs *VirtualVolume = new G4Tubs(this->Name,
+	G4Ellipsoid *VirtualVolume = new G4Ellipsoid(this->Name,
                                        this->xSemiAxis * m,
                                        this->ySemiAxis * m,
                                        this->zSemiAxis * m,

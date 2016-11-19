@@ -55,7 +55,7 @@ DetectorComponent_EllipticalCone::~DetectorComponent_EllipticalCone() {
 
 void DetectorComponent_EllipticalCone::ConstructVolume() {
 	
-	G4Tubs *VirtualVolume = new G4Tubs(this->Name,
+	G4EllipticalCone *VirtualVolume = new G4EllipticalCone(this->Name,
 					this->xSemiAxis * m,
                                         this->ySemiAxis * m,
                                         this->Height * m,
