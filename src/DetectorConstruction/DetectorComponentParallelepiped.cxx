@@ -26,7 +26,7 @@
 
 //Geant4 Headers
 #include "G4SystemOfUnits.hh"
-#include "G4Tubs.hh"
+#include "G4Para.hh"
 #include "G4LogicalVolume.hh"
 
 DetectorComponent_Parallelepiped::DetectorComponent_Parallelepiped(

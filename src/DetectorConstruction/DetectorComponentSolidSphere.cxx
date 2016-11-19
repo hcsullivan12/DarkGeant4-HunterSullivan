@@ -26,7 +26,7 @@
 
 //Geant4 Headers
 #include "G4SystemOfUnits.hh"
-#include "G4Tubs.hh"
+#include "G4Orb.hh"
 #include "G4LogicalVolume.hh"
 
 DetectorComponent_SolidSphere::DetectorComponent_SolidSphere(

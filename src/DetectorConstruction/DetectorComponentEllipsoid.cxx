@@ -26,7 +26,7 @@
 
 //Geant4 Headers
 #include "G4SystemOfUnits.hh"
-#include "G4Tubs.hh"
+#include "G4Ellipsoid.hh"
 #include "G4LogicalVolume.hh"
 
 DetectorComponent_Ellipsoid::DetectorComponent_Ellipsoid(

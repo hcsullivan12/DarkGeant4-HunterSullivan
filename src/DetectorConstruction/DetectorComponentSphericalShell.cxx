@@ -25,7 +25,7 @@
 
 //Geant4 Headers
 #include "G4SystemOfUnits.hh"
-#include "G4Box.hh"
+#include "G4Sphere.hh"
 #include "G4LogicalVolume.hh"
 
 DetectorComponent_SphericalShell::DetectorComponent_SphericalShell(

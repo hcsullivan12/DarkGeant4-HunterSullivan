@@ -26,7 +26,7 @@
 
 //Geant4 Headers
 #include "G4SystemOfUnits.hh"
-#include "G4Tubs.hh"
+#include "G4Hype.hh"
 #include "G4LogicalVolume.hh"
 
 DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(
