@@ -38,16 +38,13 @@ def main():
 	ResidualRangeChunkList = GetResidualRangeList(
 					GetPositionListFromFileContents(File))
 	
+	CompareChunkLengths(dedxChunkList, ResidualRangeChunkList)
+	
 	print("Length of dedxChunk = %d\n" % LengthOfChunkList(dedxChunkList))
 	print("Length of ResidualRangeChunk = %d\n" % LengthOfChunkList(ResidualRangeChunkList))
 	
 	dedx = ConvertChunkListToList(dedxChunkList)
 	ResidualRange = ConvertChunkListToList(ResidualRangeChunkList)
-	
-	print("Length of dedx = %d\n" % len(dedx))
-	print("Length of residual range = %d\n" % len(ResidualRange))
-	
-	return
 	
 	PlotData(ResidualRange, dedx)
 	
@@ -58,6 +55,20 @@ def LengthOfChunkList(ChunkList):
 		Length += len(chunk)
 		
 	return Length
+	
+def CompareChunkLengths(Chunk1, Chunk2):
+	
+	if len(Chunk1) != len(Chunk2):
+		print("Something went wrong")
+		print("Length of Chunk1 = %d\n" % (len(Chunk1)))
+		print("Length of Chunk2 = %d\n" % (len(Chunk2)))
+		return
+	
+	for i in range(len(Chunk1)):
+		if len(Chunk1[i]) != len(Chunk2[i]):
+			print(len(Chunk1[i]))
+			print(len(Chunk2[i]))
+			print("Event %d mismatch\n" % (i+1))
 	
 '''
 
@@ -104,8 +115,8 @@ def Getdedx(File):
 		if "Primary Ionization Energy" in line:
 			
 			FoundLine = False
-			#Drops the last index
-			dedx.append(list(dedxChunk))
+			if len(dedxChunk) != 0:
+				dedx.append(list(dedxChunk))
 			dedxChunk = []
 			
 		elif "dE/dx" in line:
@@ -138,7 +149,8 @@ def GetPositionListFromFileContents(File):
 		if FoundPositionStart and len(File[i]) <= 1:
 			
 			FoundPositionStart = False
-			Position.append(list(PositionChunk))
+			if len(PositionChunk) != 0:
+				Position.append(list(PositionChunk))
 			PositionChunk = []
 			
 		elif "Primary Particle Position" in File[i]:
@@ -149,12 +161,14 @@ def GetPositionListFromFileContents(File):
 		elif FoundPositionStart:
 			
 			InsideDetector = "Detector" in File[i]
-			IonizedDetector = "Ioni" in File[i]
+			IonizedDetector = "hIoni" in File[i]
 			
 			if InsideDetector and IonizedDetector:
 				PositionChunk.append(File[i].split())
 				
-	print("Length of Position = %d" % LengthOfChunkList(Position))
+	if len(PositionChunk) != 0:
+		Position.append(list(PositionChunk))
+				
 	return Position
 	
 
@@ -162,11 +176,15 @@ def GetResidualRangeList(Position):
 	
 	ResidualRange = []
 	ResidualRangeChunk = []
-	for chunk in Position:
+	for idx, chunk in enumerate(Position):
 		
+		if len(chunk) == 0:
+			#print("Event %d results in no length" % (idx+1))
+			continue
+			
 		TotalTrackLength = float(chunk[-1][4])
 		
-		for i in range(1, len(chunk)):
+		for i in range(0, len(chunk)):
 			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][4]))
 			
 		ResidualRange.append(list(ResidualRangeChunk))
