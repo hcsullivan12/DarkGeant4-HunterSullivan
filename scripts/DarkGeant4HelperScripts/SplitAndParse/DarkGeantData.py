@@ -307,13 +307,9 @@ class DarkGeant4Data(object):
 		
 		LengthOfPositionRow = len(self.PositionList[0])
 		for i in range(len(self.PositionList)):
-			
 			for t in range(LengthOfPositionRow):
-				
 				fp.write(str(self.PositionList[i][t]))
-				
 				if t != (LengthOfPositionRow - 1):
-					
 					fp.write(" ")
 					
 			fp.write("\n")
