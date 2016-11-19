@@ -356,17 +356,15 @@ struct ArgumentTable {
 
 //Argument Function Prototypes
 void Execute_Argument(int argc, char *argv[], int index);
-void JBInput_Argument(int argc, char *argv[], int index);
 void Module_Argument (int argc, char *argv[], int index);
 void Limit_T_Argument(int argc, char *argv[], int index);
 void Show_Vis_Argument(int argc, char *argv[], int index);
 
 
 
-static const int numHandledArguments = 5;
+static const int numHandledArguments = 4;
 static const ArgumentTable Table[numHandledArguments] =
 {{"-execute"     , &Execute_Argument},
- {"-JBInput"     , &JBInput_Argument},
  {"-module"      , &Module_Argument},
  {"-lim-t-output", &Limit_T_Argument},
  {"-vis"         , &Show_Vis_Argument}};
@@ -414,32 +412,6 @@ void Execute_Argument(int argc, char *argv[], int index) {
 	ExecutionVector.push_back("/control/execute " + CharLiteralToString);
 	
 }
-
-/*
- * JBInput_Arguments(int argc, char *argv[], int index)
- * 
- * * Description
- * 
- * 		...
- * 
- * */
-
-void JBInput_Argument(int argc, char *argv[], int index) {
-
-	string filename("output.dat");
-	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
-	
-}
-
-/*
- * Module_Argument(int argc, char *argv[], int index)
- * 
- * * Description
- * 
- * 		...
- * 
- * */
-
 
 void Module_Argument (int argc, char *argv[], int index) {
 
