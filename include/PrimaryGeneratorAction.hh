@@ -64,7 +64,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	 
 	public:
 	
-		PrimaryGeneratorAction(vector<FourVector> FourVectors);
+		PrimaryGeneratorAction(vector<FourVector> FourVectors, string DarkGeantOutputPath);
 		~PrimaryGeneratorAction();
 		
 		void GeneratePrimaries(G4Event *event);

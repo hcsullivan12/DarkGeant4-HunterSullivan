@@ -16,22 +16,21 @@ Config
 ]]--
 
 ConfigTable = { Module_Name = "Default",
-                PhysicsList = "Default" }
-
+                PhysicsList = "Default"}
+                
 --[[
 
-File
-~~~~~~~~~~~~~~~~~~
+	DarkGeantOutputFile
+	
+	* Name
+	
+		Not Required. By default will be "DarkGeantOutput.dat"
+		
+	* Location
+	
+		Not Required. Default will be the <present module path>/log
 
-	* File specifies a file to be loaded. It must give the entire path from the
-	executable's standpoint
+--]]
+DarkGeantOutputFile = { Name = "DarkGeantOutput.dat",
+                        Location = nil }
 
-	* Type specifies the type of data stored in the file given.
-
-		1. Fourvector ( E, P_x, P_y, P_z)
-		2. ...
-
-]]--
-
-FileTable = { File = nil,
-              Type = nil }

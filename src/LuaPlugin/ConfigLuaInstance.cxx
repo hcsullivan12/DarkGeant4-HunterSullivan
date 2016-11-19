@@ -45,6 +45,12 @@ ConfigLuaInstance::ConfigLuaInstance(string ModulePath)
 	LoadTable("ConfigTable");
 	Initialize_modulename();
 	Initialize_physicslist();
+	lua_pop(this->L, 1);
+	
+	LoadTable("DarkGeantOutputFile");
+	Initialize_DarkGeantOutputFile();
+	Initialize_DarkGeantOutputLocation();
+	lua_pop(this->L, 1);
 	
 }
 
@@ -93,6 +99,41 @@ void ConfigLuaInstance::Initialize_physicslist() {
 		this->physicslist = new PhysicsList();
 	else if (PhysicsListString == "QGSP_BERT")
 		this->physicslist = new QGSP_BERT();
+	
+}
+
+/*
+ * Initialize_DarkGeantOutputFile()
+ * 
+ * 
+ * */
+
+void ConfigLuaInstance::Initialize_DarkGeantOutputFile() {
+	
+	this->DarkGeantOutputFile = GetStringFromTable_NoHalt("Name",
+                                            "Using default output name",
+                                            "DarkGeant4Output.dat");
+	
+}
+
+/*
+ * Initialize_DarkGeantOutputLocation()
+ * 
+ * TODO
+ * 
+ * 		Make directories so the user doesn't have to do it?
+ * 		Requires a bit of parsing, or maybe just a simple mkdir
+ * 		function call.
+ * 
+ * 
+ * */
+
+void ConfigLuaInstance::Initialize_DarkGeantOutputLocation() {
+	
+	
+	this->DarkGeantOutputLocation = GetStringFromTable_NoHalt("Location",
+                   "No output location specified. Using default path",
+                   this->Module_Path + "/" + this->DarkGeantOutputFile);
 	
 }
 

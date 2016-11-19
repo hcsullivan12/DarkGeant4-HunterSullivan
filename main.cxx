@@ -58,6 +58,7 @@
 
 // C & C++ Headers
 #include <cstring>
+#include <ctime>
 #include <string>
 #include <vector>
 
@@ -159,9 +160,16 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
+	clock_t start_time = time(NULL);
+	
 	std::cin.get();
 	cout << "BeamOn!\n";
 	runManager->BeamOn(ParticleConfigFileInstance->FourVectors.size());
+	
+	double time_elapsed = difftime(time(NULL), start_time);
+	
+	cout << "Elapsed time = " << time_elapsed << "s\n";
+	cout << "Elapsed time = " << time_elapsed/60.0 << "min\n";
 	
 }
 
@@ -292,10 +300,13 @@ void InitializeRunManager(G4RunManager *runManager) {
 	runManager->SetUserInitialization(Detector);
 	runManager->SetUserInitialization(ConfigFileInstance->physicslist);
 	
+	
 	PrimaryGeneratorAction *Generator = new PrimaryGeneratorAction(
-	                           ParticleConfigFileInstance->FourVectors);
+	                       ParticleConfigFileInstance->FourVectors,
+	                       ConfigFileInstance->DarkGeantOutputLocation);
 	runManager->SetUserAction(Generator);
 	runManager->SetUserAction(Generator->GetSteppingAction());
+	
 	
 	runManager->Initialize();
 	
@@ -345,17 +356,15 @@ struct ArgumentTable {
 
 //Argument Function Prototypes
 void Execute_Argument(int argc, char *argv[], int index);
-void JBInput_Argument(int argc, char *argv[], int index);
 void Module_Argument (int argc, char *argv[], int index);
 void Limit_T_Argument(int argc, char *argv[], int index);
 void Show_Vis_Argument(int argc, char *argv[], int index);
 
 
 
-static const int numHandledArguments = 5;
+static const int numHandledArguments = 4;
 static const ArgumentTable Table[numHandledArguments] =
 {{"-execute"     , &Execute_Argument},
- {"-JBInput"     , &JBInput_Argument},
  {"-module"      , &Module_Argument},
  {"-lim-t-output", &Limit_T_Argument},
  {"-vis"         , &Show_Vis_Argument}};
@@ -403,32 +412,6 @@ void Execute_Argument(int argc, char *argv[], int index) {
 	ExecutionVector.push_back("/control/execute " + CharLiteralToString);
 	
 }
-
-/*
- * JBInput_Arguments(int argc, char *argv[], int index)
- * 
- * * Description
- * 
- * 		...
- * 
- * */
-
-void JBInput_Argument(int argc, char *argv[], int index) {
-
-	string filename("output.dat");
-	JBStruct = Get_VectorStruct_FromFile<G4double>(filename);
-	
-}
-
-/*
- * Module_Argument(int argc, char *argv[], int index)
- * 
- * * Description
- * 
- * 		...
- * 
- * */
-
 
 void Module_Argument (int argc, char *argv[], int index) {
 

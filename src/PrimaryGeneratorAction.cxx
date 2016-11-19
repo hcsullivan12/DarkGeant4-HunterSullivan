@@ -28,13 +28,13 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> FourVectors) 
+PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> FourVectors, string DarkGeantOutputPath) 
 
  : G4VUserPrimaryGeneratorAction()
 
 {
 	
-	this->Stepping = new SteppingAction();
+	this->Stepping = new SteppingAction(DarkGeantOutputPath);
 	
 	this->ParticleGun = new G4ParticleGun(1);
 	ParticleTable = G4ParticleTable::GetParticleTable();
