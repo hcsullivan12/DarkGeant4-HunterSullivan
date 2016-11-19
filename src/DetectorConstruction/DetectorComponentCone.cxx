@@ -57,8 +57,8 @@ void DetectorComponent_Cone::ConstructVolume() {
 					this->InnerRadiusAtTop * m,
 					this->InnerRadiusAtBottom * m,
 					this->OutsideRadiusAtTop * m,
-                                        this->OutsideRadiusAtBottom * m,
-                                        this->HalfLength * m,
+					this->OutsideRadiusAtBottom * m,
+					this->HalfLength * m,
 					this->StartAngle * deg,
 					this->DeltaAngle * deg);		
 	
