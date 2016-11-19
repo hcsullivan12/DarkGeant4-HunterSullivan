@@ -34,10 +34,11 @@ function UniformRandomDistribution(lower, upper)
 
 	local randnum = math.random()
 	
-	if randnum < .5
+	if randnum < .5 then
 		return -(lower * 2) * randnum
 	else
 		return upper * randnum
+	end
 
 end
 
