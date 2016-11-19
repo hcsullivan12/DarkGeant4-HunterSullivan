@@ -183,10 +183,10 @@ def GetResidualRangeList(Position):
 			#print("Event %d results in no length" % (idx+1))
 			continue
 			
-		TotalTrackLength = float(chunk[-1][4])
+		TotalTrackLength = float(chunk[-1][4])/10.0
 		
 		for i in range(0, len(chunk)):
-			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][4]))
+			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][4])/10.0)
 			
 		ResidualRange.append(list(ResidualRangeChunk))
 		ResidualRangeChunk = []
