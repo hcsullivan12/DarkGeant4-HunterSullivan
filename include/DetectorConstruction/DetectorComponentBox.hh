@@ -1,5 +1,5 @@
 /*
- * DetectorComponentBox.cxx
+ * DetectorComponentBox.hh
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
@@ -34,6 +34,7 @@ class DetectorComponent_Box : public DetectorComponent {
 	 * Class member variables
 	 * 
 	 * */
+
 	public:
 	
 		G4double x;
@@ -45,6 +46,7 @@ class DetectorComponent_Box : public DetectorComponent {
 	 * Class member functions
 	 * 
 	 * */
+
 	public:
 	
 		DetectorComponent_Box(G4String Name,

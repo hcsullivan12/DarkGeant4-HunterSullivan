@@ -1,5 +1,5 @@
 /*
- * DetectorComponentCylinder
+ * DetectorComponentCylinder.hh
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
