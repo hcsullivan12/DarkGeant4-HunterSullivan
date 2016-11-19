@@ -1,5 +1,5 @@
 /*
- * DetectorComponentEllipsoid.cxx
+ * DetectorComponentHyperbolicTube.cxx
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -22,47 +22,48 @@
  */
 
 
-#include "DetectorComponentEllipsoid.hh"
+#include "DetectorComponentHyperbolicTube.hh"
 
 //Geant4 Headers
 #include "G4SystemOfUnits.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Ellipsoid::DetectorComponent_Ellipsoid(
-				G4String Name,
-                                G4double xSemiAxis,
-                                G4double ySemiAxis,
-                                G4double zSemiAxis,
-                                G4double zBottom,
-                                G4double zTop,
+DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(
+                                G4String Name,
+				G4double InnerRadius;
+				G4double OuterRadius;
+				G4double InnerRadiusAngle;
+				G4double OuterRadiusAngle;
+				G4double zHalfLength;
                                 G4ThreeVector Position,
                                 G4String MaterialString,
                                 G4String Inside)
- : DetectorComponent(Name, ELLIPSOID, Position, MaterialString, Inside)
+ : DetectorComponent(Name, HYPERBOLICTUBE, Position, MaterialString, Inside)
 {
 	
-	this->xSemiAxis = xSemiAxis;
-	this->ySemiAxis = ySemiAxis;
-	this->zSemiAxis = zSemiAxis;
-	this->zBottom = zBottom;
-	this->zTop = zTop;
+	this->InnerRadius = InnerRadius;
+	this->OuterRadius = OuterRadius;
+	this->InnerRadiusAngle = InnerRadiusAngle;
+	this->OuterRadiusAngle = OuterRadiusAngle;
+	this->zHalfLength = zHalfLength;
 	
 }
 
-DetectorComponent_Ellipsoid::~DetectorComponent_Ellipsoid() {
+DetectorComponent_HyperbolicTube::~DetectorComponent_HyperbolicTube() {
 	
 	
 }
 
-void DetectorComponent_Ellipsoid::ConstructVolume() {
+
+void DetectorComponent_HyperbolicTube::ConstructVolume() {
 	
-	G4Ellipsoid *VirtualVolume = new G4Ellipsoid(this->Name,
-                                       this->xSemiAxis * m,
-                                       this->ySemiAxis * m,
-                                       this->zSemiAxis * m,
-                                       this->zBottom * m,
-                                       this->zTop * m);
+	G4Hype *VirtualVolume = new G4Hype(this->Name,
+                                       this->InnerRadius * m,
+                                       this->OuterRadius * m,
+                                       this->InnerRadiusAngle * deg,
+                                       this->OuterRadiusAngle * deg,
+                                       this->zHalfLength * m);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
