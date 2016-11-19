@@ -42,7 +42,7 @@ DetectorConfig = { Detector_Name = "Detector",
 			Z (No Default Value) (Length)-> Usually
 
 ]]--
-World = { Material = "G4_AIR",
+World = { Material = "G4_Galactic",
           Volume_Type = "Box",
           X = 5.0,
           Y = 5.0,
