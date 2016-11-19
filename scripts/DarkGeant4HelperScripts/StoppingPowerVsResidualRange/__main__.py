@@ -46,11 +46,6 @@ def main():
 	dedx = ConvertChunkListToList(dedxChunkList)
 	ResidualRange = ConvertChunkListToList(ResidualRangeChunkList)
 	
-	#DeleteBadIndicies(dedx, ResidualRange)
-	
-	#print("Length of dedx = %d\n" % (len(dedx)))
-	#print("Length of ResidualRange = %d\n" % (len(ResidualRange)))
-	
 	PlotData(ResidualRange, dedx)
 	
 def LengthOfChunkList(ChunkList):
