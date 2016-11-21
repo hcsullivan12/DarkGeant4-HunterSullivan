@@ -233,6 +233,15 @@ def ConvertChunkListToList(ChunkList):
 			
 	return List
 
+def SubtractLists(List1, List2):
+	
+	if len(List1) != len(List2):
+		print("Something went wrong")
+		return
+	
+	for idx in range(len(List1)):
+		List1[idx] -= List2[idx]
+
 def DeleteBadIndicies(dedx, ResidualRange):
 	
 	indices = []
