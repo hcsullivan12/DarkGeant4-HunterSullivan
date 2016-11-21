@@ -139,7 +139,16 @@ Particle_File_Type = nil
 			
 		Number_Of_Events
 		
-			...
+			Specifies the number of events to generate. Must be an
+			integer.
+			
+			default = nil. Will half execution if Particle_File is nil
+			
+		Energy
+		
+			Specifies the energy of each particle in units of GeV
+			
+			default = nil. Will halt execution if Particle_File is nil
 
 --]]
 Particle_Table = { Particle_Name = "mu+",
