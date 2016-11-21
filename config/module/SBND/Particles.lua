@@ -109,9 +109,9 @@ Particle_File_Type = nil
 			...
 
 --]]
-Particle_Table = { Particle_Name = "mu+",
+Particle_Table = { Particle_Name = "proton",
                    Particles_Position = Particle_Position_Function,
                    Momentum_Direction = {0.0, 0.0, 1.0},
-                   Energy = 1000.0,
-                   Number_Of_Events = 20 }
+                   Energy = 2.0,
+                   Number_Of_Events = 1000 }
 
