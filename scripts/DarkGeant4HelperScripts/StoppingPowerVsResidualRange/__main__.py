@@ -34,9 +34,9 @@ def main():
 	
 	File = ReadFileAndGetFileContents()
 	dedxChunkList = Getdedx(File)
-	
-	ResidualRangeChunkList = GetResidualRangeList(
-					GetPositionListFromFileContents(File))
+	Position = GetPositionListFromFileContents(File)
+	Energy = GetEnergyList(Position)
+	ResidualRangeChunkList = GetResidualRangeList(Position)
 	
 	CompareChunkLengths(dedxChunkList, ResidualRangeChunkList)
 	
@@ -45,8 +45,15 @@ def main():
 	
 	dedx = ConvertChunkListToList(dedxChunkList)
 	ResidualRange = ConvertChunkListToList(ResidualRangeChunkList)
+	Energy = GetEnergyList(Position)
 	
-	PlotData(ResidualRange, dedx)
+	PlotData(ResidualRange, dedx, "dE/dX vs residual range", 
+	"residual range (cm)", 
+	"dE/dX (MeV/cm)")
+	
+	PlotData(ResidualRange, Energy, "E vs residual range",
+	"residual range (cm)",
+	"E (MeV)")
 	
 def LengthOfChunkList(ChunkList):
 	
@@ -245,12 +252,12 @@ def DeleteBadIndicies(dedx, ResidualRange):
 		...
 
 '''
-def PlotData(XAxis, YAxis):
+def PlotData(XAxis, YAxis, title, xlabel, ylabel):
 
-	plt.title("dE/dX vs residual range")
+	plt.title(title)
 	plt.rcParams['font.size'] = 16.0
-	plt.xlabel("residual range (cm)")
-	plt.ylabel("dE/dX (MeV/cm)")
+	plt.xlabel(xlabel)
+	plt.ylabel(ylabel)
 	plt.plot(XAxis, YAxis, 'go')
 	plt.show()
 	
