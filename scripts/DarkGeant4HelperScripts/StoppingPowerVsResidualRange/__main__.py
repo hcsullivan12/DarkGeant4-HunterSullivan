@@ -196,6 +196,15 @@ def GetResidualRangeList(Position):
 		
 	return ResidualRange
 	
+def GetEnergyList(Position):
+	
+	EnergyList = []
+	for chunk in Position:
+		for idx in range(len(chunk)-1):
+			EnergyList.append(float(chunk[idx][4]))
+			
+	return EnergyList
+	
 def GetIndexOfLastDetectorIonization(chunk):
 	
 	for i in range(len(chunk)-1, 0, -1):
