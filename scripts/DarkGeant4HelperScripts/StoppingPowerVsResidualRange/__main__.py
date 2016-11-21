@@ -117,7 +117,8 @@ def Getdedx(File):
 			FoundLine = False
 			# len(dedxChunk) > 1 to skip last element
 			# del dedxChunk[-1]
-			if len(dedxChunk) != 0:
+			if len(dedxChunk) > 0:
+				del dedxChunk[-1]
 				dedx.append(list(dedxChunk))
 			dedxChunk = []
 			
@@ -182,14 +183,13 @@ def GetResidualRangeList(Position):
 	for idx, chunk in enumerate(Position):
 		
 		if len(chunk) == 0:
-			#print("Event %d results in no length" % (idx+1))
 			continue
 			
-		TotalTrackLength = float(chunk[-1][4])/10.0
+		TotalTrackLength = float(chunk[-1][6])/10.0
 		
 		# len(chunk)-1 to skip last elements
-		for i in range(0, len(chunk)):
-			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][4])/10.0)
+		for i in range(0, len(chunk)-1):
+			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][6])/10.0)
 			
 		ResidualRange.append(list(ResidualRangeChunk))
 		ResidualRangeChunk = []
