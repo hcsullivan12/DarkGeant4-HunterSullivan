@@ -32,6 +32,19 @@ class G4Material;
 //Geant4 Headers
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4Cons.hh"
+#include "G4Para.hh"
+#include "G4Trd.hh"
+#include "G4Sphere.hh"
+#include "G4Orb.hh"
+#include "G4Torus.hh"
+#include "G4EllipticalTube.hh"
+#include "G4Ellipsoid.hh"
+#include "G4EllipticalCone.hh"
+#include "G4Hype.hh"
+#include "G4Tet.hh"
+#include "G4TwistedBox.hh"
+#include "G4TwistedTrd.hh"
 #include "G4LogicalVolume.hh"
 
 #include "G4ThreeVector.hh"
@@ -57,7 +70,8 @@ enum VolumeType {
 	TETRAHEDRA,
 	TORUS,
 	TRAPEZOID,
-	TWISTED_BOX
+	TWISTED_BOX,
+	Z_TWISTED_TRAPEZOID
 	
 };
 
