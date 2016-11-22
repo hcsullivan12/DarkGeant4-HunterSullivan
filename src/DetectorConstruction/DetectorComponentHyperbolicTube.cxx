@@ -31,11 +31,11 @@
 
 DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(
                                 G4String Name,
-								G4double InnerRadius;
-								G4double OuterRadius;
-								G4double InnerRadiusAngle;
-								G4double OuterRadiusAngle;
-								G4double zHalfLength;
+								G4double InnerRadius,
+								G4double OuterRadius,
+								G4double InnerRadiusAngle,
+								G4double OuterRadiusAngle,
+								G4double zHalfLength,
                                 G4ThreeVector Position,
                                 G4String MaterialString,
                                 G4String Inside)

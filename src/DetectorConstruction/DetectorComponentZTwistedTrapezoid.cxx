@@ -64,7 +64,7 @@ void DetectorComponent_ZTwistedTrapezoid::ConstructVolume() {
                                         this->xHalfLengthAtTop * m,
                                         this->yHalfLengthAtBottom * m,
                                         this->yHalfLengthAtTop * m,
-					this->zHalfLength * m
+										this->zHalfLength * m,
                                         this->TwistingAngle * deg);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
