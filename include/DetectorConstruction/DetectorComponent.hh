@@ -79,6 +79,9 @@ class DetectorComponent {
 		Material *DetectorComponentMaterial;
 		G4String Inside;
 		G4LogicalVolume *LogicalVolume;
+		
+		G4RotationMatrix RotationMatrix;
+		G4Transform3D Transform;
 	
 	/*
 	 * 
@@ -96,17 +99,9 @@ class DetectorComponent {
 		
 		virtual void ConstructVolume() {;}
 		
-	protected:
-	
-		void SetMaterialPointer(G4String MaterialString);
-	
-	/*
-	 * 
-	 * TODO
-	 * 
-	 * 		Finish this class
-	 * 
-	 * */
+		void RotateX(double delta);
+		void RotateY(double delta);
+		void RotateZ(double delta);
 	
 };
 
