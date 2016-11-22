@@ -31,10 +31,10 @@
 
 DetectorComponent_EllipticalCone::DetectorComponent_EllipticalCone(
 				G4String Name,
-				G4double xSemiAxis,
-				G4double ySemiAxis,
-				G4double Height,
-				G4double zTop,
+				G4double xSemiAxis;
+				G4double ySemiAxis;
+				G4double Height;
+				G4double zTop;
 				G4ThreeVector Position,
                 G4String MaterialString,
                 G4String Inside)

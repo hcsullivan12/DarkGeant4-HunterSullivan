@@ -24,7 +24,7 @@
 #ifndef DETECTORCOMPONENTCONE_HH
 #define DETECTORCOMPONENTCONE_HH
 
-#include "DetectorComponent.hh"
+#include "DetectorComponent"
 
 class DetectorComponent_Cone : public DetectorComponent {
 
@@ -47,7 +47,7 @@ class DetectorComponent_Cone : public DetectorComponent {
 	 * */
 	 public:
 		//Constructor
-		DetectorComponent_Cone(G4String Name,
+		DetectorComponent_Cone(G4String Name;
 				G4double InnerRadiusAtTop,
 				G4double InnerRadiusAtBottom,
 				G4double OutsideRadiusAtTop,

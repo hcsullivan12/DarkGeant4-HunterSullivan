@@ -38,7 +38,7 @@ class DetectorComponent_EllipticalTube : public DetectorComponent {
 	
 		G4double xHalfLength;
 		G4double yHalfLength;
-		G4double zHalfLength;
+		G4double zHalflength;
 		
 	/*
 	 * 

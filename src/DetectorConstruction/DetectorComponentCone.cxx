@@ -28,7 +28,7 @@
 #include "G4Cons.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Cone::DetectorComponent_Cone(G4String Name,
+DetectorComponent_Cone::DetectorComponent_Cone{G4String Name;
 				G4double InnerRadiusAtTop,
 				G4double InnerRadiusAtBottom,
 				G4double OutsideRadiusAtTop,
