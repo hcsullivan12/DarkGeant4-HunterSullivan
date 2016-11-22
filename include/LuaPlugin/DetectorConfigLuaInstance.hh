@@ -91,6 +91,8 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		void Initialize_number_of_detector_components();
 		void Initialize_detector_components();
 		
+		void ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component);
+		
 		SharedAttributes SetSharedAttributes(string DetectorComponentIndex);
 		
 		DetectorComponent *WithVolumeGetDetectorComponent(SharedAttributes Attribute);

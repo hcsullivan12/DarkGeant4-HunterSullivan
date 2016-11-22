@@ -113,8 +113,15 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
         * 		assume that the value that Volume_Type is valid.
         * 
         * */
+        SharedAttributes LocalAttributes = SetSharedAttributes(
+                                           DetectorComponentIndex);
+                                           
 		this->Components.push_back(WithVolumeGetDetectorComponent(
-                           SetSharedAttributes(DetectorComponentIndex)));
+                                   LocalAttributes));
+		
+		ApplyRotations(LocalAttributes,
+		this->Components[this->Components.size()-1]);
+		
 		
 	}
 	cout << "\n";
@@ -226,22 +233,17 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                              "No Half_Length found."
                                         + string(" Halting Execution"));
                                         
-	DetectorComponent_Cylinder *Cyl = new DetectorComponent_Cylinder(
-                                      Attribute.Name,
-                                      Inner_Radius,
-                                      Outer_Radius,
-                                      Start_Angle,
-                                      Delta_Angle,
-                                      Half_Length,
-                                      Attribute.Position,
-                                      Attribute.Material,
-                                      Attribute.Inside);
-                                      
-	Cyl->RotateX(Attribute.XRotation * deg);
-	Cyl->RotateY(Attribute.YRotation * deg);
-	Cyl->RotateZ(Attribute.ZRotation * deg);
-	
-	return Cyl;
+	return new DetectorComponent_Cylinder(
+                                          Attribute.Name,
+                                          Inner_Radius,
+                                          Outer_Radius,
+                                          Start_Angle,
+                                          Delta_Angle,
+                                          Half_Length,
+                                          Attribute.Position,
+                                          Attribute.Material,
+                                          Attribute.Inside);
+                                    
    
 }
 
@@ -277,6 +279,14 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(Shar
 	Box->RotateX(Attribute.ZRotation * deg);
 	
 	return Box;
+	
+}
+
+void DetectorConfigLuaInstance::ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component) {
+
+	Component->RotateX(Attribute.XRotation * deg);
+	Component->RotateY(Attribute.XRotation * deg);
+	Component->RotateZ(Attribute.XRotation * deg);
 	
 }
 
