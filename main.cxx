@@ -366,7 +366,7 @@ static const int numHandledArguments = 4;
 static const ArgumentTable Table[numHandledArguments] =
 {{"-execute"     , &Execute_Argument},
  {"-module"      , &Module_Argument},
- {"-lim-t-output", &Limit_T_Argument},
+ {"-lim-output"  , &Limit_T_Argument},
  {"-vis"         , &Show_Vis_Argument}};
 
 
