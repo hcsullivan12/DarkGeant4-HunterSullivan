@@ -1,3 +1,0 @@
-/home/hunter/projects/DarkGeant4/build/CMakeFiles/edit_cache.dir
-/home/hunter/projects/DarkGeant4/build/CMakeFiles/rebuild_cache.dir
-/home/hunter/projects/DarkGeant4/build/CMakeFiles/DarkGeant4.dir
