@@ -28,7 +28,25 @@
 #include "PhysicsList.hh"
 
 // Geant4 Headers
+#include "QGSP.hh"
 #include "QGSP_BERT.hh"
+#include "QGSP_BERT_EMV.hh"
+#include "QGSP_BERT_HP.hh"
+#include "QGSP_BERT_TRV.hh"
+#include "QGSP_BIC.hh"
+#include "QGSP_BIC_HP.hh"
+#include "QGSP_INCLXX.hh"
+#include "FTFP_BERT.hh"
+
+// Commented out headers may not exist?
+
+//#include "QGSP_EMV.hh"
+//#include "QGSC.hh"
+//#include "QGSC_EMV.hh"
+//#include "QGSP_EFLOW.hh"
+//#include "FTFP.hh"
+//#include "FTFP_EMV.hh"
+
  
  
 /*
@@ -97,9 +115,24 @@ void ConfigLuaInstance::Initialize_physicslist() {
 	
 	if (PhysicsListString == "Default")
 		this->physicslist = new PhysicsList();
+	else if (PhysicsListString == "QGSP")
+		this->physicslist = new QGSP();
 	else if (PhysicsListString == "QGSP_BERT")
 		this->physicslist = new QGSP_BERT();
-	
+	else if (PhysicsListString == "QGSP_BERT_EMV")
+		this->physicslist = new QGSP_BERT_EMV();
+	else if (PhysicsListString == "QGSP_BERT_HP")
+		this->physicslist = new QGSP_BERT_HP();
+	else if (PhysicsListString == "QGSP_BERT_TRV")
+		this->physicslist = new QGSP_BERT_TRV();
+	else if (PhysicsListString == "QGSP_BIC")
+		this->physicslist = new QGSP_BIC();
+	else if (PhysicsListString == "QGSP_BIC_HP")
+		this->physicslist = new QGSP_BIC_HP();
+	else if (PhysicsListString == "QGSP_INCLXX")
+		this->physicslist = new QGSP_INCLXX();
+	else if (PhysicsListString == "FTFP_BERT")
+		this->physicslist = new FTFP_BERT();
 }
 
 /*
