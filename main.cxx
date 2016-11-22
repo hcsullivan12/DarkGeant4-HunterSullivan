@@ -84,14 +84,13 @@ static const string VersionString = "0.3 \"Zwicky\"";
 static bool TerminalOutput = true;
 static bool ShowVis = false;
 
-static string Module = "config";
+static string           Module = "config";
 static vector<G4String> ExecutionVector;
-static FourVectorStruct<G4double> *JBStruct = NULL;
 
-static ConfigLuaInstance *ConfigFileInstance = NULL;
+static ConfigLuaInstance         *ConfigFileInstance = NULL;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance = NULL;
-static MaterialConfigLua *MaterialConfigFileInstance = NULL;
-static ParticlesConfigLua *ParticleConfigFileInstance = NULL;
+static MaterialConfigLua         *MaterialConfigFileInstance = NULL;
+static ParticlesConfigLua        *ParticleConfigFileInstance = NULL;
 
 static DetectorConstructionV2 *Detector = NULL;
 
@@ -203,10 +202,6 @@ void Clean() {
 	 * 
 	 * */
 	//delete runManager;
-
-	if (JBStruct != NULL)
-		delete JBStruct->array;
-	delete JBStruct;
 	
 	delete ConfigFileInstance;
 	delete DetectorConfigFileInstance;
