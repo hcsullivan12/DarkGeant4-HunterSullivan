@@ -178,7 +178,7 @@ SharedAttributes DetectorConfigLuaInstance::SetSharedAttributes(string DetectorC
                                                       "Y not rotated",
                                                       0.0);		
                                                       
-        Attribute.YRotation = GetNumberFromTable_NoHalt("Y_Rotation",
+        Attribute.ZRotation = GetNumberFromTable_NoHalt("Z_Rotation",
                                                       "Y not rotated",
                                                       0.0);	
 	}
@@ -279,8 +279,8 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(Shar
 void DetectorConfigLuaInstance::ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component) {
 
 	Component->RotateX(Attribute.XRotation * deg);
-	Component->RotateY(Attribute.XRotation * deg);
-	Component->RotateZ(Attribute.XRotation * deg);
+	Component->RotateY(Attribute.YRotation * deg);
+	Component->RotateZ(Attribute.ZRotation * deg);
 	
 }
 
