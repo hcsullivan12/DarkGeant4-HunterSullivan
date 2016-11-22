@@ -1,0 +1,4 @@
+/gun/particle mu+
+/gun/energy 100 MeV
+#
+/run/beamOn 2
