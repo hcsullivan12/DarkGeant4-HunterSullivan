@@ -159,9 +159,8 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
-	clock_t start_time = time(NULL);
-	
 	std::cin.get();
+	clock_t start_time = time(NULL);
 	cout << "BeamOn!\n";
 	runManager->BeamOn(ParticleConfigFileInstance->FourVectors.size());
 	
