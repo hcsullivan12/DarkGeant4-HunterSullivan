@@ -51,6 +51,10 @@ struct SharedAttributes {
 	G4String VolumeType;
 	G4ThreeVector Position;
 	
+	G4double XRotation;
+	G4double YRotation;
+	G4double ZRotation;
+	
 };
 
 
