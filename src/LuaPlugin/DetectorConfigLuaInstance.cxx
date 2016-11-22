@@ -179,7 +179,7 @@ SharedAttributes DetectorConfigLuaInstance::SetSharedAttributes(string DetectorC
                                                       0.0);		
                                                       
         Attribute.ZRotation = GetNumberFromTable_NoHalt("Z_Rotation",
-                                                      "Y not rotated",
+                                                      "Z not rotated",
                                                       0.0);	
 	}
 	
