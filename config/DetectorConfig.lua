@@ -77,6 +77,24 @@ World = { Material = "G4_AIR",
 			Y (No Default Value) (Height)-> Usually
 			Z (No Default Value) (Length)-> Usually
 			
+	* X_Rotation
+	
+		Rotates the object about the X Axis by <number> degrees
+	
+		Default value of 0.0
+		
+	* Y_Rotation
+	
+		Rotates the object about the Y Axis next, by <number> degrees
+	
+		Default value of 0.0
+	
+	* Z_Rotation
+	
+		Rotates the object about the Z Axis next, by <number> degrees
+	
+		Default value of 0.0
+		
 	* Inside
 	
 		"World"
