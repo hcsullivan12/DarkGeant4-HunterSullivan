@@ -30,8 +30,7 @@ class G4VPhysicalVolume;
 class G4Material;
 
 //Geant4 Headers
-#include "G4Box.hh"
-#include "G4Tubs.hh"
+
 #include "G4LogicalVolume.hh"
 
 #include "G4ThreeVector.hh"
@@ -45,7 +44,20 @@ class G4Material;
 enum VolumeType {
 
 	BOX = 0,
-	CYLINDER
+	CYLINDER,
+	CONE,
+	ELLIPSOID,
+	ELLIPTICAL_CONE,
+	ELLIPTICAL_TUBE,
+	HYPERBOLIC_TUBE,
+	PARALLELEPIPED,
+	SOLID_SPHERE,
+	SPHERICAL_SHELL,
+	TETRAHEDRA,
+	TORUS,
+	TRAPEZOID,
+	TWISTED_BOX,
+	Z_TWISTED_TRAPEZOID
 	
 };
 

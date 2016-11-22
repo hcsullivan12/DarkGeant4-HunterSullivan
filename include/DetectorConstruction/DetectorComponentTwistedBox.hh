@@ -1,7 +1,7 @@
 /*
- * DetectorComponentCylinder.hh
+ * DetectorComponentTwistedBox.hh
  * 
- * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
+ * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,44 +21,45 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTCYLINDER_HH
-#define DETECTORCOMPONENTCYLINDER_HH
+#ifndef DETECTORCOMPONENTTWISTEDBOX_HH
+#define DETECTORCOMPONENTTWISTEDBOX_HH
 
 #include "DetectorComponent.hh"
 
-class DetectorComponent_Cylinder : public DetectorComponent {
+
+class DetectorComponent_TwistedBox : public DetectorComponent {
 	
 	/*
 	 * 
 	 * Class member variables
 	 * 
 	 * */
+
 	public:
 	
-		G4double InnerRadius;
-		G4double OuterRadius;
-		G4double StartAngle;
-		G4double DeltaAngle;
-		G4double HalfLength;
-		
+		G4double TwistingAngle;
+		G4double xHalflength;
+		G4double yHalfLength;
+		G4double zHalfLength;
+	
 	/*
 	 * 
 	 * Class member functions
 	 * 
 	 * */
+
 	public:
 	
-		DetectorComponent_Cylinder(G4String Name,
-                                   G4double InnerRadius,
-                                   G4double OuterRadius,
-                                   G4double StartAngle,
-                                   G4double DeltaAngle,
-                                   G4double HalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
-		~DetectorComponent_Cylinder();
-	
+		DetectorComponent_TwistedBox(G4String Name,
+                              	G4double TwistingAngle,
+				G4double xHalfLength,
+                                G4double yHalfLength,
+                                G4double zHalfLength,
+                                G4ThreeVector Position,
+                                G4String MaterialString,
+                                G4String Inside);
+		~DetectorComponent_TwistedBox();
+		
 		void ConstructVolume();
 	
 };

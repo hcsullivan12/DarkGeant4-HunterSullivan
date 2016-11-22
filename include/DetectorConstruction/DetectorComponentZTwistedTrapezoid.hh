@@ -1,5 +1,5 @@
 /*
- * DetectorComponentSphericalShell.hh
+ * DetectorComponentZTwistedTrapezoid.hh
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -21,47 +21,52 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTSPHERICALSHELL_HH
-#define DETECTORCOMPONENTSPHERICALSHELL_HH
+#ifndef DETECTORCOMPONENTZTWISTEDTRAPEZOID_HH
+#define DETECTORCOMPONENTZTWISTEDTRAPEZOID_HH
 
 #include "DetectorComponent.hh"
 
-class DetectorComponent_SphericalShell : public DetectorComponent {
+
+class DetectorComponent_ZTwistedTrapezoid : public DetectorComponent {
 	
 	/*
 	 * 
 	 * Class member variables
 	 * 
 	 * */
+
 	public:
 	
-		G4double InnerRadius;
-		G4double OuterRadius;
-		G4double PhiStart;
-		G4double DeltaPhi;
-		G4double ThetaStart;
-		G4double DeltaTheta;
+		G4double xHalfLengthAtBottom;
+		G4double xHalfLengthAtTop;
+		G4double yHalfLengthAtBottom;
+		G4double yHalfLengthAtTop;
+		G4double zHalfLength;
+		G4double TwistingAngle;
+	
 	/*
 	 * 
 	 * Class member functions
 	 * 
 	 * */
+
 	public:
 	
-		DetectorComponent_SphericalShell(G4String Name,
-				G4double InnerRadius,
-				G4double OuterRadius,
-                G4double PhiStart,
-                G4double DeltaPhi,
-                G4double ThetaStart,
-				G4double DeltaTheta,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
-		~DetectorComponent_SphericalShell();
-	
+		DetectorComponent_ZTwistedTrapezoid(G4String Name,
+                              	G4double xHalfLengthAtBottom,
+                              	G4double xHalfLengthAtTop,
+                              	G4double yHalfLengthAtBottom,
+				G4double yHalfLengthAtTop,
+				G4double zHalfLength,
+				G4double TwistingAngle,
+                              	G4ThreeVector Position,
+                              	G4String MaterialString,
+                              	G4String Inside);
+		~DetectorComponent_ZTwistedTrapezoid();
+		
 		void ConstructVolume();
 	
 };
 
 #endif
+

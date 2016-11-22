@@ -1,5 +1,5 @@
 /*
- * DetectorComponentEllipticalTube.hh
+ * DetectorComponentEllipticalTube.cxx
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -21,44 +21,46 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTELLIPTICALTUBE_HH
-#define DETECTORCOMPONENTELLIPTICALTUBE_HH
 
-#include "DetectorComponent.hh"
+#include "DetectorComponentEllipticalTube.hh"
 
-class DetectorComponent_EllipticalTube : public DetectorComponent {
-	
-	/*
-	 * 
-	 * Class member variables
-	 * 
-	 * */
+//Geant4 Headers
+#include "G4SystemOfUnits.hh"
+#include "G4EllipticalTube.hh"
+#include "G4LogicalVolume.hh"
 
-	public:
-	
-		G4double xHalfLength;
-		G4double yHalfLength;
-		G4double zHalfLength;
-		
-	/*
-	 * 
-	 * Class member functions
-	 * 
-	 * */
-
-	public:
-	
-		DetectorComponent_EllipticalTube(G4String Name,
+DetectorComponent_EllipticalTube::DetectorComponent_EllipticalTube(
+                                   G4String Name,
                                    G4double xHalfLength,
                                    G4double yHalfLength,
                                    G4double zHalfLength,
                                    G4ThreeVector Position,
                                    G4String MaterialString,
-                                   G4String Inside);
-		~DetectorComponent_EllipticalTube();
+                                   G4String Inside)
+ : DetectorComponent(Name, ELLIPTICAL_TUBE, Position, MaterialString, Inside)
+{
 	
-		void ConstructVolume();
+	this->xHalfLength = xHalfLength;
+	this->yHalfLength = yHalfLength;
+	this->zHalfLength = zHalfLength;
 	
-};
+}
 
-#endif
+DetectorComponent_EllipticalTube::~DetectorComponent_EllipticalTube() {
+	
+	
+}
+
+
+void DetectorComponent_EllipticalTube::ConstructVolume() {
+	
+	G4EllipticalTube *VirtualVolume = new G4EllipticalTube(this->Name,
+                                       this->xHalfLength * m,
+                                       this->yHalfLength * m,
+                                       this->zHalfLength * m);
+	
+	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
+                 this->DetectorComponentMaterial->GetMaterialPointer(),
+                 this->Name);
+
+}

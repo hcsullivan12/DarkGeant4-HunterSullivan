@@ -1,5 +1,5 @@
 /*
- * DetectorComponentEllipsoid
+ * DetectorComponentEllipsoid.hh
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 

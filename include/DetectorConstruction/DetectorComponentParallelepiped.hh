@@ -24,6 +24,9 @@
 #ifndef DETECTORCOMPONENTPARALLELEPIPED_HH
 #define DETECTORCOMPONENTPARALLELEPIPED_HH
 
+#include "DetectorComponent.hh"
+
+
 class DetectorComponent_Parallelepiped : public DetectorComponent {
 
 	/*
@@ -47,7 +50,7 @@ class DetectorComponent_Parallelepiped : public DetectorComponent {
 	 public:
 	 
 		//Constructor
-		DetectorComponent_Parallelpiped(G4String Name,
+		DetectorComponent_Parallelepiped(G4String Name,
 				G4double xHalfLength,
 				G4double yHalfLength,
 				G4double zHalfLength,
@@ -57,6 +60,7 @@ class DetectorComponent_Parallelepiped : public DetectorComponent {
 				G4ThreeVector Position,
 				G4String MaterialString,
 				G4String Inside);
+				
 		~DetectorComponent_Parallelepiped();
 		
 		void ConstructVolume();
