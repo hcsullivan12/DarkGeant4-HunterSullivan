@@ -161,6 +161,21 @@ SharedAttributes DetectorConfigLuaInstance::SetSharedAttributes(string DetectorC
                              
 	Attribute.Position = GetG4ThreeVector("Position");
 	
+	if (DetectorComponentIndex != "0") {
+	
+		Attribute.XRotation = GetNumberFromTable_NoHalt("X_Rotation",
+                                                      "X not rotated",
+                                                      0.0);
+                                                      
+		Attribute.YRotation = GetNumberFromTable_NoHalt("Y_Rotation",
+                                                      "Y not rotated",
+                                                      0.0);		
+                                                      
+        Attribute.YRotation = GetNumberFromTable_NoHalt("Y_Rotation",
+                                                      "Y not rotated",
+                                                      0.0);	
+	}
+	
 	return Attribute;
 	
 }
@@ -211,8 +226,8 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                              "No Half_Length found."
                                         + string(" Halting Execution"));
                                         
-                                         
-	return new DetectorComponent_Cylinder(Attribute.Name,
+	DetectorComponent_Cylinder *Cyl = new DetectorComponent_Cylinder(
+                                      Attribute.Name,
                                       Inner_Radius,
                                       Outer_Radius,
                                       Start_Angle,
@@ -221,6 +236,12 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                       Attribute.Position,
                                       Attribute.Material,
                                       Attribute.Inside);
+                                      
+	Cyl->RotateX(Attribute.XRotation * deg);
+	Cyl->RotateY(Attribute.YRotation * deg);
+	Cyl->RotateZ(Attribute.ZRotation * deg);
+	
+	return Cyl;
    
 }
 
@@ -245,10 +266,17 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(Shar
 	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
                                     string("value. Halting Execution"));
 	
-	return new DetectorComponent_Box(Attribute.Name, X, Y, Z, 
+	DetectorComponent_Box *Box = new DetectorComponent_Box(
+                                     Attribute.Name, X, Y, Z, 
                                      Attribute.Position, 
                                      Attribute.Material, 
                                      Attribute.Inside);
-                                     
+	
+	Box->RotateX(Attribute.XRotation * deg);
+	Box->RotateX(Attribute.YRotation * deg);
+	Box->RotateX(Attribute.ZRotation * deg);
+	
+	return Box;
+	
 }
 
