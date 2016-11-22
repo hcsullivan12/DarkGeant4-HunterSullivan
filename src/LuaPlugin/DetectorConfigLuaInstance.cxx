@@ -268,17 +268,11 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(Shar
 	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
                                     string("value. Halting Execution"));
 	
-	DetectorComponent_Box *Box = new DetectorComponent_Box(
+	return new DetectorComponent_Box(
                                      Attribute.Name, X, Y, Z, 
                                      Attribute.Position, 
                                      Attribute.Material, 
                                      Attribute.Inside);
-	
-	Box->RotateX(Attribute.XRotation * deg);
-	Box->RotateX(Attribute.YRotation * deg);
-	Box->RotateX(Attribute.ZRotation * deg);
-	
-	return Box;
 	
 }
 
