@@ -30,8 +30,10 @@ class G4VPhysicalVolume;
 class G4Material;
 
 //Geant4 Headers
-
 #include "G4LogicalVolume.hh"
+
+#include "G4RotationMatrix.hh"
+#include "G4Transform3D.hh"
 
 #include "G4ThreeVector.hh"
 
