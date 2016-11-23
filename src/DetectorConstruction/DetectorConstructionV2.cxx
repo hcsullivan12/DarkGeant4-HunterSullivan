@@ -148,7 +148,7 @@ void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
 	for (size_t i = 0;i < this->Materials.size();i++) {
 	
 		G4String MaterialString = Materials[i]->GetMaterialName();
-		if (strcmp(ComponentString.c_str(), MaterialString.c_str()) == 0) {
+		if (ComponentString == MaterialString) {
 			
 			Component->DetectorComponentMaterial = Materials[i];
 			return;

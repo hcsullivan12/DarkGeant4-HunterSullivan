@@ -68,15 +68,15 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
 	int i = this->PresentIndex;
 	this->ParticleGun->SetParticleDefinition(
-	                     ParticleTable->FindParticle(
-	                     this->FourVectors[i].ParticleName));
+	                   ParticleTable->FindParticle(
+	                   this->FourVectors[i].ParticleName));
 	                     
 	this->ParticleGun->SetParticleEnergy(this->FourVectors[i].T * GeV);
 	
 	this->ParticleGun->SetParticlePosition(
-                                 G4ThreeVector(this->FourVectors[i].X * m,
-                                               this->FourVectors[i].Y * m,
-                                               this->FourVectors[i].Z * m));
+                             G4ThreeVector(this->FourVectors[i].X * m,
+                                           this->FourVectors[i].Y * m,
+                                           this->FourVectors[i].Z * m));
                                                
 	this->ParticleGun->SetParticleMomentumDirection(G4ThreeVector(
                                              this->FourVectors[i].P_x,
