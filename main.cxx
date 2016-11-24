@@ -316,7 +316,7 @@ void InitializeUIManager() {
 		ui->ApplyCommand("/tracking/verbose 1");
 		
 	}
-	ui->ApplyCommand("/control/execute vis.mac");
+	ui->ApplyCommand("/control/execute " + Module +"/vis.mac");
 	
 }
 #endif

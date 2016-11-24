@@ -69,7 +69,6 @@ add_custom_command(TARGET DarkGeant4 PRE_BUILD
 )
 
 set(COPY_FILES
-    vis.mac
     basicrun.mac)
 
 foreach(_script ${COPY_FILES})
