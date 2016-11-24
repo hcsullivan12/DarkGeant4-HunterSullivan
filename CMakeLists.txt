@@ -67,14 +67,3 @@ add_custom_command(TARGET DarkGeant4 PRE_BUILD
                    ${PROJECT_SOURCE_DIR}/config
                    ${PROJECT_BINARY_DIR}/config
 )
-
-set(COPY_FILES
-    basicrun.mac)
-
-foreach(_script ${COPY_FILES})
-  configure_file(
-    ${PROJECT_SOURCE_DIR}/${_script}
-    ${PROJECT_BINARY_DIR}/${_sccript}
-    COPYONLY
-    )
-endforeach()
