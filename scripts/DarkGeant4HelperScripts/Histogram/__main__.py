@@ -44,10 +44,6 @@ TotalSecondaryEnergyList = []
 DifferenceList = []
 dEdxlist = []
 TotalIonizationList = []
-PositionList = []
-
-PathReconstructionObjs = []
-PathReconstructionMagnitude = []
 
 '''
 
@@ -101,8 +97,6 @@ def MakeLists(File):
 	global PrimaryIonizationList
 	global TotalSecondaryEnergyList
 	global TotalIonizationList
-	global PathReconstructionObjs
-	global PathReconstructionMagnitude
 	
 	MakeList(File, "Primary particle kinetic energy", PrimaryKineticEnergyList)
 	MakeList(File, "Primary Ionization Energy", PrimaryIonizationList)
@@ -110,13 +104,6 @@ def MakeLists(File):
 	MakeList(File, "Total Ionization Energy", TotalIonizationList)
 	MakeSecondaryEnergyList(File)
 	MakedEdxList(File)
-	
-	PositionList = MakePositionList(File)
-	for List in PositionList:
-		PathReconstructionObjs.append(PathReconstructionV2(List))
-	
-	PathReconstructionMagnitude = ConsolidateDataFromPathObjs(
-									PathReconstructionObjs)
 									
 '''
 
@@ -135,7 +122,6 @@ def InitializeHistogramObjects():
 	global PrimaryIonizationList
 	global dEdxlist
 	global TotalIonizationList
-	global PathReconstructionMagnitude
 	
 	HistogramObjs = []
 	PrimaryHistogram = HistogramPlotter(PrimaryKineticEnergyList,
@@ -163,18 +149,11 @@ def InitializeHistogramObjects():
 								XRange = [0,1200],
 								Bins = 9000)
 								
-	PathMagnitudeHistogram = HistogramPlotter(
-								PathReconstructionMagnitude,
-								"Magnitude of displacement per step",
-								"Distance (mm)",
-								"Amount",
-								Bins = 6000)
 								
 	HistogramObjs.append(PrimaryHistogram)
 	HistogramObjs.append(TotalIonizationHistogram)
 	HistogramObjs.append(PrimaryIonizationHistogram)
 	HistogramObjs.append(dEdxHistogram)
-	HistogramObjs.append(PathMagnitudeHistogram)
 	
 	return HistogramObjs
 	
