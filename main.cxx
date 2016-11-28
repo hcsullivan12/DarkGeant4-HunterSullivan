@@ -84,14 +84,13 @@ static const string VersionString = "0.3 \"Zwicky\"";
 static bool TerminalOutput = true;
 static bool ShowVis = false;
 
-static string Module = "config";
+static string           Module = "config";
 static vector<G4String> ExecutionVector;
-static FourVectorStruct<G4double> *JBStruct = NULL;
 
-static ConfigLuaInstance *ConfigFileInstance = NULL;
+static ConfigLuaInstance         *ConfigFileInstance = NULL;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance = NULL;
-static MaterialConfigLua *MaterialConfigFileInstance = NULL;
-static ParticlesConfigLua *ParticleConfigFileInstance = NULL;
+static MaterialConfigLua         *MaterialConfigFileInstance = NULL;
+static ParticlesConfigLua        *ParticleConfigFileInstance = NULL;
 
 static DetectorConstructionV2 *Detector = NULL;
 
@@ -160,9 +159,8 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
-	clock_t start_time = time(NULL);
-	
 	std::cin.get();
+	clock_t start_time = time(NULL);
 	cout << "BeamOn!\n";
 	runManager->BeamOn(ParticleConfigFileInstance->FourVectors.size());
 	
@@ -203,10 +201,6 @@ void Clean() {
 	 * 
 	 * */
 	//delete runManager;
-
-	if (JBStruct != NULL)
-		delete JBStruct->array;
-	delete JBStruct;
 	
 	delete ConfigFileInstance;
 	delete DetectorConfigFileInstance;
@@ -322,7 +316,7 @@ void InitializeUIManager() {
 		ui->ApplyCommand("/tracking/verbose 1");
 		
 	}
-	ui->ApplyCommand("/control/execute vis.mac");
+	ui->ApplyCommand("/control/execute " + Module +"/vis.mac");
 	
 }
 #endif
@@ -366,7 +360,7 @@ static const int numHandledArguments = 4;
 static const ArgumentTable Table[numHandledArguments] =
 {{"-execute"     , &Execute_Argument},
  {"-module"      , &Module_Argument},
- {"-lim-t-output", &Limit_T_Argument},
+ {"-lim-output"  , &Limit_T_Argument},
  {"-vis"         , &Show_Vis_Argument}};
 
 
