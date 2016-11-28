@@ -24,8 +24,6 @@
 //Geant4 Headers
 #include "G4RunManager.hh"
 #include "G4ThreeVector.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "QGSP_BERT.hh"
 
 #ifdef G4VIS_USE
 
