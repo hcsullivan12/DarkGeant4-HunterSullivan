@@ -34,9 +34,9 @@ def main():
 	
 	File = ReadFileAndGetFileContents()
 	dedxChunkList = Getdedx(File)
-	
-	ResidualRangeChunkList = GetResidualRangeList(
-					GetPositionListFromFileContents(File))
+	Position = GetPositionListFromFileContents(File)
+	Energy = GetEnergyList(Position)
+	ResidualRangeChunkList = GetResidualRangeList(Position)
 	
 	CompareChunkLengths(dedxChunkList, ResidualRangeChunkList)
 	
@@ -45,8 +45,15 @@ def main():
 	
 	dedx = ConvertChunkListToList(dedxChunkList)
 	ResidualRange = ConvertChunkListToList(ResidualRangeChunkList)
+	Energy = GetEnergyList(Position)
 	
-	PlotData(ResidualRange, dedx)
+	PlotData(ResidualRange, dedx, "dE/dX vs residual range", 
+	"residual range (cm)", 
+	"dE/dX (MeV/cm)")
+	
+	PlotData(ResidualRange, Energy, "E vs residual range",
+	"residual range (cm)",
+	"E (MeV)")
 	
 def LengthOfChunkList(ChunkList):
 	
@@ -115,7 +122,10 @@ def Getdedx(File):
 		if "Primary Ionization Energy" in line:
 			
 			FoundLine = False
-			if len(dedxChunk) != 0:
+			# len(dedxChunk) > 1 to skip last element
+			# del dedxChunk[-1]
+			if len(dedxChunk) > 0:
+				del dedxChunk[-1]
 				dedx.append(list(dedxChunk))
 			dedxChunk = []
 			
@@ -180,18 +190,27 @@ def GetResidualRangeList(Position):
 	for idx, chunk in enumerate(Position):
 		
 		if len(chunk) == 0:
-			#print("Event %d results in no length" % (idx+1))
 			continue
 			
-		TotalTrackLength = float(chunk[-1][4])
+		TotalTrackLength = float(chunk[-1][6])/10.0
 		
-		for i in range(0, len(chunk)):
-			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][4]))
+		# len(chunk)-1 to skip last elements
+		for i in range(0, len(chunk)-1):
+			ResidualRangeChunk.append(TotalTrackLength - float(chunk[i][6])/10.0)
 			
 		ResidualRange.append(list(ResidualRangeChunk))
 		ResidualRangeChunk = []
 		
 	return ResidualRange
+	
+def GetEnergyList(Position):
+	
+	EnergyList = []
+	for chunk in Position:
+		for idx in range(len(chunk)-1):
+			EnergyList.append(float(chunk[idx][4]))
+			
+	return EnergyList
 	
 def GetIndexOfLastDetectorIonization(chunk):
 	
@@ -214,6 +233,25 @@ def ConvertChunkListToList(ChunkList):
 			
 	return List
 
+def SubtractLists(List1, List2):
+	
+	if len(List1) != len(List2):
+		print("Something went wrong")
+		return
+	
+	for idx in range(len(List1)):
+		List1[idx] -= List2[idx]
+
+def DeleteBadIndicies(dedx, ResidualRange):
+	
+	indices = []
+	for i, element in enumerate(ResidualRange):
+		if element == 0.0:
+			indices.append(i)
+			
+	for i in range(len(indices)-1, 0, -1):
+		del dedx[indices[i]]
+		del ResidualRange[indices[i]]
 '''
 
 	PlotData(XAxis, YAxis)
@@ -223,12 +261,12 @@ def ConvertChunkListToList(ChunkList):
 		...
 
 '''
-def PlotData(XAxis, YAxis):
+def PlotData(XAxis, YAxis, title, xlabel, ylabel):
 
-	plt.title("dE/dX vs residual range")
+	plt.title(title)
 	plt.rcParams['font.size'] = 16.0
-	plt.xlabel("residual range (cm)")
-	plt.ylabel("dE/dX (MeV/cm)")
+	plt.xlabel(xlabel)
+	plt.ylabel(ylabel)
 	plt.plot(XAxis, YAxis, 'go')
 	plt.show()
 	

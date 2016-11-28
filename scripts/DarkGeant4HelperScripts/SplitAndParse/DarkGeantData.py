@@ -90,6 +90,10 @@ class DarkGeant4Data(object):
 				self.PositionList[Pos].append(float(
 				TempSplit[t+1]))
 				
+			# Energy (MeV)
+			self.PositionList[Pos].append(TempSplit[4])
+			# dE (MeV)
+			self.PositionList[Pos].append(TempSplit[5])
 			# Step length
 			self.PositionList[Pos].append(TempSplit[6])
 			# Track length
