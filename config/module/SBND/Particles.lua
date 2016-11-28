@@ -14,12 +14,13 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 
 	local PositionTable = {}
 	
+	math.randomseed(os.time())
 	for i = 1, AmountOfPositionsToGenerate 
 	do
 	
-		local x = 0
-		local y = 0
-		local z = PseudoRandomDistribution()
+		local x = UniformRandomDistribution(-2.5, 2.5)
+		local y = UniformRandomDistribution(-2.5, 2.5)
+		local z = UniformRandomDistribution(-650.0, 650.0)
 		
 		PositionTable[i] = {x, y, z}
 	
@@ -29,54 +30,20 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 
 end
 
---[[
-
-
-
---]]
-math.randomseed(os.time())
-glob_distribution_modifier = 0
-function PseudoRandomDistribution()
+function UniformRandomDistribution(lower, upper)
 
 	local randnum = math.random()
-
-	--Forces a higher proportion of particles to be closer to the origin
-	if glob_distribution_modifier < 5 then
-
-		glob_distribution_modifier = glob_distribution_modifier + 1
-		
-		if randnum <= .5 then
-		
-			return (-randnum) * 2.0
-		
-		else
-		
-			return randnum * 1.0
-		
-		end
 	
-	else 
-	
-		glob_distribution_modifier = 0
-		
-		if randnum <= .5 then
-		
-			return (-randnum) * 10.0
-		
-		else
-		
-			return randnum * 5.0
-		
-		end
-	
+	if randnum < .5 then
+		return -(lower * 2) * randnum
+	else
+		return upper * randnum
 	end
 
 end
 
 
---[[
 
---]]
 Particle_File = nil
 
 --[[
@@ -139,21 +106,12 @@ Particle_File_Type = nil
 			
 		Number_Of_Events
 		
-			Specifies the number of events to generate. Must be an
-			integer.
-			
-			default = nil. Will half execution if Particle_File is nil
-			
-		Energy
-		
-			Specifies the energy of each particle in units of GeV
-			
-			default = nil. Will halt execution if Particle_File is nil
+			...
 
 --]]
-Particle_Table = { Particle_Name = "mu+",
+Particle_Table = { Particle_Name = "proton",
                    Particles_Position = Particle_Position_Function,
                    Momentum_Direction = {0.0, 0.0, 1.0},
-                   Energy = 1000.0,
-                   Number_Of_Events = 20 }
+                   Energy = 2.0,
+                   Number_Of_Events = 1000 }
 
