@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-./SplitAndParseDarkGeantData.py
+python3 SplitAndParseDark
 
 touch DarkGeantData
 
