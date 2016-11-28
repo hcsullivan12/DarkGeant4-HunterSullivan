@@ -117,18 +117,13 @@ void DetectorConstructionV2::InitializePhysicalVolume() {
 	
 	for (size_t i = 0; i < this->Components.size();i++) {
 	
-		G4VPhysicalVolume *ComponentPhysical = new G4PVPlacement(0,
-                                     this->Components[i]->Position,
-                                     this->Components[i]->LogicalVolume,
-                                     this->Components[i]->Name,
-                                     this->World->LogicalVolume,
-                                     false,
-                                     0);     
-		
-		if (ComponentPhysical == NULL)
-			cout << "ComponentPhysical STUB\n";
+		new G4PVPlacement(this->Components[i]->Transform,
+                          this->Components[i]->LogicalVolume,
+                          this->Components[i]->Name,
+                          this->World->LogicalVolume,
+                          false,
+                          0);
 			
-		//delete ComponentPhysical;
 	}
 	
 }

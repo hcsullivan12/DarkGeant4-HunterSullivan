@@ -1,5 +1,5 @@
 /*
- * DetectorComponentCylinder.hh
+ * DetectorComponentParallelepiped.hh
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
@@ -21,46 +21,51 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTCYLINDER_HH
-#define DETECTORCOMPONENTCYLINDER_HH
+#ifndef DETECTORCOMPONENTPARALLELEPIPED_HH
+#define DETECTORCOMPONENTPARALLELEPIPED_HH
 
 #include "DetectorComponent.hh"
 
-class DetectorComponent_Cylinder : public DetectorComponent {
-	
+
+class DetectorComponent_Parallelepiped : public DetectorComponent {
+
 	/*
-	 * 
-	 * Class member variables
-	 * 
-	 * */
+	 * Class Member variables
+	 *
+	 */
+	
 	public:
 	
-		G4double InnerRadius;
-		G4double OuterRadius;
-		G4double StartAngle;
-		G4double DeltaAngle;
-		G4double HalfLength;
+		G4double xHalfLength;
+		G4double yHalfLength;
+		G4double zHalfLength;
+		G4double AngleOfXZFaces;
+		G4double PolarAngleOfXYFaces;
+		G4double AzimuthalAngleOfXYFaces;
+
+	/*
+	 * Public Class Member functions
+	 * 
+	 * */
+	 public:
+	 
+		//Constructor
+		DetectorComponent_Parallelepiped(G4String Name,
+				G4double xHalfLength,
+				G4double yHalfLength,
+				G4double zHalfLength,
+				G4double AngleOfXZFaces,
+				G4double PolarAngleOfXYFaces,
+				G4double AzimuthalAngleOfXYFaces,
+				G4ThreeVector Position,
+				G4String MaterialString,
+				G4String Inside);
+				
+		~DetectorComponent_Parallelepiped();
 		
-	/*
-	 * 
-	 * Class member functions
-	 * 
-	 * */
-	public:
-	
-		DetectorComponent_Cylinder(G4String Name,
-                                   G4double InnerRadius,
-                                   G4double OuterRadius,
-                                   G4double StartAngle,
-                                   G4double DeltaAngle,
-                                   G4double HalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
-		~DetectorComponent_Cylinder();
-	
 		void ConstructVolume();
 	
 };
 
 #endif
+

@@ -33,7 +33,6 @@
 DetectorConfigLuaInstance::DetectorConfigLuaInstance(string ModulePath)
 : LuaInstance(ModulePath, "DetectorConfig.lua")
 {
-	LoadTable("World");
 	Initialize_world();
 	
 	LoadTable("DetectorConfig");
@@ -56,13 +55,9 @@ DetectorConfigLuaInstance::~DetectorConfigLuaInstance()
 
 void DetectorConfigLuaInstance::Initialize_world() {
 	
-	G4String Volume_Type = GetStringFromTable_WithHalt("Volume_Type",
-                                  "No Volume_Type specified for world");
-                              
-    G4String Name = GetStringFromTable_NoHalt("World_Name",
-                                              "Default World Name",
-                                              "World");
-    this->World = WithVolumeGetDetectorComponent(Volume_Type, Name);    
+	LoadTable("World");
+    this->World = WithVolumeGetDetectorComponent(SetSharedAttributes("0"));
+    lua_pop(this->L, 1);
 }
 
 /*
@@ -106,18 +101,11 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 		//Pop entire stack
 		lua_pop(this->L, -1);
 		
-		string tempstring = ConvertIntToString(i);
+		string DetectorComponentIndex = ConvertIntToString(i);
 		
-		cout << "\nDetectorComponent_" + tempstring << ":\n";
-		LoadTable("DetectorComponent_" + tempstring);
-		
-		G4String Volume_Type = GetStringFromTable_WithHalt("Volume_Type",
-		                     "You didn't define an appropriate volume "
-		                     + string("for DetectorComponent_"
-		                     + tempstring));
-        G4String Name = GetStringFromTable_NoHalt("Component_Name",
-                                          "Default Component_Name Used",
-                             "DetectorComponent_" + tempstring);            
+		cout << "\nDetectorComponent_" + DetectorComponentIndex << ":\n";
+		LoadTable("DetectorComponent_" + DetectorComponentIndex);
+		          
        /*
         * * Comment
         * 
@@ -125,20 +113,87 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
         * 		assume that the value that Volume_Type is valid.
         * 
         * */
-		this->Components.push_back(WithVolumeGetDetectorComponent(Volume_Type, Name));
+        SharedAttributes LocalAttributes = SetSharedAttributes(
+                                           DetectorComponentIndex);
+                                           
+		this->Components.push_back(WithVolumeGetDetectorComponent(
+                                   LocalAttributes));
+		
+		ApplyRotations(LocalAttributes,
+		this->Components[this->Components.size()-1]);
+		
 		
 	}
 	cout << "\n";
 	
 }
 
+SharedAttributes DetectorConfigLuaInstance::SetSharedAttributes(string DetectorComponentIndex) {
 
-DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(G4String Volume_Type, G4String Name) {
+	SharedAttributes Attribute;
+	string OutputVolumeName;
 	
-	if (Volume_Type == "Cylinder")
-		return MakeDetectorComponent_Cylinder(Name);
-    else if (Volume_Type == "Box")
-		return MakeDetectorComponent_Box(Name);
+	/*
+	 * if DetectorComponentIndex == "0", we are looking at the world
+	 * volume. Otherwise we're looking at a regular DetectorComponent
+	 * volume.
+	 * 
+	 * */
+	if (DetectorComponentIndex == "0") {
+		
+		OutputVolumeName = "World";
+		
+	} else {
+	
+		OutputVolumeName = "DetectorComponent_" + DetectorComponentIndex;
+		
+	}
+
+
+	Attribute.VolumeType = GetStringFromTable_WithHalt("Volume_Type",
+		                  "You didn't define an appropriate volume for "
+		                  + OutputVolumeName);
+		                     
+	Attribute.Name = GetStringFromTable_NoHalt("Component_Name",
+                                          "Default Component_Name Used",
+                                          OutputVolumeName);
+                         
+	Attribute.Material = GetStringFromTable_WithHalt("Material",
+                                        "No Material found."
+                                        + string(" Halting Execution"));
+                         
+	Attribute.Inside = GetStringFromTable_WithHalt("Inside",
+                                        "Please define Inside."
+                                        + string(" Halting Execution"));
+                             
+	Attribute.Position = GetG4ThreeVector("Position");
+	
+	if (DetectorComponentIndex != "0") {
+	
+		Attribute.XRotation = GetNumberFromTable_NoHalt("X_Rotation",
+                                                      "X not rotated",
+                                                      0.0);
+                                                      
+		Attribute.YRotation = GetNumberFromTable_NoHalt("Y_Rotation",
+                                                      "Y not rotated",
+                                                      0.0);		
+                                                      
+        Attribute.ZRotation = GetNumberFromTable_NoHalt("Z_Rotation",
+                                                      "Z not rotated",
+                                                      0.0);	
+	}
+	
+	return Attribute;
+	
+}
+
+
+DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(SharedAttributes Attribute) {
+	
+	if (Attribute.VolumeType == "Cylinder")
+		return MakeDetectorComponent_Cylinder(Attribute);
+	else if (Attribute.VolumeType == "Box")
+		return MakeDetectorComponent_Box(Attribute);
 	
 	return NULL;
 	
@@ -153,13 +208,7 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(G4S
  * 
  * */
  
-DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder(G4String Name) {
-	
-	
-	G4String MaterialString = GetStringFromTable_WithHalt("Material",
-                                        "No Material found."
-                                        + string(" Halting Execution"));
-	     
+DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder(SharedAttributes Attribute) {     
 	                                      
 	G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
                                              "No Inner_Radius found."
@@ -167,7 +216,7 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                              0.0);
                                                                                
 	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
-                                             "No Outer_Radiys found."
+                                             "No Outer_Radius found."
                                         + string(" Halting Execution"));
                                       
 	G4double Start_Angle = GetNumberFromTable_NoHalt("Start_Angle",
@@ -175,8 +224,8 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                              + string(" Set to 0.0"),
                                              0.0);
                                                
-	G4double End_Angle = GetNumberFromTable_NoHalt("End_Angle",
-                                             "No End_Angle found."
+	G4double Delta_Angle = GetNumberFromTable_NoHalt("Delta_Angle",
+                                             "No Delta_Angle found."
                                              + string(" Set to 360."),
                                              360.);
                                             
@@ -184,23 +233,17 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
                                              "No Half_Length found."
                                         + string(" Halting Execution"));
                                         
-	G4String Inside = GetStringFromTable_WithHalt("Inside",
-                                                 "Please define Inside."
-                                        + string(" Halting Execution"));
-                                         
-                                         
-	G4ThreeVector Position = GetG4ThreeVector("Position");
-   
-   
-	return new DetectorComponent_Cylinder(Name,
-                                      Inner_Radius,
-                                      Outer_Radius,
-                                      Start_Angle,
-                                      End_Angle,
-                                      Half_Length,
-                                      Position,
-                                      MaterialString,
-                                      Inside);
+	return new DetectorComponent_Cylinder(
+                                          Attribute.Name,
+                                          Inner_Radius,
+                                          Outer_Radius,
+                                          Start_Angle,
+                                          Delta_Angle,
+                                          Half_Length,
+                                          Attribute.Position,
+                                          Attribute.Material,
+                                          Attribute.Inside);
+                                    
    
 }
 
@@ -214,10 +257,7 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
  * 
  * */
 
-DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4String Name) {
-	
-	G4String MaterialString = GetStringFromTable_WithHalt("Material",
-                               "Did not provide a valid material");
+DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(SharedAttributes Attribute) {
     
 	G4double X = GetNumberFromTable_WithHalt("X", "Did not provide X "+
                                     string("value. Halting Execution"));
@@ -227,15 +267,20 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(G4St
                                      
 	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
                                     string("value. Halting Execution"));
-                                    
-	G4String Inside = GetStringFromTable_WithHalt("Inside",
-                                        "Please define Inside."
-                                        + string(" Halting Execution"));
-                                     
-	G4ThreeVector Position = GetG4ThreeVector("Position");
 	
-	return new DetectorComponent_Box(Name, X, Y, Z, 
-                                     Position, MaterialString, Inside);
-                                     
+	return new DetectorComponent_Box(
+                                     Attribute.Name, X, Y, Z, 
+                                     Attribute.Position, 
+                                     Attribute.Material, 
+                                     Attribute.Inside);
+	
+}
+
+void DetectorConfigLuaInstance::ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component) {
+
+	Component->RotateX(Attribute.XRotation * deg);
+	Component->RotateY(Attribute.YRotation * deg);
+	Component->RotateZ(Attribute.ZRotation * deg);
+	
 }
 

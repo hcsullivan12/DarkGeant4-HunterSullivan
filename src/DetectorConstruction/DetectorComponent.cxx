@@ -36,24 +36,34 @@ DetectorComponent::DetectorComponent(G4String Name,
 	this->MaterialString = MaterialString;
 	this->Inside = Inside;
 	
+	this->RotationMatrix = G4RotationMatrix();
+	this->Transform = G4Transform3D(this->RotationMatrix, Position);
+	
+}
+
+void DetectorComponent::RotateX(double delta) {
+	
+	this->RotationMatrix.rotateX(delta);
+	this->Transform = G4Transform3D(this->RotationMatrix, Position);
+	
+}
+
+void DetectorComponent::RotateY(double delta) {
+	
+	this->RotationMatrix.rotateY(delta);
+	this->Transform = G4Transform3D(this->RotationMatrix, Position);
+	
+}
+
+void DetectorComponent::RotateZ(double delta) {
+	
+	this->RotationMatrix.rotateZ(delta);
+	this->Transform = G4Transform3D(this->RotationMatrix, Position);
+	
 }
 
 DetectorComponent::~DetectorComponent() {
 
-	
-	
-}
-
-/*
- * 
- * TODO
- * 
- * 		It might be fruitful to introduce an array of Material object 
- * 		pointers so that this function can just loop over the objects
- * 
- * */
-void DetectorComponent::SetMaterialPointer(G4String MaterialString) {
-	
 	
 	
 }

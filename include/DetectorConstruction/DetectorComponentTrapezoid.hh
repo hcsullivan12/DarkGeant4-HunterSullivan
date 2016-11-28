@@ -1,7 +1,7 @@
 /*
- * DetectorComponentCylinder.hh
+ * DetectorComponentTrapezoid.hh
  * 
- * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
+ * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,12 +21,12 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTCYLINDER_HH
-#define DETECTORCOMPONENTCYLINDER_HH
+#ifndef DETECTORCOMPONENTTRAPEZOID_HH
+#define DETECTORCOMPONENTTRAPEZOID_HH
 
 #include "DetectorComponent.hh"
 
-class DetectorComponent_Cylinder : public DetectorComponent {
+class DetectorComponent_Trapezoid : public DetectorComponent {
 	
 	/*
 	 * 
@@ -35,11 +35,11 @@ class DetectorComponent_Cylinder : public DetectorComponent {
 	 * */
 	public:
 	
-		G4double InnerRadius;
-		G4double OuterRadius;
-		G4double StartAngle;
-		G4double DeltaAngle;
-		G4double HalfLength;
+		G4double xHalfLengthAtBottom;
+		G4double xHalfLengthAtTop;
+		G4double yHalfLengthAtBottom;
+		G4double yHalfLengthAtTop;
+		G4double zHalfLength;
 		
 	/*
 	 * 
@@ -48,16 +48,16 @@ class DetectorComponent_Cylinder : public DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent_Cylinder(G4String Name,
-                                   G4double InnerRadius,
-                                   G4double OuterRadius,
-                                   G4double StartAngle,
-                                   G4double DeltaAngle,
-                                   G4double HalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
-		~DetectorComponent_Cylinder();
+		DetectorComponent_Trapezoid(G4String Name,
+				G4double xHalfLengthAtBottom,
+				G4double xHalfLengthAtTop,
+				G4double yHalfLengthAtBottom,
+				G4double yHalfLengthAtTop,
+				G4double zHalfLength,
+				G4ThreeVector Position,
+				G4String Material,
+				G4String Inside);                                   
+		~DetectorComponent_Trapezoid();
 	
 		void ConstructVolume();
 	

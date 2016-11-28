@@ -1,5 +1,5 @@
 /*
- * DetectorComponentCylinder.hh
+ * DetectorComponentCone.hh
  * 
  * Copyright 2016 Emma Davenport <Davenport.physics@gmail.com>
  * 
@@ -21,46 +21,48 @@
  * 
  */
 
-#ifndef DETECTORCOMPONENTCYLINDER_HH
-#define DETECTORCOMPONENTCYLINDER_HH
+#ifndef DETECTORCOMPONENTCONE_HH
+#define DETECTORCOMPONENTCONE_HH
 
 #include "DetectorComponent.hh"
 
-class DetectorComponent_Cylinder : public DetectorComponent {
-	
+class DetectorComponent_Cone : public DetectorComponent {
+
 	/*
-	 * 
-	 * Class member variables
-	 * 
+ 	 * Class Member Variables
+	 *
 	 * */
 	public:
-	
-		G4double InnerRadius;
-		G4double OuterRadius;
+		G4double InnerRadiusAtTop;
+		G4double InnerRadiusAtBottom;
+		G4double OutsideRadiusAtTop;
+		G4double OutsideRadiusAtBottom;
+		G4double HalfLength;
 		G4double StartAngle;
 		G4double DeltaAngle;
-		G4double HalfLength;
-		
+	
 	/*
-	 * 
-	 * Class member functions
+	 * Public Class Member functions
 	 * 
 	 * */
-	public:
-	
-		DetectorComponent_Cylinder(G4String Name,
-                                   G4double InnerRadius,
-                                   G4double OuterRadius,
-                                   G4double StartAngle,
-                                   G4double DeltaAngle,
-                                   G4double HalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
-		~DetectorComponent_Cylinder();
-	
+	 public:
+		//Constructor
+		DetectorComponent_Cone(G4String Name,
+				G4double InnerRadiusAtTop,
+				G4double InnerRadiusAtBottom,
+				G4double OutsideRadiusAtTop,
+				G4double OutsideRadiusAtBottom,
+				G4double HalfLength,
+				G4double StartAngle,
+				G4double DeltaAngle,
+				G4ThreeVector Position,
+				G4String MaterialString,
+				G4String Inside);
+		~DetectorComponent_Cone();
+		
 		void ConstructVolume();
 	
 };
 
 #endif
+

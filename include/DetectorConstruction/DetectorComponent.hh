@@ -30,9 +30,10 @@ class G4VPhysicalVolume;
 class G4Material;
 
 //Geant4 Headers
-#include "G4Box.hh"
-#include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
+
+#include "G4RotationMatrix.hh"
+#include "G4Transform3D.hh"
 
 #include "G4ThreeVector.hh"
 
@@ -45,7 +46,20 @@ class G4Material;
 enum VolumeType {
 
 	BOX = 0,
-	CYLINDER
+	CYLINDER,
+	CONE,
+	ELLIPSOID,
+	ELLIPTICAL_CONE,
+	ELLIPTICAL_TUBE,
+	HYPERBOLIC_TUBE,
+	PARALLELEPIPED,
+	SOLID_SPHERE,
+	SPHERICAL_SHELL,
+	TETRAHEDRA,
+	TORUS,
+	TRAPEZOID,
+	TWISTED_BOX,
+	Z_TWISTED_TRAPEZOID
 	
 };
 
@@ -65,6 +79,9 @@ class DetectorComponent {
 		Material *DetectorComponentMaterial;
 		G4String Inside;
 		G4LogicalVolume *LogicalVolume;
+		
+		G4RotationMatrix RotationMatrix;
+		G4Transform3D Transform;
 	
 	/*
 	 * 
@@ -82,17 +99,9 @@ class DetectorComponent {
 		
 		virtual void ConstructVolume() {;}
 		
-	protected:
-	
-		void SetMaterialPointer(G4String MaterialString);
-	
-	/*
-	 * 
-	 * TODO
-	 * 
-	 * 		Finish this class
-	 * 
-	 * */
+		void RotateX(double delta);
+		void RotateY(double delta);
+		void RotateZ(double delta);
 	
 };
 

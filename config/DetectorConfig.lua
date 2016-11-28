@@ -33,7 +33,7 @@ DetectorConfig = { Detector_Name = "Detector",
 			Outer_Radius (No Default Value)
 			Half_Length (No Default Value)
 			Start_Angle (Default Value of 0.0)
-			End_Angle   (Default Value of 360.)
+			Delta_Angle   (Default Value of 360.)
 		
 		"Box"
 		
@@ -69,7 +69,7 @@ World = { Material = "G4_AIR",
 			Outer_Radius (No Default Value)
 			Half_Length (No Default Value)
 			Start_Angle (Default Value of 0.0)
-			End_Angle   (Default Value of 360.)
+			Delta_Angle   (Default Value of 360.)
 		
 		"Box"
 		
@@ -77,6 +77,24 @@ World = { Material = "G4_AIR",
 			Y (No Default Value) (Height)-> Usually
 			Z (No Default Value) (Length)-> Usually
 			
+	* X_Rotation
+	
+		Rotates the object about the X Axis by <number> degrees
+	
+		Default value of 0.0
+		
+	* Y_Rotation
+	
+		Rotates the object about the Y Axis next, by <number> degrees
+	
+		Default value of 0.0
+	
+	* Z_Rotation
+	
+		Rotates the object about the Z Axis next, by <number> degrees
+	
+		Default value of 0.0
+		
 	* Inside
 	
 		"World"
