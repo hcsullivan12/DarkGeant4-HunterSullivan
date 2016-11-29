@@ -77,6 +77,7 @@ class Composite_Material {
 	private:
 	
 		vector<Material *> Composite_Materials;
+		vector<G4double> fractionalmass;
 	
 	
 	/*
@@ -86,7 +87,9 @@ class Composite_Material {
 	 * */	
 	public:
 	
-		Composite_Material(G4String name, vector<Material *> Composite_Materials);
+		Composite_Material( G4String name, 
+                            vector<Material *> Composite_Materials,
+                            vector<G4double>   fractionalmass);
 		~Composite_Material();
 	
 	private:
