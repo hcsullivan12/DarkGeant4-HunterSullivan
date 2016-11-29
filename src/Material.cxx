@@ -105,3 +105,16 @@ void Material::SetAdditionalNames() {
 	 * */
 	
 }
+
+
+Composite_Material::Composite_Material(G4String name, vector<Material *> Composite_Materials) {
+	
+	this->Composite_Materials = Composite_Materials;
+	
+}
+
+void Composite_Material::BuildCompositeMaterial() {
+
+	
+	
+}

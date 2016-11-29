@@ -66,5 +66,33 @@ class Material {
 		
 };
 
+class Composite_Material {
+	
+	
+	/*
+	 * Class member variables
+	 * 
+	 * 
+	 * */
+	private:
+	
+		vector<Material *> Composite_Materials;
+	
+	
+	/*
+	 * 
+	 * Class member functions
+	 * 
+	 * */	
+	public:
+	
+		Composite_Material(G4String name, vector<Material *> Composite_Materials);
+		~Composite_Material();
+	
+	private:
+	
+		void BuildCompositeMaterial();
+};
+
 #endif
 
