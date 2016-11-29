@@ -226,6 +226,34 @@ void LuaInstance::CloseLuaState() {
 	
 }
 
+bool LuaInstance::IsGlobalNil(string var) {
+	
+	lua_getglobal(this->L, var.c_str());
+	bool nil = IsNil();
+	lua_pop(this->L, 1);
+	
+	return nil;
+	
+}
+
+bool LuaInstance::IsTableElementNil(string var) {
+	
+	lua_pushstring(this->L, var.c_str());
+	lua_gettable(this->L, -2);
+	
+	bool nil = IsNil();
+	lua_pop(this->L, 1);
+	
+	return nil;
+	
+}
+
+bool LuaInstance::IsNil() {
+
+	return lua_type(this->L, -1) == LUA_TNIL;
+	
+}
+
 LuaInstance::~LuaInstance() {
 	
 	if (this->L != NULL) {

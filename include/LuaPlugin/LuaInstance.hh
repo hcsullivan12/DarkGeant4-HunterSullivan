@@ -221,7 +221,14 @@ class LuaInstance {
 			return ReturnValue;
 			
 		}
+		
+		bool IsGlobalNil(string var);
+		bool IsTableElementNil(string var);
 		G4ThreeVector GetG4ThreeVector(string TableName);
+	
+	private:
+	
+		bool IsNil();
 	
 };
 
