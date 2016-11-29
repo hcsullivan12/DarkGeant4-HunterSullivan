@@ -51,8 +51,7 @@ Number_Of_Materials = 2
 		
 	
 ]]--
-Material_1 = { G4Database = true,
-              G4Name = "G4_AIR"  }
+Material_1 = { G4Name = "G4_AIR" }
               
               
 Material_2 = { Name = "Liquid Argon",

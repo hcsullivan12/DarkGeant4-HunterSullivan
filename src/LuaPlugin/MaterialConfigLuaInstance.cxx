@@ -76,17 +76,14 @@ void MaterialConfigLua::Initialize_MaterialsVector() {
 		string IterationString = ConvertIntToString(i);
 		LoadTable("Material_" + IterationString);
 		
-		cout << "Material_" + IterationString << "\n";
-		if(GetBooleanFromTable_NoHalt("G4Database", 
-           "No G4Database element found. Assuming False", 0))
-        {
-		
-			Materials.push_back(ConstructMaterial_ByDatabase());
+		if (!IsTableElementNil("G4Name")) {
+			
+			this->Materials.push_back(ConstructMaterial_ByDatabase());
 			
 		} else {
-		
-			Materials.push_back(ConstructMaterial_ByHand());
 			
+			this->Materials.push_back(ConstructMaterial_ByHand());
+		
 		}
 		
 		lua_pop(this->L, 1);
