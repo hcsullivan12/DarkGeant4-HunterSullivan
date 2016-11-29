@@ -52,10 +52,43 @@ Number_Of_Materials = 2
 	
 ]]--
 Material_1 = { G4Database = true,
-              G4Name = "G4_AIR"  }
+               G4Name = "G4_AIR"  }
               
               
 Material_2 = { Name = "Liquid Argon",
                Number_Of_Protons = 18,
                Atomic_Mass = 39.95,
                Density = 1.390 }
+               
+               
+               
+--[[
+
+	* Number_Of_Composite_Materials
+	
+		Must always be defined and must be an integer.
+
+--]]
+Number_Of_Composite_Materials = 1
+
+--[[
+
+	TODO
+	
+	It might be imperative to calculate the density in DarkGeant4,
+	affording the user to avoid having to do that calculation themselves.
+	
+	With that being said, maybe they want to provide a different density,
+	so maybe the option ought to stay but be optional?
+	
+	*Component_x
+	
+		First value is a known material, second value is the fractional
+		mass.
+
+--]]
+Composite_Material_1 = { Name = "CompositeTest",
+                         Density = 1.375 -- Arbitrary number
+                         Number_Of_Components = 2,
+                         Component_1 = {"G4_AIR", .1},
+                         Component_2 = {"Liquid Argon", .9}}
