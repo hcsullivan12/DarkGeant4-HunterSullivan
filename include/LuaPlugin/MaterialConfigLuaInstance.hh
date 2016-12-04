@@ -54,10 +54,12 @@ class MaterialConfigLua : public LuaInstance {
 	public:
 	
 		vector<Material *> Materials;
+		vector<Composite_Material *> Composite_Materials;
 		
 	private:
 	
 		int NumberOfMaterials;
+		int NumberOfCompositeMaterials;
 	
 	/*
 	 * Class member functions
@@ -73,8 +75,12 @@ class MaterialConfigLua : public LuaInstance {
 	
 		void Initialize_NumberOfMaterials();
 		void Initialize_MaterialsVector();
+		void Initialize_CompositeMaterialsVector();
+		
 		Material *ConstructMaterial_ByDatabase();
 		Material *ConstructMaterial_ByHand();
+		
+		Composite_Material *ConstructCompositeMaterial();
 	
 };
 

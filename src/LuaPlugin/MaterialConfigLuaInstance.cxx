@@ -31,6 +31,7 @@ MaterialConfigLua::MaterialConfigLua(string ModulePath)
 	
 	Initialize_NumberOfMaterials();
 	Initialize_MaterialsVector();
+	Initialize_CompositeMaterialsVector();
 	
 }
 
@@ -56,7 +57,9 @@ void MaterialConfigLua::Initialize_NumberOfMaterials() {
 	this->NumberOfMaterials = GetIntegerFromGlobal_WithHalt(
 	                                             "Number_Of_Materials");
 	
-	
+	this->NumberOfCompositeMaterials = GetIntegerFromGlobal_NoHalt(
+                                        "Number_Of_Composite_Materials",
+                                        0);
 }
 
 /*
@@ -91,6 +94,24 @@ void MaterialConfigLua::Initialize_MaterialsVector() {
 		
 		lua_pop(this->L, 1);
 		cout << "\n";
+	}
+	
+}
+
+void MaterialConfigLua::Initialize_CompositeMaterialsVector() {
+
+	for (int i = 1;i <= this->NumberOfCompositeMaterials;i++) {
+	
+		string IterationString = ConvertIntToString(i);
+		LoadTable("Composite_Material_" + IterationString);
+		
+		cout << "Composite_Material_" + IterationString << "\n";
+		
+		Composite_Materials.push_back(ConstructCompositeMaterial());
+		
+		// Pops Table
+		lua_pop(this->L, 1);
+		
 	}
 	
 }
@@ -149,3 +170,25 @@ Material *MaterialConfigLua::ConstructMaterial_ByHand() {
 	
 }
 
+Composite_Material *MaterialConfigLua::ConstructCompositeMaterial() {
+
+	G4String Name = GetStringFromTable_WithHalt("Name",
+                                "Make sure you have a Name variable!"
+                                + string(" Halting execution.\n"));
+	
+	G4int NumberOfComponents = GetIntegerFromGlobal_WithHalt(
+                                                "Number_Of_Components");
+                                                
+    if (NumberOfComponents <= 0) {
+	
+		cout << "Number of components should be greater than 0!\n";
+		exit(1);
+		
+	}
+	
+	G4double Density = GetNumberFromTable_NoHalt("Density", 
+                                      "Density will be calculated",
+                                      -1.0);
+	
+	return NULL;
+}
