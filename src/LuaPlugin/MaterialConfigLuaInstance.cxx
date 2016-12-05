@@ -31,7 +31,7 @@ MaterialConfigLua::MaterialConfigLua(string ModulePath)
 	
 	Initialize_NumberOfMaterials();
 	Initialize_MaterialsVector();
-	//Initialize_CompositeMaterialsVector();
+	Initialize_CompositeMaterialsVector();
 	
 }
 
@@ -226,7 +226,7 @@ void MaterialConfigLua::GetCompositeCompoments(G4int NumComponents,
 	for (G4int i = 1; i <= NumComponents;i++) {
 	
 		string ItrString = ConvertIntToString(i);
-		LoadTable("Component_" + ItrString);
+		LoadTable_WithinTable("Component_" + ItrString);
 		
 		cout << "Component_" + ItrString << "\n";
 		
