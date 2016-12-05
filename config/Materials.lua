@@ -88,7 +88,7 @@ Number_Of_Composite_Materials = 1
 
 --]]
 Composite_Material_1 = { Name = "CompositeTest",
-                         Density = 1.375 -- Arbitrary number
+                         Density = 1.375, -- Arbitrary number
                          Number_Of_Components = 2,
-                         Component_1 = {"G4_AIR", .1},
-                         Component_2 = {"Liquid Argon", .9}}
+                         Component_1 = {Material = "G4_AIR"      , Fractional_Mass = .1},
+                         Component_2 = {Material = "Liquid Argon", Fractional_Mass = .9}}

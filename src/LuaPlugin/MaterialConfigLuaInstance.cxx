@@ -31,7 +31,7 @@ MaterialConfigLua::MaterialConfigLua(string ModulePath)
 	
 	Initialize_NumberOfMaterials();
 	Initialize_MaterialsVector();
-	Initialize_CompositeMaterialsVector();
+	//Initialize_CompositeMaterialsVector();
 	
 }
 
@@ -176,8 +176,9 @@ Composite_Material *MaterialConfigLua::ConstructCompositeMaterial() {
                                 "Make sure you have a Name variable!"
                                 + string(" Halting execution.\n"));
 	
-	G4int NumberOfComponents = GetIntegerFromGlobal_WithHalt(
-                                                "Number_Of_Components");
+	G4int NumberOfComponents = GetIntegerFromTable_WithHalt(
+                                  "Number_Of_Components",
+                                  "Number_Of_Components not specified");
                                                 
     if (NumberOfComponents <= 0) {
 	
@@ -185,10 +186,74 @@ Composite_Material *MaterialConfigLua::ConstructCompositeMaterial() {
 		exit(1);
 		
 	}
+	//Gets Components from Component_x tables
+	G4String *materials = new G4String[NumberOfComponents];
+	G4double *fracmass  = new G4double[NumberOfComponents];
+	GetCompositeCompoments(NumberOfComponents, materials, fracmass);
+	
+	
+	vector<Material *> MaterialsVec;
+	vector<G4double >  FracmassVec;
+	
+	for (int i = 0;i < NumberOfComponents;i++) {
+	
+		MaterialsVec.push_back(FindAppropriateMaterialPointer(materials[i]));
+		FracmassVec.push_back(fracmass[i]);
+		
+	}
 	
 	G4double Density = GetNumberFromTable_NoHalt("Density", 
                                       "Density will be calculated",
                                       -1.0);
+                                      
+	if (Density <= 0) {
+	
+		//Call G4double CalculateDensity(G4int NumComponents, G4double fracmass);
+		
+	}
+	
+	delete [] materials;
+	delete [] fracmass;
 	
 	return NULL;
+}
+
+void MaterialConfigLua::GetCompositeCompoments(G4int NumComponents,
+                                               G4String *materials, 
+                                               G4double *fracmass) 
+{
+	
+	for (G4int i = 1; i <= NumComponents;i++) {
+	
+		string ItrString = ConvertIntToString(i);
+		LoadTable("Component_" + ItrString);
+		
+		cout << "Component_" + ItrString << "\n";
+		
+		materials[i-1] = GetStringFromTable_WithHalt("Material",
+                                              "No Material specified");
+		fracmass[i-1]  = GetNumberFromTable_WithHalt("Fractional_Mass",
+                                        "No Fractional_Mass specified");
+	
+		//pops table
+		lua_pop(this->L, 1);
+	}
+	
+}
+
+Material *MaterialConfigLua::FindAppropriateMaterialPointer(G4String material) {
+
+	for (size_t i = 0;i < this->Materials.size();i++) {
+	
+		if (material == Materials[i]->GetMaterialName()) {
+		
+			return Materials[i];
+			
+		}
+		
+	}
+	
+	cout << material << " not defined\n";
+	throw;
+	
 }

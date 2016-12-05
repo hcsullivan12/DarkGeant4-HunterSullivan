@@ -77,8 +77,16 @@ class MaterialConfigLua : public LuaInstance {
 		void Initialize_MaterialsVector();
 		void Initialize_CompositeMaterialsVector();
 		
+		void GetCompositeCompoments(G4int NumComponents,
+                                    G4String *materials, 
+                                    G4double *fracmass);
+                                    
+		G4double CalculateDensity(G4int NumComponents, G4double fracmass);
+		
 		Material *ConstructMaterial_ByDatabase();
 		Material *ConstructMaterial_ByHand();
+		
+		Material *FindAppropriateMaterialPointer(G4String material);
 		
 		Composite_Material *ConstructCompositeMaterial();
 	
