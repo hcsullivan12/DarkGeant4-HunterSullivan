@@ -194,6 +194,33 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
 		return MakeDetectorComponent_Cylinder(Attribute);
 	else if (Attribute.VolumeType == "Box")
 		return MakeDetectorComponent_Box(Attribute);
+	else if (Attribute.VolumeType == "Cone")
+		return MakeDetectorComponent_Cone(Attribute);
+	else if (Attribute.VolumeType == "Ellipsoid")
+		return MakeDetectorComponent_Ellipsoid(Attribute);
+	else if (Attribute.VolumeType == "Elliptical Cone")
+		return MakeDetectorComponent_EllipticalCone(Attribute);
+	else if (Attribute.VolumeType == "Elliptical Tube")
+		return MakeDetectorComponent_Ellipticaltube(Attribute);
+	else if (Attribute.VolumeType == "Hyperbolic Tube")
+		return MakeDetectorComponent_hyperbolicTube(Attribute);
+	else if (Attribute.VolumeType == "Parallelepiped")
+		return MakeDetectorComponent_Parallelepiped(Attribute);
+	else if (Attribute.VolumeType == "Solid Sphere")
+		return MakeDetectorComponent_SolidSphere(Attribute);
+	else if (Attribute.VolumeType == "Spherical Shell")
+		return MakeDetectorComponent_SphericalShell(Attribute);
+	else if (Attribute.VolumeType == "Tetrahedra")
+		return MakeDetectorComponent_Tetrahedra(Attribute);
+	else if (Attribute.VolumeType == "Torus")
+		return MakeDetectorComponent_Torus(Attribute);
+	else if (Attribute.VolumeType == "Trapezoid")
+		return MakeDetectorComponent_Trapezoid(Attribute);
+	else if (Attribute.VolumeType == "Twisted Box")
+		return MakeDetectorComponent_TwistedBox(Attribute);
+	else (Attribute.VolumeType == "Z Twisted Trapezoid")
+		return MakeDetectorComponent_ZTwistedTrapezoid(Attribute);
+	
 	
 	return NULL;
 	
