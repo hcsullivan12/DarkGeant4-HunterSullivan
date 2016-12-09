@@ -51,6 +51,13 @@ DetectorComponent_Cone::DetectorComponent_Cone(G4String Name,
 
 }
 
+DetectorComponent_Cone::~DetectorComponent_Cone() {
+	
+
+	
+	
+}
+
 void DetectorComponent_Cone::ConstructVolume() {
 
 	G4Cons *VirtualVolume = new G4Cons(this->Name,

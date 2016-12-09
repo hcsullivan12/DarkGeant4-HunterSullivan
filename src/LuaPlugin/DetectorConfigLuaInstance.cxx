@@ -196,30 +196,6 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
 		return MakeDetectorComponent_Box(Attribute);
 	else if (Attribute.VolumeType == "Cone")
 		return MakeDetectorComponent_Cone(Attribute);
-	else if (Attribute.VolumeType == "Ellipsoid")
-		return MakeDetectorComponent_Ellipsoid(Attribute);
-	else if (Attribute.VolumeType == "Elliptical Cone")
-		return MakeDetectorComponent_EllipticalCone(Attribute);
-	else if (Attribute.VolumeType == "Elliptical Tube")
-		return MakeDetectorComponent_Ellipticaltube(Attribute);
-	else if (Attribute.VolumeType == "Hyperbolic Tube")
-		return MakeDetectorComponent_hyperbolicTube(Attribute);
-	else if (Attribute.VolumeType == "Parallelepiped")
-		return MakeDetectorComponent_Parallelepiped(Attribute);
-	else if (Attribute.VolumeType == "Solid Sphere")
-		return MakeDetectorComponent_SolidSphere(Attribute);
-	else if (Attribute.VolumeType == "Spherical Shell")
-		return MakeDetectorComponent_SphericalShell(Attribute);
-	else if (Attribute.VolumeType == "Tetrahedra")
-		return MakeDetectorComponent_Tetrahedra(Attribute);
-	else if (Attribute.VolumeType == "Torus")
-		return MakeDetectorComponent_Torus(Attribute);
-	else if (Attribute.VolumeType == "Trapezoid")
-		return MakeDetectorComponent_Trapezoid(Attribute);
-	else if (Attribute.VolumeType == "Twisted Box")
-		return MakeDetectorComponent_TwistedBox(Attribute);
-	else (Attribute.VolumeType == "Z Twisted Trapezoid")
-		return MakeDetectorComponent_ZTwistedTrapezoid(Attribute);
 	
 	
 	return NULL;
@@ -302,6 +278,65 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(Shar
                                      Attribute.Inside);
 	
 }
+
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_Cone()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_Cone *DetectorConfigLuaInstance::MakeDetectorComponent_Cone(SharedAttributes Attribute) {
+    
+	G4double Inner_Radius_At_Top = GetNumberFromTable_NoHalt("Inner_Radius_At_Top",
+							"No Inner_Radius_At_Top found."
+							+ string(" Set to 0.0"),
+							0.0);
+	
+	G4double Inner_Radius_At_Bottom = GetNumberFromTable_NoHalt("Inner_Radius_At_Bottom",
+							"No Inner_Radius_At_Bottom found."
+							+ string(" Set to 0.0"),
+							0.0);
+                                     
+	G4double Outside_Radius_At_Top = GetNumberFromTable_WithHalt("Outside_Radius_At_Top",
+							"No Outside_Radius_At_Top found."
+							+ string(" Haulting Execution"));
+
+	G4double Outside_Radius_At_Bottom = GetNumberFromTable_WithHalt("Outside_Radius_At_Bottom",
+							"No Outside_Radius_At_Bottom found."
+							+ string(" Haulting Execution"));
+
+	G4double Half_Length = GetNumberFromTable_WithHalt("Half_Length",
+							"No Half_Length found."
+							+ string(" Haulting Execution"));
+
+	G4double Start_Angle = GetNumberFromTable_NoHalt("Start_Angle",
+							"No Start_Angle found."
+							+ string(" Set to 0.0"),
+							0.0);
+
+	G4double Delta_Angle = GetNumberFromTable_NoHalt("Delta_Angle",
+							"No Delta_Angle found."
+							+ string(" Set to 360."),
+							360.);
+	
+	return new DetectorComponent_Cone(
+					Attribute.Name,
+					Inner_Radius_At_Top,
+					Inner_Radius_At_Bottom,
+					Outside_Radius_At_Top,
+					Outside_Radius_At_Bottom,
+					Half_Length,
+					Start_Angle,
+					Delta_Angle,	 
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+
+}
+
 
 void DetectorConfigLuaInstance::ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component) {
 
