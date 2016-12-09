@@ -40,6 +40,19 @@
 #include "DetectorComponent.hh"
 #include "DetectorComponentBox.hh"
 #include "DetectorComponentCylinder.hh"
+#include "DetectorComponentCone.hh"
+#include "DetectorComponentEllipsoid.hh"
+#include "DetectorComponentEllipticalCone.hh"
+#include "DetectorComponentEllipticalTube.hh"
+#include "DetectorComponentHyperbolicTube.hh"
+#include "DetectorComponentParallelepiped.hh"
+#include "DetectorComponentSolidSphere.hh"
+#include "DetectorComponentSphericalShell.hh"
+#include "DetectorComponentTetrahedra.hh"
+#include "DetectorComponentTorus.hh"
+#include "DetectorComponentTrapezoid.hh"
+#include "DetectorComponentTwistedBox.hh"
+#include "DetectorComponentZTwistedTrapezoid.hh"
 
 #include "Utilities.hh"
 
@@ -73,6 +86,19 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		vector<DetectorComponent *> Components;
 		vector<DetectorComponent_Cylinder> CylinderComponents;
 		vector<DetectorComponent_Box> BoxComponents;
+		vector<DetectorComponent_Cone> ConeComponents;
+		vector<DetectorComponent_Ellipsoid> EllipsoidComponents;
+		vector<DetectorComponent_EllipticalCone> EllipticalConeComponents;
+		vector<DetectorComponent_EllipticalTube> EllipticalTubeComponents;
+		vector<DetectorComponent_HyperbolicTube> HyperbolicTubeComponents;
+		vector<DetectorComponent_Parallelepiped> ParallelepipedComponents;
+		vector<DetectorComponent_SolidSphere> SolidSphereComponents;
+		vector<DetectorComponent_SphericalShell> SphericalShellComponents;
+		vector<DetectorComponent_Tetrahedra> TetrahedraComponents;
+		vector<DetectorComponent_Torus> TorusComponents;
+		vector<DetectorComponent_Trapezoid> TrapezoidComponents;
+		vector<DetectorComponent_TwistedBox> TwistedBoxComponents;
+		vector<DetectorComponent_ZTwistedTrapezoid> ZTwistedTrapezoidComponents;
 		
 	
 	/*
@@ -99,6 +125,19 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		
 		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(SharedAttributes Attribute);
 		DetectorComponent_Box *MakeDetectorComponent_Box(SharedAttributes Attribute);
+		DetectorComponent_Cone *MakeDetectorComponent_Cone(SharedAttributes Attribute);
+		DetectorComponent_Ellipsoid *MakeDetectorComponent_Ellipsoid(SharedAttributes Attribute);
+		DetectorComponent_EllipticalCone *MakeDetectorComponent_EllipticalCone(SharedAttributes Attribute);
+		DetectorComponent_EllipticalTube *MakeDetectorComponent_EllipticalTube(SharedAttributes Attribute);
+		DetectorComponent_HyperbolicTube *MakeDetectorComponent_HyperbolicTube(SharedAttributes Attribute);
+		DetectorComponent_Parallelepiped *MakeDetectorComponent_Parallelepiped(SharedAttributes Attribute);
+		DetectorComponent_SolidSphere *MakeDetectorComponent_SolidSphere(SharedAttributes Attribute);
+		DetectorComponent_SphericalShell *MakeDetectorComponent_SphericalShell(SharedAttributes Attribute);
+		DetectorComponent_Tetrahedra *MakeDetectorComponent_Tetrahedra(SharedAttributes Attribute);
+		DetectorComponent_Torus *MakeDetectorComponent_Torus(SharedAttributes Attribute);
+		DetectorComponent_Trapezoid *MakeDetectorComponent_Trapezoid(SharedAttributes Attribute);
+		DetectorComponent_TwistedBox *MakeDetectorComponent_TwistedBox(SharedAttributes Attribute);
+		DetectorComponent_ZTwistedTrapezoid *MakeDetectorComponent_ZTwistedTrapezoid(SharedAttributes Attribute);
 		
 	/*
 	 * 
