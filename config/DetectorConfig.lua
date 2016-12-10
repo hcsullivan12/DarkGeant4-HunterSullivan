@@ -160,7 +160,7 @@ World = { Material = "G4_AIR",
                         Inside = "World" }
 ]]--
 
-DetectorComponent_1 = { Material = "Liquid Argon",
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Parallelepiped",
                         X_Half_Length = 2.0,
 			Y_Half_Length = 4.0,
@@ -170,7 +170,18 @@ DetectorComponent_1 = { Material = "Liquid Argon",
 			Azimuthal_Angle_Of_XY_Faces = 5,			
                         Position = { 0, 0, 0 },
                         Inside = "World" }
+]]--
 
+DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Spherical Shell",
+                        Inner_Radius = 2.0,
+			Outer_Radius = 4.0,
+			Phi_Start = 0,
+			Delta_Phi = 3.14,
+			Theta_Start = 0,
+			Delta_Theta = 1.7,						
+                        Position = { 0, 0, 0 },
+                        Inside = "World" }
 
 --[[DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Solid Sphere",

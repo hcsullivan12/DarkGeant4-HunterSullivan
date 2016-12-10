@@ -208,6 +208,8 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
 		return MakeDetectorComponent_Parallelepiped(Attribute);
 	else if (Attribute.VolumeType == "Solid Sphere")
 		return MakeDetectorComponent_SolidSphere(Attribute);
+	else if (Attribute.VolumeType == "Spherical Shell")
+		return MakeDetectorComponent_SphericalShell(Attribute);
 	else if (Attribute.VolumeType == "Torus")
 		return MakeDetectorComponent_Torus(Attribute);
 	
@@ -580,6 +582,60 @@ DetectorComponent_SolidSphere *DetectorConfigLuaInstance::MakeDetectorComponent_
 	return new DetectorComponent_SolidSphere(
 					Attribute.Name,
 					Radius,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
+}
+
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_SphericalShell()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_SphericalShell *DetectorConfigLuaInstance::MakeDetectorComponent_SphericalShell(SharedAttributes Attribute) {
+    
+	G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
+						"No Inner_Radius found."
+						+ string(" Set to 0.0"),
+						0.0);
+	
+	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
+						"No Outer_Radius found."
+						+ string(" Haulting Execution"));
+		
+	G4double Phi_Start = GetNumberFromTable_NoHalt("Phi_Start",
+						"No Phi_Start found."
+						+ string(" Set to 0.0"),
+						0.0);
+
+	G4double Delta_Phi = GetNumberFromTable_NoHalt("Delta_Phi",
+						"No Delta_Phi found."
+						+ string(" Set to 360."),
+						360.);
+	
+	G4double Theta_Start = GetNumberFromTable_NoHalt("Theta_Start",
+						"No Theta_Start found."
+						+ string(" Set to 0.0"),
+						0.0);
+
+	G4double Delta_Theta = GetNumberFromTable_NoHalt("Delta_Theta",
+						"No Delta_Theta found."
+						+ string(" Set to 360."),
+						360.);
+	
+	return new DetectorComponent_SphericalShell(
+					Attribute.Name,
+					Inner_Radius,
+					Outer_Radius,
+					Phi_Start,
+					Delta_Phi,
+					Theta_Start,
+					Delta_Theta,
                                      	Attribute.Position, 
                                      	Attribute.Material, 
                                      	Attribute.Inside);
