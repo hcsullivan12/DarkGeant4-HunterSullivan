@@ -198,6 +198,14 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
 		return MakeDetectorComponent_Cone(Attribute);
 	else if (Attribute.VolumeType == "Ellipsoid")
 		return MakeDetectorComponent_Ellipsoid(Attribute);
+	else if (Attribute.VolumeType == "Elliptical Cone")
+		return MakeDetectorComponent_EllipticalCone(Attribute);
+	else if (Attribute.VolumeType == "Elliptical Tube")
+		return MakeDetectorComponent_EllipticalTube(Attribute);
+	else if (Attribute.VolumeType == "Solid Sphere")
+		return MakeDetectorComponent_SolidSphere(Attribute);
+	else if (Attribute.VolumeType == "Torus")
+		return MakeDetectorComponent_Torus(Attribute);
 	
 	
 	return NULL;
@@ -383,6 +391,149 @@ DetectorComponent_Ellipsoid *DetectorConfigLuaInstance::MakeDetectorComponent_El
 	
 }
 
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_EllipticalCone()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_EllipticalCone *DetectorConfigLuaInstance::MakeDetectorComponent_EllipticalCone(SharedAttributes Attribute) {
+    
+	G4double X_Semi_Axis = GetNumberFromTable_WithHalt("X_Semi_Axis",
+						"No X_Semi_Axis found."
+						+ string(" Haulting Execution"));
+	
+	G4double Y_Semi_Axis = GetNumberFromTable_WithHalt("Y_Semi_Axis",
+						"No Y_Semi_Axis found."
+						+ string(" Haulting Execution"));
+		
+	G4double Height = GetNumberFromTable_WithHalt("Height",
+						"No Height found."
+						+ string(" Haulting Execution"));
+	
+	G4double Z_Top = GetNumberFromTable_WithHalt("Z_Top",
+						"No Z_Top found."
+						+ string(" Haulting Execution"));
+	
+	return new DetectorComponent_EllipticalCone(
+					Attribute.Name,
+					X_Semi_Axis,
+					Y_Semi_Axis,
+					Height,
+					Z_Top,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
+}
+
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_EllipticalTube()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_EllipticalTube *DetectorConfigLuaInstance::MakeDetectorComponent_EllipticalTube(SharedAttributes Attribute) {
+    
+	G4double X_Half_Length = GetNumberFromTable_WithHalt("X_Half_Length",
+							"No X_Half_Length found."
+							+ string(" Haulting Execution"));
+	
+	G4double Y_Half_Length = GetNumberFromTable_WithHalt("Y_Half_Length",
+							"No Y_Half_Length found."
+							+ string(" Haulting Execution"));
+		
+	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+							"No Z_Half_Length found."
+							+ string(" Haulting Execution"));
+	
+	return new DetectorComponent_EllipticalTube(
+					Attribute.Name,
+					X_Half_Length,
+					Y_Half_Length,
+					Z_Half_Length,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
+}
+
+
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_SolidSphere()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_SolidSphere *DetectorConfigLuaInstance::MakeDetectorComponent_SolidSphere(SharedAttributes Attribute) {
+    
+	G4double Radius = GetNumberFromTable_WithHalt("Radius",
+						"No Radius found."
+						+ string(" Haulting Execution"));
+	
+	return new DetectorComponent_SolidSphere(
+					Attribute.Name,
+					Radius,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
+}
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_Torus()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_Torus *DetectorConfigLuaInstance::MakeDetectorComponent_Torus(SharedAttributes Attribute) {
+    
+	G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
+						"No Inner_Radius found."
+						+ string(" Set to 0.0"),
+						0.0);
+
+	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
+						"No Outer_Radius found."
+						+ string(" Haulting Execution"));
+
+	G4double Sweeping_Radius = GetNumberFromTable_WithHalt("Sweeping_Radius",
+						"No Sweeping_Radius found."
+						+ string(" Haulting Execution"));
+
+	G4double Phi_Start = GetNumberFromTable_NoHalt("Phi_Start",
+						"No Phi_Start found."
+						+ string(" Set to 0.0"),
+						0.0);
+
+	G4double Delta_Phi = GetNumberFromTable_NoHalt("Delta_Phi",
+						"No Delta_Phi found."
+						+ string(" Set to 360."),
+						360.);
+	
+	return new DetectorComponent_Torus(
+					Attribute.Name,
+					Inner_Radius,
+					Outer_Radius,
+					Sweeping_Radius,
+					Phi_Start,
+					Delta_Phi,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
+}
 
 void DetectorConfigLuaInstance::ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component) {
 
