@@ -44,6 +44,8 @@
 #include "DetectorComponentEllipsoid.hh"
 #include "DetectorComponentEllipticalCone.hh"
 #include "DetectorComponentEllipticalTube.hh"
+#include "DetectorComponentHyperbolicTube.hh"
+#include "DetectorComponentParallelepiped.hh"
 #include "DetectorComponentSolidSphere.hh"
 #include "DetectorComponentTorus.hh"
 
@@ -84,6 +86,8 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		vector<DetectorComponent_Ellipsoid> EllipsoidComponents;
 		vector<DetectorComponent_EllipticalCone> EllipticalConeComponents;
 		vector<DetectorComponent_EllipticalTube> EllipticalTubeComponents;
+		vector<DetectorComponent_HyperbolicTube> HyperbolicTubeComponents;
+		vector<DetectorComponent_Parallelepiped> ParallelepipedComponents;
 		vector<DetectorComponent_Torus> TorusComponents;
 		vector<DetectorComponent_SolidSphere> SolidSphereComponents;
 		
@@ -118,6 +122,8 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		DetectorComponent_Ellipsoid *MakeDetectorComponent_Ellipsoid(SharedAttributes Attribute);
 		DetectorComponent_EllipticalCone *MakeDetectorComponent_EllipticalCone(SharedAttributes Attribute);
 		DetectorComponent_EllipticalTube *MakeDetectorComponent_EllipticalTube(SharedAttributes Attribute);
+		DetectorComponent_HyperbolicTube *MakeDetectorComponent_HyperbolicTube(SharedAttributes Attribute);
+		DetectorComponent_Parallelepiped *MakeDetectorComponent_Parallelepiped(SharedAttributes Attribute);
 		DetectorComponent_SolidSphere *MakeDetectorComponent_SolidSphere(SharedAttributes Attribute);
 		DetectorComponent_Torus *MakeDetectorComponent_Torus(SharedAttributes Attribute);
 		

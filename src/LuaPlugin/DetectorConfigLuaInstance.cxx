@@ -202,6 +202,10 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
 		return MakeDetectorComponent_EllipticalCone(Attribute);
 	else if (Attribute.VolumeType == "Elliptical Tube")
 		return MakeDetectorComponent_EllipticalTube(Attribute);
+	else if (Attribute.VolumeType == "Hyperbolic Tube")
+		return MakeDetectorComponent_HyperbolicTube(Attribute);
+	else if (Attribute.VolumeType == "Parallelepiped")
+		return MakeDetectorComponent_Parallelepiped(Attribute);
 	else if (Attribute.VolumeType == "Solid Sphere")
 		return MakeDetectorComponent_SolidSphere(Attribute);
 	else if (Attribute.VolumeType == "Torus")
@@ -458,6 +462,99 @@ DetectorComponent_EllipticalTube *DetectorConfigLuaInstance::MakeDetectorCompone
 					X_Half_Length,
 					Y_Half_Length,
 					Z_Half_Length,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
+}
+
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_HyperbolicTube()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_HyperbolicTube *DetectorConfigLuaInstance::MakeDetectorComponent_HyperbolicTube(SharedAttributes Attribute) {
+    
+	G4double Inner_Radius = GetNumberFromTable_WithHalt("Inner_Radius",
+							"No Inner_Radius found."
+							+ string(" Haulting Execution"));
+	
+	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
+							"No Outer_Radius found."
+							+ string(" Haulting Execution"));
+		
+	G4double Inner_Radius_Angle = GetNumberFromTable_WithHalt("Inner_Radius_Angle",
+							"Not Inner_Radius_Angle found."
+							+ string(" Haulting Execution"));
+	
+	G4double Outer_Radius_Angle = GetNumberFromTable_WithHalt("Outer_Radius_Angle",
+							"No Outer_Radius_Angle found."
+							+ string(" Haulting Execution"));
+
+	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+							"No Z_Half_Length found."
+							+ string(" Haulting Execution"));
+	
+	return new DetectorComponent_HyperbolicTube(
+					Attribute.Name,
+					Inner_Radius,
+					Outer_Radius,
+					Inner_Radius_Angle,
+					Outer_Radius_Angle,
+					Z_Half_Length,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
+}
+
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_Parallelepiped()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_Parallelepiped *DetectorConfigLuaInstance::MakeDetectorComponent_Parallelepiped(SharedAttributes Attribute) {
+    
+	G4double X_Half_Length = GetNumberFromTable_WithHalt("X_Half_Length",
+							"No X_Half_Length found."
+							+ string(" Haulting Execution"));
+	
+	G4double Y_Half_Length = GetNumberFromTable_WithHalt("Y_Half_Length",
+							"No Y_Half_Length found."
+							+ string(" Haulting Execution"));
+		
+	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+							"No Z_Half_Length found."
+							+ string(" Haulting Execution"));
+
+	G4double Angle_Of_XZ_Faces = GetNumberFromTable_WithHalt("Angle_Of_XZ_Faces",
+							"No Angle_Of_XZ_Faces found."
+							+ string(" Haulting Execution"));
+	
+	G4double Polar_Angle_Of_XY_Faces = GetNumberFromTable_WithHalt("Polar_Angle_Of_XY_Faces",
+							"No Polar_Angle_Of_XY_Faces found."
+							+ string(" Haulting Execution"));
+
+	G4double Azimuthal_Angle_Of_XY_Faces = GetNumberFromTable_WithHalt("Azimuthal_Angle_Of_XY_Faces",
+							"No Azimuthal_Angle_Of_XY_Faces found."
+							+ string(" Haulting Execution"));
+	
+	return new DetectorComponent_Parallelepiped(
+					Attribute.Name,
+					X_Half_Length,
+					Y_Half_Length,
+					Z_Half_Length,
+					Angle_Of_XZ_Faces,
+					Polar_Angle_Of_XY_Faces,
+					Azimuthal_Angle_Of_XY_Faces,
                                      	Attribute.Position, 
                                      	Attribute.Material, 
                                      	Attribute.Inside);

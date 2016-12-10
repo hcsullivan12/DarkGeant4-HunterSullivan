@@ -61,8 +61,8 @@ void DetectorComponent_HyperbolicTube::ConstructVolume() {
 	G4Hype *VirtualVolume = new G4Hype(this->Name,
                                        this->InnerRadius * m,
                                        this->OuterRadius * m,
-                                       this->InnerRadiusAngle * deg,
-                                       this->OuterRadiusAngle * deg,
+                                       this->InnerRadiusAngle * rad,
+                                       this->OuterRadiusAngle * rad,
                                        this->zHalfLength * m);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
