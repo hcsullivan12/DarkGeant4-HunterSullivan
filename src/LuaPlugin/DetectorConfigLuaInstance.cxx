@@ -216,6 +216,8 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
 		return MakeDetectorComponent_Trapezoid(Attribute);
 	else if (Attribute.VolumeType == "Twisted Box")
 		return MakeDetectorComponent_TwistedBox(Attribute);
+	else if (Attribute.VolumeType == "Z Twisted Trapezoid")
+		return MakeDetectorComponent_ZTwistedTrapezoid(Attribute);
 	
 	
 	return NULL;
@@ -774,6 +776,57 @@ DetectorComponent_TwistedBox *DetectorConfigLuaInstance::MakeDetectorComponent_T
                                      	Attribute.Inside);
 	
 }
+
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_ZTwistedTrapezoid()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_ZTwistedTrapezoid *DetectorConfigLuaInstance::MakeDetectorComponent_ZTwistedTrapezoid(SharedAttributes Attribute) {
+     
+	G4double X_Half_Length_At_Bottom = GetNumberFromTable_WithHalt("X_Half_Length_At_Bottom",
+							"No X_Half_Length_At_Bottom found."
+							+ string(" Haulting Execution"));
+
+	G4double X_Half_Length_At_Top = GetNumberFromTable_WithHalt("X_Half_Length_At_Top",
+							"No X_Half_Length_At_Top found."
+							+ string(" Haulting Execution"));
+
+	G4double Y_Half_Length_At_Bottom = GetNumberFromTable_WithHalt("Y_Half_Length_At_Bottom",
+							"No Y_Half_Length_At_Bottom found."
+							+ string(" Haulting Execution"));
+
+	G4double Y_Half_Length_At_Top = GetNumberFromTable_WithHalt("Y_Half_Length_At_Top",
+							"No Y_Half_Length_At_Top found."
+							+ string(" Haulting Execution"));
+
+	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+							"No Z_Half_Length found."
+							+ string(" Haulting Execution"));
+
+	G4double Twisting_Angle = GetNumberFromTable_NoHalt("Twisting_Angle",
+							"No Twisting_Angle found."
+							+ string(" Set to 0.0"),
+							0.0);
+	
+	return new DetectorComponent_ZTwistedTrapezoid(
+					Attribute.Name,
+					X_Half_Length_At_Bottom,
+					X_Half_Length_At_Top,
+					Y_Half_Length_At_Bottom,
+					Y_Half_Length_At_Top,
+					Z_Half_Length,
+					Twisting_Angle,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
+}
+
 
 void DetectorConfigLuaInstance::ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component) {
 

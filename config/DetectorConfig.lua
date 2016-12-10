@@ -213,7 +213,7 @@ World = { Material = "G4_AIR",
                         Inside = "World" }
 ]]--
 
-DetectorComponent_1 = { Material = "Liquid Argon",
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Twisted Box",
                         Twisting_Angle = 20.0,
 			X_Half_Length = 1.0,
@@ -221,4 +221,15 @@ DetectorComponent_1 = { Material = "Liquid Argon",
 			Z_Half_Length = 1.0,
                         Position = {0, 0, 0},
                         Inside = "World" }
-                 
+]]--
+
+DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Z Twisted Trapezoid",
+                       	X_Half_Length_At_Bottom = 1.0,
+			X_Half_Length_At_Top = 3.0,
+			Y_Half_Length_At_Bottom = 1.0,
+			Y_Half_Length_At_Top = 3.0,
+			Z_Half_Length = 4.0,
+			Twisting_Angle = 30.0,
+                        Position = {0, 0, 0},
+                        Inside = "World" }            
