@@ -177,9 +177,9 @@ DetectorComponent_1 = { Material = "Liquid Argon",
                         Inner_Radius = 2.0,
 			Outer_Radius = 4.0,
 			Phi_Start = 0,
-			Delta_Phi = 3.14,
+			Delta_Phi = 90,
 			Theta_Start = 0,
-			Delta_Theta = 1.7,						
+			Delta_Theta = 180,						
                         Position = { 0, 0, 0 },
                         Inside = "World" }
 

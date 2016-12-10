@@ -64,10 +64,10 @@ void DetectorComponent_SphericalShell::ConstructVolume() {
 	G4Sphere *VirtualVolume = new G4Sphere(this->Name,
 					this->InnerRadius * m,
                                         this->OuterRadius * m,
-					this->PhiStart * rad,
-					this->DeltaPhi * rad,
-                                        this->ThetaStart * rad,
-					this->DeltaTheta * rad);
+					this->PhiStart * deg,
+					this->DeltaPhi * deg,
+                                        this->ThetaStart * deg,
+					this->DeltaTheta * deg);
                                      
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
