@@ -49,6 +49,8 @@
 #include "DetectorComponentSolidSphere.hh"
 #include "DetectorComponentSphericalShell.hh"
 #include "DetectorComponentTorus.hh"
+#include "DetectorComponentTrapezoid.hh"
+#include "DetectorComponentTwistedBox.hh"
 
 
 #include "Utilities.hh"
@@ -92,6 +94,8 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		vector<DetectorComponent_SolidSphere> SolidSphereComponents;
 		vector<DetectorComponent_SphericalShell> SphericalShellComponents;
 		vector<DetectorComponent_Torus> TorusComponents;
+		vector<DetectorComponent_Trapezoid> TrapezoidComponents;
+		vector<DetectorComponent_TwistedBox> TwistedBoxComponents;
 		
 		
 		
@@ -130,6 +134,8 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		DetectorComponent_SolidSphere *MakeDetectorComponent_SolidSphere(SharedAttributes Attribute);
 		DetectorComponent_SphericalShell *MakeDetectorComponent_SphericalShell(SharedAttributes Attribute);
 		DetectorComponent_Torus *MakeDetectorComponent_Torus(SharedAttributes Attribute);
+		DetectorComponent_Trapezoid *MakeDetectorComponent_Trapezoid(SharedAttributes Attribute);
+		DetectorComponent_TwistedBox *MakeDetectorComponent_TwistedBox(SharedAttributes Attribute);
 		
 		
 	/*

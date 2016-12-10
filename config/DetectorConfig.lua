@@ -172,7 +172,7 @@ World = { Material = "G4_AIR",
                         Inside = "World" }
 ]]--
 
-DetectorComponent_1 = { Material = "Liquid Argon",
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Spherical Shell",
                         Inner_Radius = 2.0,
 			Outer_Radius = 4.0,
@@ -182,6 +182,7 @@ DetectorComponent_1 = { Material = "Liquid Argon",
 			Delta_Theta = 180,						
                         Position = { 0, 0, 0 },
                         Inside = "World" }
+]]--
 
 --[[DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Solid Sphere",
@@ -201,8 +202,23 @@ DetectorComponent_1 = { Material = "Liquid Argon",
                         Inside = "World" }
 ]]--
 
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Trapezoid",
+                        X_Half_Length_At_Bottom = 1.0,
+			X_Half_Length_At_Top = 2.0,
+			Y_Half_Length_At_Bottom = 1.0,
+			Y_Half_Length_At_Top = 2.0,
+			Z_Half_Length = 2,						
+                        Position = { 0, 0, 2 },
+                        Inside = "World" }
+]]--
 
-
-
-
+DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Twisted Box",
+                        Twisting_Angle = 20.0,
+			X_Half_Length = 1.0,
+			Y_Half_Length = 3.0,
+			Z_Half_Length = 1.0,
+                        Position = {0, 0, 0},
+                        Inside = "World" }
                  
