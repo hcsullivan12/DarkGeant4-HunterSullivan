@@ -196,6 +196,8 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
 		return MakeDetectorComponent_Box(Attribute);
 	else if (Attribute.VolumeType == "Cone")
 		return MakeDetectorComponent_Cone(Attribute);
+	else if (Attribute.VolumeType == "Ellipsoid")
+		return MakeDetectorComponent_Ellipsoid(Attribute);
 	
 	
 	return NULL;
@@ -335,6 +337,50 @@ DetectorComponent_Cone *DetectorConfigLuaInstance::MakeDetectorComponent_Cone(Sh
                                      	Attribute.Material, 
                                      	Attribute.Inside);
 
+}
+
+
+
+/*
+ * DetectorConfigLuaInstance::MakeDectorComponent_Ellipsoid()
+ * 
+ * 
+ * 
+ * */
+
+DetectorComponent_Ellipsoid *DetectorConfigLuaInstance::MakeDetectorComponent_Ellipsoid(SharedAttributes Attribute) {
+    
+	G4double X_Semi_Axis = GetNumberFromTable_WithHalt("X_Semi_Axis",
+						"No X_Semi_Axis found."
+						+ string(" Haulting Execution"));
+	
+	G4double Y_Semi_Axis = GetNumberFromTable_WithHalt("Y_Semi_Axis",
+						"No Y_Semi_Axis found."
+						+ string(" Haulting Execution"));
+		
+	G4double Z_Semi_Axis = GetNumberFromTable_WithHalt("Z_Semi_Axis",
+						"No Z_Semi_Axis found."
+						+ string(" Haulting Execution"));
+		
+	G4double Z_Bottom = GetNumberFromTable_WithHalt("Z_Bottom",
+						"No Z_Bottom found."
+						+ string(" Haulting Execution"));
+	
+	G4double Z_Top = GetNumberFromTable_WithHalt("Z_Top",
+						"No Z_Top found."
+						+ string(" Haulting Execution"));
+	
+	return new DetectorComponent_Ellipsoid(
+					Attribute.Name,
+					X_Semi_Axis,
+					Y_Semi_Axis,
+					Z_Semi_Axis,
+					Z_Bottom,
+					Z_Top,
+                                     	Attribute.Position, 
+                                     	Attribute.Material, 
+                                     	Attribute.Inside);
+	
 }
 
 

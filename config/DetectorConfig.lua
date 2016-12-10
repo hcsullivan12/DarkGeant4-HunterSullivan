@@ -106,7 +106,7 @@ World = { Material = "G4_AIR",
                         Inside = "World" }
 --]]
 
-DetectorComponent_1 = { Material = "Liquid Argon",
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Cone",
                         Inner_Radius_At_Bottom = 1.0,
 			Outside_Radius_At_Bottom = 2.0,
@@ -117,6 +117,15 @@ DetectorComponent_1 = { Material = "Liquid Argon",
 			Delta_Angle = 180.0,
                         Position = { 0, 0, 0 },
                         Inside = "World" }
+]]--
 
-
+DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Ellipsoid",
+                        X_Semi_Axis = 6.0,
+			Y_Semi_Axis = 4.0,
+			Z_Semi_Axis = 2.0,
+			Z_Bottom = -3.0,
+			Z_Top = 3.0,
+                        Position = {0, 0, 0},
+                        Inside = "World" }
                         

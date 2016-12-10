@@ -41,6 +41,7 @@
 #include "DetectorComponentBox.hh"
 #include "DetectorComponentCylinder.hh"
 #include "DetectorComponentCone.hh"
+#include "DetectorComponentEllipsoid.hh"
 
 
 #include "Utilities.hh"
@@ -76,6 +77,8 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		vector<DetectorComponent_Cylinder> CylinderComponents;
 		vector<DetectorComponent_Box> BoxComponents;
 		vector<DetectorComponent_Cone> ConeComponents;
+		vector<DetectorComponent_Ellipsoid> EllipsoidComponents;
+		
 		
 		
 	
@@ -104,6 +107,7 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(SharedAttributes Attribute);
 		DetectorComponent_Box *MakeDetectorComponent_Box(SharedAttributes Attribute);
 		DetectorComponent_Cone *MakeDetectorComponent_Cone(SharedAttributes Attribute);
+		DetectorComponent_Ellipsoid *MakeDetectorComponent_Ellipsoid(SharedAttributes Attribute);
 		
 		
 	/*
