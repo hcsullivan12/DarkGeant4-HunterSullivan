@@ -108,13 +108,13 @@ World = { Material = "G4_AIR",
 
 DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Cone",
-                        Inner_Radius_At_Top = 0.0,
-			Inner_Radius_At_Bottom = 0.0,
+                        Inner_Radius_At_Bottom = 1.0,
+			Outside_Radius_At_Bottom = 2.0,
+			Inner_Radius_At_Top = 3.0,
 			Outside_Radius_At_Top = 4.0,
-			Outside_Radius_At_Bottom = 1.0,
 			Half_Length = 2.0,
-			Start_Angle = 0.0,
-			Delta_Angle = 360.0,
+			Start_Angle = 270.0,
+			Delta_Angle = 180.0,
                         Position = { 0, 0, 0 },
                         Inside = "World" }
 

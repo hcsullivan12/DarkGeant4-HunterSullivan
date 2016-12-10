@@ -290,22 +290,22 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(Shar
 
 DetectorComponent_Cone *DetectorConfigLuaInstance::MakeDetectorComponent_Cone(SharedAttributes Attribute) {
     
-	G4double Inner_Radius_At_Top = GetNumberFromTable_NoHalt("Inner_Radius_At_Top",
-							"No Inner_Radius_At_Top found."
-							+ string(" Set to 0.0"),
-							0.0);
-	
 	G4double Inner_Radius_At_Bottom = GetNumberFromTable_NoHalt("Inner_Radius_At_Bottom",
 							"No Inner_Radius_At_Bottom found."
 							+ string(" Set to 0.0"),
 							0.0);
-                                     
-	G4double Outside_Radius_At_Top = GetNumberFromTable_WithHalt("Outside_Radius_At_Top",
-							"No Outside_Radius_At_Top found."
-							+ string(" Haulting Execution"));
-
+	
 	G4double Outside_Radius_At_Bottom = GetNumberFromTable_WithHalt("Outside_Radius_At_Bottom",
 							"No Outside_Radius_At_Bottom found."
+							+ string(" Haulting Execution"));
+                                     
+	G4double Inner_Radius_At_Top = GetNumberFromTable_NoHalt("Inner_Radius_At_Top",
+							"No Inner_Radius_At_Top found."
+							+ string(" Set to 0.0"),
+							0.0);
+
+	G4double Outside_Radius_At_Top = GetNumberFromTable_WithHalt("Outside_Radius_At_Top",
+							"No Outside_Radius_At_Top found."
 							+ string(" Haulting Execution"));
 
 	G4double Half_Length = GetNumberFromTable_WithHalt("Half_Length",
@@ -324,10 +324,10 @@ DetectorComponent_Cone *DetectorConfigLuaInstance::MakeDetectorComponent_Cone(Sh
 	
 	return new DetectorComponent_Cone(
 					Attribute.Name,
-					Inner_Radius_At_Top,
 					Inner_Radius_At_Bottom,
-					Outside_Radius_At_Top,
 					Outside_Radius_At_Bottom,
+					Inner_Radius_At_Top,
+					Outside_Radius_At_Top,
 					Half_Length,
 					Start_Angle,
 					Delta_Angle,	 

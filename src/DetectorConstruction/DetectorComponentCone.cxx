@@ -29,10 +29,10 @@
 #include "G4LogicalVolume.hh"
 
 DetectorComponent_Cone::DetectorComponent_Cone(G4String Name,
-				G4double InnerRadiusAtTop,
 				G4double InnerRadiusAtBottom,
-				G4double OutsideRadiusAtTop,
 				G4double OutsideRadiusAtBottom,
+				G4double InnerRadiusAtTop,
+				G4double OutsideRadiusAtTop,
 				G4double HalfLength,
 				G4double StartAngle,
 				G4double DeltaAngle,
@@ -41,10 +41,10 @@ DetectorComponent_Cone::DetectorComponent_Cone(G4String Name,
 				G4String Inside)
  : DetectorComponent(Name, CONE, Position, MaterialString, Inside)
 {
-		this->InnerRadiusAtTop = InnerRadiusAtTop;
 		this->InnerRadiusAtBottom = InnerRadiusAtBottom;
-		this->OutsideRadiusAtTop = OutsideRadiusAtTop;
 		this->OutsideRadiusAtBottom = OutsideRadiusAtBottom;
+		this->InnerRadiusAtTop = InnerRadiusAtTop;
+		this->OutsideRadiusAtTop = OutsideRadiusAtTop;
 		this->HalfLength = HalfLength;	
 		this->StartAngle = StartAngle;
 		this->DeltaAngle = DeltaAngle;
@@ -61,10 +61,10 @@ DetectorComponent_Cone::~DetectorComponent_Cone() {
 void DetectorComponent_Cone::ConstructVolume() {
 
 	G4Cons *VirtualVolume = new G4Cons(this->Name,
-					this->InnerRadiusAtTop * m,
 					this->InnerRadiusAtBottom * m,
-					this->OutsideRadiusAtTop * m,
 					this->OutsideRadiusAtBottom * m,
+					this->InnerRadiusAtTop * m,
+					this->OutsideRadiusAtTop * m,
 					this->HalfLength * m,
 					this->StartAngle * deg,
 					this->DeltaAngle * deg);		
