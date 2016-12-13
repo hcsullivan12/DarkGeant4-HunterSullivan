@@ -119,6 +119,20 @@ void LuaInstance::LoadTable(string table) {
 	
 }
 
+void LuaInstance::LoadTable_WithinTable(string table) {
+
+	lua_pushstring(this->L, table.c_str());
+	lua_gettable(this->L, -2);
+	
+	if (!lua_istable(this->L, -1)) {
+	
+		cout << "Table " << table << " does not exist\n";
+		throw;
+		
+	}
+	
+}
+
 /*
  * GetG4ThreeVector(string TableName)
  * 

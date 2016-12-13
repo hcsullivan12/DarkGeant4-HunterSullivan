@@ -161,6 +161,7 @@ class LuaInstance {
 		* 
 		* */
 		void LoadTable(string table);
+		void LoadTable_WithinTable(string table);
 		
 		template<typename T, typename U>
 		T GetGlobalVariable(string var,

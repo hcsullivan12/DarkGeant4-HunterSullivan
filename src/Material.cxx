@@ -27,6 +27,8 @@
 #include "G4NistManager.hh"
 
 
+using std::cout;
+
 static G4NistManager *NistManager = NULL;
 
 /*
@@ -107,14 +109,42 @@ void Material::SetAdditionalNames() {
 }
 
 
-Composite_Material::Composite_Material(G4String name, vector<Material *> Composite_Materials) {
-	
+Composite_Material::Composite_Material(G4String name, G4double density,
+                                       vector<Material *> Composite_Materials,
+                                       vector<G4double>   fractionalmass) 
+{
+
+	this->name = name;
 	this->Composite_Materials = Composite_Materials;
+	this->fractionalmass = fractionalmass;
+	this->density = density;
+	
+	if (Composite_Materials.size() != fractionalmass.size()) {
+	
+		cout << "Composite Materials to fractional mass ratio not 1\n";
+		exit(1);
+		
+	}
+	
+}
+
+G4Material *Composite_Material::GetCompositeMaterialPointer() {
+
+	return this->CompositeMaterial;
 	
 }
 
 void Composite_Material::BuildCompositeMaterial() {
 
+	this->CompositeMaterial = new G4Material(this->name,
+                              this->density,
+                              this->Composite_Materials.size());
 	
+	for (int i = 0;i < (int)this->Composite_Materials.size();i++) {
+		
+		this->CompositeMaterial->AddMaterial(this->Composite_Materials[i]->GetMaterialPointer(),
+                                             this->fractionalmass[i]);
+		
+	}
 	
 }
