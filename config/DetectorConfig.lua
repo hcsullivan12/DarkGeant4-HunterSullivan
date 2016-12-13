@@ -13,7 +13,7 @@
 
 ]]--
 DetectorConfig = { Detector_Name = "Detector",
-                  Number_of_Detector_Components = 2 }
+                  Number_of_Detector_Components = 1 }
 
 
 -- **** Please note that units of length are in metres!                  
@@ -104,22 +104,150 @@ World = { Material = "G4_AIR",
 			defined.
 
 ]]--
-DetectorComponent_1 = { Material = "Liquid Argon",
+--[[ DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Box",
                         X = 1,
                         Y = 1,
                         Z = 2,
                         Position = { 0, 0, 0 },
                         Inside = "World" }
+]]--
 
-DetectorComponent_2 = { Material = "Liquid Argon",
+--[[ DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Cylinder",
                         Inner_Radius = 1.0,
                         Outer_Radius = 2.0,
                         Start_Angle = 0.0,
-                        End_Angle = 270.0,
+                        Delta_Angle = 270.0,
                         Half_Length = 2.0,
                         Position = {0, 0, 2},
                         Inside = "World" }
+--]]
 
-                        
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Cone",
+                        Inner_Radius_At_Bottom = 1.0,
+			Outside_Radius_At_Bottom = 2.0,
+			Inner_Radius_At_Top = 3.0,
+			Outside_Radius_At_Top = 4.0,
+			Half_Length = 2.0,
+			Start_Angle = 270.0,
+			Delta_Angle = 180.0,
+                        Position = { 0, 0, 0 },
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Ellipsoid",
+                        X_Semi_Axis = 6.0,
+			Y_Semi_Axis = 4.0,
+			Z_Semi_Axis = 2.0,
+			Z_Bottom = -3.0,
+			Z_Top = 3.0,
+                        Position = {0, 0, 0},
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Elliptical Cone",
+                        X_Semi_Axis = 0.5,
+			Y_Semi_Axis = 0.5,
+			Height = 0.5,
+			Z_Top = 0.5,
+                        Position = {0, 0, 0},
+                        Inside = "World" }   
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Elliptical Tube",
+                        X_Half_Length = 2.0,
+			Y_Half_Length = 4.0,
+			Z_Half_Length = 6.0,			
+                        Position = { 0, 0, 0 },
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Hyperbolic Tube",
+                        Inner_Radius = 1.0,
+			Outer_Radius = 2.0,
+			Inner_Radius_Angle = .7,
+			Outer_Radius_Angle = .7,
+			Z_Half_Length = 4.0,			
+                        Position = { 0, 0, 0 },
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Parallelepiped",
+                        X_Half_Length = 2.0,
+			Y_Half_Length = 4.0,
+			Z_Half_Length = 6.0,
+			Angle_Of_XZ_Faces = 10,
+			Polar_Angle_Of_XY_Faces = 20,
+			Azimuthal_Angle_Of_XY_Faces = 5,			
+                        Position = { 0, 0, 0 },
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Spherical Shell",
+                        Inner_Radius = 2.0,
+			Outer_Radius = 4.0,
+			Phi_Start = 0,
+			Delta_Phi = 90,
+			Theta_Start = 0,
+			Delta_Theta = 180,						
+                        Position = { 0, 0, 0 },
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Solid Sphere",
+                        Radius = 2.0,
+                        Position = { 0, 0, 0 },
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Torus",
+                        Inner_Radius = 2.0,
+			Outer_Radius = 3.0,
+			Sweeping_Radius = 6.0,
+			Phi_Start = 0.0,
+			Delta_Phi = 90,
+                        Position = {0, 0, 0},
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Trapezoid",
+                        X_Half_Length_At_Bottom = 1.0,
+			X_Half_Length_At_Top = 2.0,
+			Y_Half_Length_At_Bottom = 1.0,
+			Y_Half_Length_At_Top = 2.0,
+			Z_Half_Length = 2,						
+                        Position = { 0, 0, 2 },
+                        Inside = "World" }
+]]--
+
+--[[DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Twisted Box",
+                        Twisting_Angle = 20.0,
+			X_Half_Length = 1.0,
+			Y_Half_Length = 3.0,
+			Z_Half_Length = 1.0,
+                        Position = {0, 0, 0},
+                        Inside = "World" }
+]]--
+
+DetectorComponent_1 = { Material = "Liquid Argon",
+                        Volume_Type = "Z Twisted Trapezoid",
+                       	X_Half_Length_At_Bottom = 1.0,
+			X_Half_Length_At_Top = 3.0,
+			Y_Half_Length_At_Bottom = 1.0,
+			Y_Half_Length_At_Top = 3.0,
+			Z_Half_Length = 4.0,
+			Twisting_Angle = 30.0,
+                        Position = {0, 0, 0},
+                        Inside = "World" }            
