@@ -78,7 +78,7 @@ using std::cin;
  * 
  * */
 
-static const string VersionString = "0.3 \"Zwicky\"";
+static const string VersionString = "0.4 \"Fermi\"";
 static bool TerminalOutput = true;
 static bool ShowVis = false;
 
