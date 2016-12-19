@@ -20,132 +20,6 @@ DetectorConfig = { Detector_Name = "Detector",
 
 --[[
 
-	* Material
-	
-		"Liquid Argon"
-		"Air"
-
-	* Volume_Type
-	
-		"Cylinder"
-		
-			Inner_Radius (Default value of 0.0)
-			Outer_Radius (No Default Value)
-			Start_Angle (Default Value of 0.0)
-			Delta_Angle   (Default Value of 360.)
-			Half_Length (No Default Value)
-		
-		"Box"
-		
-			X (No Default Value) (Width) -> Usually
-			Y (No Default Value) (Height)-> Usually
-			Z (No Default Value) (Length)-> Usually
-
-
-		"Cone"
-
-			Inner_Radius_At_Bottom (Default value of 0.0)
-			Outside_Radius_At_Bottom (No Default Value)
-			Inner_Radius_At_Top (Default value of 0.0)
-			Outside_Radius_At_Top (No Default Value)
-			Half_Length (No Default Value)
-			Start_Angle (Default value of 0.0)
-			Delta_Angle (Default value of 360.)
-
-		"Ellipsoid"
-
-			X_Semi_Axis (No Default Value)
-			Y_Semi_Axis (No Default Value)
-			Z_Semi_Axis (No Default Value)
-			Z_Bottom (No Default Value)
-			Z_Top (No Default Value)
-
-		"Elliptical Cone"
-
-			X_Semi_Axis (No Default Value)
-			Y_Semi_Axis (No Default Value)
-			Height (No Default Value)
-			Z_Top (No Default Value)
-		
-		"Elliptical Tube"
-
-			X_Half_Length (No Default Value)
-			Y_Half_Length (No Default Value)
-			Z_Half_Length (No Default Value)			
-		
-		"Hyperbolic Tube"
-
-			Inner_Radius (No Default Value)
-			Outer_Radius (No Default Value)
-			Inner_Radius_Angle (No Default Value)
-			Outer_Radius_Angle (No Default Value)
-			Z_Half_Length (No Default Value)
-
-		"Parallelepiped"
-
-			X_Half_Length (No Default Value)
-			Y_Half_Length (No Default Value) 
-			Z_Half_Length (No Default Value) 
-			Angle_Of_XZ_Faces (No Default Value)
-			Polar_Angle_Of_XY_Faces (No Default Value)
-			Azimuthal_Angle_Of_XY_Faces (No Default Value)
-
-		"Solid Sphere"
-
-			Radius (No Default Value)
-		
-		"Spherical Shell"
-		
-			Inner_Radius (Default value of 0.0)
-			Outer_Radius (No Default Value)
-			Phi_Start (Default value of 0.0)
-			Delta_Phi (Default value of 360.)
-			Theta_Start (Default value of 0.0)
-			Delta_Theta (Default value of 360.)
-
-		"Torus"
-
-			Inner_Radius (Default value of 0.0)
-			Outer_Radius (No Default Value)
-			Sweeping_Radius (No Default Value)
-			Phi_Start (Default value of 0.0) 
-			Delta_Phi (Default value of 360.)
-
-		"Trapezoid"
-
-			X_Half_Length_At_Bottom (No Default Value)
-			X_Half_Length_At_Top (No Default Value)
-			Y_Half_Length_At_Bottom (No Default Value)
-			Y_Half_Length_At_Top (No Default Value)
-			Z_Half_Length (No Default Value)
-
-		"Twisted Box"
-
-			Twisting_Angle (No Default Value)
-			X_Half_Length (No Default Value)
-			Y_Half_Length (No Default Value)
-			Z_Half_Length (No Default Value)
-
-		"ZTwistedTrapezoid"
-
-			X_Half_Length_At_Bottom (No Default Value)
-			X_Half_Length_At_Top (No Default Value)
-			Y_Half_Length_At_Bottom (No Default Value)
-			Y_Half_Length_At_Top (No Default Value)
-			Z_Half_Length (No Default Value)
-			Twisting_Angle (Default value of 0.0)
-
-]]--
-World = { Material = "G4_AIR",
-          Volume_Type = "Box",
-          X = 20.0,
-          Y = 20.0,
-          Z = 20.0,
-          Inside = "None",
-          Position = {0, 0, 0} }
-
---[[
-
 	* Component_Name
 	
 		(Default value of DectorComponent_x)
@@ -290,7 +164,17 @@ World = { Material = "G4_AIR",
 			default = nil. Will halt execution of program if not 
 			defined.
 
+
 ]]--
+
+World = { Material = "G4_AIR",
+          Volume_Type = "Box",
+          X = 20.0,
+          Y = 20.0,
+          Z = 20.0,
+          Inside = "None",
+          Position = {0, 0, 0} }
+
 --[[ DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Box",
                         X = 1,
