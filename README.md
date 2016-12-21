@@ -18,6 +18,7 @@ cd build
 cmake -DGeant4_DIR=/path/to/Geant4/dir ../
 make
 ```
+If you do not have Geant4 installed, please see the wiki for hints
 
 ## Basic muon run.
 
