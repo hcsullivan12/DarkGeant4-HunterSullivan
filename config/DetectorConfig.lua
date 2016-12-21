@@ -176,9 +176,9 @@ World = { Material = "G4_AIR",
           Position = {0, 0, 0} }
 
 DetectorComponent_1 = { Material = "Liquid Argon",
-                        Volume_Type = "Box",
-                        X = 1,
-                        Y = 1,
-                        Z = 2,
+                        Volume_Type = "Cylinder",
+                        Inner_Radius = 0.0,
+                        Outer_Radius = 3.0,
+                        Half_Length  = 1,
                         Position = { 0, 0, 0 },
                         Inside = "World" }       
