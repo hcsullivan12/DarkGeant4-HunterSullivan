@@ -76,6 +76,14 @@ end
 
 --[[
 
+	Particle_File
+	
+	A string value, naming the file located in the present module
+	directory that you want DarkGeant4 to load.
+	
+	Default value is nil and will not halt execution if other
+	variables are satisfied.
+
 --]]
 Particle_File = nil
 

@@ -23,8 +23,6 @@ Config
 		
 		http://geant4.cern.ch/support/proc_mod_catalog/physics_lists/referencePL.shtml
 
-	* <Other parameters>
-
 ]]--
 
 ConfigTable = { Module_Name = "Default",
