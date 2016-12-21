@@ -31,6 +31,21 @@ A window should be rendered on your screen with a basic cylindrical volume (Pres
 
 To see some action happen on screen, select your terminal and press enter. The code is presently waiting for a carriage return before it executes the run phase.
 
+## Runtime Arguments
+
+Pass the following command if you wish to have DarkGeant4 open a Geant4 rendering window. Note, rendering will cause your simulation to run for a longer period of time. In some cases, Geant4 may not be able to render your simulation if given a large enough world volume.
+
+`-vis`
+
+Pass the following command if you wish to have DarkGeant4 limit the information outputted to the terminal. Note, outputting data to the terminal will cause your simulation to run for a longer period of time.
+
+`-lim-output`
+
+Pass the following if you wish to have DarkGeant4 load a specific module of configurations.
+
+`-module <module name>`
+
+
 ## Using Python scripts for data analysis
 
 The python scripts are written in python3, so be sure you have a python3 interpreter installed on your system with the necessary dependencies.
