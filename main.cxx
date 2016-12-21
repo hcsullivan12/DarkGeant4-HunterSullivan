@@ -294,8 +294,8 @@ void InitializeRunManager(G4RunManager *runManager) {
 	
 	
 	PrimaryGeneratorAction *Generator = new PrimaryGeneratorAction(
-	                       ParticleConfigFileInstance->FourVectors,
-	                       ConfigFileInstance->DarkGeantOutputLocation);
+                           ParticleConfigFileInstance->FourVectors,
+                           ConfigFileInstance->DarkGeantOutputLocation);
 	runManager->SetUserAction(Generator);
 	runManager->SetUserAction(Generator->GetSteppingAction());
 	
