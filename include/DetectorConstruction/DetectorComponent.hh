@@ -91,7 +91,7 @@ class DetectorComponent {
 	public:
 	
 		DetectorComponent(G4String Name,
-		                  VolumeType Type, 
+                          VolumeType Type, 
                           G4ThreeVector Position,
                           G4String MaterialString,
                           G4String Inside);

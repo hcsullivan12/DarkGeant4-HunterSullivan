@@ -13,42 +13,10 @@
 
 ]]--
 DetectorConfig = { Detector_Name = "Detector",
-                  Number_of_Detector_Components = 2 }
+                  Number_of_Detector_Components = 1 }
 
 
 -- **** Please note that units of length are in metres!                  
-
---[[
-
-	* Material
-	
-		"Liquid Argon"
-		"Air"
-
-	* Volume_Type
-	
-		"Cylinder"
-		
-			Inner_Radius (Default value of 0.0)
-			Outer_Radius (No Default Value)
-			Half_Length (No Default Value)
-			Start_Angle (Default Value of 0.0)
-			Delta_Angle   (Default Value of 360.)
-		
-		"Box"
-		
-			X (No Default Value) (Width) -> Usually
-			Y (No Default Value) (Height)-> Usually
-			Z (No Default Value) (Length)-> Usually
-
-]]--
-World = { Material = "G4_AIR",
-          Volume_Type = "Box",
-          X = 20.0,
-          Y = 20.0,
-          Z = 20.0,
-          Inside = "None",
-          Position = {0, 0, 0} }
 
 --[[
 
@@ -76,6 +44,99 @@ World = { Material = "G4_AIR",
 			X (No Default Value) (Width) -> Usually
 			Y (No Default Value) (Height)-> Usually
 			Z (No Default Value) (Length)-> Usually
+
+		"Cone"
+
+			Inner_Radius_At_Bottom (Default value of 0.0)
+			Outside_Radius_At_Bottom (No Default Value)
+			Inner_Radius_At_Top (Default value of 0.0)
+			Outside_Radius_At_Top (No Default Value)
+			Half_Length (No Default Value)
+			Start_Angle (Default value of 0.0)
+			Delta_Angle (Default value of 360.)
+
+		"Ellipsoid"
+
+			X_Semi_Axis (No Default Value)
+			Y_Semi_Axis (No Default Value)
+			Z_Semi_Axis (No Default Value)
+			Z_Bottom (No Default Value)
+			Z_Top (No Default Value)
+
+		"Elliptical Cone"
+
+			X_Semi_Axis (No Default Value)
+			Y_Semi_Axis (No Default Value)
+			Height (No Default Value)
+			Z_Top (No Default Value)
+		
+		"Elliptical Tube"
+
+			X_Half_Length (No Default Value)
+			Y_Half_Length (No Default Value)
+			Z_Half_Length (No Default Value)			
+		
+		"Hyperbolic Tube"
+
+			Inner_Radius (No Default Value)
+			Outer_Radius (No Default Value)
+			Inner_Radius_Angle (No Default Value)
+			Outer_Radius_Angle (No Default Value)
+			Z_Half_Length (No Default Value)
+
+		"Parallelepiped"
+
+			X_Half_Length (No Default Value)
+			Y_Half_Length (No Default Value) 
+			Z_Half_Length (No Default Value) 
+			Angle_Of_XZ_Faces (No Default Value)
+			Polar_Angle_Of_XY_Faces (No Default Value)
+			Azimuthal_Angle_Of_XY_Faces (No Default Value)
+
+		"Solid Sphere"
+
+			Radius (No Default Value)
+		
+		"Spherical Shell"
+		
+			Inner_Radius (Default value of 0.0)
+			Outer_Radius (No Default Value)
+			Phi_Start (Default value of 0.0)
+			Delta_Phi (Default value of 360.)
+			Theta_Start (Default value of 0.0)
+			Delta_Theta (Default value of 360.)
+
+		"Torus"
+
+			Inner_Radius (Default value of 0.0)
+			Outer_Radius (No Default Value)
+			Sweeping_Radius (No Default Value)
+			Phi_Start (Default value of 0.0) 
+			Delta_Phi (Default value of 360.)
+
+		"Trapezoid"
+
+			X_Half_Length_At_Bottom (No Default Value)
+			X_Half_Length_At_Top (No Default Value)
+			Y_Half_Length_At_Bottom (No Default Value)
+			Y_Half_Length_At_Top (No Default Value)
+			Z_Half_Length (No Default Value)
+
+		"Twisted Box"
+
+			Twisting_Angle (No Default Value)
+			X_Half_Length (No Default Value)
+			Y_Half_Length (No Default Value)
+			Z_Half_Length (No Default Value)
+
+		"ZTwistedTrapezoid"
+
+			X_Half_Length_At_Bottom (No Default Value)
+			X_Half_Length_At_Top (No Default Value)
+			Y_Half_Length_At_Bottom (No Default Value)
+			Y_Half_Length_At_Top (No Default Value)
+			Z_Half_Length (No Default Value)
+			Twisting_Angle (Default value of 0.0)
 			
 	* X_Rotation
 	
@@ -103,23 +164,21 @@ World = { Material = "G4_AIR",
 			default = nil. Will halt execution of program if not 
 			defined.
 
+
 ]]--
+
+World = { Material = "G4_AIR",
+          Volume_Type = "Box",
+          X = 20.0,
+          Y = 20.0,
+          Z = 20.0,
+          Inside = "None",
+          Position = {0, 0, 0} }
+
 DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Box",
                         X = 1,
                         Y = 1,
                         Z = 2,
                         Position = { 0, 0, 0 },
-                        Inside = "World" }
-
-DetectorComponent_2 = { Material = "Liquid Argon",
-                        Volume_Type = "Cylinder",
-                        Inner_Radius = 1.0,
-                        Outer_Radius = 2.0,
-                        Start_Angle = 0.0,
-                        End_Angle = 270.0,
-                        Half_Length = 2.0,
-                        Position = {0, 0, 2},
-                        Inside = "World" }
-
-                        
+                        Inside = "World" }       

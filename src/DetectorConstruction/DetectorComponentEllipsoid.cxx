@@ -30,7 +30,7 @@
 #include "G4LogicalVolume.hh"
 
 DetectorComponent_Ellipsoid::DetectorComponent_Ellipsoid(
-								G4String Name,
+                                G4String Name,
                                 G4double xSemiAxis,
                                 G4double ySemiAxis,
                                 G4double zSemiAxis,

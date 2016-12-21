@@ -33,10 +33,10 @@ class DetectorComponent_Cone : public DetectorComponent {
 	 *
 	 * */
 	public:
-		G4double InnerRadiusAtTop;
 		G4double InnerRadiusAtBottom;
-		G4double OutsideRadiusAtTop;
 		G4double OutsideRadiusAtBottom;
+		G4double InnerRadiusAtTop;
+		G4double OutsideRadiusAtTop;
 		G4double HalfLength;
 		G4double StartAngle;
 		G4double DeltaAngle;
@@ -48,10 +48,10 @@ class DetectorComponent_Cone : public DetectorComponent {
 	 public:
 		//Constructor
 		DetectorComponent_Cone(G4String Name,
-				G4double InnerRadiusAtTop,
 				G4double InnerRadiusAtBottom,
-				G4double OutsideRadiusAtTop,
 				G4double OutsideRadiusAtBottom,
+				G4double InnerRadiusAtTop,
+				G4double OutsideRadiusAtTop,
 				G4double HalfLength,
 				G4double StartAngle,
 				G4double DeltaAngle,
