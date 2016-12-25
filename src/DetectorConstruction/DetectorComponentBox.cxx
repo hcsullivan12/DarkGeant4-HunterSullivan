@@ -30,18 +30,18 @@
 
 DetectorComponent_Box::DetectorComponent_Box(
                               G4String Name,
-                              G4double x,
-                              G4double y,
-                              G4double z,
+                              G4double half_x,
+                              G4double half_y,
+                              G4double half_z,
                               G4ThreeVector Position,
                               G4String MaterialString,
                               G4String Inside)
  : DetectorComponent(Name, BOX, Position, MaterialString, Inside) 
 {
 	
-	this->x = x;
-	this->y = y;
-	this->z = z;
+	this->half_x = half_x;
+	this->half_y = half_y;
+	this->half_z = half_z;
 	
 }
 
@@ -65,9 +65,9 @@ DetectorComponent_Box::~DetectorComponent_Box() {
 void DetectorComponent_Box::ConstructVolume() {
 	
 	G4Box *VirtualVolume = new G4Box(this->Name,
-                                     this->x * m,
-                                     this->y * m,
-                                     this->z * m);
+                                     this->half_x * m,
+                                     this->half_y * m,
+                                     this->half_z * m);
                                      
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),

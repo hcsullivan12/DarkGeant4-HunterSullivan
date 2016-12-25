@@ -41,9 +41,9 @@ DetectorConfig = { Detector_Name = "Detector",
 		
 		"Box"
 		
-			X (No Default Value) (Width) -> Usually
-			Y (No Default Value) (Height)-> Usually
-			Z (No Default Value) (Length)-> Usually
+			half_X (No Default Value) (Width) -> Usually
+			half_Y (No Default Value) (Height)-> Usually
+			half_Z (No Default Value) (Length)-> Usually
 
 		"Cone"
 
@@ -169,9 +169,9 @@ DetectorConfig = { Detector_Name = "Detector",
 
 World = { Material = "G4_AIR",
           Volume_Type = "Box",
-          X = 20.0,
-          Y = 20.0,
-          Z = 20.0,
+          half_X = 20.0,
+          half_Y = 20.0,
+          half_Z = 20.0,
           Inside = "None",
           Position = {0, 0, 0} }
 

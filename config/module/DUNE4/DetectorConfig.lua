@@ -4,17 +4,17 @@ DetectorConfig = { Detector_Name = "Detector",
 
 World = { Material = "G4_AIR",
           Volume_Type = "Box",
-          X = 20.0,
-          Y = 20.0,
-          Z = 20.0,
+          half_X = 20.0,
+          half_Y = 20.0,
+          half_Z = 20.0,
           Inside = "None",
           Position = {0, 0, 0} }
 
 DetectorComponent_1 = { Material = "Liquid Argon",
                         Volume_Type = "Box",
-                        X = 1,
-                        Y = 1,
-                        Z = 2,
+                        half_X = 1,
+                        half_Y = 1,
+                        half_Z = 2,
                         Position = { 0, 0, 0 },
                         Inside = "World" }
 

@@ -284,17 +284,18 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
 
 DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(SharedAttributes Attribute) {
     
-	G4double X = GetNumberFromTable_WithHalt("X", "Did not provide X "+
+	G4double half_X = GetNumberFromTable_WithHalt("half_X", "Did not provide half_X "+
                                     string("value. Halting Execution"));
 	
-	G4double Y = GetNumberFromTable_WithHalt("Y", "Did not provide Y "+
+	G4double half_Y = GetNumberFromTable_WithHalt("half_Y", "Did not provide half_Y "+
                                     string("value. Halting Execution"));
                                      
-	G4double Z = GetNumberFromTable_WithHalt("Z", "Did not provide Z "+
+	G4double half_Z = GetNumberFromTable_WithHalt("half_Z", "Did not provide half_Z "+
                                     string("value. Halting Execution"));
 	
 	return new DetectorComponent_Box(
-                                     Attribute.Name, X, Y, Z, 
+                                     Attribute.Name, half_X, 
+                                     half_Y, half_Z, 
                                      Attribute.Position, 
                                      Attribute.Material, 
                                      Attribute.Inside);

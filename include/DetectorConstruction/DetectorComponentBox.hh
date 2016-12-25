@@ -37,9 +37,9 @@ class DetectorComponent_Box : public DetectorComponent {
 
 	public:
 	
-		G4double x;
-		G4double y;
-		G4double z;
+		G4double half_x;
+		G4double half_y;
+		G4double half_z;
 	
 	/*
 	 * 
@@ -50,9 +50,9 @@ class DetectorComponent_Box : public DetectorComponent {
 	public:
 	
 		DetectorComponent_Box(G4String Name,
-                              G4double x,
-                              G4double y,
-                              G4double z,
+                              G4double half_x,
+                              G4double half_y,
+                              G4double half_z,
                               G4ThreeVector Position,
                               G4String MaterialString,
                               G4String Inside);
