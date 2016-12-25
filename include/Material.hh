@@ -40,7 +40,7 @@ class Material {
 	 * Class member variables
 	 * 
 	 * */
-	private:
+	protected:
 	
 		G4String name;
 		vector<G4String> OtherPossibleNames;
@@ -55,6 +55,7 @@ class Material {
 	 * */
 	public:
 	
+		Material();
 		Material(G4String name);
 		Material(G4String name, G4double z, G4double a, G4double density);
 		~Material();
@@ -66,7 +67,7 @@ class Material {
 		
 };
 
-class Composite_Material {
+class Composite_Material : Material {
 	
 	
 	/*
@@ -78,13 +79,6 @@ class Composite_Material {
 	
 		vector<Material *> Composite_Materials;
 		vector<G4double> fractionalmass;
-		
-		G4Material *CompositeMaterial;
-		
-		G4double density;
-		
-		G4String name;
-	
 	
 	/*
 	 * 
@@ -97,8 +91,6 @@ class Composite_Material {
                             vector<Material *> Composite_Materials,
                             vector<G4double>   fractionalmass);
 		~Composite_Material();
-		
-		G4Material *GetCompositeMaterialPointer();
 	
 	private:
 	
