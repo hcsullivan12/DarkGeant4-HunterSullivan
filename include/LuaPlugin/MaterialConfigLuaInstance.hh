@@ -54,7 +54,6 @@ class MaterialConfigLua : public LuaInstance {
 	public:
 	
 		vector<Material *> Materials;
-		vector<Composite_Material *> Composite_Materials;
 		
 	private:
 	

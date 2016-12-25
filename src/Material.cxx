@@ -31,6 +31,11 @@ using std::cout;
 
 static G4NistManager *NistManager = NULL;
 
+Material::Material() {
+	
+	
+}
+
 /*
  *
  * Should be used for Materials that are defined by Geant4 already. 
@@ -111,7 +116,8 @@ void Material::SetAdditionalNames() {
 
 Composite_Material::Composite_Material(G4String name, G4double density,
                                        vector<Material *> Composite_Materials,
-                                       vector<G4double>   fractionalmass) 
+                                       vector<G4double>   fractionalmass)
+ : Material()
 {
 
 	this->name = name;
@@ -125,24 +131,20 @@ Composite_Material::Composite_Material(G4String name, G4double density,
 		exit(1);
 		
 	}
+	BuildCompositeMaterial();
 	
 }
 
-G4Material *Composite_Material::GetCompositeMaterialPointer() {
-
-	return this->CompositeMaterial;
-	
-}
 
 void Composite_Material::BuildCompositeMaterial() {
 
-	this->CompositeMaterial = new G4Material(this->name,
+	this->DefinedMaterial = new G4Material(this->name,
                               this->density,
                               this->Composite_Materials.size());
 	
 	for (int i = 0;i < (int)this->Composite_Materials.size();i++) {
 		
-		this->CompositeMaterial->AddMaterial(this->Composite_Materials[i]->GetMaterialPointer(),
+		this->DefinedMaterial->AddMaterial(this->Composite_Materials[i]->GetMaterialPointer(),
                                              this->fractionalmass[i]);
 		
 	}
