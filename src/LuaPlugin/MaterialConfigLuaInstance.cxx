@@ -104,11 +104,11 @@ void MaterialConfigLua::Initialize_CompositeMaterialsVector() {
 		
 		cout << "Composite_Material_" + IterationString << "\n";
 		
-		Composite_Materials.push_back(ConstructCompositeMaterial());
+		this->Composite_Materials.push_back(ConstructCompositeMaterial());
 		
 		// Pops Table
 		lua_pop(this->L, 1);
-		
+		cout << "\n";
 	}
 	
 }
