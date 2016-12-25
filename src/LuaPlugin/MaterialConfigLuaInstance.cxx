@@ -104,7 +104,7 @@ void MaterialConfigLua::Initialize_CompositeMaterialsVector() {
 		
 		cout << "Composite_Material_" + IterationString << "\n";
 		
-		this->Composite_Materials.push_back(ConstructCompositeMaterial());
+		this->Materials.push_back(ConstructCompositeMaterial());
 		
 		// Pops Table
 		lua_pop(this->L, 1);
@@ -212,7 +212,8 @@ Composite_Material *MaterialConfigLua::ConstructCompositeMaterial() {
 	delete [] materials;
 	delete [] fracmass;
 	
-	return NULL;
+	return new Composite_Material(Name, Density, MaterialsVec, FracmassVec);
+	
 }
 
 void MaterialConfigLua::GetCompositeCompoments(G4int NumComponents,

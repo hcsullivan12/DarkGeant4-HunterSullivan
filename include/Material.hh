@@ -67,7 +67,7 @@ class Material {
 		
 };
 
-class Composite_Material : Material {
+class Composite_Material : public Material {
 	
 	
 	/*
