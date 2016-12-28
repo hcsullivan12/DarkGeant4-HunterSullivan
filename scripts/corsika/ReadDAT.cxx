@@ -1,5 +1,5 @@
 /*
- * Read_Particle_File_Corsika.cxx
+ * ReadDAT.cxx
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
