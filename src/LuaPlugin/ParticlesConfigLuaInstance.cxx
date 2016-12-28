@@ -116,11 +116,11 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 	
 	Load_PositionFunction();
 	
-	for (int i = 0; i <= this->NumberOfEvents; i++) {
+	for (int i = 1; i <= this->NumberOfEvents; i++) {
 		
-		G4double *PositionPointers[3] = {&this->FourVectors[i][0].X,
-                                         &this->FourVectors[i][0].Y,
-                                         &this->FourVectors[i][0].Z};
+		G4double *PositionPointers[3] = {&this->FourVectors[i-1][0].X,
+                                         &this->FourVectors[i-1][0].Y,
+                                         &this->FourVectors[i-1][0].Z};
                                          
 		lua_pushinteger(this->L, i);
 		lua_gettable(this->L, -2);
