@@ -28,7 +28,9 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> FourVectors, string DarkGeantOutputPath) 
+PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> *FourVectors,
+                                               string DarkGeantOutputPath,
+                                               int NumberOfEvents) 
 
  : G4VUserPrimaryGeneratorAction()
 
@@ -42,10 +44,13 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> FourVectors, s
 	this->PresentIndex = 0;
 	this->FourVectors = FourVectors;
 	
+	this->NumberOfEvents = NumberOfEvents;
+	
 }
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 	
+	delete this->Stepping;
 	delete this->ParticleGun;
 	
 }
@@ -61,30 +66,36 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction() {
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
-	if (this->PresentIndex == (int)this->FourVectors.size())
+	if (this->PresentIndex == this->NumberOfEvents)
 		return;
 	
 	this->Stepping->SaveEvent();
 	
 	int i = this->PresentIndex;
-	this->ParticleGun->SetParticleDefinition(
-	                   ParticleTable->FindParticle(
-	                   this->FourVectors[i].ParticleName));
-	                     
-	this->ParticleGun->SetParticleEnergy(this->FourVectors[i].T * GeV);
 	
-	this->ParticleGun->SetParticlePosition(G4ThreeVector(
-                                           this->FourVectors[i].X * m,
-                                           this->FourVectors[i].Y * m,
-                                           this->FourVectors[i].Z * m));
+	for (size_t prtcle = 0; prtcle < this->FourVectors[i].size(); prtcle++) {
+
+		this->ParticleGun->SetParticleDefinition(
+                       ParticleTable->FindParticle(
+                       this->FourVectors[i][prtcle].ParticleName));
+	                     
+		this->ParticleGun->SetParticleEnergy(this->FourVectors[i][prtcle].T * GeV);
+	
+		this->ParticleGun->SetParticlePosition(G4ThreeVector(
+                                           this->FourVectors[i][prtcle].X * m,
+                                           this->FourVectors[i][prtcle].Y * m,
+                                           this->FourVectors[i][prtcle].Z * m));
                                                
-	this->ParticleGun->SetParticleMomentumDirection(G4ThreeVector(
-                                             this->FourVectors[i].P_x,
-                                             this->FourVectors[i].P_y,
-                                             this->FourVectors[i].P_z));
+		this->ParticleGun->SetParticleMomentumDirection(G4ThreeVector(
+                                             this->FourVectors[i][prtcle].P_x,
+                                             this->FourVectors[i][prtcle].P_y,
+                                             this->FourVectors[i][prtcle].P_z));
+
+		this->ParticleGun->GeneratePrimaryVertex(event);
+		
+	}
 	
 	this->PresentIndex++;
-	this->ParticleGun->GeneratePrimaryVertex(event);
 	
 }
 

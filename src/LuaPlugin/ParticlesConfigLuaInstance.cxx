@@ -67,7 +67,7 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 
 ParticlesConfigLua::~ParticlesConfigLua() {
 	
-	
+	delete [] this->FourVectors;
 	
 }
 

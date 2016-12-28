@@ -51,8 +51,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	private:
 	
 		int PresentIndex;
+		int NumberOfEvents;
 		SteppingAction *Stepping;
-		vector<FourVector> FourVectors;
+		vector<FourVector> *FourVectors;
 		
 		G4ParticleTable *ParticleTable;
 		G4ParticleGun *ParticleGun;
@@ -65,7 +66,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	 
 	public:
 	
-		PrimaryGeneratorAction(vector<FourVector> FourVectors, string DarkGeantOutputPath);
+		PrimaryGeneratorAction(vector<FourVector> *FourVectors,
+                               string DarkGeantOutputPath,
+                               int NumberOfEvents);
 		~PrimaryGeneratorAction();
 		
 		void GeneratePrimaries(G4Event *event);
