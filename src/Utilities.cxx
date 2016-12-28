@@ -65,7 +65,7 @@ int DetermineNumberOfEvents(string filename) {
 	fscanf(fp,"%d:", &NumberOfEvents);
 	fclose(fp);
 	
-	return NumberOfEvents;
+	return NumberOfEvents+1;
 }
 
 struct ParticleMasses {

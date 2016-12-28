@@ -160,7 +160,7 @@ void InitializeState() {
 	std::cin.get();
 	clock_t start_time = time(NULL);
 	cout << "BeamOn!\n";
-	runManager->BeamOn(ParticleConfigFileInstance->FourVectors.size());
+	runManager->BeamOn(ParticleConfigFileInstance->NumberOfEvents);
 	
 	double time_elapsed = difftime(time(NULL), start_time);
 	
