@@ -60,6 +60,7 @@ struct FourVector {
 };
 
 int DetermineFileLength(string filename);
+int DetermineNumberOfEvents(string filename);
 string ConvertIntToString(int integer);
 G4double GetParticleKineticEnergy(string particle, G4double E);
 
