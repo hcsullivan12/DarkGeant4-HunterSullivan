@@ -30,12 +30,12 @@
 #include <string>
 using namespace std;
 
-void readParticleFile();  //Prototypes
+void readParticleFile();                                                //PROTOTYPES
 void printRunDate(double );
-string getLowEnergyHadronModel(double );
-string getHighEnergyHadronModel(double );
-void printParticleData(const double [39][7]);
+void writeShowerAndParticleData(int , const double [][10] , const double [][39][7]);
 string getParticleName(double );
+int getRunHeaderData(ifstream& , double );
+
 
 int main() {
 	
@@ -44,56 +44,144 @@ int main() {
 	
 	readParticleFile();
 	
+	
+	
 }
 
 void readParticleFile() {
 	
-	//Open the file
+	//OPEN THE FILE
 	ifstream ParticleFile;
-	ParticleFile.open("/home/hunter/Desktop/Corsika/corsika-75600/src/utils/boom/fort.7");
+	ParticleFile.open("/home/hunter/Desktop/Corsika/corsika-75600/run/boom/fort.7");
 	
-	//Test for Error
+	//TEST FOR ERROR
 	if(ParticleFile.fail()) {
 		cerr << "Error. Cannot find file." << endl;
 		exit(1);
 	}
+	
+	double EVTH = 3.33000E+02;
+	
 
-/*------------------RUN HEADER VARIABLES------------------*/
+	double word = 0.0;
+	
+	//READ RUN HEADER
+	int Number_of_Showers = getRunHeaderData(ParticleFile, word);
+	
+	//READ EVENT HEADERS
+	    //kth shower
+	    //nth particle of kth shower(up to 39 per shower)
+	    
+	double ShowerData[Number_of_Showers][10];                           
+		/*  ShowerData[k][0]          Event Header = 3.33000E+02;       (particle id x 1000 + hadr. generation x 10 + no. of obs. level)
+	        ShowerData[k][1]          Primary ID;                      
+	        ShowerData[k}[2]          Primary Energy;                   (GeV)
+	        ShowerData[k][3]          Primary Starting Altitude;        (cm)           CHECK UNITS AT SOME POINT
+	        ShowerData[k][4]          First Interaction Height;         (cm)
+	        ShowerData[k][5]          Primary_px;                       (GeV/c)
+	        ShowerData[k][6]          Primary_py;                       (GeV/c)
+	        ShowerData[k][7]          Primary_pz;                       (GeV/c) 
+	        ShowerData[k][8]          Zenith Angle;                     (radians)
+	        ShowerData[k][9]          Azimuthal Angle;                  (radians) */
+	
+	double ParticleData[Number_of_Showers][39][7];                      
+	/*      ParticleData[k][n][0]     Particle_ID;                      (particle id x 1000 + hadr. generation x 10 + no. of obs. level)
+	        ParticleData[k][n][1]     Particle_px;                      (GeV/c)
+	        ParticleData[k][n][2]     Particle_py;                      (GeV/c)
+	        ParticleData[k][n][3]     Particle_pz;                      (in -z direction GeV/c)
+	        ParticleData[k][n][4]     Particle_X;                       (cm)
+	        ParticleData[k][n][5]     Particle_Y;                       (cm)
+	        ParticleData[k][n][6]     Time_Since_First_Interaction;     (nsec) */
+	
+	   
+	                            
+	int Number_of_Word;
+	int k;                                                              //kth shower
+	int n;                                                              //nth particle, Prints up to 39 particles for each shower
+	
+	for (k = 1; k <= Number_of_Showers; k++) {
+		    
+		    while (word != EVTH) {                                      //Find shower headers
+				ParticleFile >> word;
+			}
+		
+		Number_of_Word = 2;
+		ShowerData[k-1][0] = word;
+		
+		
+		/*------------------CONTENT OF kth SHOWER HEADER------------------*/
+		while(Number_of_Word <= 273) {
+		
+			ParticleFile >> word;
+		
+			switch (Number_of_Word) {
+				case 3: ShowerData[k-1][1] = word;       break;
+				case 4: ShowerData[k-1][2] = word;       break;
+				case 5: ShowerData[k-1][3] = word;       break;
+				case 7: ShowerData[k-1][4] = word;       break;
+				case 8: ShowerData[k-1][5] = word;       break;
+				case 9: ShowerData[k-1][6] = word;       break;
+				case 10: ShowerData[k-1][7] = word;      break;
+				case 11: ShowerData[k-1][8] = word;      break;
+				case 12: ShowerData[k-1][9] = word;      break;
+				default:                                 break;
+			}
+		
+			Number_of_Word++;
+		}
+
+		/*------------------CONTENT OF kth SHOWER PARTICLE SUB-BLOCK------------------*/
+		for(n = 1; n <= 39; n++) {
+		
+			Number_of_Word = 1;
+		
+			//EACH PARTICLE HAS 7 COLUMNS
+			while (Number_of_Word <= 7) {
+			
+				//GET DATA
+				ParticleFile >> word;
+				
+				switch (Number_of_Word) {
+					case 1: ParticleData[k-1][n-1][0] = floor(word/1000);           break;
+					case 2: ParticleData[k-1][n-1][1] = word;                       break;
+					case 3: ParticleData[k-1][n-1][2] = word;                       break;
+					case 4: ParticleData[k-1][n-1][3] = word;                       break;
+					case 5: ParticleData[k-1][n-1][4] = word;                       break;
+					case 6: ParticleData[k-1][n-1][5] = word;                       break;
+					case 7: ParticleData[k-1][n-1][6] = word;                       break;
+					default:                                                        break;
+				}
+			
+				Number_of_Word++;
+			}
+		}
+	}
+	
+	ParticleFile.close();
+	
+	writeShowerAndParticleData(Number_of_Showers, ShowerData, ParticleData);
+	
+}
+
+
+
+
+
+/*--------------------GET RUN HEADER DATA------------------*/
+int getRunHeaderData(ifstream& ParticleFile, double word) {
+	
+	/*RUN HEADER VARIABLES*/
 	double RUNH = 1.11111E+07;
 	double Run_Number;
 	double Run_Date;
 	double Observation_Height;
 	double Energy_Lower_Limit;
 	double Energy_Upper_Limit;
+	int Number_of_Showers;
 	
-/*------------------EVENT HEADER VARIABLES (once per event)------------------*/
-	double EVTH = 3.33333E+07;
-	double Event_Number;
-	double Primary_Particle;
-	double Primary_Energy;    //GeV
-	double Starting_Altitude;     //g/cm^2
-	double First_Interaction_Height;    //cm
-	double Primary_px;   //GeV/c
-	double Primary_py;   //GeV/c
-	double Primary_pz;   //GeV/c
-	double Zenith_Angle;   //radian
-	double Azimuthal_Angle;   //radian
-	double Hadron_KE_Cutoff;   //GeV
-	double Muon_KE_Cutoff;    //GeV
-	double Electron_KE_Cutoff;    //GeV
-	double Photon_KE_Cutoff;    //GeV
-	double xEarthMagField;   //microT
-	double zEarthMagField;   //microT
-	double Low_Energy_Hadron_Model;
-	double High_Energy_Hadron_Model;
-	
-/*------------------CONTENT OF RUN HEADER------------------*/
-	
-	//Helpful counters
-	double word;
+	/*CONTENT OF RUN HEADER*/
 	int Number_of_Word = 1;
 	
-	//For Run Header
 	while(Number_of_Word <= 273) {
 		
 		ParticleFile >> word;
@@ -105,116 +193,32 @@ void readParticleFile() {
 			case 6: Observation_Height =         word; break;
 			case 17: Energy_Lower_Limit =        word; break;
 			case 18: Energy_Upper_Limit =        word; break;
+			case 93: Number_of_Showers = (int)floor(word); break;
 			default:                                   break;
 		}
 		
 		Number_of_Word++;
 	}
 	
+	cout << "----RUN INFO----" << endl;
 	cout << "RUNH is " << RUNH << endl;
 	cout << "Run Number is " << Run_Number << endl;
 	printRunDate(Run_Date);
 	cout << "Observation Height is " << Observation_Height << " cm" << endl;
 	cout << "Energy Lower Limit is " << Energy_Lower_Limit << " GeV" << endl;
 	cout << "Energy Upper Limit is " << Energy_Upper_Limit << " GeV" << endl;
+	cout << "Number of showers is " << Number_of_Showers << endl;
+	cout << "\n";
 	
 	
-/*------------------CONTENT OF EVENT HEADER------------------*/
-	Number_of_Word = 1;
-	
-	while(Number_of_Word <= 273) {
-		
-		ParticleFile >> word;
-		
-		switch (Number_of_Word) {
-			case 1: EVTH =                            word; break;
-			case 2: Event_Number =                    word; break;
-			case 3: Primary_Particle =                word; break;
-			case 4: Primary_Energy =                  word; break;
-			case 5: Starting_Altitude =               word; break;
-			case 7: First_Interaction_Height =        word; break;
-			case 8: Primary_px =                      word; break;
-			case 9: Primary_py =                      word; break;
-			case 10: Primary_pz =                     word; break;
-			case 11: Zenith_Angle =                   word; break;
-			case 12: Azimuthal_Angle =                word; break;
-			case 61: Hadron_KE_Cutoff =               word; break;
-			case 62: Muon_KE_Cutoff =                 word; break;
-			case 63: Electron_KE_Cutoff =             word; break;
-			case 64: Photon_KE_Cutoff =               word; break;
-			case 71: xEarthMagField =                 word; break;
-			case 72: zEarthMagField =                 word; break;
-			case 75: Low_Energy_Hadron_Model =        word; break;
-			case 76: High_Energy_Hadron_Model =       word; break;
-			default: break;
-		}
-		
-		Number_of_Word++;
-	}
-	
-	cout << "EVTH is " << EVTH << endl;
-	cout << "Event Number is " << Event_Number << endl;
-	cout << "Primary Particle is " << getParticleName(Primary_Particle) << endl;
-	cout << "Primary Energy is " << Primary_Energy << " GeV" << endl;
-	cout << "Starting Altitude is " << Starting_Altitude << " cm" << endl;
-	cout << "First Interaction Height is " << First_Interaction_Height << " cm" << endl;
-	cout << "Primary px is " << Primary_px << " GeV/c" << endl;
-	cout << "Primary py is " << Primary_py << " GeV/c" << endl;
-	cout << "Primary pz is " << Primary_pz << " GeV/c" << endl;
-	cout << "Zenith Angle is " << Zenith_Angle << " radians" << endl;
-	cout << "Azimuthal Angle is " << Azimuthal_Angle << " radians" << endl;
-	cout << "Hadron_KE Cutoff is " << Hadron_KE_Cutoff << " GeV" << endl;
-	cout << "Muon KE Cutoff is " << Muon_KE_Cutoff << " GeV" << endl;
-	cout << "Electron_KE Cutoff is " << Electron_KE_Cutoff << " GeV" << endl;
-	cout << "Photon KE Cutoff is " << Photon_KE_Cutoff << " GeV" << endl;
-	cout << "xEarthMagField is " << xEarthMagField << " microT" << endl;
-	cout << "zEarthMagField is " << zEarthMagField << " microT" << endl;
-	cout << "Low Energy Hadron Model is " << getLowEnergyHadronModel(Low_Energy_Hadron_Model) << endl;
-	cout << "High Energy Hadron Model is " << getHighEnergyHadronModel(High_Energy_Hadron_Model) << endl;
-	
-	
-/*------------------CONTENT OF PARTICLE SUB-BLOCK------------------*/
-	int n;    //nth particle
-	double ParticleData[39][7];   //array ---> 39 particles with 7 columns of data for each
-	
-	/*  Particle[n][0]        Particle_ID;                      (particle id x 1000 + hadr. generation x 10 + no. of obs. level)
-	    Particle[n][1]        Particle_px;                      (GeV/c)
-	    Particle[n][2]        Particle_py;                      (GeV/c)
-	    Particle[n][3]        Particle_pz;                      (in -z direction GeV/c)
-	    Particle[n][4]        Particle_X;                       (cm)
-	    Particle[n][5]        Particle_Y;                       (cm)
-	    Particle[n][6]        Time_Since_First_Interaction;     (nsec) */
-	
-	for(n = 0; n < 39; n++) {
-		
-		Number_of_Word = 0;
-		
-		while (Number_of_Word < 7) {
-			
-			//Get data
-			ParticleFile >> word;
-			
-			//Columns
-			switch (Number_of_Word) {
-				case 0: ParticleData[n][0] = floor(word/1000);           break;
-				case 1: ParticleData[n][1] = word;                       break;
-				case 2: ParticleData[n][2] = word;                       break;
-				case 3: ParticleData[n][3] = word;                       break;
-				case 4: ParticleData[n][4] = word;                       break;
-				case 5: ParticleData[n][5] = word;                       break;
-				case 6: ParticleData[n][6] = word;                       break;
-				default:                                                 break;
-			}
-			
-			Number_of_Word++;
-		}
-	}
-	
-	printParticleData(ParticleData);
-	
-	ParticleFile.close();
-	exit(1);
+	return Number_of_Showers;
 }
+
+
+
+
+
+
 
 
 /*------------------PRINT RUN DATE------------------*/
@@ -230,83 +234,75 @@ void printRunDate(double Run_Date) {
 	
 }
 
-/*------------------GET HADRON MODELS------------------*/
-string getLowEnergyHadronModel(double Low_Energy_Hadron_Model) {
-	
-	int input = (int)float(Low_Energy_Hadron_Model);
-	string model;
-	
-	switch (input) {
-		case 1: model = "GHEISHA";           break;
-		case 2: model = "UrQMD";             break;
-		case 3: model = "FLUKA";             break;
-		default: model = "Error";            break;
-	}
-	
-	return model;
-}
 
-string getHighEnergyHadronModel(double High_Energy_Hadron_Model) {
-	
-	int input = (int)float(High_Energy_Hadron_Model);
-	string model;
-	
-	switch (input) {
-		case 0: model = "HDPM";              break;
-		case 1: model = "VENUS";             break;
-		case 2: model = "SIBYLL";            break;
-		case 3: model = "QGSJET";            break;
-		case 4: model = "DPMJET";            break;
-		case 5: model = "NEXUS";             break;
-		case 6: model = "EPOS";              break;
-		default: model = "Error";            break;
-	}
-	
-	return model;
-	
-}
 
-/*------------------PRINT PARTICLE DATE------------------*/
-void printParticleData(const double ParticleData[39][7]) {
+
+
+
+
+/*-----------------WRITE SHOWER AND PARTICLE DATA-------------------*/
+void writeShowerAndParticleData(int Number_of_Showers, const double ShowerData [][10], const double ParticleData [][39][7]) {
 	
-	string Columns[8] = {"Particle # ", "ID", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "      Delta t (ns)"};
+	ofstream OutputFile;
+	OutputFile.open ("/home/hunter/Desktop/Corsika/corsika-75600/run/boom/Particle_Data.txt");
 	
-	cout << "\n\n";
+	string ShowerRows[9] = {"Primary ID:", "Primary Energy(GeV):", "Starting Altitude(cm):", "First Interaction Height(cm):", "Primary Px(GeV/c):", "Primary Py(GeV/c):", "Primary Pz(GeV/c):", "Zenith Angle(rad):", "Azimuthal Angle(rad):"};
+	string ParticleColumns[8] = {"Particle # ", "ID", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "      Delta t (ns)"};      
 	
-	//Print Table Header
-	for(int i = 0; i < 8; i++) {
-		
-		if (i == 7) {
-			cout << setw(20) << Columns[i] << endl;
-		}
-		
-		else cout << Columns[i] << setw(20);
-		
-	}
+	if (OutputFile.is_open()) {
 	
-	cout << "\n";
-	
-	//Print Array Data
-	for (int n = 0; n < 39; n++) {
+		for (int k = 1; k <= Number_of_Showers; k++) {
 		
-		cout << "Particle " << setw(2) << n + 1;
+			OutputFile << "\n\n----------------------------------------------SHOWER NUMBER " << k << "-----------------------------------------------\n\n";
 		
-		for (int j = 0; j < 7; j++) {
-			
-			if (j == 0) {
-				cout << setw(20) << getParticleName(ParticleData[n][j]);
+			/*PRINT SHOWER DATA*/
+			for(int i = 1; i <= 9; i++) {
+				OutputFile << setw(30) << left << ShowerRows[i-1] << setw(20) << ShowerData[k-1][i] << endl;
 			}
-			
-			if (j == 6) {
-				cout << setw(20) << ParticleData[n][j] << endl;
+		
+			OutputFile << "\n";
+		
+			/*PRINT PARTICLE COLUMNS*/
+			for (int i = 0; i < 8; i++) {
+		
+				if (i == 7) {
+					OutputFile << ParticleColumns[i] << endl;
+				}
+				else OutputFile << ParticleColumns[i] << setw(20) << right;
 			}
+		
+			OutputFile << "\n";
+		
+			/*PRINT DATA IN PARTICLE ARRAY*/
+			for (int n = 1; n <= 39; n++) {
+		
+				OutputFile << "Particle " << setw(2) << n;
+		
+				for (int j = 0; j < 7; j++) {
 			
-			if (j != 0 && j != 6) {
-				cout << setw(20) << ParticleData[n][j];
+					if (j == 0) {
+						OutputFile << setw(20) << getParticleName(ParticleData[k-1][n-1][j]);
+					}
+					
+					if (j == 6) {
+						OutputFile << setw(20) << ParticleData[k-1][n-1][j] << endl;
+					}
+					
+					if (j != 0 && j != 6) {
+						OutputFile << setw(20) << ParticleData[k-1][n-1][j];
+					}
+				}
 			}
 		}
+	
+		OutputFile.close();
 	}
+	
+	else cout << "Unable to open file.";
 }
+
+
+
 
 /*------------------GET PARTICLE NAME------------------*/
 string getParticleName(double currentParticleID) {
@@ -334,7 +330,7 @@ string getParticleName(double currentParticleID) {
 		case 76: ParticleName = "(add. info) muon-";             break;
 		case 133: ParticleName = "tauon neutrino";               break;
 		case 134: ParticleName = "anti tauon neutrino";          break;
-		default: ParticleName = "Error";                         break;
+		default: ParticleName = "Unknown";                       break;
 		
 	}
 	
