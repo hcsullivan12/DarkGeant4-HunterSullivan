@@ -177,7 +177,6 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	Vector.P_y = Momentum.y();
 	Vector.P_z = Momentum.z();
 	Vector.E = Energy;
-	Vector.T = GetParticleKineticEnergy(ParticleName, Energy);
 	
 	if (!this->PositionDefinedByFunction) {
 	
@@ -461,9 +460,6 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 		{
 			
 			Temp_FourVector.ParticleName = G4String(Temp_ParticleName);
-			Temp_FourVector.T = GetParticleKineticEnergy(
-			                               Temp_FourVector.ParticleName,
-			                               Temp_FourVector.E);
 			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
@@ -496,9 +492,6 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 		{
 			
 			
-			Temp_FourVector.T = GetParticleKineticEnergy(
-			                               this->PrimaryParticle_Name,
-			                               Temp_FourVector.E);
 			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
@@ -531,10 +524,7 @@ void ParticlesConfigLua::ReadFile_FourVector() {
                                          &Temp_FourVector.P_y,
                                          &Temp_FourVector.P_z) != EOF) 
 		{
-		
-			Temp_FourVector.T = GetParticleKineticEnergy(
-			                               this->PrimaryParticle_Name,
-			                               Temp_FourVector.E);
+			
 			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}

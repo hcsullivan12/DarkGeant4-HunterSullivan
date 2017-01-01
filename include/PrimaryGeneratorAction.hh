@@ -30,9 +30,10 @@
 // Geant4 Headers
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
+#include "G4ThreeVector.hh"
+#include "G4ParticleDefinition.hh"
 #include "G4GeneralParticleSource.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ThreeVector.hh"
 
 // User Headers
 #include "SteppingAction.hh"
@@ -76,7 +77,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	
 	private:
 	
-		void DetermineParticleDefinition(FourVector vec);
+		G4ParticleDefinition *GetParticleDefinition(FourVector vec);
 };
 
 #endif

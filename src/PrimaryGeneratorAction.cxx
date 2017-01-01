@@ -26,7 +26,6 @@
 
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
-#include "G4ParticleDefinition.hh"
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> *FourVectors,
                                                string DarkGeantOutputPath,
@@ -75,12 +74,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
 	for (size_t prtcle = 0; prtcle < this->FourVectors[i].size(); prtcle++) {
 
-		this->ParticleGun->SetParticleDefinition(
-                       ParticleTable->FindParticle(
-                       this->FourVectors[i][prtcle].ParticleName));
-	                     
-		this->ParticleGun->SetParticleEnergy(this->FourVectors[i][prtcle].T * GeV);
-	
+		G4ParticleDefinition *Def = GetParticleDefinition(this->FourVectors[i][prtcle]);
+		this->FourVectors[i][prtcle].T = this->FourVectors[i][prtcle].E * GeV - Def->GetPDGMass();
+		
+		this->ParticleGun->SetParticleDefinition(Def);
+		this->ParticleGun->SetParticleEnergy(this->FourVectors[i][prtcle].T);
 		this->ParticleGun->SetParticlePosition(G4ThreeVector(
                                            this->FourVectors[i][prtcle].X * m,
                                            this->FourVectors[i][prtcle].Y * m,
@@ -99,10 +97,11 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
 }
 
-void PrimaryGeneratorAction::DetermineParticleDefinition(FourVector vec) {
+G4ParticleDefinition *PrimaryGeneratorAction::GetParticleDefinition(FourVector vec) {
 
+	std::cout << vec.ParticleName << "\n";
 	G4ParticleDefinition* Def;
-	if (vec.ParticleName.length() == 1 && vec.ParticleName[0] == '0') {
+	if (vec.ParticleName == "0") {
 	
 		//Geantino or Optical Photon
 		Def = ParticleTable->FindParticle(0);
@@ -117,7 +116,7 @@ void PrimaryGeneratorAction::DetermineParticleDefinition(FourVector vec) {
 		
 	}
 	
-	this->ParticleGun->SetParticleDefinition(Def);
+	return Def;
 	
 }
 
