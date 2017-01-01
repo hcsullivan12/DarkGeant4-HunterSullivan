@@ -37,6 +37,7 @@ string getParticleName(double );
 double getParticleZ(ifstream& , double );
 int getNumberOfShowers(ifstream& , double );
 double getParticleEnergy(double , double , double , double );
+void removeExe();
 
 
 int main() {
@@ -46,7 +47,7 @@ int main() {
 	
 	readParticleFile();
 	
-	
+	removeExe();
 	
 }
 
@@ -409,6 +410,12 @@ string getParticleName(double currentParticleID) {
 	}
 	
 	return ParticleName;
+	
+}
+
+void removeExe() {
+	
+	remove("/home/hunter/projects/DarkGeant4/scripts/corsika/ReadCorsikaParticles");
 	
 }
 
