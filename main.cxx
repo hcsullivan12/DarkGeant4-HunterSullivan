@@ -364,7 +364,7 @@ static const ArgumentTable Table[numHandledArguments] =
  {"-module"      , &Module_Argument},
  {"-lim-output"  , &Limit_T_Argument},
  {"-vis"         , &Show_Vis_Argument},
- {"-num-threads" , }};
+ {"-num-threads" , &Num_Threads_Argument}};
 
 
 
