@@ -101,10 +101,10 @@ void readParticleFile() {
 	/*      ParticleData[k][n][0]     Particle_ID;                      (particle id x 1000 + hadr. generation x 10 + no. of obs. level)
 	        ParticleData[k][n][1]     Particle_px;                      (GeV/c)
 	        ParticleData[k][n][2]     Particle_py;                      (GeV/c)
-	        ParticleData[k][n][3]     Particle_pz;                      (in -z direction GeV/c)
-	        ParticleData[k][n][4]     Particle_X;                       (cm)
-	        ParticleData[k][n][5]     Particle_Y;                       (cm)
-	        ParticleData[k][n][6]     Particle_Z;                       (cm) */
+	        ParticleData[k][n][3]     Particle_pz;                      (in z direction GeV/c)
+	        ParticleData[k][n][4]     Particle_X;                       (m)
+	        ParticleData[k][n][5]     Particle_Y;                       (m)
+	        ParticleData[k][n][6]     Particle_Z;                       (m) */
 	
 	   
 	                            
@@ -146,7 +146,7 @@ void readParticleFile() {
 		/*------------------CONTENT OF kth SHOWER PARTICLE SUB-BLOCK------------------*/
 		for(n = 1; n <= 39; n++) {
 		
-			ParticleData[k-1][n-1][6] = Particle_Z;
+			ParticleData[k-1][n-1][6] = Particle_Z/100;			//CHECK THIS!!!! UNITS
 			Number_of_Word = 1;
 		
 			//EACH PARTICLE HAS 7 COLUMNS
@@ -159,9 +159,9 @@ void readParticleFile() {
 					case 1: ParticleData[k-1][n-1][0] = floor(word/1000);           break;
 					case 2: ParticleData[k-1][n-1][1] = word;                       break;
 					case 3: ParticleData[k-1][n-1][2] = word;                       break;
-					case 4: ParticleData[k-1][n-1][3] = word;                       break;
-					case 5: ParticleData[k-1][n-1][4] = word;                       break;
-					case 6: ParticleData[k-1][n-1][5] = word;                       break;
+					case 4: ParticleData[k-1][n-1][3] = word*-1;                    break;
+					case 5: ParticleData[k-1][n-1][4] = word/100;                   break;
+					case 6: ParticleData[k-1][n-1][5] = word/100;                   break;
 					default:                                                        break;
 				}
 			
