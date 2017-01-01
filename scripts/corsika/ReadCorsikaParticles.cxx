@@ -1,5 +1,5 @@
 /*
- * ReadDAT.cxx
+ * ReadCorsikaParticles.cxx
  * 
  * Copyright 2016 Hunter Sullivan <hunter.sullivan@mavs.uta.edu>
  * 
@@ -30,11 +30,13 @@
 #include <string>
 using namespace std;
 
-void readParticleFile();                                                //PROTOTYPES
+void readParticleFile();     //PROTOTYPES
 void printRunDate(double );
 void writeShowerAndParticleData(int , const double [][10] , const double [][39][7]);
 string getParticleName(double );
-int getRunHeaderData(ifstream& , double );
+double getParticleZ(ifstream& , double );
+int getNumberOfShowers(ifstream& , double );
+double getParticleEnergy(double , double , double , double );
 
 
 int main() {
@@ -47,6 +49,15 @@ int main() {
 	
 	
 }
+
+/*
+ * readParticleFile()
+ * 
+ *        Reads from particle output file that Corsika produces. Event headers start with 3.33000E+02.
+ *        From there, data is extracted into Shower and (secondary) Particle arrays.
+ * 
+ * 
+ * */
 
 void readParticleFile() {
 	
@@ -66,7 +77,8 @@ void readParticleFile() {
 	double word = 0.0;
 	
 	//READ RUN HEADER
-	int Number_of_Showers = getRunHeaderData(ParticleFile, word);
+	double Particle_Z = getParticleZ(ParticleFile, word);
+	int Number_of_Showers = getNumberOfShowers(ParticleFile, word);
 	
 	//READ EVENT HEADERS
 	    //kth shower
@@ -91,7 +103,7 @@ void readParticleFile() {
 	        ParticleData[k][n][3]     Particle_pz;                      (in -z direction GeV/c)
 	        ParticleData[k][n][4]     Particle_X;                       (cm)
 	        ParticleData[k][n][5]     Particle_Y;                       (cm)
-	        ParticleData[k][n][6]     Time_Since_First_Interaction;     (nsec) */
+	        ParticleData[k][n][6]     Particle_Z;                       (cm) */
 	
 	   
 	                            
@@ -133,6 +145,7 @@ void readParticleFile() {
 		/*------------------CONTENT OF kth SHOWER PARTICLE SUB-BLOCK------------------*/
 		for(n = 1; n <= 39; n++) {
 		
+			ParticleData[k-1][n-1][6] = Particle_Z;
 			Number_of_Word = 1;
 		
 			//EACH PARTICLE HAS 7 COLUMNS
@@ -148,7 +161,6 @@ void readParticleFile() {
 					case 4: ParticleData[k-1][n-1][3] = word;                       break;
 					case 5: ParticleData[k-1][n-1][4] = word;                       break;
 					case 6: ParticleData[k-1][n-1][5] = word;                       break;
-					case 7: ParticleData[k-1][n-1][6] = word;                       break;
 					default:                                                        break;
 				}
 			
@@ -163,12 +175,16 @@ void readParticleFile() {
 	
 }
 
+/*
+ * getParticleZ()
+ * 
+ *        Obtains the Z coordinate for the shower particles. This is just the observational height
+ *        listed in the Run Header. Also prints out run information.
+ * 
+ * 
+ * */
 
-
-
-
-/*--------------------GET RUN HEADER DATA------------------*/
-int getRunHeaderData(ifstream& ParticleFile, double word) {
+double getParticleZ(ifstream& ParticleFile, double word) {
 	
 	/*RUN HEADER VARIABLES*/
 	double RUNH = 1.11111E+07;
@@ -177,12 +193,11 @@ int getRunHeaderData(ifstream& ParticleFile, double word) {
 	double Observation_Height;
 	double Energy_Lower_Limit;
 	double Energy_Upper_Limit;
-	int Number_of_Showers;
 	
 	/*CONTENT OF RUN HEADER*/
 	int Number_of_Word = 1;
 	
-	while(Number_of_Word <= 273) {
+	while(Number_of_Word <= 92) {
 		
 		ParticleFile >> word;
 		
@@ -193,7 +208,6 @@ int getRunHeaderData(ifstream& ParticleFile, double word) {
 			case 6: Observation_Height =         word; break;
 			case 17: Energy_Lower_Limit =        word; break;
 			case 18: Energy_Upper_Limit =        word; break;
-			case 93: Number_of_Showers = (int)floor(word); break;
 			default:                                   break;
 		}
 		
@@ -206,22 +220,38 @@ int getRunHeaderData(ifstream& ParticleFile, double word) {
 	printRunDate(Run_Date);
 	cout << "Observation Height is " << Observation_Height << " cm" << endl;
 	cout << "Energy Lower Limit is " << Energy_Lower_Limit << " GeV" << endl;
-	cout << "Energy Upper Limit is " << Energy_Upper_Limit << " GeV" << endl;
+	cout << "Energy Upper Limit is " << Energy_Upper_Limit << " GeV" << endl;	
+	
+	return Observation_Height;
+}
+
+/*
+ * getNumberOfShowers()
+ * 
+ *        Obtains the number of showers simulated in Corsika. This is in the Run Header.
+ * 
+ * */
+
+int getNumberOfShowers(ifstream& ParticleFile, double word) {
+	
+	int Number_of_Showers;
+	
+	ParticleFile >> word;   //93rd word in block
+	
+	Number_of_Showers = word;
+	
 	cout << "Number of showers is " << Number_of_Showers << endl;
 	cout << "\n";
-	
 	
 	return Number_of_Showers;
 }
 
+/*
+ * printRunDate()
+ * 
+ * 
+ * */
 
-
-
-
-
-
-
-/*------------------PRINT RUN DATE------------------*/
 void printRunDate(double Run_Date) {
 	
 	string RunDate;
@@ -234,62 +264,46 @@ void printRunDate(double Run_Date) {
 	
 }
 
+/* writeShowerAndParticleData()
+ * 
+ *        Writes the particle data to a file Particle_Data.txt in a certain format given
+ *        in Particles.lua.
+ * 
+ *        The E/c quantity is not given in particle data file, so it must be calculated from given quantities. 
+ * 
+ * 
+ * */
 
-
-
-
-
-
-/*-----------------WRITE SHOWER AND PARTICLE DATA-------------------*/
 void writeShowerAndParticleData(int Number_of_Showers, const double ShowerData [][10], const double ParticleData [][39][7]) {
 	
 	ofstream OutputFile;
 	OutputFile.open ("/home/hunter/projects/Corsika/run/build/Particle_Data.txt");
 	
-	string ShowerRows[9] = {"Primary ID:", "Primary Energy(GeV):", "Starting Altitude(cm):", "First Interaction Height(cm):", "Primary Px(GeV/c):", "Primary Py(GeV/c):", "Primary Pz(GeV/c):", "Zenith Angle(rad):", "Azimuthal Angle(rad):"};
-	string ParticleColumns[8] = {"Particle # ", "ID", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "      Delta t (ns)"};      
+	//string ShowerRows[9] = {"Primary ID:", "Primary Energy(GeV):", "Starting Altitude(cm):", "First Interaction Height(cm):", "Primary Px(GeV/c):", "Primary Py(GeV/c):", "Primary Pz(GeV/c):", "Zenith Angle(rad):", "Azimuthal Angle(rad):"};
+	//string ParticleColumns[8] = {"ID", "E/c", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "Z (cm)"};      
 	
 	if (OutputFile.is_open()) {
 	
 		for (int k = 1; k <= Number_of_Showers; k++) {
 		
-			OutputFile << "\n\n----------------------------------------------SHOWER NUMBER " << k << "-----------------------------------------------\n\n";
-		
-			/*PRINT SHOWER DATA*/
-			for(int i = 1; i <= 9; i++) {
-				OutputFile << setw(30) << left << ShowerRows[i-1] << setw(20) << ShowerData[k-1][i] << endl;
-			}
-		
-			OutputFile << "\n";
-		
-			/*PRINT PARTICLE COLUMNS*/
-			for (int i = 0; i < 8; i++) {
-		
-				if (i == 7) {
-					OutputFile << ParticleColumns[i] << endl;
-				}
-				else OutputFile << ParticleColumns[i] << setw(20) << right;
-			}
-		
-			OutputFile << "\n";
-		
 			/*PRINT DATA IN PARTICLE ARRAY*/
 			for (int n = 1; n <= 39; n++) {
 		
-				OutputFile << "Particle " << setw(2) << n;
+				//OutputFile << "Particle " << setw(2) << n;
 		
 				for (int j = 0; j < 7; j++) {
 			
 					if (j == 0) {
-						OutputFile << setw(20) << getParticleName(ParticleData[k-1][n-1][j]);
+						OutputFile << getParticleName(ParticleData[k-1][n-1][j]) << ", ";
+						OutputFile << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]) << ", ";
 					}
 					
 					if (j == 6) {
-						OutputFile << setw(20) << ParticleData[k-1][n-1][j] << endl;
+						OutputFile << ParticleData[k-1][n-1][j] << endl;
 					}
 					
 					if (j != 0 && j != 6) {
-						OutputFile << setw(20) << ParticleData[k-1][n-1][j];
+						OutputFile << ParticleData[k-1][n-1][j] << ", ";
 					}
 				}
 			}
@@ -299,12 +313,72 @@ void writeShowerAndParticleData(int Number_of_Showers, const double ShowerData [
 	}
 	
 	else cout << "Unable to open file.";
+
 }
 
+/*
+ * getParticleEnergy()
+ * 
+ *        Obtains and returns E/c quantity for print out.
+ * 
+ * 
+ * */
 
+double getParticleEnergy(double ID, double Px, double Py, double Pz) {
+	
+	double energy_c;
+	
+	double P2 = Px*Px + Py*Py + Pz*Pz;
+	double mass;
+	double ParticleMasses[200];
+	
+	for (int i = 1; i <= 200; i++){
+		
+		switch (i) {
+		//in MeV/c^2
+		case 1: ParticleMasses[i] = 0;                          break;
+		case 2: ParticleMasses[i] = 0.5109989461;               break;
+		case 3: ParticleMasses[i] = 0.5109989461;               break;
+		case 5: ParticleMasses[i] = 105.6583745;                break;
+		case 6: ParticleMasses[i] = 105.6583745;                break;
+		case 8: ParticleMasses[i] = 139.57018;                  break;
+		case 9: ParticleMasses[i] = 139.57018;                  break;
+		case 13: ParticleMasses[i] = 939.5654133;               break;
+		case 14: ParticleMasses[i] = 938.2720813;               break;
+		case 15: ParticleMasses[i] = 938.2720813;               break;
+		case 66: ParticleMasses[i] = 0;                         break;
+		case 67: ParticleMasses[i] = 0;                         break;
+		case 68: ParticleMasses[i] = 0;                         break;
+		case 69: ParticleMasses[i] = 0;                         break;
+		case 75: ParticleMasses[i] = 0;                         break;
+		case 76: ParticleMasses[i] = 0;                         break;
+		case 133: ParticleMasses[i] = 0;                        break;
+		case 134: ParticleMasses[i] = 0;                        break;
+		}	
+		
+		
+	}
+	
+	for (int i = 1; i <= 200; i++ ) {
+		
+		if (ID == i) {
+			mass = ParticleMasses[i];
+		}
+	}
+	
+	
+	energy_c = sqrt(P2 + mass*mass);
+	return energy_c;
+}
 
+/*
+ * getParticleName()
+ * 
+ *         Obtains the name of each particle. I've only provided a few.
+ * 
+ * 
+ * */
 
-/*------------------GET PARTICLE NAME------------------*/
 string getParticleName(double currentParticleID) {
 	
 	int ID = (int)floor(currentParticleID);
