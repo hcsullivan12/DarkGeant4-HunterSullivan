@@ -294,16 +294,16 @@ void writeShowerAndParticleData(int Number_of_Showers, const double ShowerData [
 				for (int j = 0; j < 7; j++) {
 			
 					if (j == 0) {
-						OutputFile << getParticleName(ParticleData[k-1][n-1][j]) << ", ";
-						OutputFile << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]) << ", ";
+						OutputFile << setw(10) << left << getParticleName(ParticleData[k-1][n-1][j]);
+						OutputFile << setw(15) << right << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
 					}
 					
 					if (j == 6) {
-						OutputFile << ParticleData[k-1][n-1][j] << endl;
+						OutputFile << setw(15) << right << ParticleData[k-1][n-1][j] << endl;
 					}
 					
 					if (j != 0 && j != 6) {
-						OutputFile << ParticleData[k-1][n-1][j] << ", ";
+						OutputFile << setw(15) << right << ParticleData[k-1][n-1][j];
 					}
 				}
 			}
