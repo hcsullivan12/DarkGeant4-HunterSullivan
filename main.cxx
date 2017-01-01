@@ -78,20 +78,22 @@ using std::cin;
  * 
  * */
 
+// Runtime Argument variables
 static const string VersionString = "0.4 \"Fermi\"";
 static bool TerminalOutput = true;
 static bool ShowVis = false;
 
+static int NumberOfThreads = 1;
+
 static string           Module = "config";
 static vector<G4String> ExecutionVector;
 
+// Misc variables
 static ConfigLuaInstance         *ConfigFileInstance = NULL;
 static DetectorConfigLuaInstance *DetectorConfigFileInstance = NULL;
 static MaterialConfigLua         *MaterialConfigFileInstance = NULL;
 static ParticlesConfigLua        *ParticleConfigFileInstance = NULL;
-
 static DetectorConstructionV2 *Detector = NULL;
-
 static G4RunManager *runManager;
 
 /*
@@ -352,15 +354,17 @@ void Execute_Argument(int argc, char *argv[], int index);
 void Module_Argument (int argc, char *argv[], int index);
 void Limit_T_Argument(int argc, char *argv[], int index);
 void Show_Vis_Argument(int argc, char *argv[], int index);
+void Num_Threads_Argument(int argc, char *argv[], int index);
 
 
 
-static const int numHandledArguments = 4;
+static const int numHandledArguments = 5;
 static const ArgumentTable Table[numHandledArguments] =
 {{"-execute"     , &Execute_Argument},
  {"-module"      , &Module_Argument},
  {"-lim-output"  , &Limit_T_Argument},
- {"-vis"         , &Show_Vis_Argument}};
+ {"-vis"         , &Show_Vis_Argument},
+ {"-num-threads" , }};
 
 
 
@@ -427,6 +431,29 @@ void Limit_T_Argument(int argc, char *argv[], int index) {
 void Show_Vis_Argument(int argc, char *argv[], int index) {
 	
 	ShowVis = true;
+	
+}
+
+void Num_Threads_Argument(int argc, char *argv[], int index) {
+	
+	if ((index+1) == argc) {
+	
+		cout << "Need to specify number of threads!\n";
+		return;
+		
+	}
+	if (atoi(argv[index+1]) >= 1) {
+		
+		NumberOfThreads = atoi(argv[index+1]);
+		
+	} else {
+		
+		cout << "Invalid number of threads. Be sure to provide a number\n";
+		cout << "greater than or equal to 1\n";
+		return;
+		
+	}
+	
 	
 }
 
