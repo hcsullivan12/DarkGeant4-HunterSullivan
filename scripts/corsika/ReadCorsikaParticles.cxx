@@ -363,7 +363,7 @@ double getParticleEnergy(double ID, double Px, double Py, double Pz) {
 	for (int i = 1; i <= 200; i++ ) {
 		
 		if (ID == i) {
-			mass = ParticleMasses[i];
+			mass = ParticleMasses[i]/(10000);   //Convert to GeV/c^2
 		}
 	}
 	
