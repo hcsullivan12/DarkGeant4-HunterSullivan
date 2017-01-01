@@ -31,7 +31,6 @@ def main(args):
 	eventnum = 0
 	for line in fp_r:
 		fp_w.write("%d: %s" % (eventnum, line))
-		eventnum += 1
 	
 	return 0
 
