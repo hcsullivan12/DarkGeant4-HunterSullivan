@@ -74,6 +74,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 		void GeneratePrimaries(G4Event *event);
 		SteppingAction *GetSteppingAction();
 	
+	private:
+	
+		void DetermineParticleDefinition(FourVector vec);
 };
 
 #endif

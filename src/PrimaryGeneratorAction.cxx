@@ -99,6 +99,27 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	
 }
 
+void PrimaryGeneratorAction::DetermineParticleDefinition(FourVector vec) {
+
+	G4ParticleDefinition* Def;
+	if (vec.ParticleName.length() == 1 && vec.ParticleName[0] == '0') {
+	
+		//Geantino or Optical Photon
+		Def = ParticleTable->FindParticle(0);
+		
+	} else if (atoi(vec.ParticleName.c_str()) != 0) {
+		
+		Def = ParticleTable->FindParticle(atoi(vec.ParticleName.c_str()));
+		
+	} else {
+	
+		Def = ParticleTable->FindParticle(vec.ParticleName);
+		
+	}
+	
+	this->ParticleGun->SetParticleDefinition(Def);
+	
+}
 
 /*
  * GetSteppingAction()
