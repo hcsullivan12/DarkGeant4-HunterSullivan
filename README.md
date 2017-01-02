@@ -42,10 +42,15 @@ Pass the following command if you wish to have DarkGeant4 limit the information 
 
 `-lim-output`
 
-Pass the following if you wish to have DarkGeant4 load a specific module of configurations.
+Pass the following if you wish to have DarkGeant4 load a specific module of configuration.
 
 `-module <module name>`
 
+To specify the amount of threads you wish DarkGeant4 to use during simulations, pass the following command
+
+`-num-threads #threads`
+
+where #threads must be an integer value greater than or equal to 1.
 
 ## Using Python scripts for data analysis
 
