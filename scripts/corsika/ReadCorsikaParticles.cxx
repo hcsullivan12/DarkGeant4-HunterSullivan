@@ -39,6 +39,9 @@ int getNumberOfShowers(ifstream& , double );
 double getParticleEnergy(double , double , double , double );
 void removeExe();
 
+static const double EVTH = 3.33000E+02;
+static const double RUNE = 7.77000E+02;
+
 
 int main() {
 	
@@ -72,7 +75,7 @@ void readParticleFile() {
 		exit(1);
 	}
 	
-	double EVTH = 3.33000E+02;
+	
 	
 
 	double word = 0.0;
@@ -109,10 +112,9 @@ void readParticleFile() {
 	   
 	                            
 	int Number_of_Word;
-	int k;                                                              //kth shower
-	int n;                                                              //nth particle, Prints up to 39 particles for each shower
+                                                           //kth shower //nth particle, Prints up to 39 particles for each shower
 	
-	for (k = 1; k <= Number_of_Showers; k++) {
+	for (int k = 1; k <= Number_of_Showers; k++) {
 		    
 		    while (word != EVTH) {                                      //Find shower headers
 				ParticleFile >> word;
@@ -142,30 +144,33 @@ void readParticleFile() {
 		
 			Number_of_Word++;
 		}
-
-		/*------------------CONTENT OF kth SHOWER PARTICLE SUB-BLOCK------------------*/
-		for(n = 1; n <= 39; n++) {
 		
-			ParticleData[k-1][n-1][6] = Particle_Z/100;			//CHECK THIS!!!! UNITS
-			Number_of_Word = 1;
+		ParticleFile >> word;
 		
-			//EACH PARTICLE HAS 7 COLUMNS
-			while (Number_of_Word <= 7) {
+		if (word != RUNE) {
 			
-				//GET DATA
-				ParticleFile >> word;
+			/*------------------CONTENT OF kth SHOWER PARTICLE SUB-BLOCK------------------*/
+			for(int n = 1; n <= 39; n++) {
+		
+				ParticleData[k-1][n-1][6] = Particle_Z/100;			//CHECK THIS!!!! UNITS
+				Number_of_Word = 1;
+		
+				//EACH PARTICLE HAS 7 COLUMNS
+				while (Number_of_Word <= 7) {
 				
-				switch (Number_of_Word) {
-					case 1: ParticleData[k-1][n-1][0] = floor(word/1000);           break;
-					case 2: ParticleData[k-1][n-1][1] = word;                       break;
-					case 3: ParticleData[k-1][n-1][2] = word;                       break;
-					case 4: ParticleData[k-1][n-1][3] = word*-1;                    break;
-					case 5: ParticleData[k-1][n-1][4] = word/100;                   break;
-					case 6: ParticleData[k-1][n-1][5] = word/100;                   break;
-					default:                                                        break;
-				}
+					switch (Number_of_Word) {
+						case 1: ParticleData[k-1][n-1][0] = floor(word/1000);           break;
+						case 2: ParticleData[k-1][n-1][1] = word;                       break;
+						case 3: ParticleData[k-1][n-1][2] = word;                       break;
+						case 4: ParticleData[k-1][n-1][3] = word*-1;                    break;
+						case 5: ParticleData[k-1][n-1][4] = word/100;                   break;
+						case 6: ParticleData[k-1][n-1][5] = word/100;                   break;
+						default:                                                        break;
+					}
 			
-				Number_of_Word++;
+					Number_of_Word++;
+					ParticleFile >> word;
+				}
 			}
 		}
 	}
@@ -188,7 +193,6 @@ void readParticleFile() {
 double getParticleZ(ifstream& ParticleFile, double word) {
 	
 	/*RUN HEADER VARIABLES*/
-	double RUNH = 1.11111E+07;
 	double Run_Number;
 	double Run_Date;
 	double Observation_Height;
@@ -203,7 +207,6 @@ double getParticleZ(ifstream& ParticleFile, double word) {
 		ParticleFile >> word;
 		
 		switch (Number_of_Word) {
-			case 1: RUNH =                       word; break;
 			case 2: Run_Number =                 word; break;  
 			case 3: Run_Date =                   word; break;
 			case 6: Observation_Height =         word; break;
@@ -216,10 +219,9 @@ double getParticleZ(ifstream& ParticleFile, double word) {
 	}
 	
 	cout << "----RUN INFO----" << endl;
-	cout << "RUNH is " << RUNH << endl;
 	cout << "Run Number is " << Run_Number << endl;
 	printRunDate(Run_Date);
-	cout << "Observation Height is " << Observation_Height << " cm" << endl;
+	cout << "Observation Height is " << Observation_Height/100 << " m above sea level" << endl;
 	cout << "Energy Lower Limit is " << Energy_Lower_Limit << " GeV" << endl;
 	cout << "Energy Upper Limit is " << Energy_Upper_Limit << " GeV" << endl;	
 	
@@ -278,10 +280,15 @@ void printRunDate(double Run_Date) {
 void writeShowerAndParticleData(int Number_of_Showers, const double ShowerData [][10], const double ParticleData [][39][7]) {
 	
 	ofstream OutputFile;
-	OutputFile.open ("/home/hunter/projects/Corsika/run/build/Particle_Data.txt");
+	OutputFile.open ("/home/hunter/projects/DarkGeant4/config/Particle_Data.txt");
 	
 	//string ShowerRows[9] = {"Primary ID:", "Primary Energy(GeV):", "Starting Altitude(cm):", "First Interaction Height(cm):", "Primary Px(GeV/c):", "Primary Py(GeV/c):", "Primary Pz(GeV/c):", "Zenith Angle(rad):", "Azimuthal Angle(rad):"};
-	//string ParticleColumns[8] = {"ID", "E/c", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "Z (cm)"};      
+	//string ParticleColumns[8] = {"ID", "E/c", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "Z (cm)"};    
+	
+	double muonEnergies = 0.0;
+	int muons = 0;
+	double gammaEnergies = 0.0;
+	int gammas = 0;
 	
 	if (OutputFile.is_open()) {
 	
@@ -289,22 +296,35 @@ void writeShowerAndParticleData(int Number_of_Showers, const double ShowerData [
 		
 			/*PRINT DATA IN PARTICLE ARRAY*/
 			for (int n = 1; n <= 39; n++) {
+				
+				if (ParticleData[k-1][n-1][0] != 0) {
 		
-				//OutputFile << "Particle " << setw(2) << n;
-		
-				for (int j = 0; j < 7; j++) {
+					for (int j = 0; j < 7; j++) {
+					
 			
-					if (j == 0) {
-						OutputFile << setw(10) << left << getParticleName(ParticleData[k-1][n-1][j]);
-						OutputFile << setw(15) << right << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-					}
+						if (j == 0) {
+							OutputFile << 0 << ":";
+							OutputFile << setw(10) << getParticleName(ParticleData[k-1][n-1][j]);
+							OutputFile << setw(15) << right << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+						
+							if (ParticleData[k-1][n-1][j] == 5 || ParticleData[k-1][n-1][j] == 6 || ParticleData[k-1][n-1][j] == 75 || ParticleData[k-1][n-1][j] == 76) {
+								muonEnergies = muonEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+								muons++;
+							}
+							
+							if (ParticleData[k-1][n-1][j] == 1) {
+								gammaEnergies = gammaEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+								gammas++;
+								}
+						}
 					
-					if (j == 6) {
-						OutputFile << setw(15) << right << ParticleData[k-1][n-1][j] << endl;
-					}
+						if (j == 6) {
+							OutputFile << setw(15) << right << ParticleData[k-1][n-1][j] << endl;
+						}
 					
-					if (j != 0 && j != 6) {
-						OutputFile << setw(15) << right << ParticleData[k-1][n-1][j];
+						if (j != 0 && j != 6) {
+							OutputFile << setw(15) << right << ParticleData[k-1][n-1][j];
+						}
 					}
 				}
 			}
@@ -314,7 +334,12 @@ void writeShowerAndParticleData(int Number_of_Showers, const double ShowerData [
 	}
 	
 	else cout << "Unable to open file.";
-
+	
+	cout << "The average muon energy is " << muonEnergies/muons << " GeV\n";
+	cout << "The number of muons detected is " << muons << "\n\n";
+	
+	cout << "The average gamma energy is " << gammaEnergies/gammas << " GeV\n";
+	cout << "The number of gammas detected is " << gammas << "\n\n";
 }
 
 /*
@@ -388,10 +413,10 @@ string getParticleName(double currentParticleID) {
 	switch (ID) {
 		
 		case 1: ParticleName = "gamma";                          break;
-		case 2: ParticleName = "positron";                       break;
-		case 3: ParticleName = "electron";                       break;
-		case 5: ParticleName = "muon+";                          break;
-		case 6: ParticleName = "muon-";                          break;
+		case 2: ParticleName = "e+";                       break;
+		case 3: ParticleName = "e-";                       break;
+		case 5: ParticleName = "mu+";                          break;
+		case 6: ParticleName = "mu-";                          break;
 		case 8: ParticleName = "pion+";                          break;
 		case 9: ParticleName = "pion-";                          break;
 		case 13: ParticleName = "neutron";                       break;
