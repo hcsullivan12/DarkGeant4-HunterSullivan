@@ -30,8 +30,10 @@
 // Geant4 Headers
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ThreeVector.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4GeneralParticleSource.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 
 // User Headers
 #include "SteppingAction.hh"
@@ -50,8 +52,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	private:
 	
 		int PresentIndex;
+		int NumberOfEvents;
 		SteppingAction *Stepping;
-		vector<FourVector> FourVectors;
+		vector<FourVector> *FourVectors;
 		
 		G4ParticleTable *ParticleTable;
 		G4ParticleGun *ParticleGun;
@@ -64,12 +67,17 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	 
 	public:
 	
-		PrimaryGeneratorAction(vector<FourVector> FourVectors, string DarkGeantOutputPath);
+		PrimaryGeneratorAction(vector<FourVector> *FourVectors,
+                               string DarkGeantOutputPath,
+                               int NumberOfEvents);
 		~PrimaryGeneratorAction();
 		
 		void GeneratePrimaries(G4Event *event);
 		SteppingAction *GetSteppingAction();
 	
+	private:
+	
+		G4ParticleDefinition *GetParticleDefinition(FourVector vec);
 };
 
 #endif

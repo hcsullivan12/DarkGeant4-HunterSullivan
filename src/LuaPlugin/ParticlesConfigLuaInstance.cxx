@@ -67,7 +67,7 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 
 ParticlesConfigLua::~ParticlesConfigLua() {
 	
-	
+	delete [] this->FourVectors;
 	
 }
 
@@ -116,11 +116,11 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 	
 	Load_PositionFunction();
 	
-	for (int i = 1; i <= (int)this->FourVectors.size(); i++) {
+	for (int i = 1; i <= this->NumberOfEvents; i++) {
 		
-		G4double *PositionPointers[3] = {&this->FourVectors[i].X,
-                                         &this->FourVectors[i].Y,
-                                         &this->FourVectors[i].Z};
+		G4double *PositionPointers[3] = {&this->FourVectors[i-1][0].X,
+                                         &this->FourVectors[i-1][0].Y,
+                                         &this->FourVectors[i-1][0].Z};
                                          
 		lua_pushinteger(this->L, i);
 		lua_gettable(this->L, -2);
@@ -158,7 +158,7 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	G4String ParticleName = GetStringFromTable_WithHalt("Particle_Name",
                                             "Particle_Name not found.");
                                              
-	int NumberOfEvents = GetIntegerFromTable_WithHalt("Number_Of_Events",
+	this->NumberOfEvents = GetIntegerFromTable_WithHalt("Number_Of_Events",
                                          "Number_Of_Events not found.");
                                          
 	G4double Energy = GetNumberFromTable_WithHalt("Energy",
@@ -169,13 +169,14 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	//Pops Particle_Table
 	lua_pop(this->L, 1);
 	
+	Initialize_FourVector_Vector();
+	
 	FourVector Vector;
 	Vector.ParticleName = ParticleName;
 	Vector.P_x = Momentum.x();
 	Vector.P_y = Momentum.y();
 	Vector.P_z = Momentum.z();
 	Vector.E = Energy;
-	Vector.T = GetParticleKineticEnergy(ParticleName, Energy);
 	
 	if (!this->PositionDefinedByFunction) {
 	
@@ -185,11 +186,17 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 		
 	}
 	
-	for (int i = 0;i < NumberOfEvents;i++) {
+	for (int i = 0;i < this->NumberOfEvents;i++) {
 	
-		this->FourVectors.push_back(Vector);
+		this->FourVectors[i].push_back(Vector);
 		
 	}
+	
+}
+
+void ParticlesConfigLua::Initialize_FourVector_Vector() {
+
+	this->FourVectors = new vector<FourVector>[this->NumberOfEvents];
 	
 }
 
@@ -206,7 +213,7 @@ void ParticlesConfigLua::Load_PositionFunction() {
 	lua_gettable(this->L, -2);
 	
 	// Pushes how many elements we want to generate.
-	lua_pushinteger(this->L, (int)this->FourVectors.size());
+	lua_pushinteger(this->L, this->NumberOfEvents);
 	
 	if (lua_pcall(this->L, 1, 1, 0) != 0) {
 	
@@ -384,10 +391,12 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 void ParticlesConfigLua::ReadFile_FourVector() {
 	
 	string path = this->Module_Path + "/" + this->ParticleFile;
+	this->NumberOfEvents = DetermineNumberOfEvents(path);
+	Initialize_FourVector_Vector();
+	
 	FILE *fp = fopen(path.c_str(), "r");
-	
 	FourVector Temp_FourVector;
-	
+	int eventnum = 0;
 	/*
 	 * this->ParticleFileType has the following substrings:
 	 * 
@@ -403,20 +412,21 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 	 
 	if (this->FileHasParticleNames && this->FileHasPosition) {
 	
-		string input = "%s %lf %lf %lf %lf %lf %lf %lf";
+		string input = "%d: %s %lf %lf %lf %lf %lf %lf %lf";
 		char Temp_ParticleName[256] = {'\0'};
-		while (fscanf(fp, input.c_str(), Temp_ParticleName,
-                                        &Temp_FourVector.E,
-                                        &Temp_FourVector.P_x,
-                                        &Temp_FourVector.P_y,
-                                        &Temp_FourVector.P_z,
-                                        &Temp_FourVector.X,
-                                        &Temp_FourVector.Y,
-                                        &Temp_FourVector.Z) != EOF) 
+		while (fscanf(fp, input.c_str(), &eventnum, 
+                                         Temp_ParticleName,
+                                         &Temp_FourVector.E,
+                                         &Temp_FourVector.P_x,
+                                         &Temp_FourVector.P_y,
+                                         &Temp_FourVector.P_z,
+                                         &Temp_FourVector.X,
+                                         &Temp_FourVector.Y,
+                                         &Temp_FourVector.Z) != EOF) 
 		{
 			
 			Temp_FourVector.ParticleName = G4String(Temp_ParticleName);
-			this->FourVectors.push_back(Temp_FourVector);
+			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
 	
@@ -434,25 +444,23 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 	
 	} else if (this->FileHasParticleNames) {
 	
-		string input = "%s %lf %lf %lf %lf";
+		string input = "%d: %s %lf %lf %lf %lf";
 		char Temp_ParticleName[256] = {'\0'};
 		
 		Temp_FourVector.X = this->Position.x();
 		Temp_FourVector.Y = this->Position.y();
 		Temp_FourVector.Z = this->Position.z();
 		
-		while (fscanf(fp, input.c_str(), Temp_ParticleName,
-                                        &Temp_FourVector.E,
-                                        &Temp_FourVector.P_x,
-                                        &Temp_FourVector.P_y,
-                                        &Temp_FourVector.P_z) != EOF) 
+		while (fscanf(fp, input.c_str(), &eventnum,
+                                         Temp_ParticleName,
+                                         &Temp_FourVector.E,
+                                         &Temp_FourVector.P_x,
+                                         &Temp_FourVector.P_y,
+                                         &Temp_FourVector.P_z) != EOF) 
 		{
 			
 			Temp_FourVector.ParticleName = G4String(Temp_ParticleName);
-			Temp_FourVector.T = GetParticleKineticEnergy(
-			                               Temp_FourVector.ParticleName,
-			                               Temp_FourVector.E);
-			this->FourVectors.push_back(Temp_FourVector);
+			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
 		
@@ -470,10 +478,11 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 	
 	} else if (this->FileHasPosition) {
 		
-		string input = "%lf %lf %lf %lf %lf %lf %lf";
+		string input = "%d: %lf %lf %lf %lf %lf %lf %lf";
 		Temp_FourVector.ParticleName = this->PrimaryParticle_Name;
 		
-		while (fscanf(fp, input.c_str(), &Temp_FourVector.E,
+		while (fscanf(fp, input.c_str(), &eventnum,
+                                         &Temp_FourVector.E,
                                          &Temp_FourVector.P_x,
                                          &Temp_FourVector.P_y,
                                          &Temp_FourVector.P_z,
@@ -483,10 +492,7 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 		{
 			
 			
-			Temp_FourVector.T = GetParticleKineticEnergy(
-			                               this->PrimaryParticle_Name,
-			                               Temp_FourVector.E);
-			this->FourVectors.push_back(Temp_FourVector);
+			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
 		
@@ -505,23 +511,21 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 		
 	} else {
 		
-		string input = "%lf %lf %lf %lf";
+		string input = "%d: %lf %lf %lf %lf";
 		
 		Temp_FourVector.ParticleName = this->PrimaryParticle_Name;
 		Temp_FourVector.X = this->Position.x();
 		Temp_FourVector.Y = this->Position.y();
 		Temp_FourVector.Z = this->Position.z();
 		
-		while (fscanf(fp, input.c_str(), &Temp_FourVector.E,
+		while (fscanf(fp, input.c_str(), &eventnum,
+                                         &Temp_FourVector.E,
                                          &Temp_FourVector.P_x,
                                          &Temp_FourVector.P_y,
                                          &Temp_FourVector.P_z) != EOF) 
 		{
-		
-			Temp_FourVector.T = GetParticleKineticEnergy(
-			                               this->PrimaryParticle_Name,
-			                               Temp_FourVector.E);
-			this->FourVectors.push_back(Temp_FourVector);
+			
+			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
 		

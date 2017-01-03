@@ -52,6 +52,22 @@ int DetermineFileLength(string filename) {
 	
 }
 
+int DetermineNumberOfEvents(string filename) {
+
+	int FileLength = DetermineFileLength(filename);
+	int NumberOfEvents = 0;
+	
+	FILE *fp = fopen(filename.c_str(), "r");
+	
+	char tempbuffer[256];
+	for (int i = 0;i < FileLength-1;i++)
+		fgets(tempbuffer, 256, fp);
+	fscanf(fp,"%d:", &NumberOfEvents);
+	fclose(fp);
+	
+	return NumberOfEvents+1;
+}
+
 struct ParticleMasses {
 	
 	G4String name;
