@@ -21,6 +21,7 @@
  * 
  */
 
+/*------------------HEADERS-------------------*/
 #include <iostream>
 #include <fstream>
 #include <stdlib.h>
@@ -29,19 +30,24 @@
 #include <math.h>
 #include <string>
 using namespace std;
+/*---------------------------------------------*/
 
-void readParticleFile();     //PROTOTYPES
+/*-----------------PROTOTYPES--------------------*/
+void readParticleFile();     
 void printRunDate(double );
 void writeShowerAndParticleData(int , const double [][10] , const double [][39][7]);
 string getParticleName(double );
 double getParticleZ(ifstream& , double );
-int getNumberOfShowers(ifstream& , double );
+void getNumberOfShowers(ifstream& , double );
 double getParticleEnergy(double , double , double , double );
 void removeExe();
+/*-----------------------------------------------*/
 
+/*-----------------GLOBAL VARIABLES------------------*/
 static const double EVTH = 3.33000E+02;
 static const double RUNE = 7.77000E+02;
-
+static int Number_of_Showers;
+/*---------------------------------------------------*/
 
 int main() {
 	
@@ -82,7 +88,7 @@ void readParticleFile() {
 	
 	//READ RUN HEADER
 	double Particle_Z = getParticleZ(ParticleFile, word);
-	int Number_of_Showers = getNumberOfShowers(ParticleFile, word);
+	getNumberOfShowers(ParticleFile, word);
 	
 	//READ EVENT HEADERS
 	    //kth shower
@@ -235,9 +241,7 @@ double getParticleZ(ifstream& ParticleFile, double word) {
  * 
  * */
 
-int getNumberOfShowers(ifstream& ParticleFile, double word) {
-	
-	int Number_of_Showers;
+void getNumberOfShowers(ifstream& ParticleFile, double word) {
 	
 	ParticleFile >> word;   //93rd word in block
 	
@@ -245,8 +249,6 @@ int getNumberOfShowers(ifstream& ParticleFile, double word) {
 	
 	cout << "Number of showers is " << Number_of_Showers << endl;
 	cout << "\n";
-	
-	return Number_of_Showers;
 }
 
 /*
