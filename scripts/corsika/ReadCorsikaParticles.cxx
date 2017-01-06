@@ -73,7 +73,7 @@ void readParticleFile() {
 	
 	//OPEN THE FILE
 	ifstream ParticleFile;
-	ParticleFile.open("fort.7");
+	ParticleFile.open("/home/hunter/projects/Corsika/run/build/fort.7");
 	
 	//TEST FOR ERROR
 	if(ParticleFile.fail()) {
@@ -96,13 +96,14 @@ void readParticleFile() {
 	    
 	double **ShowerData = new double*[Number_of_Showers];
 	double ***ParticleData = new double**[Number_of_Showers];
+	
 	for (int i = 0;i < Number_of_Showers;i++)
 		ShowerData[i] = new double[10];
 		
 	for (int i = 0; i < Number_of_Showers;i++) {
-		ParticleData[i] = new double*[39];
-		for (int j = 0;j < 39;j++)
-			ParticleData[i][j] = new double[7];
+			ParticleData[i] = new double*[39];
+			for (int j = 0;j < 39;j++)
+				ParticleData[i][j] = new double[7];
 		
 	}
 	
@@ -295,7 +296,7 @@ void printRunDate(double Run_Date) {
 void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, double ***ParticleData) {
 	
 	ofstream OutputFile;
-	OutputFile.open ("Particle_Data.txt");
+	OutputFile.open ("/home/hunter/projects/DarkGeant4/config/Particle_Data.txt");
 	
 	//string ShowerRows[9] = {"Primary ID:", "Primary Energy(GeV):", "Starting Altitude(cm):", "First Interaction Height(cm):", "Primary Px(GeV/c):", "Primary Py(GeV/c):", "Primary Pz(GeV/c):", "Zenith Angle(rad):", "Azimuthal Angle(rad):"};
 	//string ParticleColumns[8] = {"ID", "E/c", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "Z (cm)"};    
@@ -455,7 +456,7 @@ string getParticleName(double currentParticleID) {
 
 void removeExe() {
 	
-	//remove("/home/hunter/projects/DarkGeant4/scripts/corsika/ReadCorsikaParticles");
+	remove("/home/hunter/projects/DarkGeant4/scripts/corsika/ReadCorsikaParticles");
 	
 }
 
