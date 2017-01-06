@@ -35,10 +35,10 @@ using namespace std;
 /*-----------------PROTOTYPES--------------------*/
 void readParticleFile();     
 void printRunDate(double );
-void writeShowerAndParticleData(int , const double [][10] , const double [][39][7]);
+void writeShowerAndParticleData(int , double ** , double ***);
 string getParticleName(double );
-double getParticleZ(ifstream& , double );
-void getNumberOfShowers(ifstream& , double );
+double getParticleZ(ifstream* , double );
+void getNumberOfShowers(ifstream* , double );
 double getParticleEnergy(double , double , double , double );
 void removeExe();
 /*-----------------------------------------------*/
@@ -73,7 +73,7 @@ void readParticleFile() {
 	
 	//OPEN THE FILE
 	ifstream ParticleFile;
-	ParticleFile.open("/home/hunter/projects/Corsika/run/build/fort.7");
+	ParticleFile.open("fort.7");
 	
 	//TEST FOR ERROR
 	if(ParticleFile.fail()) {
@@ -87,14 +87,26 @@ void readParticleFile() {
 	double word = 0.0;
 	
 	//READ RUN HEADER
-	double Particle_Z = getParticleZ(ParticleFile, word);
-	getNumberOfShowers(ParticleFile, word);
+	double Particle_Z = getParticleZ(&ParticleFile, word);
+	getNumberOfShowers(&ParticleFile, word);
 	
 	//READ EVENT HEADERS
 	    //kth shower
 	    //nth particle of kth shower(up to 39 per shower)
 	    
-	double ShowerData[Number_of_Showers][10];                           
+	double **ShowerData = new double*[Number_of_Showers];
+	double ***ParticleData = new double**[Number_of_Showers];
+	for (int i = 0;i < Number_of_Showers;i++)
+		ShowerData[i] = new double[10];
+		
+	for (int i = 0; i < Number_of_Showers;i++) {
+		ParticleData[i] = new double*[39];
+		for (int j = 0;j < 39;j++)
+			ParticleData[i][j] = new double[7];
+		
+	}
+	
+	//double ShowerData[Number_of_Showers][10];                           
 		/*  ShowerData[k][0]          Event Header = 3.33000E+02;       (particle id x 1000 + hadr. generation x 10 + no. of obs. level)
 	        ShowerData[k][1]          Primary ID;                      
 	        ShowerData[k}[2]          Primary Energy;                   (GeV)
@@ -106,7 +118,7 @@ void readParticleFile() {
 	        ShowerData[k][8]          Zenith Angle;                     (radians)
 	        ShowerData[k][9]          Azimuthal Angle;                  (radians) */
 	
-	double ParticleData[Number_of_Showers][39][7];                      
+	//double ParticleData[Number_of_Showers][39][7];                      
 	/*      ParticleData[k][n][0]     Particle_ID;                      (particle id x 1000 + hadr. generation x 10 + no. of obs. level)
 	        ParticleData[k][n][1]     Particle_px;                      (GeV/c)
 	        ParticleData[k][n][2]     Particle_py;                      (GeV/c)
@@ -118,8 +130,7 @@ void readParticleFile() {
 	   
 	                            
 	int Number_of_Word;
-                                                           //kth shower //nth particle, Prints up to 39 particles for each shower
-	
+
 	for (int k = 1; k <= Number_of_Showers; k++) {
 		    
 		    while (word != EVTH) {                                      //Find shower headers
@@ -185,6 +196,8 @@ void readParticleFile() {
 	
 	writeShowerAndParticleData(Number_of_Showers, ShowerData, ParticleData);
 	
+	delete [] ParticleData;
+	delete [] ShowerData;
 }
 
 /*
@@ -196,7 +209,7 @@ void readParticleFile() {
  * 
  * */
 
-double getParticleZ(ifstream& ParticleFile, double word) {
+double getParticleZ(ifstream* ParticleFile, double word) {
 	
 	/*RUN HEADER VARIABLES*/
 	double Run_Number;
@@ -210,7 +223,7 @@ double getParticleZ(ifstream& ParticleFile, double word) {
 	
 	while(Number_of_Word <= 92) {
 		
-		ParticleFile >> word;
+		*ParticleFile >> word;
 		
 		switch (Number_of_Word) {
 			case 2: Run_Number =                 word; break;  
@@ -241,9 +254,9 @@ double getParticleZ(ifstream& ParticleFile, double word) {
  * 
  * */
 
-void getNumberOfShowers(ifstream& ParticleFile, double word) {
+void getNumberOfShowers(ifstream* ParticleFile, double word) {
 	
-	ParticleFile >> word;   //93rd word in block
+	*ParticleFile >> word;   //93rd word in block
 	
 	Number_of_Showers = word;
 	
@@ -279,10 +292,10 @@ void printRunDate(double Run_Date) {
  * 
  * */
 
-void writeShowerAndParticleData(int Number_of_Showers, const double ShowerData [][10], const double ParticleData [][39][7]) {
+void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, double ***ParticleData) {
 	
 	ofstream OutputFile;
-	OutputFile.open ("/home/hunter/projects/DarkGeant4/config/Particle_Data.txt");
+	OutputFile.open ("Particle_Data.txt");
 	
 	//string ShowerRows[9] = {"Primary ID:", "Primary Energy(GeV):", "Starting Altitude(cm):", "First Interaction Height(cm):", "Primary Px(GeV/c):", "Primary Py(GeV/c):", "Primary Pz(GeV/c):", "Zenith Angle(rad):", "Azimuthal Angle(rad):"};
 	//string ParticleColumns[8] = {"ID", "E/c", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "Z (cm)"};    
@@ -442,7 +455,7 @@ string getParticleName(double currentParticleID) {
 
 void removeExe() {
 	
-	remove("/home/hunter/projects/DarkGeant4/scripts/corsika/ReadCorsikaParticles");
+	//remove("/home/hunter/projects/DarkGeant4/scripts/corsika/ReadCorsikaParticles");
 	
 }
 
