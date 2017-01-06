@@ -99,7 +99,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 
 G4ParticleDefinition *PrimaryGeneratorAction::GetParticleDefinition(FourVector vec) {
 
-	std::cout << vec.ParticleName << "\n";
+	//std::cout << vec.ParticleName << "\n";
 	G4ParticleDefinition* Def;
 	if (vec.ParticleName == "0") {
 	
