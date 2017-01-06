@@ -12,17 +12,16 @@
 
 --]]
 function Particle_Position_Function(AmountOfPositionsToGenerate)
-
-	local PositionTable = {}
 	
-	for i = 1, AmountOfPositionsToGenerate 
+	math.randomseed(os.time())
+	
+	local PositionTable = {}
+	local x = 0
+	local y = 0
+	for i = 1, AmountOfPositionsToGenerate
 	do
 	
-		local x = 0
-		local y = 0
-		local z = PseudoRandomDistribution()
-		
-		PositionTable[i] = {x, y, z}
+		PositionTable[i] = {x, y, BoxMullerTransform()}
 	
 	end
 	
@@ -32,45 +31,29 @@ end
 
 --[[
 
-
+	Box-Muller Transform allows for a uniform random distribution from
+	[0,1] to be transformed to a random guassian distribution
+	
+	U_1 = e^(-(R^2)/2)
 
 --]]
-math.randomseed(os.time())
-glob_distribution_modifier = 0
-function PseudoRandomDistribution()
+function BoxMullerTransform()
 
-	local randnum = math.random()
+	local U_1 = 0.0
+	local U_2 = 0.0
+	
+	U_2 = math.random()
 
-	--Forces a higher proportion of particles to be closer to the origin
-	if glob_distribution_modifier < 5 then
+	--[[
+	
+		This condition is set to force a radius of 33.0 or less.
+	
+	--]]
+	do
+		U_1 = math.random()
+	until U_1 >= 3.726653-6
 
-		glob_distribution_modifier = glob_distribution_modifier + 1
-		
-		if randnum <= .5 then
-		
-			return (-randnum) * 2.0
-		
-		else
-		
-			return randnum * 1.0
-		
-		end
-	
-	else 
-	
-		glob_distribution_modifier = 0
-		
-		if randnum <= .5 then
-		
-			return (-randnum) * 10.0
-		
-		else
-		
-			return randnum * 5.0
-		
-		end
-	
-	end
+	return math.sqrt(-2 * math.log(U_1)) * math.cos(2 * math.pi * U_2)
 
 end
 
