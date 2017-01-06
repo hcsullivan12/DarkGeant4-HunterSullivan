@@ -305,6 +305,7 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 	int muons = 0;
 	double gammaEnergies = 0.0;
 	int gammas = 0;
+	int unknowns = 0;
 	
 	if (OutputFile.is_open()) {
 	
@@ -321,6 +322,9 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 						if (j == 0) {
 							OutputFile << 0 << ":";
 							OutputFile << setw(10) << getParticleName(ParticleData[k-1][n-1][j]);
+							if (getParticleName(ParticleData[k-1][n-1][j]) == "Unknown"){
+								unknowns++;
+							}
 							OutputFile << setw(15) << right << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
 						
 							if (ParticleData[k-1][n-1][j] == 5 || ParticleData[k-1][n-1][j] == 6 || ParticleData[k-1][n-1][j] == 75 || ParticleData[k-1][n-1][j] == 76) {
@@ -356,6 +360,8 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 	
 	cout << "The average gamma energy is " << gammaEnergies/gammas << " GeV\n";
 	cout << "The number of gammas detected is " << gammas << "\n\n";
+	
+	cout << "The number of unknowns is " << unknowns << "\n";
 }
 
 /*
