@@ -50,7 +50,7 @@ function BoxMullerTransform()
 		This condition is set to force a radius of 33.0 or less.
 	
 	--]]
-	do
+	repeat
 		U_1 = math.random()
 	until U_1 > 3.36244e-237
 
