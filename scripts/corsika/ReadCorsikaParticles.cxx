@@ -301,10 +301,29 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 	//string ShowerRows[9] = {"Primary ID:", "Primary Energy(GeV):", "Starting Altitude(cm):", "First Interaction Height(cm):", "Primary Px(GeV/c):", "Primary Py(GeV/c):", "Primary Pz(GeV/c):", "Zenith Angle(rad):", "Azimuthal Angle(rad):"};
 	//string ParticleColumns[8] = {"ID", "E/c", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "Z (cm)"};    
 	
-	double muonEnergies = 0.0;
-	int muons = 0;
+	int NumberOfParticles = 0;
+	
+	double muMinusEnergies = 0.0;
+	int muMinus = 0;
+	
+	double muPlusEnergies = 0.0;
+	int muPlus = 0;
+	
 	double gammaEnergies = 0.0;
 	int gammas = 0;
+	
+	double eMinusEnergies = 0.0;
+	int eMinus = 0;
+	
+	double ePlusEnergies = 0.0;
+	int ePlus = 0;
+	
+	double neutronEnergies = 0.0;
+	int neutrons = 0;
+	
+	double protonEnergies = 0.0;
+	int protons = 0;
+	
 	int unknowns = 0;
 	
 	if (OutputFile.is_open()) {
@@ -314,52 +333,90 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 			/*PRINT DATA IN PARTICLE ARRAY*/
 			for (int n = 1; n <= 39; n++) {
 				
-				if (ParticleData[k-1][n-1][0] != 0) {
-		
-					for (int j = 0; j < 7; j++) {
+				if (getParticleName(ParticleData[k-1][n-1][0]) != "Unknown") {
+				
+					if (ParticleData[k-1][n-1][0] != 0) {
 					
-			
-						if (j == 0) {
-							OutputFile << 0 << ":";
-							OutputFile << setw(10) << getParticleName(ParticleData[k-1][n-1][j]);
-							if (getParticleName(ParticleData[k-1][n-1][j]) == "Unknown"){
-								unknowns++;
-							}
-							OutputFile << setw(15) << right << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+						NumberOfParticles++;
 						
-							if (ParticleData[k-1][n-1][j] == 5 || ParticleData[k-1][n-1][j] == 6 || ParticleData[k-1][n-1][j] == 75 || ParticleData[k-1][n-1][j] == 76) {
-								muonEnergies = muonEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-								muons++;
-							}
-							
-							if (ParticleData[k-1][n-1][j] == 1) {
-								gammaEnergies = gammaEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-								gammas++;
+							for (int j = 0; j < 7; j++) {
+			
+								if (j == 0) {
+									OutputFile << 0 << ":";
+									OutputFile << setw(10) << getParticleName(ParticleData[k-1][n-1][j]);
+									if (ParticleData[k-1][n-1][j] == 6 || ParticleData[k-1][n-1][j] == 76){
+										muMinusEnergies = muMinusEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+										muMinus++;
+									}
+									if (ParticleData[k-1][n-1][j] == 5 || ParticleData[k-1][n-1][j] == 75){
+										muPlusEnergies = muPlusEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+										muPlus++;
+									}
+									if (ParticleData[k-1][n-1][j] == 1){
+										gammaEnergies = gammaEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+										gammas++;
+									}
+									if (ParticleData[k-1][n-1][j] == 3){
+										eMinusEnergies = eMinusEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+										eMinus++;
+									}
+									if (ParticleData[k-1][n-1][j] == 2){
+										ePlusEnergies = ePlusEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+										ePlus++;
+									}
+									if (ParticleData[k-1][n-1][j] == 13){
+										neutronEnergies = neutronEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+										neutrons++;
+									}
+									if (ParticleData[k-1][n-1][j] == 14){
+										protonEnergies = protonEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
+										protons++;
+									}
+									if (getParticleName(ParticleData[k-1][n-1][j]) == "Unknown"){
+										unknowns++;
+									}
 								}
-						}
+							
+								if (j == 6) {
+									OutputFile << setw(15) << right << ParticleData[k-1][n-1][j] << endl;
+								}
 					
-						if (j == 6) {
-							OutputFile << setw(15) << right << ParticleData[k-1][n-1][j] << endl;
-						}
-					
-						if (j != 0 && j != 6) {
-							OutputFile << setw(15) << right << ParticleData[k-1][n-1][j];
+								if (j != 0 && j != 6) {
+									OutputFile << setw(15) << right << ParticleData[k-1][n-1][j];
+								}
+							}
 						}
 					}
 				}
 			}
-		}
 	
-		OutputFile.close();
+			OutputFile.close();
 	}
 	
 	else cout << "Unable to open file.";
 	
-	cout << "The average muon energy is " << muonEnergies/muons << " GeV\n";
-	cout << "The number of muons detected is " << muons << "\n\n";
+	cout << "The number of particles detected is " << NumberOfParticles << "\n\n";
+	
+	cout << "The average muon- energy is " << muMinusEnergies/muMinus << " GeV\n";
+	cout << "The number of muon- detected is " << muMinus << "\n\n";
+	
+	cout << "The average muon+ energy is " << muPlusEnergies/muPlus << " GeV\n";
+	cout << "The number of muon+ detected is " << muPlus << "\n\n";
 	
 	cout << "The average gamma energy is " << gammaEnergies/gammas << " GeV\n";
 	cout << "The number of gammas detected is " << gammas << "\n\n";
+	
+	cout << "The average e- energy is " << eMinusEnergies/eMinus << " GeV\n";
+	cout << "The number of e- detected is " << eMinus << "\n\n";
+	
+	cout << "The average e+ energy is " << ePlusEnergies/ePlus << " GeV\n";
+	cout << "The number of e+ detected is " << ePlus << "\n\n";
+	
+	cout << "The average neutron energy is " << neutronEnergies/neutrons << " GeV\n";
+	cout << "The number of neutrons detected is " << neutrons << "\n\n";
+	
+	cout << "The average proton energy is " << protonEnergies/protons << " GeV\n";
+	cout << "The number of protons detected is " << protons << "\n\n";
 	
 	cout << "The number of unknowns is " << unknowns << "\n";
 }
