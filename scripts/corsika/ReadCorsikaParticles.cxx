@@ -375,6 +375,7 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 									if (getParticleName(ParticleData[k-1][n-1][j]) == "Unknown"){
 										unknowns++;
 									}
+									OutputFile << setw(15) << right << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
 								}
 							
 								if (j == 6) {
@@ -455,22 +456,14 @@ double getParticleEnergy(double ID, double Px, double Py, double Pz) {
 		case 67: ParticleMasses[i] = 0;                         break;
 		case 68: ParticleMasses[i] = 0;                         break;
 		case 69: ParticleMasses[i] = 0;                         break;
-		case 75: ParticleMasses[i] = 0;                         break;
-		case 76: ParticleMasses[i] = 0;                         break;
+		case 75: ParticleMasses[i] = 105.6583745;               break;
+		case 76: ParticleMasses[i] = 105.6583745;               break;
 		case 133: ParticleMasses[i] = 0;                        break;
 		case 134: ParticleMasses[i] = 0;                        break;
 		}	
-		
-		
 	}
-	
-	for (int i = 1; i <= 200; i++ ) {
-		
-		if (ID == i) {
-			mass = ParticleMasses[i]/(10000);   //Convert to GeV/c^2
-		}
-	}
-	
+	int j = (int)ID;
+	mass = ParticleMasses[j]/1000;	
 	
 	energy_c = sqrt(P2 + mass*mass);
 	return energy_c;
