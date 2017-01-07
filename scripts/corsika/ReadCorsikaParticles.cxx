@@ -371,7 +371,7 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 									if (ParticleData[k-1][n-1][j] == 14){
 										protonEnergies = protonEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
 										protons++;
-									}
+									}									
 									if (getParticleName(ParticleData[k-1][n-1][j]) == "Unknown"){
 										unknowns++;
 									}
@@ -496,8 +496,8 @@ string getParticleName(double currentParticleID) {
 		case 3: ParticleName = "e-";                       break;
 		case 5: ParticleName = "mu+";                          break;
 		case 6: ParticleName = "mu-";                          break;
-		case 8: ParticleName = "pion+";                          break;
-		case 9: ParticleName = "pion-";                          break;
+		case 8: ParticleName = "pi+";                          break;
+		case 9: ParticleName = "pi-";                          break;
 		case 13: ParticleName = "neutron";                       break;
 		case 14: ParticleName = "proton";                        break;
 		case 15: ParticleName = "antiproton";                    break;
