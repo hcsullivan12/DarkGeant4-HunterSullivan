@@ -52,8 +52,8 @@ double getParticleEnergy(double [4]);
 /*-----------------------------------------------*/
 
 /*-----------------GLOBAL VARIABLES------------------*/
-static const double EVTH = 3.33000E+02;
-static const double RUNE = 7.77000E+02;
+static const double EVTH = 3.33333E+07;
+static const double RUNE = 7.77778E+07;
 static int Number_of_Showers;
 /*---------------------------------------------------*/
 
@@ -84,7 +84,7 @@ void readParticleFile() {
 	
 	//OPEN THE FILE
 	ifstream ParticleFile;
-	ParticleFile.open("/home/hunter/projects/Corsika/run/build/fort.7");
+	ParticleFile.open("fort.7");
 	
 	//TEST FOR ERROR
 	if(ParticleFile.fail()) {
@@ -143,7 +143,9 @@ void readParticleFile() {
 
 	for (int k = 1; k <= Number_of_Showers; k++) {
 		    
-		    while (word != EVTH) {                                      //Find shower headers
+
+		    while (word != EVTH) {
+                                     //Find shower headers
 				ParticleFile >> word;
 			}
 		
@@ -203,6 +205,7 @@ void readParticleFile() {
 	}
 	
 	ParticleFile.close();
+	
 	
 	writeShowerAndParticleData(Number_of_Showers, ShowerData, ParticleData);
 	
@@ -305,7 +308,7 @@ void printRunDate(double Run_Date) {
 void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, double ***ParticleData) {
 	
 	ofstream OutputFile;
-	OutputFile.open ("/home/hunter/projects/DarkGeant4/config/Particle_Data.txt");
+	OutputFile.open ("Particle_Data.txt");
 	
 	//string ShowerRows[9] = {"Primary ID:", "Primary Energy(GeV):", "Starting Altitude(cm):", "First Interaction Height(cm):", "Primary Px(GeV/c):", "Primary Py(GeV/c):", "Primary Pz(GeV/c):", "Zenith Angle(rad):", "Azimuthal Angle(rad):"};
 	//string ParticleColumns[8] = {"ID", "E/c", "Px (GeV/c)", "Py (GeV/c)", "Pz (GeV/c)", "X (cm)", "Y (cm)", "Z (cm)"};    
@@ -338,7 +341,7 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 	if (OutputFile.is_open()) {
 	
 		for (int k = 1; k <= Number_of_Showers; k++) {
-		
+			
 			/*PRINT DATA IN PARTICLE ARRAY*/
 			for (int n = 1; n <= 39; n++) {
 				
@@ -357,10 +360,10 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 									
 									double *EnergyPointer = NULL;
 									int    *ParticleIteratorPointer = NULL;
-									switch ((int)ParticleData[k-1][n-1][j]) {
+									switch ((int)floor(ParticleData[k-1][n-1][j])) {
 									
 										case 6:
-										case 76: 
+										case 76:
 											EnergyPointer = &muMinusEnergies;
 											ParticleIteratorPointer = &muMinus;
 										break;
@@ -389,13 +392,15 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 											EnergyPointer = &protonEnergies;
 											ParticleIteratorPointer = &protons;
 										break;
-										
+										default:
+											cout << ParticleData[k-1][n-1][j] << endl;
+										break;
 										
 									}
 									if (EnergyPointer != NULL) {
 										
 										*EnergyPointer += getParticleEnergy(ParticleData[k-1][n-1]);
-										*ParticleIteratorPointer++;
+										*ParticleIteratorPointer += 1;
 										
 									}
 									if (getParticleName(ParticleData[k-1][n-1][j]) == "Unknown") {
@@ -423,7 +428,8 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 			OutputFile.close();
 	}
 	
-	else cout << "Unable to open file.";
+	else 
+		cout << "Unable to open file.";
 	
 	cout << "The number of particles detected is " << NumberOfParticles << "\n\n";
 	
@@ -492,7 +498,7 @@ double getParticleEnergy(double ParticleData[4]) {
 	double Pz = ParticleData[3];
 	
 	double P2 = Px*Px + Py*Py + Pz*Pz;
-	double mass = ParticleMasses[(int)ID]/1000;
+	double mass = ParticleMasses[(int)floor(ID)]/1000;
 	
 	return sqrt(P2 + mass*mass);
 }
@@ -539,7 +545,7 @@ string getParticleName(double currentParticleID) {
 
 void removeExe() {
 	
-	remove("/home/hunter/projects/DarkGeant4/scripts/corsika/ReadCorsikaParticles");
+	//remove("/home/hunter/projects/DarkGeant4/scripts/corsika/ReadCorsikaParticles");
 	
 }
 
