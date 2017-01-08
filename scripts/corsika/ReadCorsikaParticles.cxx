@@ -59,6 +59,7 @@ static int Number_of_Showers;
 int main() {
 	
 	Initialize_ParticleNamesArray();
+	Initialize_ParticleMassesArray();
 	
 	cout << "\n\n";
 	cout << "---------SIMULATION RUN FOR CORSIKA---------\n\n";
@@ -115,8 +116,7 @@ void readParticleFile() {
 				ParticleData[i][j] = new double[7];
 		
 	}
-	
-	//double ShowerData[Number_of_Showers][10];                           
+	                   
 		/*  ShowerData[k][0]          Event Header = 3.33000E+02;       (particle id x 1000 + hadr. generation x 10 + no. of obs. level)
 	        ShowerData[k][1]          Primary ID;                      
 	        ShowerData[k}[2]          Primary Energy;                   (GeV)
@@ -127,8 +127,7 @@ void readParticleFile() {
 	        ShowerData[k][7]          Primary_pz;                       (GeV/c) 
 	        ShowerData[k][8]          Zenith Angle;                     (radians)
 	        ShowerData[k][9]          Azimuthal Angle;                  (radians) */
-	
-	//double ParticleData[Number_of_Showers][39][7];                      
+	                   
 	/*      ParticleData[k][n][0]     Particle_ID;                      (particle id x 1000 + hadr. generation x 10 + no. of obs. level)
 	        ParticleData[k][n][1]     Particle_px;                      (GeV/c)
 	        ParticleData[k][n][2]     Particle_py;                      (GeV/c)
