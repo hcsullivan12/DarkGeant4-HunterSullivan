@@ -40,7 +40,7 @@ void writeShowerAndParticleData(int , double ** , double ***);
 void removeExe();
 
 void Initialize_ParticleNamesArray();
-void Initialize_ParticleMassesArray()
+void Initialize_ParticleMassesArray();
 
 void FreeGlobalStaticResources();
 
@@ -48,6 +48,7 @@ string getParticleName(double );
 
 double getParticleZ(ifstream* , double );
 double getParticleEnergy(double , double , double , double );
+double getParticleEnergy(double [4]);
 /*-----------------------------------------------*/
 
 /*-----------------GLOBAL VARIABLES------------------*/
@@ -350,48 +351,68 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 							for (int j = 0; j < 7; j++) {
 			
 								if (j == 0) {
+									
 									OutputFile << 0 << ":";
 									OutputFile << setw(10) << getParticleName(ParticleData[k-1][n-1][j]);
-									if (ParticleData[k-1][n-1][j] == 6 || ParticleData[k-1][n-1][j] == 76){
-										muMinusEnergies = muMinusEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-										muMinus++;
+									
+									double *EnergyPointer = NULL;
+									int    *ParticleIteratorPointer = NULL;
+									switch ((int)ParticleData[k-1][n-1][j]) {
+									
+										case 6:
+										case 76: 
+											EnergyPointer = &muMinusEnergies;
+											ParticleIteratorPointer = &muMinus;
+										break;
+										case 5:
+										case 75:
+											EnergyPointer = &muPlusEnergies;
+											ParticleIteratorPointer = &muPlus;
+										break;
+										case 1:
+											EnergyPointer = &gammaEnergies;
+											ParticleIteratorPointer = &gammas;
+										break;
+										case 3:
+											EnergyPointer = &eMinusEnergies;
+											ParticleIteratorPointer = &eMinus;
+										break;
+										case 2:
+											EnergyPointer = &ePlusEnergies;
+											ParticleIteratorPointer = &ePlus;
+										break;
+										case 13:
+											EnergyPointer = &neutronEnergies;
+											ParticleIteratorPointer = &neutrons;
+										break;
+										case 14:
+											EnergyPointer = &protonEnergies;
+											ParticleIteratorPointer = &protons;
+										break;
+										
+										
 									}
-									if (ParticleData[k-1][n-1][j] == 5 || ParticleData[k-1][n-1][j] == 75){
-										muPlusEnergies = muPlusEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-										muPlus++;
+									if (EnergyPointer != NULL) {
+										
+										*EnergyPointer += getParticleEnergy(ParticleData[k-1][n-1]);
+										*ParticleIteratorPointer++;
+										
 									}
-									if (ParticleData[k-1][n-1][j] == 1){
-										gammaEnergies = gammaEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-										gammas++;
-									}
-									if (ParticleData[k-1][n-1][j] == 3){
-										eMinusEnergies = eMinusEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-										eMinus++;
-									}
-									if (ParticleData[k-1][n-1][j] == 2){
-										ePlusEnergies = ePlusEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-										ePlus++;
-									}
-									if (ParticleData[k-1][n-1][j] == 13){
-										neutronEnergies = neutronEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-										neutrons++;
-									}
-									if (ParticleData[k-1][n-1][j] == 14){
-										protonEnergies = protonEnergies + getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-										protons++;
-									}									
-									if (getParticleName(ParticleData[k-1][n-1][j]) == "Unknown"){
+									if (getParticleName(ParticleData[k-1][n-1][j]) == "Unknown") {
+										
 										unknowns++;
+										
 									}
-									OutputFile << setw(15) << right << getParticleEnergy(ParticleData[k-1][n-1][0], ParticleData[k-1][n-1][1], ParticleData[k-1][n-1][2], ParticleData[k-1][n-1][3]);
-								}
-							
-								if (j == 6) {
+									OutputFile << setw(15) << right << getParticleEnergy(ParticleData[k-1][n-1]);
+									
+								} else if(j == 6) {
+									
 									OutputFile << setw(15) << right << ParticleData[k-1][n-1][j] << endl;
-								}
-					
-								if (j != 0 && j != 6) {
+									
+								} else {
+									
 									OutputFile << setw(15) << right << ParticleData[k-1][n-1][j];
+									
 								}
 							}
 						}
@@ -461,6 +482,18 @@ double getParticleEnergy(double ID, double Px, double Py, double Pz) {
 	double P2 = Px*Px + Py*Py + Pz*Pz;
 	double mass = ParticleMasses[(int)ID]/1000;
 
+	return sqrt(P2 + mass*mass);
+}
+double getParticleEnergy(double ParticleData[4]) {
+
+	double ID = ParticleData[0];
+	double Px = ParticleData[1];
+	double Py = ParticleData[2];
+	double Pz = ParticleData[3];
+	
+	double P2 = Px*Px + Py*Py + Pz*Pz;
+	double mass = ParticleMasses[(int)ID]/1000;
+	
 	return sqrt(P2 + mass*mass);
 }
 
