@@ -35,12 +35,19 @@ using namespace std;
 /*-----------------PROTOTYPES--------------------*/
 void readParticleFile();     
 void printRunDate(double );
-void writeShowerAndParticleData(int , double ** , double ***);
-string getParticleName(double );
-double getParticleZ(ifstream* , double );
 void getNumberOfShowers(ifstream* , double );
-double getParticleEnergy(double , double , double , double );
+void writeShowerAndParticleData(int , double ** , double ***);
 void removeExe();
+
+void Initialize_ParticleNamesArray();
+void Initialize_ParticleMassesArray()
+
+void FreeGlobalStaticResources();
+
+string getParticleName(double );
+
+double getParticleZ(ifstream* , double );
+double getParticleEnergy(double , double , double , double );
 /*-----------------------------------------------*/
 
 /*-----------------GLOBAL VARIABLES------------------*/
@@ -51,13 +58,15 @@ static int Number_of_Showers;
 
 int main() {
 	
+	Initialize_ParticleNamesArray();
+	
 	cout << "\n\n";
 	cout << "---------SIMULATION RUN FOR CORSIKA---------\n\n";
 	
 	readParticleFile();
 	
 	removeExe();
-	
+	FreeGlobalStaticResources();
 }
 
 /*
@@ -422,6 +431,24 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
 	cout << "The number of unknowns is " << unknowns << "\n";
 }
 
+static double *ParticleMasses;
+void Initialize_ParticleMassesArray() {
+	
+	ParticleMasses = new double[200];
+	ParticleMasses[2] = 0.5109989461;
+	ParticleMasses[3] = 0.5109989461;
+	ParticleMasses[5] = 105.6583745;
+	ParticleMasses[6] = 105.6583745;
+	ParticleMasses[8] = 139.57018;
+	ParticleMasses[9] = 139.57018;
+	ParticleMasses[13] = 939.5654133;
+	ParticleMasses[14] = 938.2720813;
+	ParticleMasses[15] = 938.2720813;
+	ParticleMasses[75] = 105.6583745;
+	ParticleMasses[76] = 105.6583745;
+	
+}
+
 /*
  * getParticleEnergy()
  * 
@@ -431,42 +458,37 @@ void writeShowerAndParticleData(int Number_of_Showers, double **ShowerData, doub
  * */
 
 double getParticleEnergy(double ID, double Px, double Py, double Pz) {
-	
-	double energy_c;
-	
+
 	double P2 = Px*Px + Py*Py + Pz*Pz;
-	double mass;
-	double ParticleMasses[200];
+	double mass = ParticleMasses[(int)ID]/1000;
+
+	return sqrt(P2 + mass*mass);
+}
+
+
+static string *ParticleName;
+
+void Initialize_ParticleNamesArray() {
 	
-	for (int i = 1; i <= 200; i++){
-		
-		switch (i) {
-		//in MeV/c^2
-		case 1: ParticleMasses[i] = 0;                          break;
-		case 2: ParticleMasses[i] = 0.5109989461;               break;
-		case 3: ParticleMasses[i] = 0.5109989461;               break;
-		case 5: ParticleMasses[i] = 105.6583745;                break;
-		case 6: ParticleMasses[i] = 105.6583745;                break;
-		case 8: ParticleMasses[i] = 139.57018;                  break;
-		case 9: ParticleMasses[i] = 139.57018;                  break;
-		case 13: ParticleMasses[i] = 939.5654133;               break;
-		case 14: ParticleMasses[i] = 938.2720813;               break;
-		case 15: ParticleMasses[i] = 938.2720813;               break;
-		case 66: ParticleMasses[i] = 0;                         break;
-		case 67: ParticleMasses[i] = 0;                         break;
-		case 68: ParticleMasses[i] = 0;                         break;
-		case 69: ParticleMasses[i] = 0;                         break;
-		case 75: ParticleMasses[i] = 105.6583745;               break;
-		case 76: ParticleMasses[i] = 105.6583745;               break;
-		case 133: ParticleMasses[i] = 0;                        break;
-		case 134: ParticleMasses[i] = 0;                        break;
-		}	
-	}
-	int j = (int)ID;
-	mass = ParticleMasses[j]/1000;	
+	ParticleName = new string[200];
+	ParticleName[1] = "gamma";
+	ParticleName[2] = "e+";
+	ParticleName[3] = "e-";
+	ParticleName[5] = "mu+";
+	ParticleName[6] = "mu-";
+	ParticleName[8] = "pi+";
+	ParticleName[9] = "pi-";
+	ParticleName[13] = "neutron";
+	ParticleName[14] = "proton";
+	ParticleName[15] = "antiproton";
+	ParticleName[66] = "electron neutrino";
+	ParticleName[67] = "anti electron neutrino";
+	ParticleName[68] = "muon neutrino";
+	ParticleName[69] = "anti muon neutrino";
+	ParticleName[75] = "(add. info) mu+";
+	ParticleName[133] = "tauon neutrino";
+	ParticleName[134] = "anti tauon neutrino";
 	
-	energy_c = sqrt(P2 + mass*mass);
-	return energy_c;
 }
 
 /*
@@ -479,34 +501,7 @@ double getParticleEnergy(double ID, double Px, double Py, double Pz) {
 
 string getParticleName(double currentParticleID) {
 	
-	int ID = (int)floor(currentParticleID);
-	string ParticleName;
-	
-	switch (ID) {
-		
-		case 1: ParticleName = "gamma";                          break;
-		case 2: ParticleName = "e+";                       break;
-		case 3: ParticleName = "e-";                       break;
-		case 5: ParticleName = "mu+";                          break;
-		case 6: ParticleName = "mu-";                          break;
-		case 8: ParticleName = "pi+";                          break;
-		case 9: ParticleName = "pi-";                          break;
-		case 13: ParticleName = "neutron";                       break;
-		case 14: ParticleName = "proton";                        break;
-		case 15: ParticleName = "antiproton";                    break;
-		case 66: ParticleName = "electron neutrino";             break;
-		case 67: ParticleName = "anti electron neutrino";        break;
-		case 68: ParticleName = "muon neutrino";                 break;
-		case 69: ParticleName = "anti muon neutrino";            break;
-		case 75: ParticleName = "(add. info) muon+";             break;
-		case 76: ParticleName = "(add. info) muon-";             break;
-		case 133: ParticleName = "tauon neutrino";               break;
-		case 134: ParticleName = "anti tauon neutrino";          break;
-		default: ParticleName = "Unknown";                       break;
-		
-	}
-	
-	return ParticleName;
+	return ParticleName[(int)floor(currentParticleID)];
 	
 }
 
@@ -516,3 +511,9 @@ void removeExe() {
 	
 }
 
+void FreeGlobalStaticResources() {
+	
+	delete [] ParticleName;
+	delete [] ParticleMasses;
+	
+}
