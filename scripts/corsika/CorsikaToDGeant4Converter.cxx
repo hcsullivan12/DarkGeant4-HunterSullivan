@@ -54,7 +54,7 @@
 using namespace std;
 
 /*-----------------PROTOTYPES--------------------*/
-void readParticleFile();     
+void readParticleFile(double );     
 void printRunDate(double );
 void getNumberOfShowers(ifstream* , double );
 void writeShowerAndParticleData(int , double ** , double ***);
@@ -88,7 +88,12 @@ int main() {
 	cout << "\n\n";
 	cout << "---------SIMULATION RUN FOR CORSIKA---------\n\n";
 	
-	readParticleFile();
+	cout << "Please enter the initial z-coordinate (in meters) you'd like for the secondary particles\n";
+	cout << "(Enter -1 for observational level set in Corsika):\n ";
+	double inputZ;
+	cin >> inputZ; 
+	
+	readParticleFile(inputZ);
 	
 	removeExe();
 	FreeGlobalStaticResources();
@@ -103,7 +108,7 @@ int main() {
  * 
  * */
 
-void readParticleFile() {
+void readParticleFile(double inputZ) {
 	
 	//OPEN THE FILE
 	ifstream ParticleFile;
@@ -112,6 +117,7 @@ void readParticleFile() {
 	//TEST FOR ERROR
 	if(ParticleFile.fail()) {
 		cerr << "Error. Cannot find file." << endl;
+		removeExe();
 		exit(1);
 	}
 	
@@ -199,9 +205,15 @@ void readParticleFile() {
 			
 			/*------------------CONTENT OF kth SHOWER PARTICLE SUB-BLOCK------------------*/
 			for(int n = 1; n <= 39; n++) {
-		
-				ParticleData[k-1][n-1][6] = Particle_Z/100;			//CHECK THIS!!!! UNITS
-				Number_of_Word = 1;
+				
+				if (inputZ != -1) {
+					ParticleData[k-1][n-1][6] = Particle_Z/100;			//CHECK THIS!!!! UNITS
+					Number_of_Word = 1;
+				}
+				else {
+					ParticleData[k-1][n-1][6] = inputZ;			//CHECK THIS!!!! UNITS
+					Number_of_Word = 1;
+				}
 		
 				//EACH PARTICLE HAS 7 COLUMNS
 				while (Number_of_Word <= 7) {
