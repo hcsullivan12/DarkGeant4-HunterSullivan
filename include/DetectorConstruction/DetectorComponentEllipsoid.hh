@@ -50,15 +50,7 @@ class DetectorComponent_Ellipsoid : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_Ellipsoid(G4String Name,
-                                   G4double xSemiAxis,
-                                   G4double ySemiAxis,
-                                   G4double zSemiAxis,
-                                   G4double zBottom,
-                                   G4double zTop,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
+		DetectorComponent_Ellipsoid(DetectorComponent_vars vars);
 		~DetectorComponent_Ellipsoid();
 	
 		void ConstructVolume();

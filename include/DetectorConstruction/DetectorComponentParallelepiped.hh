@@ -50,16 +50,7 @@ class DetectorComponent_Parallelepiped : public DetectorComponent {
 	 public:
 	 
 		//Constructor
-		DetectorComponent_Parallelepiped(G4String Name,
-				G4double xHalfLength,
-				G4double yHalfLength,
-				G4double zHalfLength,
-				G4double AngleOfXZFaces,
-				G4double PolarAngleOfXYFaces,
-				G4double AzimuthalAngleOfXYFaces,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
+		DetectorComponent_Parallelepiped(DetectorComponent_vars vars);
 				
 		~DetectorComponent_Parallelepiped();
 		

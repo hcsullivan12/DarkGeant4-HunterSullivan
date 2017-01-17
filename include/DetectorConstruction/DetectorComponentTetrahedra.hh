@@ -51,14 +51,7 @@ class DetectorComponent_Tetrahedra : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_Tetrahedra(G4String Name,
-				G4ThreeVector Point1,
-				G4ThreeVector Point2,
-				G4ThreeVector Point3,
-				G4ThreeVector Point4,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
+		DetectorComponent_Tetrahedra(DetectorComponent_vars vars);
 		~DetectorComponent_Tetrahedra();
 	
 		void ConstructVolume();

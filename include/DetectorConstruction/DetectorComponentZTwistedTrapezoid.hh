@@ -52,16 +52,7 @@ class DetectorComponent_ZTwistedTrapezoid : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_ZTwistedTrapezoid(G4String Name,
-                              	G4double xHalfLengthAtBottom,
-                              	G4double xHalfLengthAtTop,
-                              	G4double yHalfLengthAtBottom,
-				G4double yHalfLengthAtTop,
-				G4double zHalfLength,
-				G4double TwistingAngle,
-                              	G4ThreeVector Position,
-                              	G4String MaterialString,
-                              	G4String Inside);
+		DetectorComponent_ZTwistedTrapezoid(DetectorComponent_vars vars);
 		~DetectorComponent_ZTwistedTrapezoid();
 		
 		void ConstructVolume();

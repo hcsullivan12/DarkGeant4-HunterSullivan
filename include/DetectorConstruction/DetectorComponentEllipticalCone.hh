@@ -49,14 +49,7 @@ class DetectorComponent_EllipticalCone : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_EllipticalCone(G4String Name,
-                                   G4double xSemiAxis,
-                                   G4double ySemiAxis,
-                                   G4double Height,
-                                   G4double zTop,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
+		DetectorComponent_EllipticalCone(DetectorComponent_vars vars);
 		~DetectorComponent_EllipticalCone();
 	
 		void ConstructVolume();
