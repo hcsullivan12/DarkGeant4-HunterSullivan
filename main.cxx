@@ -160,6 +160,7 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
+	std::cout << endl;
 	std::cout << "Press enter to start simulation" << endl;
 	std::cin.get();
 	clock_t start_time = time(NULL);
