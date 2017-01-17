@@ -29,27 +29,18 @@
 #include "G4TwistedTrd.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_ZTwistedTrapezoid::DetectorComponent_ZTwistedTrapezoid(
-					G4String Name,
-					G4double xHalfLengthAtBottom,
-					G4double xHalfLengthAtTop,
-					G4double yHalfLengthAtBottom,
-					G4double yHalfLengthAtTop,
-					G4double zHalfLength,
-					G4double TwistingAngle,
-                                  	G4ThreeVector Position,
-                                   	G4String MaterialString,
-                                  	G4String Inside)
- : DetectorComponent(Name, Z_TWISTED_TRAPEZOID, Position, MaterialString, Inside)
+DetectorComponent_ZTwistedTrapezoid::DetectorComponent_ZTwistedTrapezoid(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
 	
-	this->xHalfLengthAtBottom = xHalfLengthAtBottom;
-	this->xHalfLengthAtTop = xHalfLengthAtTop;
-	this->yHalfLengthAtBottom = yHalfLengthAtBottom;
-	this->yHalfLengthAtTop = yHalfLengthAtTop;
-	this->zHalfLength = zHalfLength;
-	this->TwistingAngle = TwistingAngle;
+	this->xHalfLengthAtBottom = vars.z_twisted_trapezoid->xHalfLengthAtBottom;
+	this->xHalfLengthAtTop    = vars.z_twisted_trapezoid->xHalfLengthAtTop;
+	this->yHalfLengthAtBottom = vars.z_twisted_trapezoid->yHalfLengthAtBottom;
+	this->yHalfLengthAtTop    = vars.z_twisted_trapezoid->yHalfLengthAtTop;
+	this->zHalfLength         = vars.z_twisted_trapezoid->zHalfLength;
+	this->TwistingAngle       = vars.z_twisted_trapezoid->TwistingAngle;
 	
+	delete vars.z_twisted_trapezoid;
 }
 
 DetectorComponent_ZTwistedTrapezoid::~DetectorComponent_ZTwistedTrapezoid() {

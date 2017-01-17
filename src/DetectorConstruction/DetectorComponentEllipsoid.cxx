@@ -29,25 +29,17 @@
 #include "G4Ellipsoid.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Ellipsoid::DetectorComponent_Ellipsoid(
-                                G4String Name,
-                                G4double xSemiAxis,
-                                G4double ySemiAxis,
-                                G4double zSemiAxis,
-                                G4double zBottom,
-                                G4double zTop,
-                                G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside)
- : DetectorComponent(Name, ELLIPSOID, Position, MaterialString, Inside)
+DetectorComponent_Ellipsoid::DetectorComponent_Ellipsoid(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
 	
-	this->xSemiAxis = xSemiAxis;
-	this->ySemiAxis = ySemiAxis;
-	this->zSemiAxis = zSemiAxis;
-	this->zBottom = zBottom;
-	this->zTop = zTop;
+	this->xSemiAxis = vars.ellipsoid->xSemiAxis;
+	this->ySemiAxis = vars.ellipsoid->ySemiAxis;
+	this->zSemiAxis = vars.ellipsoid->zSemiAxis;
+	this->zBottom   = vars.ellipsoid->zBottom;
+	this->zTop      = vars.ellipsoid->zTop;
 	
+	delete vars.ellipsoid;
 }
 
 DetectorComponent_Ellipsoid::~DetectorComponent_Ellipsoid() {

@@ -28,20 +28,15 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Box::DetectorComponent_Box(
-                              G4String Name,
-                              G4double half_x,
-                              G4double half_y,
-                              G4double half_z,
-                              G4ThreeVector Position,
-                              G4String MaterialString,
-                              G4String Inside)
- : DetectorComponent(Name, BOX, Position, MaterialString, Inside) 
+DetectorComponent_Box::DetectorComponent_Box(DetectorComponent_vars vars)
+ : DetectorComponent(vars) 
 {
 	
-	this->half_x = half_x;
-	this->half_y = half_y;
-	this->half_z = half_z;
+	this->half_x = vars.box->half_x;
+	this->half_y = vars.box->half_y;
+	this->half_z = vars.box->half_z;
+	
+	delete vars.box;
 	
 }
 

@@ -28,23 +28,16 @@
 #include "G4TwistedBox.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_TwistedBox::DetectorComponent_TwistedBox(
-				G4String Name,
-				G4double TwistingAngle,
-				G4double xHalflength,
-				G4double yHalfLength,
-				G4double zHalfLength,                            
-                                G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside)
- : DetectorComponent(Name, TWISTED_BOX, Position, MaterialString, Inside) 
+DetectorComponent_TwistedBox::DetectorComponent_TwistedBox(DetectorComponent_vars vars)
+ : DetectorComponent(vars) 
 {
 	
-	this->TwistingAngle = TwistingAngle;
-	this->xHalflength = xHalflength;
-	this->yHalfLength = yHalfLength;
-	this->zHalfLength = zHalfLength;
+	this->TwistingAngle = vars.twisted_box->TwistingAngle;
+	this->xHalfLength   = vars.twisted_box->xHalfLength;
+	this->yHalfLength   = vars.twisted_box->yHalfLength;
+	this->zHalfLength   = vars.twisted_box->zHalfLength;
 	
+	delete vars.twisted_box;
 }
 
 
@@ -58,10 +51,10 @@ DetectorComponent_TwistedBox::~DetectorComponent_TwistedBox() {
 void DetectorComponent_TwistedBox::ConstructVolume() {
 	
 	G4TwistedBox *VirtualVolume = new G4TwistedBox(this->Name,
-					this->TwistingAngle * deg,
-                                        this->xHalflength * m,
-					this->yHalfLength * m,
-                                        this->zHalfLength * m);
+                                                   this->TwistingAngle * deg,
+                                                   this->xHalfLength * m,
+                                                   this->yHalfLength * m,
+                                                   this->zHalfLength * m);
                                      
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),

@@ -38,7 +38,7 @@ class DetectorComponent_TwistedBox : public DetectorComponent {
 	public:
 	
 		G4double TwistingAngle;
-		G4double xHalflength;
+		G4double xHalfLength;
 		G4double yHalfLength;
 		G4double zHalfLength;
 	
@@ -50,14 +50,7 @@ class DetectorComponent_TwistedBox : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_TwistedBox(G4String Name,
-                              	G4double TwistingAngle,
-				G4double xHalfLength,
-                                G4double yHalfLength,
-                                G4double zHalfLength,
-                                G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside);
+		DetectorComponent_TwistedBox(DetectorComponent_vars vars);
 		~DetectorComponent_TwistedBox();
 		
 		void ConstructVolume();

@@ -45,11 +45,7 @@ class DetectorComponent_SolidSphere : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_SolidSphere(G4String Name,
-				G4double Radius,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
+		DetectorComponent_SolidSphere(DetectorComponent_vars vars);
 				
 		~DetectorComponent_SolidSphere();
 	

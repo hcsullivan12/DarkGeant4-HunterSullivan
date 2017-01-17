@@ -48,15 +48,7 @@ class DetectorComponent_Cylinder : public DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent_Cylinder(G4String Name,
-                                   G4double InnerRadius,
-                                   G4double OuterRadius,
-                                   G4double StartAngle,
-                                   G4double DeltaAngle,
-                                   G4double HalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
+		DetectorComponent_Cylinder(DetectorComponent_vars vars);
 		~DetectorComponent_Cylinder();
 	
 		void ConstructVolume();

@@ -24,6 +24,7 @@
 
 #include "DetectorConfigLuaInstance.hh"
 
+using std::exception;
 /*
  * DetectorConfigLuaInstane::DetectorConfigLuaInstance(string ModulePath)
  * 
@@ -113,7 +114,7 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
         * 		assume that the value that Volume_Type is valid.
         * 
         * */
-        SharedAttributes LocalAttributes = SetSharedAttributes(
+        DetectorComponent_vars LocalAttributes = SetSharedAttributes(
                                            DetectorComponentIndex);
                                            
 		this->Components.push_back(WithVolumeGetDetectorComponent(
@@ -128,9 +129,9 @@ void DetectorConfigLuaInstance::Initialize_detector_components() {
 	
 }
 
-SharedAttributes DetectorConfigLuaInstance::SetSharedAttributes(string DetectorComponentIndex) {
+DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string DetectorComponentIndex) {
 
-	SharedAttributes Attribute;
+	DetectorComponent_vars vars;
 	string OutputVolumeName;
 	
 	/*
@@ -150,74 +151,86 @@ SharedAttributes DetectorConfigLuaInstance::SetSharedAttributes(string DetectorC
 	}
 
 
-	Attribute.VolumeType = GetStringFromTable_WithHalt("Volume_Type",
+	vars.VolumeType_str = GetStringFromTable_WithHalt("Volume_Type",
 		                  "You didn't define an appropriate volume for "
 		                  + OutputVolumeName);
 		                     
-	Attribute.Name = GetStringFromTable_NoHalt("Component_Name",
+	vars.Name = GetStringFromTable_NoHalt("Component_Name",
                                           "Default Component_Name Used",
                                           OutputVolumeName);
                          
-	Attribute.Material = GetStringFromTable_WithHalt("Material",
+	vars.MaterialString = GetStringFromTable_WithHalt("Material",
                                         "No Material found."
                                         + string(" Halting Execution"));
                          
-	Attribute.Inside = GetStringFromTable_WithHalt("Inside",
+	vars.Inside = GetStringFromTable_WithHalt("Inside",
                                         "Please define Inside."
                                         + string(" Halting Execution"));
                              
-	Attribute.Position = GetG4ThreeVector("Position");
+	vars.Position = GetG4ThreeVector("Position");
+	
+	
+	try {
+		
+		vars.colour = GetG4ThreeVector("colour");
+		
+	} catch (string e) {
+		
+		cout << "Default colour used\n";
+		vars.colour = G4Colour(.5, .5, .5);
+		lua_pop(this->L, 1);
+	}
 	
 	if (DetectorComponentIndex != "0") {
 	
-		Attribute.XRotation = GetNumberFromTable_NoHalt("X_Rotation",
+		vars.XRotation = GetNumberFromTable_NoHalt("X_Rotation",
                                                       "X not rotated",
                                                       0.0);
                                                       
-		Attribute.YRotation = GetNumberFromTable_NoHalt("Y_Rotation",
+		vars.YRotation = GetNumberFromTable_NoHalt("Y_Rotation",
                                                       "Y not rotated",
                                                       0.0);		
                                                       
-        Attribute.ZRotation = GetNumberFromTable_NoHalt("Z_Rotation",
+        vars.ZRotation = GetNumberFromTable_NoHalt("Z_Rotation",
                                                       "Z not rotated",
                                                       0.0);	
 	}
 	
-	return Attribute;
+	return vars;
 	
 }
 
 
-DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(SharedAttributes Attribute) {
+DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(DetectorComponent_vars vars) {
 	
-	if (Attribute.VolumeType == "Cylinder")
-		return MakeDetectorComponent_Cylinder(Attribute);
-	else if (Attribute.VolumeType == "Box")
-		return MakeDetectorComponent_Box(Attribute);
-	else if (Attribute.VolumeType == "Cone")
-		return MakeDetectorComponent_Cone(Attribute);
-	else if (Attribute.VolumeType == "Ellipsoid")
-		return MakeDetectorComponent_Ellipsoid(Attribute);
-	else if (Attribute.VolumeType == "Elliptical Cone")
-		return MakeDetectorComponent_EllipticalCone(Attribute);
-	else if (Attribute.VolumeType == "Elliptical Tube")
-		return MakeDetectorComponent_EllipticalTube(Attribute);
-	else if (Attribute.VolumeType == "Hyperbolic Tube")
-		return MakeDetectorComponent_HyperbolicTube(Attribute);
-	else if (Attribute.VolumeType == "Parallelepiped")
-		return MakeDetectorComponent_Parallelepiped(Attribute);
-	else if (Attribute.VolumeType == "Solid Sphere")
-		return MakeDetectorComponent_SolidSphere(Attribute);
-	else if (Attribute.VolumeType == "Spherical Shell")
-		return MakeDetectorComponent_SphericalShell(Attribute);
-	else if (Attribute.VolumeType == "Torus")
-		return MakeDetectorComponent_Torus(Attribute);
-	else if (Attribute.VolumeType == "Trapezoid")
-		return MakeDetectorComponent_Trapezoid(Attribute);
-	else if (Attribute.VolumeType == "Twisted Box")
-		return MakeDetectorComponent_TwistedBox(Attribute);
-	else if (Attribute.VolumeType == "Z Twisted Trapezoid")
-		return MakeDetectorComponent_ZTwistedTrapezoid(Attribute);
+	if (vars.VolumeType_str == "Cylinder")
+		return MakeDetectorComponent_Cylinder(vars);
+	else if (vars.VolumeType_str == "Box")
+		return MakeDetectorComponent_Box(vars);
+	else if (vars.VolumeType_str == "Cone")
+		return MakeDetectorComponent_Cone(vars);
+	else if (vars.VolumeType_str == "Ellipsoid")
+		return MakeDetectorComponent_Ellipsoid(vars);
+	else if (vars.VolumeType_str == "Elliptical Cone")
+		return MakeDetectorComponent_EllipticalCone(vars);
+	else if (vars.VolumeType_str == "Elliptical Tube")
+		return MakeDetectorComponent_EllipticalTube(vars);
+	else if (vars.VolumeType_str == "Hyperbolic Tube")
+		return MakeDetectorComponent_HyperbolicTube(vars);
+	else if (vars.VolumeType_str == "Parallelepiped")
+		return MakeDetectorComponent_Parallelepiped(vars);
+	else if (vars.VolumeType_str == "Solid Sphere")
+		return MakeDetectorComponent_SolidSphere(vars);
+	else if (vars.VolumeType_str == "Spherical Shell")
+		return MakeDetectorComponent_SphericalShell(vars);
+	else if (vars.VolumeType_str == "Torus")
+		return MakeDetectorComponent_Torus(vars);
+	else if (vars.VolumeType_str == "Trapezoid")
+		return MakeDetectorComponent_Trapezoid(vars);
+	else if (vars.VolumeType_str == "Twisted Box")
+		return MakeDetectorComponent_TwistedBox(vars);
+	else if (vars.VolumeType_str == "Z Twisted Trapezoid")
+		return MakeDetectorComponent_ZTwistedTrapezoid(vars);
 	
 	
 	return NULL;
@@ -233,41 +246,35 @@ DetectorComponent *DetectorConfigLuaInstance::WithVolumeGetDetectorComponent(Sha
  * 
  * */
  
-DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder(SharedAttributes Attribute) {     
-	                                      
-	G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
+DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cylinder(DetectorComponent_vars vars) {     
+	
+	vars.cylinder = new DetectorComponent_Cylinder_vars;
+	vars.cylinder->InnerRadius = GetNumberFromTable_NoHalt("Inner_Radius",
                                              "No Inner_Radius found."
                                              + string(" Set to 0.0"),
                                              0.0);
                                                                                
-	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
+	vars.cylinder->OuterRadius = GetNumberFromTable_WithHalt("Outer_Radius",
                                              "No Outer_Radius found."
                                         + string(" Halting Execution"));
                                       
-	G4double Start_Angle = GetNumberFromTable_NoHalt("Start_Angle",
+	vars.cylinder->StartAngle = GetNumberFromTable_NoHalt("Start_Angle",
                                              "No Start_Angle found."
                                              + string(" Set to 0.0"),
                                              0.0);
                                                
-	G4double Delta_Angle = GetNumberFromTable_NoHalt("Delta_Angle",
+	vars.cylinder->DeltaAngle = GetNumberFromTable_NoHalt("Delta_Angle",
                                              "No Delta_Angle found."
                                              + string(" Set to 360."),
                                              360.);
                                             
-	G4double Half_Length = GetNumberFromTable_WithHalt("Half_Length",
+	vars.cylinder->HalfLength = GetNumberFromTable_WithHalt("Half_Length",
                                              "No Half_Length found."
                                         + string(" Halting Execution"));
                                         
-	return new DetectorComponent_Cylinder(
-                                          Attribute.Name,
-                                          Inner_Radius,
-                                          Outer_Radius,
-                                          Start_Angle,
-                                          Delta_Angle,
-                                          Half_Length,
-                                          Attribute.Position,
-                                          Attribute.Material,
-                                          Attribute.Inside);
+	
+                                        
+	return new DetectorComponent_Cylinder(vars);
                                     
    
 }
@@ -282,23 +289,19 @@ DetectorComponent_Cylinder *DetectorConfigLuaInstance::MakeDetectorComponent_Cyl
  * 
  * */
 
-DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(SharedAttributes Attribute) {
+DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(DetectorComponent_vars vars) {
     
-	G4double half_X = GetNumberFromTable_WithHalt("half_X", "Did not provide half_X "+
+    vars.box = new DetectorComponent_Box_vars;
+	vars.box->half_x = GetNumberFromTable_WithHalt("half_X", "Did not provide half_X "+
                                     string("value. Halting Execution"));
 	
-	G4double half_Y = GetNumberFromTable_WithHalt("half_Y", "Did not provide half_Y "+
+	vars.box->half_y = GetNumberFromTable_WithHalt("half_Y", "Did not provide half_Y "+
                                     string("value. Halting Execution"));
                                      
-	G4double half_Z = GetNumberFromTable_WithHalt("half_Z", "Did not provide half_Z "+
+	vars.box->half_z = GetNumberFromTable_WithHalt("half_Z", "Did not provide half_Z "+
                                     string("value. Halting Execution"));
 	
-	return new DetectorComponent_Box(
-                                     Attribute.Name, half_X, 
-                                     half_Y, half_Z, 
-                                     Attribute.Position, 
-                                     Attribute.Material, 
-                                     Attribute.Inside);
+	return new DetectorComponent_Box(vars);
 	
 }
 
@@ -311,52 +314,42 @@ DetectorComponent_Box *DetectorConfigLuaInstance::MakeDetectorComponent_Box(Shar
  * 
  * */
 
-DetectorComponent_Cone *DetectorConfigLuaInstance::MakeDetectorComponent_Cone(SharedAttributes Attribute) {
+DetectorComponent_Cone *DetectorConfigLuaInstance::MakeDetectorComponent_Cone(DetectorComponent_vars vars) {
     
-	G4double Inner_Radius_At_Bottom = GetNumberFromTable_NoHalt("Inner_Radius_At_Bottom",
+    vars.cone = new DetectorComponent_Cone_vars;
+	vars.cone->InnerRadiusAtBottom = GetNumberFromTable_NoHalt("Inner_Radius_At_Bottom",
 							"No Inner_Radius_At_Bottom found."
 							+ string(" Set to 0.0"),
 							0.0);
 	
-	G4double Outside_Radius_At_Bottom = GetNumberFromTable_WithHalt("Outside_Radius_At_Bottom",
+	vars.cone->OutsideRadiusAtBottom = GetNumberFromTable_WithHalt("Outside_Radius_At_Bottom",
 							"No Outside_Radius_At_Bottom found."
 							+ string(" Haulting Execution"));
                                      
-	G4double Inner_Radius_At_Top = GetNumberFromTable_NoHalt("Inner_Radius_At_Top",
+	vars.cone->InnerRadiusAtTop = GetNumberFromTable_NoHalt("Inner_Radius_At_Top",
 							"No Inner_Radius_At_Top found."
 							+ string(" Set to 0.0"),
 							0.0);
 
-	G4double Outside_Radius_At_Top = GetNumberFromTable_WithHalt("Outside_Radius_At_Top",
+	vars.cone->OutsideRadiusAtTop = GetNumberFromTable_WithHalt("Outside_Radius_At_Top",
 							"No Outside_Radius_At_Top found."
 							+ string(" Haulting Execution"));
 
-	G4double Half_Length = GetNumberFromTable_WithHalt("Half_Length",
+	vars.cone->HalfLength = GetNumberFromTable_WithHalt("Half_Length",
 							"No Half_Length found."
 							+ string(" Haulting Execution"));
 
-	G4double Start_Angle = GetNumberFromTable_NoHalt("Start_Angle",
+	vars.cone->StartAngle = GetNumberFromTable_NoHalt("Start_Angle",
 							"No Start_Angle found."
 							+ string(" Set to 0.0"),
 							0.0);
 
-	G4double Delta_Angle = GetNumberFromTable_NoHalt("Delta_Angle",
+	vars.cone->DeltaAngle = GetNumberFromTable_NoHalt("Delta_Angle",
 							"No Delta_Angle found."
 							+ string(" Set to 360."),
 							360.);
 	
-	return new DetectorComponent_Cone(
-					Attribute.Name,
-					Inner_Radius_At_Bottom,
-					Outside_Radius_At_Bottom,
-					Inner_Radius_At_Top,
-					Outside_Radius_At_Top,
-					Half_Length,
-					Start_Angle,
-					Delta_Angle,	 
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_Cone(vars);
 
 }
 
@@ -369,38 +362,30 @@ DetectorComponent_Cone *DetectorConfigLuaInstance::MakeDetectorComponent_Cone(Sh
  * 
  * */
 
-DetectorComponent_Ellipsoid *DetectorConfigLuaInstance::MakeDetectorComponent_Ellipsoid(SharedAttributes Attribute) {
+DetectorComponent_Ellipsoid *DetectorConfigLuaInstance::MakeDetectorComponent_Ellipsoid(DetectorComponent_vars vars) {
     
-	G4double X_Semi_Axis = GetNumberFromTable_WithHalt("X_Semi_Axis",
+    vars.ellipsoid = new DetectorComponent_Ellipsoid_vars;
+	vars.ellipsoid->xSemiAxis = GetNumberFromTable_WithHalt("X_Semi_Axis",
 						"No X_Semi_Axis found."
 						+ string(" Haulting Execution"));
-	
-	G4double Y_Semi_Axis = GetNumberFromTable_WithHalt("Y_Semi_Axis",
+
+	vars.ellipsoid->ySemiAxis = GetNumberFromTable_WithHalt("Y_Semi_Axis",
 						"No Y_Semi_Axis found."
 						+ string(" Haulting Execution"));
 		
-	G4double Z_Semi_Axis = GetNumberFromTable_WithHalt("Z_Semi_Axis",
+	vars.ellipsoid->zSemiAxis = GetNumberFromTable_WithHalt("Z_Semi_Axis",
 						"No Z_Semi_Axis found."
 						+ string(" Haulting Execution"));
 		
-	G4double Z_Bottom = GetNumberFromTable_WithHalt("Z_Bottom",
+	vars.ellipsoid->zBottom = GetNumberFromTable_WithHalt("Z_Bottom",
 						"No Z_Bottom found."
 						+ string(" Haulting Execution"));
 	
-	G4double Z_Top = GetNumberFromTable_WithHalt("Z_Top",
+	vars.ellipsoid->zTop = GetNumberFromTable_WithHalt("Z_Top",
 						"No Z_Top found."
 						+ string(" Haulting Execution"));
 	
-	return new DetectorComponent_Ellipsoid(
-					Attribute.Name,
-					X_Semi_Axis,
-					Y_Semi_Axis,
-					Z_Semi_Axis,
-					Z_Bottom,
-					Z_Top,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_Ellipsoid(vars);
 	
 }
 
@@ -413,33 +398,26 @@ DetectorComponent_Ellipsoid *DetectorConfigLuaInstance::MakeDetectorComponent_El
  * 
  * */
 
-DetectorComponent_EllipticalCone *DetectorConfigLuaInstance::MakeDetectorComponent_EllipticalCone(SharedAttributes Attribute) {
+DetectorComponent_EllipticalCone *DetectorConfigLuaInstance::MakeDetectorComponent_EllipticalCone(DetectorComponent_vars vars) {
     
-	G4double X_Semi_Axis = GetNumberFromTable_WithHalt("X_Semi_Axis",
+    vars.elliptical_cone = new DetectorComponent_EllipticalCone_vars;
+	vars.elliptical_cone->xSemiAxis = GetNumberFromTable_WithHalt("X_Semi_Axis",
 						"No X_Semi_Axis found."
 						+ string(" Haulting Execution"));
 	
-	G4double Y_Semi_Axis = GetNumberFromTable_WithHalt("Y_Semi_Axis",
+	vars.elliptical_cone->ySemiAxis = GetNumberFromTable_WithHalt("Y_Semi_Axis",
 						"No Y_Semi_Axis found."
 						+ string(" Haulting Execution"));
 		
-	G4double Height = GetNumberFromTable_WithHalt("Height",
+	vars.elliptical_cone->Height = GetNumberFromTable_WithHalt("Height",
 						"No Height found."
 						+ string(" Haulting Execution"));
 	
-	G4double Z_Top = GetNumberFromTable_WithHalt("Z_Top",
+	vars.elliptical_cone->zTop = GetNumberFromTable_WithHalt("Z_Top",
 						"No Z_Top found."
 						+ string(" Haulting Execution"));
 	
-	return new DetectorComponent_EllipticalCone(
-					Attribute.Name,
-					X_Semi_Axis,
-					Y_Semi_Axis,
-					Height,
-					Z_Top,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_EllipticalCone(vars);
 	
 }
 
@@ -452,28 +430,22 @@ DetectorComponent_EllipticalCone *DetectorConfigLuaInstance::MakeDetectorCompone
  * 
  * */
 
-DetectorComponent_EllipticalTube *DetectorConfigLuaInstance::MakeDetectorComponent_EllipticalTube(SharedAttributes Attribute) {
+DetectorComponent_EllipticalTube *DetectorConfigLuaInstance::MakeDetectorComponent_EllipticalTube(DetectorComponent_vars vars) {
     
-	G4double X_Half_Length = GetNumberFromTable_WithHalt("X_Half_Length",
+    vars.elliptical_tube = new DetectorComponent_EllipticalTube_vars;
+	vars.elliptical_tube->xHalfLength = GetNumberFromTable_WithHalt("X_Half_Length",
 							"No X_Half_Length found."
 							+ string(" Haulting Execution"));
 	
-	G4double Y_Half_Length = GetNumberFromTable_WithHalt("Y_Half_Length",
+	vars.elliptical_tube->yHalfLength = GetNumberFromTable_WithHalt("Y_Half_Length",
 							"No Y_Half_Length found."
 							+ string(" Haulting Execution"));
 		
-	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+	vars.elliptical_tube->zHalfLength = GetNumberFromTable_WithHalt("Z_Half_Length",
 							"No Z_Half_Length found."
 							+ string(" Haulting Execution"));
 	
-	return new DetectorComponent_EllipticalTube(
-					Attribute.Name,
-					X_Half_Length,
-					Y_Half_Length,
-					Z_Half_Length,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_EllipticalTube(vars);
 	
 }
 
@@ -486,38 +458,30 @@ DetectorComponent_EllipticalTube *DetectorConfigLuaInstance::MakeDetectorCompone
  * 
  * */
 
-DetectorComponent_HyperbolicTube *DetectorConfigLuaInstance::MakeDetectorComponent_HyperbolicTube(SharedAttributes Attribute) {
+DetectorComponent_HyperbolicTube *DetectorConfigLuaInstance::MakeDetectorComponent_HyperbolicTube(DetectorComponent_vars vars) {
     
-	G4double Inner_Radius = GetNumberFromTable_WithHalt("Inner_Radius",
+    vars.hyperbolic_tube = new DetectorComponent_HyperbolicTube_vars;
+	vars.hyperbolic_tube->InnerRadius = GetNumberFromTable_WithHalt("Inner_Radius",
 							"No Inner_Radius found."
 							+ string(" Haulting Execution"));
 	
-	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
+	vars.hyperbolic_tube->OuterRadius = GetNumberFromTable_WithHalt("Outer_Radius",
 							"No Outer_Radius found."
 							+ string(" Haulting Execution"));
 		
-	G4double Inner_Radius_Angle = GetNumberFromTable_WithHalt("Inner_Radius_Angle",
+	vars.hyperbolic_tube->InnerRadiusAngle = GetNumberFromTable_WithHalt("Inner_Radius_Angle",
 							"Not Inner_Radius_Angle found."
 							+ string(" Haulting Execution"));
 	
-	G4double Outer_Radius_Angle = GetNumberFromTable_WithHalt("Outer_Radius_Angle",
+	vars.hyperbolic_tube->OuterRadiusAngle = GetNumberFromTable_WithHalt("Outer_Radius_Angle",
 							"No Outer_Radius_Angle found."
 							+ string(" Haulting Execution"));
 
-	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+	vars.hyperbolic_tube->zHalfLength = GetNumberFromTable_WithHalt("Z_Half_Length",
 							"No Z_Half_Length found."
 							+ string(" Haulting Execution"));
 	
-	return new DetectorComponent_HyperbolicTube(
-					Attribute.Name,
-					Inner_Radius,
-					Outer_Radius,
-					Inner_Radius_Angle,
-					Outer_Radius_Angle,
-					Z_Half_Length,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_HyperbolicTube(vars);
 	
 }
 
@@ -530,43 +494,34 @@ DetectorComponent_HyperbolicTube *DetectorConfigLuaInstance::MakeDetectorCompone
  * 
  * */
 
-DetectorComponent_Parallelepiped *DetectorConfigLuaInstance::MakeDetectorComponent_Parallelepiped(SharedAttributes Attribute) {
+DetectorComponent_Parallelepiped *DetectorConfigLuaInstance::MakeDetectorComponent_Parallelepiped(DetectorComponent_vars vars) {
     
-	G4double X_Half_Length = GetNumberFromTable_WithHalt("X_Half_Length",
+    vars.parallelepiped = new DetectorComponent_Parallelepiped_vars;
+	vars.parallelepiped->xHalfLength = GetNumberFromTable_WithHalt("X_Half_Length",
 							"No X_Half_Length found."
 							+ string(" Haulting Execution"));
 	
-	G4double Y_Half_Length = GetNumberFromTable_WithHalt("Y_Half_Length",
+	vars.parallelepiped->yHalfLength = GetNumberFromTable_WithHalt("Y_Half_Length",
 							"No Y_Half_Length found."
 							+ string(" Haulting Execution"));
 		
-	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+	vars.parallelepiped->zHalfLength = GetNumberFromTable_WithHalt("Z_Half_Length",
 							"No Z_Half_Length found."
 							+ string(" Haulting Execution"));
 
-	G4double Angle_Of_XZ_Faces = GetNumberFromTable_WithHalt("Angle_Of_XZ_Faces",
+	vars.parallelepiped->AngleOfXZFaces = GetNumberFromTable_WithHalt("Angle_Of_XZ_Faces",
 							"No Angle_Of_XZ_Faces found."
 							+ string(" Haulting Execution"));
 	
-	G4double Polar_Angle_Of_XY_Faces = GetNumberFromTable_WithHalt("Polar_Angle_Of_XY_Faces",
+	vars.parallelepiped->PolarAngleOfXYFaces = GetNumberFromTable_WithHalt("Polar_Angle_Of_XY_Faces",
 							"No Polar_Angle_Of_XY_Faces found."
 							+ string(" Haulting Execution"));
 
-	G4double Azimuthal_Angle_Of_XY_Faces = GetNumberFromTable_WithHalt("Azimuthal_Angle_Of_XY_Faces",
+	vars.parallelepiped->AzimuthalAngleOfXYFaces = GetNumberFromTable_WithHalt("Azimuthal_Angle_Of_XY_Faces",
 							"No Azimuthal_Angle_Of_XY_Faces found."
 							+ string(" Haulting Execution"));
 	
-	return new DetectorComponent_Parallelepiped(
-					Attribute.Name,
-					X_Half_Length,
-					Y_Half_Length,
-					Z_Half_Length,
-					Angle_Of_XZ_Faces,
-					Polar_Angle_Of_XY_Faces,
-					Azimuthal_Angle_Of_XY_Faces,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_Parallelepiped(vars);
 	
 }
 
@@ -580,18 +535,14 @@ DetectorComponent_Parallelepiped *DetectorConfigLuaInstance::MakeDetectorCompone
  * 
  * */
 
-DetectorComponent_SolidSphere *DetectorConfigLuaInstance::MakeDetectorComponent_SolidSphere(SharedAttributes Attribute) {
+DetectorComponent_SolidSphere *DetectorConfigLuaInstance::MakeDetectorComponent_SolidSphere(DetectorComponent_vars vars) {
     
-	G4double Radius = GetNumberFromTable_WithHalt("Radius",
+    vars.solid_sphere = new DetectorComponent_SolidSphere_vars;
+	vars.solid_sphere->Radius = GetNumberFromTable_WithHalt("Radius",
 						"No Radius found."
 						+ string(" Haulting Execution"));
 	
-	return new DetectorComponent_SolidSphere(
-					Attribute.Name,
-					Radius,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_SolidSphere(vars);
 	
 }
 
@@ -604,48 +555,39 @@ DetectorComponent_SolidSphere *DetectorConfigLuaInstance::MakeDetectorComponent_
  * 
  * */
 
-DetectorComponent_SphericalShell *DetectorConfigLuaInstance::MakeDetectorComponent_SphericalShell(SharedAttributes Attribute) {
+DetectorComponent_SphericalShell *DetectorConfigLuaInstance::MakeDetectorComponent_SphericalShell(DetectorComponent_vars vars) {
     
-	G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
+    vars.spherical_shell = new DetectorComponent_SphericalShell_vars;
+	vars.spherical_shell->InnerRadius = GetNumberFromTable_NoHalt("Inner_Radius",
 						"No Inner_Radius found."
 						+ string(" Set to 0.0"),
 						0.0);
 	
-	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
+	vars.spherical_shell->OuterRadius = GetNumberFromTable_WithHalt("Outer_Radius",
 						"No Outer_Radius found."
 						+ string(" Haulting Execution"));
 		
-	G4double Phi_Start = GetNumberFromTable_NoHalt("Phi_Start",
+	vars.spherical_shell->PhiStart = GetNumberFromTable_NoHalt("Phi_Start",
 						"No Phi_Start found."
 						+ string(" Set to 0.0"),
 						0.0);
 
-	G4double Delta_Phi = GetNumberFromTable_NoHalt("Delta_Phi",
+	vars.spherical_shell->DeltaPhi = GetNumberFromTable_NoHalt("Delta_Phi",
 						"No Delta_Phi found."
 						+ string(" Set to 360."),
 						360.);
 	
-	G4double Theta_Start = GetNumberFromTable_NoHalt("Theta_Start",
+	vars.spherical_shell->ThetaStart = GetNumberFromTable_NoHalt("Theta_Start",
 						"No Theta_Start found."
 						+ string(" Set to 0.0"),
 						0.0);
 
-	G4double Delta_Theta = GetNumberFromTable_NoHalt("Delta_Theta",
+	vars.spherical_shell->DeltaTheta = GetNumberFromTable_NoHalt("Delta_Theta",
 						"No Delta_Theta found."
 						+ string(" Set to 360."),
 						360.);
 	
-	return new DetectorComponent_SphericalShell(
-					Attribute.Name,
-					Inner_Radius,
-					Outer_Radius,
-					Phi_Start,
-					Delta_Phi,
-					Theta_Start,
-					Delta_Theta,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_SphericalShell(vars);
 	
 }
 
@@ -657,41 +599,33 @@ DetectorComponent_SphericalShell *DetectorConfigLuaInstance::MakeDetectorCompone
  * 
  * */
 
-DetectorComponent_Torus *DetectorConfigLuaInstance::MakeDetectorComponent_Torus(SharedAttributes Attribute) {
+DetectorComponent_Torus *DetectorConfigLuaInstance::MakeDetectorComponent_Torus(DetectorComponent_vars vars) {
     
-	G4double Inner_Radius = GetNumberFromTable_NoHalt("Inner_Radius",
+    vars.torus = new DetectorComponent_Torus_vars;
+	vars.torus->InnerRadius = GetNumberFromTable_NoHalt("Inner_Radius",
 						"No Inner_Radius found."
 						+ string(" Set to 0.0"),
 						0.0);
 
-	G4double Outer_Radius = GetNumberFromTable_WithHalt("Outer_Radius",
+	vars.torus->OuterRadius = GetNumberFromTable_WithHalt("Outer_Radius",
 						"No Outer_Radius found."
 						+ string(" Haulting Execution"));
 
-	G4double Sweeping_Radius = GetNumberFromTable_WithHalt("Sweeping_Radius",
+	vars.torus->SweepingRadius = GetNumberFromTable_WithHalt("Sweeping_Radius",
 						"No Sweeping_Radius found."
 						+ string(" Haulting Execution"));
 
-	G4double Phi_Start = GetNumberFromTable_NoHalt("Phi_Start",
+	vars.torus->PhiStart = GetNumberFromTable_NoHalt("Phi_Start",
 						"No Phi_Start found."
 						+ string(" Set to 0.0"),
 						0.0);
 
-	G4double Delta_Phi = GetNumberFromTable_NoHalt("Delta_Phi",
+	vars.torus->DeltaPhi = GetNumberFromTable_NoHalt("Delta_Phi",
 						"No Delta_Phi found."
 						+ string(" Set to 360."),
 						360.);
 	
-	return new DetectorComponent_Torus(
-					Attribute.Name,
-					Inner_Radius,
-					Outer_Radius,
-					Sweeping_Radius,
-					Phi_Start,
-					Delta_Phi,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_Torus(vars);
 	
 }
 
@@ -704,38 +638,30 @@ DetectorComponent_Torus *DetectorConfigLuaInstance::MakeDetectorComponent_Torus(
  * 
  * */
 
-DetectorComponent_Trapezoid *DetectorConfigLuaInstance::MakeDetectorComponent_Trapezoid(SharedAttributes Attribute) {
+DetectorComponent_Trapezoid *DetectorConfigLuaInstance::MakeDetectorComponent_Trapezoid(DetectorComponent_vars vars) {
     
-	G4double X_Half_Length_At_Bottom = GetNumberFromTable_WithHalt("X_Half_Length_At_Bottom",
+    vars.trapezoid = new DetectorComponent_Trapezoid_vars;
+	vars.trapezoid->xHalfLengthAtBottom = GetNumberFromTable_WithHalt("X_Half_Length_At_Bottom",
 							"No X_Half_Length_At_Bottom found."
 							+ string(" Haulting Execution"));
 
-	G4double X_Half_Length_At_Top = GetNumberFromTable_WithHalt("X_Half_Length_At_Top",
+	vars.trapezoid->xHalfLengthAtTop = GetNumberFromTable_WithHalt("X_Half_Length_At_Top",
 							"No X_Half_Length_At_Top found."
 							+ string(" Haulting Execution"));
 
-	G4double Y_Half_Length_At_Bottom = GetNumberFromTable_WithHalt("Y_Half_Length_At_Bottom",
+	vars.trapezoid->yHalfLengthAtBottom = GetNumberFromTable_WithHalt("Y_Half_Length_At_Bottom",
 							"No Y_Half_Length_At_Bottom found."
 							+ string(" Haulting Execution"));
 
-	G4double Y_Half_Length_At_Top = GetNumberFromTable_WithHalt("Y_Half_Length_At_Top",
+	vars.trapezoid->yHalfLengthAtTop = GetNumberFromTable_WithHalt("Y_Half_Length_At_Top",
 							"No Y_Half_Length_At_Top found."
 							+ string(" Haulting Execution"));
 
-	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+	vars.trapezoid->zHalfLength = GetNumberFromTable_WithHalt("Z_Half_Length",
 							"No Z_Half_Length found."
 							+ string(" Haulting Execution"));
 	
-	return new DetectorComponent_Trapezoid(
-					Attribute.Name,
-					X_Half_Length_At_Bottom,
-					X_Half_Length_At_Top,
-					Y_Half_Length_At_Bottom,
-					Y_Half_Length_At_Top,
-					Z_Half_Length,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_Trapezoid(vars);
 	
 }
 
@@ -748,33 +674,26 @@ DetectorComponent_Trapezoid *DetectorConfigLuaInstance::MakeDetectorComponent_Tr
  * 
  * */
 
-DetectorComponent_TwistedBox *DetectorConfigLuaInstance::MakeDetectorComponent_TwistedBox(SharedAttributes Attribute) {
+DetectorComponent_TwistedBox *DetectorConfigLuaInstance::MakeDetectorComponent_TwistedBox(DetectorComponent_vars vars) {
     
-	G4double Twisting_Angle = GetNumberFromTable_WithHalt("Twisting_Angle",
+    vars.twisted_box = new DetectorComponent_TwistedBox_vars;
+	vars.twisted_box->TwistingAngle = GetNumberFromTable_WithHalt("Twisting_Angle",
 						"No Twisting_Angle found."
 						+ string(" Haulting Execution"));
 
-	G4double X_Half_Length = GetNumberFromTable_WithHalt("X_Half_Length",
+	vars.twisted_box->xHalfLength = GetNumberFromTable_WithHalt("X_Half_Length",
 						"No X_Half_Length found."
 						+ string(" Haulting Execution"));
 
-	G4double Y_Half_Length = GetNumberFromTable_WithHalt("Y_Half_Length",
+	vars.twisted_box->yHalfLength = GetNumberFromTable_WithHalt("Y_Half_Length",
 						"No Y_Half_Length found."
 						+ string(" Haulting Execution"));
 
-	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+	vars.twisted_box->zHalfLength = GetNumberFromTable_WithHalt("Z_Half_Length",
 						"No Z_Half_Length found."
 						+ string(" Haulting Execution")); 
 	
-	return new DetectorComponent_TwistedBox(
-					Attribute.Name,
-					Twisting_Angle,
-					X_Half_Length,
-					Y_Half_Length,
-					Z_Half_Length,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_TwistedBox(vars);
 	
 }
 
@@ -787,53 +706,44 @@ DetectorComponent_TwistedBox *DetectorConfigLuaInstance::MakeDetectorComponent_T
  * 
  * */
 
-DetectorComponent_ZTwistedTrapezoid *DetectorConfigLuaInstance::MakeDetectorComponent_ZTwistedTrapezoid(SharedAttributes Attribute) {
+DetectorComponent_ZTwistedTrapezoid *DetectorConfigLuaInstance::MakeDetectorComponent_ZTwistedTrapezoid(DetectorComponent_vars vars) {
      
-	G4double X_Half_Length_At_Bottom = GetNumberFromTable_WithHalt("X_Half_Length_At_Bottom",
+	vars.z_twisted_trapezoid = new DetectorComponent_ZTwistedTrapezoid_vars;
+	vars.z_twisted_trapezoid->xHalfLengthAtBottom = GetNumberFromTable_WithHalt("X_Half_Length_At_Bottom",
 							"No X_Half_Length_At_Bottom found."
 							+ string(" Haulting Execution"));
 
-	G4double X_Half_Length_At_Top = GetNumberFromTable_WithHalt("X_Half_Length_At_Top",
+	vars.z_twisted_trapezoid->xHalfLengthAtTop = GetNumberFromTable_WithHalt("X_Half_Length_At_Top",
 							"No X_Half_Length_At_Top found."
 							+ string(" Haulting Execution"));
 
-	G4double Y_Half_Length_At_Bottom = GetNumberFromTable_WithHalt("Y_Half_Length_At_Bottom",
+	vars.z_twisted_trapezoid->yHalfLengthAtBottom = GetNumberFromTable_WithHalt("Y_Half_Length_At_Bottom",
 							"No Y_Half_Length_At_Bottom found."
 							+ string(" Haulting Execution"));
 
-	G4double Y_Half_Length_At_Top = GetNumberFromTable_WithHalt("Y_Half_Length_At_Top",
+	vars.z_twisted_trapezoid->yHalfLengthAtTop = GetNumberFromTable_WithHalt("Y_Half_Length_At_Top",
 							"No Y_Half_Length_At_Top found."
 							+ string(" Haulting Execution"));
 
-	G4double Z_Half_Length = GetNumberFromTable_WithHalt("Z_Half_Length",
+	vars.z_twisted_trapezoid->zHalfLength = GetNumberFromTable_WithHalt("Z_Half_Length",
 							"No Z_Half_Length found."
 							+ string(" Haulting Execution"));
 
-	G4double Twisting_Angle = GetNumberFromTable_NoHalt("Twisting_Angle",
+	vars.z_twisted_trapezoid->TwistingAngle = GetNumberFromTable_NoHalt("Twisting_Angle",
 							"No Twisting_Angle found."
 							+ string(" Set to 0.0"),
 							0.0);
 	
-	return new DetectorComponent_ZTwistedTrapezoid(
-					Attribute.Name,
-					X_Half_Length_At_Bottom,
-					X_Half_Length_At_Top,
-					Y_Half_Length_At_Bottom,
-					Y_Half_Length_At_Top,
-					Z_Half_Length,
-					Twisting_Angle,
-                                     	Attribute.Position, 
-                                     	Attribute.Material, 
-                                     	Attribute.Inside);
+	return new DetectorComponent_ZTwistedTrapezoid(vars);
 	
 }
 
 
-void DetectorConfigLuaInstance::ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component) {
+void DetectorConfigLuaInstance::ApplyRotations(DetectorComponent_vars vars, DetectorComponent* Component) {
 
-	Component->RotateX(Attribute.XRotation * deg);
-	Component->RotateY(Attribute.YRotation * deg);
-	Component->RotateZ(Attribute.ZRotation * deg);
+	Component->RotateX(vars.XRotation * deg);
+	Component->RotateY(vars.YRotation * deg);
+	Component->RotateZ(vars.ZRotation * deg);
 	
 }
 

@@ -29,21 +29,15 @@
 #include "G4EllipticalTube.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_EllipticalTube::DetectorComponent_EllipticalTube(
-                                   G4String Name,
-                                   G4double xHalfLength,
-                                   G4double yHalfLength,
-                                   G4double zHalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside)
- : DetectorComponent(Name, ELLIPTICAL_TUBE, Position, MaterialString, Inside)
+DetectorComponent_EllipticalTube::DetectorComponent_EllipticalTube(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
 	
-	this->xHalfLength = xHalfLength;
-	this->yHalfLength = yHalfLength;
-	this->zHalfLength = zHalfLength;
+	this->xHalfLength = vars.elliptical_tube->xHalfLength;
+	this->yHalfLength = vars.elliptical_tube->yHalfLength;
+	this->zHalfLength = vars.elliptical_tube->zHalfLength;
 	
+	delete vars.elliptical_tube;
 }
 
 DetectorComponent_EllipticalTube::~DetectorComponent_EllipticalTube() {

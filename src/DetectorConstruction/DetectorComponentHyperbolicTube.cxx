@@ -29,25 +29,17 @@
 #include "G4Hype.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(
-                                G4String Name,
-                                G4double InnerRadius,
-                                G4double OuterRadius,
-                                G4double InnerRadiusAngle,
-                                G4double OuterRadiusAngle,
-                                G4double zHalfLength,
-                                G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside)
- : DetectorComponent(Name, HYPERBOLIC_TUBE, Position, MaterialString, Inside)
+DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
 	
-	this->InnerRadius = InnerRadius;
-	this->OuterRadius = OuterRadius;
-	this->InnerRadiusAngle = InnerRadiusAngle;
-	this->OuterRadiusAngle = OuterRadiusAngle;
-	this->zHalfLength = zHalfLength;
+	this->InnerRadius      = vars.hyperbolic_tube->InnerRadius;
+	this->OuterRadius      = vars.hyperbolic_tube->OuterRadius;
+	this->InnerRadiusAngle = vars.hyperbolic_tube->InnerRadiusAngle;
+	this->OuterRadiusAngle = vars.hyperbolic_tube->OuterRadiusAngle;
+	this->zHalfLength      = vars.hyperbolic_tube->zHalfLength;
 	
+	delete vars.hyperbolic_tube;
 }
 
 DetectorComponent_HyperbolicTube::~DetectorComponent_HyperbolicTube() {

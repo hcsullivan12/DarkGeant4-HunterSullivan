@@ -48,13 +48,7 @@ class DetectorComponent_EllipticalTube : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_EllipticalTube(G4String Name,
-                                   G4double xHalfLength,
-                                   G4double yHalfLength,
-                                   G4double zHalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
+		DetectorComponent_EllipticalTube(DetectorComponent_vars vars);
 		~DetectorComponent_EllipticalTube();
 	
 		void ConstructVolume();

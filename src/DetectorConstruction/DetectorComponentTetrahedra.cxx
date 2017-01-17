@@ -28,23 +28,16 @@
 #include "G4Tet.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Tetrahedra::DetectorComponent_Tetrahedra(
-				G4String Name,
-				G4ThreeVector Point1,
-				G4ThreeVector Point2,
-				G4ThreeVector Point3,
-				G4ThreeVector Point4,                          
-                              	G4ThreeVector Position,
-                              	G4String MaterialString,
-                              	G4String Inside)
- : DetectorComponent(Name, TETRAHEDRA, Position, MaterialString, Inside) 
+DetectorComponent_Tetrahedra::DetectorComponent_Tetrahedra(DetectorComponent_vars vars)
+ : DetectorComponent(vars) 
 {
 	
-	this->Point1 = Point1;
-	this->Point2 = Point2;
-	this->Point3 = Point3;
-	this->Point4 = Point4;
+	this->Point1 = vars.tetrahedra->Point1;
+	this->Point2 = vars.tetrahedra->Point2;
+	this->Point3 = vars.tetrahedra->Point3;
+	this->Point4 = vars.tetrahedra->Point4;
 	
+	delete vars.tetrahedra;
 }
 
 

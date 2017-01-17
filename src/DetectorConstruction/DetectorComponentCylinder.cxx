@@ -29,25 +29,17 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Cylinder::DetectorComponent_Cylinder(
-                                   G4String Name,
-                                   G4double InnerRadius,
-                                   G4double OuterRadius,
-                                   G4double StartAngle,
-                                   G4double DeltaAngle,
-                                   G4double HalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside)
- : DetectorComponent(Name, CYLINDER, Position, MaterialString, Inside)
+DetectorComponent_Cylinder::DetectorComponent_Cylinder(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
 	
-	this->InnerRadius = InnerRadius;
-	this->OuterRadius = OuterRadius;
-	this->StartAngle = StartAngle;
-	this->HalfLength = HalfLength;
-	this->DeltaAngle = DeltaAngle;
+	this->InnerRadius = vars.cylinder->InnerRadius;
+	this->OuterRadius = vars.cylinder->OuterRadius;
+	this->StartAngle  = vars.cylinder->StartAngle;
+	this->HalfLength  = vars.cylinder->HalfLength;
+	this->DeltaAngle  = vars.cylinder->DeltaAngle;
 	
+	delete vars.cylinder;
 }
 
 DetectorComponent_Cylinder::~DetectorComponent_Cylinder() {

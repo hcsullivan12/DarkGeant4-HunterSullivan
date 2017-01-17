@@ -28,27 +28,18 @@
 #include "G4Cons.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Cone::DetectorComponent_Cone(G4String Name,
-				G4double InnerRadiusAtBottom,
-				G4double OutsideRadiusAtBottom,
-				G4double InnerRadiusAtTop,
-				G4double OutsideRadiusAtTop,
-				G4double HalfLength,
-				G4double StartAngle,
-				G4double DeltaAngle,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside)
- : DetectorComponent(Name, CONE, Position, MaterialString, Inside)
+DetectorComponent_Cone::DetectorComponent_Cone(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
-		this->InnerRadiusAtBottom = InnerRadiusAtBottom;
-		this->OutsideRadiusAtBottom = OutsideRadiusAtBottom;
-		this->InnerRadiusAtTop = InnerRadiusAtTop;
-		this->OutsideRadiusAtTop = OutsideRadiusAtTop;
-		this->HalfLength = HalfLength;	
-		this->StartAngle = StartAngle;
-		this->DeltaAngle = DeltaAngle;
+		this->InnerRadiusAtBottom   = vars.cone->InnerRadiusAtBottom;
+		this->OutsideRadiusAtBottom = vars.cone->OutsideRadiusAtBottom;
+		this->InnerRadiusAtTop      = vars.cone->InnerRadiusAtTop;
+		this->OutsideRadiusAtTop    = vars.cone->OutsideRadiusAtTop;
+		this->HalfLength            = vars.cone->HalfLength;	
+		this->StartAngle            = vars.cone->StartAngle;
+		this->DeltaAngle            = vars.cone->DeltaAngle;
 
+		delete vars.cone;
 }
 
 DetectorComponent_Cone::~DetectorComponent_Cone() {

@@ -28,27 +28,18 @@
 #include "G4Sphere.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_SphericalShell::DetectorComponent_SphericalShell(
-			G4String Name,
-                        G4double InnerRadius,
-			G4double OuterRadius,
-			G4double PhiStart,
-			G4double DeltaPhi,
-			G4double ThetaStart,
-			G4double DeltaTheta,
-                        G4ThreeVector Position,
-                        G4String MaterialString,
-                        G4String Inside)
- : DetectorComponent(Name, SPHERICAL_SHELL, Position, MaterialString, Inside) 
+DetectorComponent_SphericalShell::DetectorComponent_SphericalShell(DetectorComponent_vars vars)
+ : DetectorComponent(vars) 
 {
 	
-	this->InnerRadius = InnerRadius;
-	this->OuterRadius = OuterRadius;
-	this->PhiStart = PhiStart;
-	this->DeltaPhi = DeltaPhi;
-	this->ThetaStart = ThetaStart;
-	this->DeltaTheta = DeltaTheta;
+	this->InnerRadius = vars.spherical_shell->InnerRadius;
+	this->OuterRadius = vars.spherical_shell->OuterRadius;
+	this->PhiStart    = vars.spherical_shell->PhiStart;
+	this->DeltaPhi    = vars.spherical_shell->DeltaPhi;
+	this->ThetaStart  = vars.spherical_shell->ThetaStart;
+	this->DeltaTheta  = vars.spherical_shell->DeltaTheta;
 	
+	delete vars.spherical_shell;
 }
 
 
@@ -62,12 +53,12 @@ DetectorComponent_SphericalShell::~DetectorComponent_SphericalShell() {
 void DetectorComponent_SphericalShell::ConstructVolume() {
 	
 	G4Sphere *VirtualVolume = new G4Sphere(this->Name,
-					this->InnerRadius * m,
-                                        this->OuterRadius * m,
-					this->PhiStart * deg,
-					this->DeltaPhi * deg,
-                                        this->ThetaStart * deg,
-					this->DeltaTheta * deg);
+	                                       this->InnerRadius * m,
+                                           this->OuterRadius * m,
+	                                       this->PhiStart * deg,
+	                                       this->DeltaPhi * deg,
+                                           this->ThetaStart * deg,
+	                                       this->DeltaTheta * deg);
                                      
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),

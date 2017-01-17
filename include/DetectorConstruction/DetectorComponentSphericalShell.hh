@@ -48,16 +48,7 @@ class DetectorComponent_SphericalShell : public DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent_SphericalShell(G4String Name,
-                G4double InnerRadius,
-                G4double OuterRadius,
-                G4double PhiStart,
-                G4double DeltaPhi,
-                G4double ThetaStart,
-                G4double DeltaTheta,
-                G4ThreeVector Position,
-                G4String MaterialString,
-                G4String Inside);
+		DetectorComponent_SphericalShell(DetectorComponent_vars vars);
 		~DetectorComponent_SphericalShell();
 	
 		void ConstructVolume();

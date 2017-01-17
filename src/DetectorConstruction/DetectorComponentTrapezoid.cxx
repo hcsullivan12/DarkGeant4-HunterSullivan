@@ -28,25 +28,17 @@
 #include "G4Trd.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Trapezoid::DetectorComponent_Trapezoid(
-			G4String Name,
-                        G4double xHalfLengthAtBottom,
-			G4double xHalfLengthAtTop,
-			G4double yHalfLengthAtBottom,
-			G4double yHalfLengthAtTop,
-			G4double zHalfLength,
-                        G4ThreeVector Position,
-                        G4String MaterialString,
-                        G4String Inside)
- : DetectorComponent(Name, TRAPEZOID, Position, MaterialString, Inside) 
+DetectorComponent_Trapezoid::DetectorComponent_Trapezoid(DetectorComponent_vars vars)
+ : DetectorComponent(vars) 
 {
 	
-	this->xHalfLengthAtBottom = xHalfLengthAtBottom;
-	this->xHalfLengthAtTop = xHalfLengthAtTop;
-	this->yHalfLengthAtBottom = yHalfLengthAtBottom;
-	this->yHalfLengthAtTop = yHalfLengthAtTop;
-	this->zHalfLength = zHalfLength;
+	this->xHalfLengthAtBottom = vars.trapezoid->xHalfLengthAtBottom;
+	this->xHalfLengthAtTop    = vars.trapezoid->xHalfLengthAtTop;
+	this->yHalfLengthAtBottom = vars.trapezoid->yHalfLengthAtBottom;
+	this->yHalfLengthAtTop    = vars.trapezoid->yHalfLengthAtTop;
+	this->zHalfLength         = vars.trapezoid->zHalfLength;
 	
+	delete vars.trapezoid;
 }
 
 
@@ -60,11 +52,11 @@ DetectorComponent_Trapezoid::~DetectorComponent_Trapezoid() {
 void DetectorComponent_Trapezoid::ConstructVolume() {
 	
 	G4Trd *VirtualVolume = new G4Trd(this->Name,
-                                        this->xHalfLengthAtBottom * m,
-                                        this->xHalfLengthAtTop * m,
-					this->yHalfLengthAtBottom * m,
-					this->yHalfLengthAtTop * m,
-                                        this->zHalfLength * m);
+                                     this->xHalfLengthAtBottom * m,
+                                     this->xHalfLengthAtTop * m,
+                                     this->yHalfLengthAtBottom * m,
+                                     this->yHalfLengthAtTop * m,
+                                     this->zHalfLength * m);
                                      
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
