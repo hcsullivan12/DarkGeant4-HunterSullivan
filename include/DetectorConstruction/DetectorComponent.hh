@@ -31,10 +31,9 @@ class G4Material;
 
 //Geant4 Headers
 #include "G4LogicalVolume.hh"
-
+#include "G4VisAttributes.hh"
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
-
 #include "G4ThreeVector.hh"
 
 // C/C++ headers
@@ -216,6 +215,7 @@ struct DetectorComponent_vars {
 	VolumeType Type;
 	
 	G4ThreeVector Position;
+	G4Colour colour;
 	G4LogicalVolume *LogicalVolume;
 	Material *DetectorComponentMaterial;
 	

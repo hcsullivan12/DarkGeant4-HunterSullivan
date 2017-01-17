@@ -24,6 +24,7 @@
 
 #include "DetectorConfigLuaInstance.hh"
 
+using std::exception;
 /*
  * DetectorConfigLuaInstane::DetectorConfigLuaInstance(string ModulePath)
  * 
@@ -167,6 +168,18 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
                                         + string(" Halting Execution"));
                              
 	vars.Position = GetG4ThreeVector("Position");
+	
+	
+	try {
+		
+		vars.colour = GetG4ThreeVector("colour");
+		
+	} catch (string e) {
+		
+		cout << "Default colour used\n";
+		vars.colour = G4Colour(.5, .5, .5);
+		lua_pop(this->L, 1);
+	}
 	
 	if (DetectorComponentIndex != "0") {
 	
