@@ -56,21 +56,6 @@
 
 #include "Utilities.hh"
 
-struct SharedAttributes {
-
-	G4String Name;
-	G4String Inside;
-	G4String Material;
-	G4String VolumeType;
-	G4ThreeVector Position;
-	
-	G4double XRotation;
-	G4double YRotation;
-	G4double ZRotation;
-	
-};
-
-
 class DetectorConfigLuaInstance : public LuaInstance {
 	
 	
@@ -84,23 +69,6 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		int Number_of_Dectector_Components;
 		DetectorComponent *World;
 		vector<DetectorComponent *> Components;
-		vector<DetectorComponent_Cylinder> CylinderComponents;
-		vector<DetectorComponent_Box> BoxComponents;
-		vector<DetectorComponent_Cone> ConeComponents;
-		vector<DetectorComponent_Ellipsoid> EllipsoidComponents;
-		vector<DetectorComponent_EllipticalCone> EllipticalConeComponents;
-		vector<DetectorComponent_EllipticalTube> EllipticalTubeComponents;
-		vector<DetectorComponent_HyperbolicTube> HyperbolicTubeComponents;
-		vector<DetectorComponent_Parallelepiped> ParallelepipedComponents;
-		vector<DetectorComponent_SolidSphere> SolidSphereComponents;
-		vector<DetectorComponent_SphericalShell> SphericalShellComponents;
-		vector<DetectorComponent_Torus> TorusComponents;
-		vector<DetectorComponent_Trapezoid> TrapezoidComponents;
-		vector<DetectorComponent_TwistedBox> TwistedBoxComponents;
-		vector<DetectorComponent_ZTwistedTrapezoid> ZTwistedTrapezoidComponents;
-		
-		
-		
 		
 	
 	/*
@@ -119,26 +87,26 @@ class DetectorConfigLuaInstance : public LuaInstance {
 		void Initialize_number_of_detector_components();
 		void Initialize_detector_components();
 		
-		void ApplyRotations(SharedAttributes Attribute, DetectorComponent* Component);
+		void ApplyRotations(DetectorComponent_vars vars, DetectorComponent* Component);
 		
-		SharedAttributes SetSharedAttributes(string DetectorComponentIndex);
+		DetectorComponent_vars SetSharedAttributes(string DetectorComponentIndex);
 		
-		DetectorComponent *WithVolumeGetDetectorComponent(SharedAttributes Attribute);
+		DetectorComponent *WithVolumeGetDetectorComponent(DetectorComponent_vars vars);
 		
-		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(SharedAttributes Attribute);
-		DetectorComponent_Box *MakeDetectorComponent_Box(SharedAttributes Attribute);
-		DetectorComponent_Cone *MakeDetectorComponent_Cone(SharedAttributes Attribute);
-		DetectorComponent_Ellipsoid *MakeDetectorComponent_Ellipsoid(SharedAttributes Attribute);
-		DetectorComponent_EllipticalCone *MakeDetectorComponent_EllipticalCone(SharedAttributes Attribute);
-		DetectorComponent_EllipticalTube *MakeDetectorComponent_EllipticalTube(SharedAttributes Attribute);
-		DetectorComponent_HyperbolicTube *MakeDetectorComponent_HyperbolicTube(SharedAttributes Attribute);
-		DetectorComponent_Parallelepiped *MakeDetectorComponent_Parallelepiped(SharedAttributes Attribute);
-		DetectorComponent_SolidSphere *MakeDetectorComponent_SolidSphere(SharedAttributes Attribute);
-		DetectorComponent_SphericalShell *MakeDetectorComponent_SphericalShell(SharedAttributes Attribute);
-		DetectorComponent_Torus *MakeDetectorComponent_Torus(SharedAttributes Attribute);
-		DetectorComponent_Trapezoid *MakeDetectorComponent_Trapezoid(SharedAttributes Attribute);
-		DetectorComponent_TwistedBox *MakeDetectorComponent_TwistedBox(SharedAttributes Attribute);
-		DetectorComponent_ZTwistedTrapezoid *MakeDetectorComponent_ZTwistedTrapezoid(SharedAttributes Attribute);
+		DetectorComponent_Cylinder *MakeDetectorComponent_Cylinder(DetectorComponent_vars vars);
+		DetectorComponent_Box *MakeDetectorComponent_Box(DetectorComponent_vars vars);
+		DetectorComponent_Cone *MakeDetectorComponent_Cone(DetectorComponent_vars vars);
+		DetectorComponent_Ellipsoid *MakeDetectorComponent_Ellipsoid(DetectorComponent_vars vars);
+		DetectorComponent_EllipticalCone *MakeDetectorComponent_EllipticalCone(DetectorComponent_vars vars);
+		DetectorComponent_EllipticalTube *MakeDetectorComponent_EllipticalTube(DetectorComponent_vars vars);
+		DetectorComponent_HyperbolicTube *MakeDetectorComponent_HyperbolicTube(DetectorComponent_vars vars);
+		DetectorComponent_Parallelepiped *MakeDetectorComponent_Parallelepiped(DetectorComponent_vars vars);
+		DetectorComponent_SolidSphere *MakeDetectorComponent_SolidSphere(DetectorComponent_vars vars);
+		DetectorComponent_SphericalShell *MakeDetectorComponent_SphericalShell(DetectorComponent_vars vars);
+		DetectorComponent_Torus *MakeDetectorComponent_Torus(DetectorComponent_vars vars);
+		DetectorComponent_Trapezoid *MakeDetectorComponent_Trapezoid(DetectorComponent_vars vars);
+		DetectorComponent_TwistedBox *MakeDetectorComponent_TwistedBox(DetectorComponent_vars vars);
+		DetectorComponent_ZTwistedTrapezoid *MakeDetectorComponent_ZTwistedTrapezoid(DetectorComponent_vars vars);
 		
 		
 	/*

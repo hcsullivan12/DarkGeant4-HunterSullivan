@@ -32,10 +32,10 @@ DetectorComponent_Tetrahedra::DetectorComponent_Tetrahedra(DetectorComponent_var
  : DetectorComponent(vars) 
 {
 	
-	this->Point1 = vars->tetrahedra.Point1;
-	this->Point2 = vars->tetrahedra.Point2;
-	this->Point3 = vars->tetrahedra.Point3;
-	this->Point4 = vars->tetrahedra.Point4;
+	this->Point1 = vars.tetrahedra->Point1;
+	this->Point2 = vars.tetrahedra->Point2;
+	this->Point3 = vars.tetrahedra->Point3;
+	this->Point4 = vars.tetrahedra->Point4;
 	
 }
 

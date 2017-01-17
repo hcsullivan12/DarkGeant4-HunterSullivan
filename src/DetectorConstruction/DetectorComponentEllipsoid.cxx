@@ -34,10 +34,10 @@ DetectorComponent_Ellipsoid::DetectorComponent_Ellipsoid(DetectorComponent_vars 
 {
 	
 	this->xSemiAxis = vars.ellipsoid->xSemiAxis;
-	this->ySemiAxis = vars.ellipsoidySemiAxis;
-	this->zSemiAxis = vars.ellipsoidzSemiAxis;
-	this->zBottom   = vars.ellipsoidzBottom;
-	this->zTop      = vars.ellipsoidzTop;
+	this->ySemiAxis = vars.ellipsoid->ySemiAxis;
+	this->zSemiAxis = vars.ellipsoid->zSemiAxis;
+	this->zBottom   = vars.ellipsoid->zBottom;
+	this->zTop      = vars.ellipsoid->zTop;
 	
 }
 

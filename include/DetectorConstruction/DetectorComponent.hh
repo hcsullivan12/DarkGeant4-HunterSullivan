@@ -189,7 +189,7 @@ struct DetectorComponent_Trapezoid_vars {
 struct DetectorComponent_TwistedBox_vars {
 
 	G4double TwistingAngle;
-	G4double xHalflength;
+	G4double xHalfLength;
 	G4double yHalfLength;
 	G4double zHalfLength;
 	
@@ -209,11 +209,19 @@ struct DetectorComponent_ZTwistedTrapezoid_vars {
 struct DetectorComponent_vars {
 	
 	G4String Name;
-	VolumeType Type;
-	G4ThreeVector Position;
-	Material *DetectorComponentMaterial;
+	G4String VolumeType_str;
+	G4String MaterialString;
 	G4String Inside;
+	
+	VolumeType Type;
+	
+	G4ThreeVector Position;
 	G4LogicalVolume *LogicalVolume;
+	Material *DetectorComponentMaterial;
+	
+	G4double XRotation;
+	G4double YRotation;
+	G4double ZRotation;
 	
 	//G4Color
 	

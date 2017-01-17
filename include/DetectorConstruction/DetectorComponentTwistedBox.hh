@@ -38,7 +38,7 @@ class DetectorComponent_TwistedBox : public DetectorComponent {
 	public:
 	
 		G4double TwistingAngle;
-		G4double xHalflength;
+		G4double xHalfLength;
 		G4double yHalfLength;
 		G4double zHalfLength;
 	
