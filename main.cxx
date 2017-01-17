@@ -159,6 +159,7 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
+	std::cout << "Press enter to start simulation" << endl;
 	std::cin.get();
 	clock_t start_time = time(NULL);
 	cout << "BeamOn!\n";
