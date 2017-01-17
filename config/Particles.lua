@@ -14,7 +14,7 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 
 	local PositionTable = {}
 	
-	math.randomseed(time())
+	math.randomseed(os.time())
 	local x = 0
 	local y = 0
 	for i = 1, AmountOfPositionsToGenerate 
