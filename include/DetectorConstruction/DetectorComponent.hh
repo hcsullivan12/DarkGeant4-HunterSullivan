@@ -253,15 +253,20 @@ class DetectorComponent {
 	public:
 	
 		G4String Name;
-		VolumeType Type;
-		G4ThreeVector Position;
-		G4String MaterialString;
-		Material *DetectorComponentMaterial;
 		G4String Inside;
+		G4String MaterialString;
+		
+		VolumeType Type;
+		
+		G4Colour colour;
+		G4ThreeVector Position;
 		G4LogicalVolume *LogicalVolume;
+		G4VisAttributes *attributes;
 		
 		G4RotationMatrix RotationMatrix;
 		G4Transform3D Transform;
+		
+		Material *DetectorComponentMaterial;
 	
 	/*
 	 * 
@@ -274,6 +279,8 @@ class DetectorComponent {
 		~DetectorComponent();
 		
 		virtual void ConstructVolume() {;}
+		
+		void ApplyColor();
 		
 		void RotateX(double delta);
 		void RotateY(double delta);

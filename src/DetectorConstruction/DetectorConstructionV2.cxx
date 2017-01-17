@@ -90,11 +90,13 @@ void DetectorConstructionV2::InitializeWorld() {
 
 void DetectorConstructionV2::InitializeDetectorComponents() {
 	
-	for (size_t i = 0; i < this->Components.size();i++)
+	for (size_t i = 0; i < this->Components.size();i++) {
+		
 		FindMaterial(this->Components[i]);
-	
-	for (size_t i = 0; i < this->Components.size();i++)
 		this->Components[i]->ConstructVolume();
+		this->Components[i]->ApplyColor();
+		
+	}
 	
 }
 
