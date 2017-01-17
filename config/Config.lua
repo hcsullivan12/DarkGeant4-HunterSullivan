@@ -26,7 +26,7 @@ Config
 ]]--
 
 ConfigTable = { Module_Name = "Default",
-                PhysicsList = "Default"}
+                PhysicsList = "QGSP_BERT"}
                 
 --[[
 
