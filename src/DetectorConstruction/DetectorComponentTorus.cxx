@@ -38,6 +38,7 @@ DetectorComponent_Torus::DetectorComponent_Torus(DetectorComponent_vars vars)
 	this->PhiStart       = vars.torus->PhiStart;
 	this->DeltaPhi       = vars.torus->DeltaPhi;
 	
+	delete vars.torus;
 }
 
 

@@ -37,6 +37,7 @@ DetectorComponent_TwistedBox::DetectorComponent_TwistedBox(DetectorComponent_var
 	this->yHalfLength   = vars.twisted_box->yHalfLength;
 	this->zHalfLength   = vars.twisted_box->zHalfLength;
 	
+	delete vars.twisted_box;
 }
 
 

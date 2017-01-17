@@ -37,6 +37,7 @@ DetectorComponent_EllipticalTube::DetectorComponent_EllipticalTube(DetectorCompo
 	this->yHalfLength = vars.elliptical_tube->yHalfLength;
 	this->zHalfLength = vars.elliptical_tube->zHalfLength;
 	
+	delete vars.elliptical_tube;
 }
 
 DetectorComponent_EllipticalTube::~DetectorComponent_EllipticalTube() {

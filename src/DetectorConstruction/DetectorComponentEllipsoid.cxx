@@ -39,6 +39,7 @@ DetectorComponent_Ellipsoid::DetectorComponent_Ellipsoid(DetectorComponent_vars 
 	this->zBottom   = vars.ellipsoid->zBottom;
 	this->zTop      = vars.ellipsoid->zTop;
 	
+	delete vars.ellipsoid;
 }
 
 DetectorComponent_Ellipsoid::~DetectorComponent_Ellipsoid() {

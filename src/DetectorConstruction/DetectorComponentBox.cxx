@@ -36,6 +36,8 @@ DetectorComponent_Box::DetectorComponent_Box(DetectorComponent_vars vars)
 	this->half_y = vars.box->half_y;
 	this->half_z = vars.box->half_z;
 	
+	delete vars.box;
+	
 }
 
 

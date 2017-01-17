@@ -39,6 +39,7 @@ DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(DetectorCompo
 	this->OuterRadiusAngle = vars.hyperbolic_tube->OuterRadiusAngle;
 	this->zHalfLength      = vars.hyperbolic_tube->zHalfLength;
 	
+	delete vars.hyperbolic_tube;
 }
 
 DetectorComponent_HyperbolicTube::~DetectorComponent_HyperbolicTube() {

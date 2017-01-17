@@ -39,6 +39,7 @@ DetectorComponent_Cylinder::DetectorComponent_Cylinder(DetectorComponent_vars va
 	this->HalfLength  = vars.cylinder->HalfLength;
 	this->DeltaAngle  = vars.cylinder->DeltaAngle;
 	
+	delete vars.cylinder;
 }
 
 DetectorComponent_Cylinder::~DetectorComponent_Cylinder() {

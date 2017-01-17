@@ -38,6 +38,7 @@ DetectorComponent_EllipticalCone::DetectorComponent_EllipticalCone(DetectorCompo
 	this->Height    = vars.elliptical_cone->Height;
 	this->zTop      = vars.elliptical_cone->zTop;
 	
+	delete vars.elliptical_cone;
 }
 
 DetectorComponent_EllipticalCone::~DetectorComponent_EllipticalCone() {

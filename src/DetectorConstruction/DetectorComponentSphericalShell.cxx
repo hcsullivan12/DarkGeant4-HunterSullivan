@@ -39,6 +39,7 @@ DetectorComponent_SphericalShell::DetectorComponent_SphericalShell(DetectorCompo
 	this->ThetaStart  = vars.spherical_shell->ThetaStart;
 	this->DeltaTheta  = vars.spherical_shell->DeltaTheta;
 	
+	delete vars.spherical_shell;
 }
 
 

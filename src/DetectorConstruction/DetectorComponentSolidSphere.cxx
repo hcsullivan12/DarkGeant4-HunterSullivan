@@ -35,6 +35,7 @@ DetectorComponent_SolidSphere::DetectorComponent_SolidSphere(DetectorComponent_v
 	
 	this->Radius = vars.solid_sphere->Radius;
 	
+	delete vars.solid_sphere;
 }
 
 DetectorComponent_SolidSphere::~DetectorComponent_SolidSphere() {

@@ -39,6 +39,7 @@ DetectorComponent_Cone::DetectorComponent_Cone(DetectorComponent_vars vars)
 		this->StartAngle            = vars.cone->StartAngle;
 		this->DeltaAngle            = vars.cone->DeltaAngle;
 
+		delete vars.cone;
 }
 
 DetectorComponent_Cone::~DetectorComponent_Cone() {

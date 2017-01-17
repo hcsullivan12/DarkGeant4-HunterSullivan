@@ -40,6 +40,7 @@ DetectorComponent_Parallelepiped::DetectorComponent_Parallelepiped(DetectorCompo
 	this->PolarAngleOfXYFaces     = vars.parallelepiped->PolarAngleOfXYFaces;
 	this->AzimuthalAngleOfXYFaces = vars.parallelepiped->AzimuthalAngleOfXYFaces;
 	
+	delete vars.parallelepiped;
 }
 
 DetectorComponent_Parallelepiped::~DetectorComponent_Parallelepiped() {

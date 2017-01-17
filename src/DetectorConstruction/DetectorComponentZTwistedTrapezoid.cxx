@@ -40,6 +40,7 @@ DetectorComponent_ZTwistedTrapezoid::DetectorComponent_ZTwistedTrapezoid(Detecto
 	this->zHalfLength         = vars.z_twisted_trapezoid->zHalfLength;
 	this->TwistingAngle       = vars.z_twisted_trapezoid->TwistingAngle;
 	
+	delete vars.z_twisted_trapezoid;
 }
 
 DetectorComponent_ZTwistedTrapezoid::~DetectorComponent_ZTwistedTrapezoid() {

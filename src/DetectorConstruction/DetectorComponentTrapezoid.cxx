@@ -38,6 +38,7 @@ DetectorComponent_Trapezoid::DetectorComponent_Trapezoid(DetectorComponent_vars 
 	this->yHalfLengthAtTop    = vars.trapezoid->yHalfLengthAtTop;
 	this->zHalfLength         = vars.trapezoid->zHalfLength;
 	
+	delete vars.trapezoid;
 }
 
 

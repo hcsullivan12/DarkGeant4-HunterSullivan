@@ -37,6 +37,7 @@ DetectorComponent_Tetrahedra::DetectorComponent_Tetrahedra(DetectorComponent_var
 	this->Point3 = vars.tetrahedra->Point3;
 	this->Point4 = vars.tetrahedra->Point4;
 	
+	delete vars.tetrahedra;
 }
 
 
