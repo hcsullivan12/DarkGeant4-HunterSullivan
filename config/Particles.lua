@@ -14,12 +14,13 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 
 	local PositionTable = {}
 	
+	math.randomseed(time())
+	local x = 0
+	local y = 0
 	for i = 1, AmountOfPositionsToGenerate 
 	do
 	
-		local x = 0
-		local y = 0
-		local z = PseudoRandomDistribution()
+		local z = GetSign() * math.random()
 		
 		PositionTable[i] = {x, y, z}
 	
@@ -29,46 +30,14 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 
 end
 
---[[
+function GetSign()
 
-
-
---]]
-math.randomseed(os.time())
-glob_distribution_modifier = 0
-function PseudoRandomDistribution()
-
-	local randnum = math.random()
-
-	--Forces a higher proportion of particles to be closer to the origin
-	if glob_distribution_modifier < 5 then
-
-		glob_distribution_modifier = glob_distribution_modifier + 1
-		
-		if randnum <= .5 then
-		
-			return (-randnum) * 2.0
-		
-		else
-		
-			return randnum * 1.0
-		
-		end
+	rand = math.random()
 	
-	else 
-	
-		glob_distribution_modifier = 0
-		
-		if randnum <= .5 then
-		
-			return (-randnum) * 10.0
-		
-		else
-		
-			return randnum * 5.0
-		
-		end
-	
+	if rand < 0.5 then
+		return -1
+	else
+		return 1
 	end
 
 end
