@@ -28,22 +28,14 @@
 #include "G4TwistedBox.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_TwistedBox::DetectorComponent_TwistedBox(
-				G4String Name,
-				G4double TwistingAngle,
-				G4double xHalflength,
-				G4double yHalfLength,
-				G4double zHalfLength,                            
-                                G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside)
- : DetectorComponent(Name, TWISTED_BOX, Position, MaterialString, Inside) 
+DetectorComponent_TwistedBox::DetectorComponent_TwistedBox(DetectorComponent_vars vars)
+ : DetectorComponent(vars) 
 {
 	
-	this->TwistingAngle = TwistingAngle;
-	this->xHalflength = xHalflength;
-	this->yHalfLength = yHalfLength;
-	this->zHalfLength = zHalfLength;
+	this->TwistingAngle = vars.twisted_box->TwistingAngle;
+	this->xHalflength   = vars.twisted_box->xHalflength;
+	this->yHalfLength   = vars.twisted_box->yHalfLength;
+	this->zHalfLength   = vars.twisted_box->zHalfLength;
 	
 }
 

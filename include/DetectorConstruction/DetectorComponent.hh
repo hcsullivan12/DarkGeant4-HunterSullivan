@@ -71,6 +71,18 @@ struct DetectorComponent_Box_vars {
 	
 };
 
+struct DetectorComponent_Cone_vars {
+	
+	G4double InnerRadiusAtBottom;
+	G4double OutsideRadiusAtBottom;
+	G4double InnerRadiusAtTop;
+	G4double OutsideRadiusAtTop;
+	G4double HalfLength;
+	G4double StartAngle;
+	G4double DeltaAngle;
+	
+};
+
 struct DetectorComponent_Cylinder_vars {
 	
 	G4double InnerRadius;
@@ -131,12 +143,7 @@ struct DetectorComponent_Parallelepiped_vars {
 
 struct DetectorComponent_SolidSphere_vars {
 
-	G4double xHalfLength;
-	G4double yHalfLength;
-	G4double zHalfLength;
-	G4double AngleOfXZFaces;
-	G4double PolarAngleOfXYFaces;
-	G4double AzimuthalAngleOfXYFaces;
+	G4double Radius;
 	
 };
 
@@ -211,6 +218,7 @@ struct DetectorComponent_vars {
 	//G4Color
 	
 	DetectorComponent_Box_vars *box;
+	DetectorComponent_Cone_vars *cone;
 	DetectorComponent_Cylinder_vars *cylinder;
 	DetectorComponent_Ellipsoid_vars *ellipsoid;
 	DetectorComponent_EllipticalCone_vars *elliptical_cone;
@@ -254,11 +262,7 @@ class DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent(G4String Name,
-                          VolumeType Type, 
-                          G4ThreeVector Position,
-                          G4String MaterialString,
-                          G4String Inside);
+		DetectorComponent(DetectorComponent_vars vars);
 		~DetectorComponent();
 		
 		virtual void ConstructVolume() {;}

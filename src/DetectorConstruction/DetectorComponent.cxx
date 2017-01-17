@@ -23,18 +23,14 @@
 
 #include "DetectorComponent.hh"
 
-DetectorComponent::DetectorComponent(G4String Name,
-                                     VolumeType Type, 
-                                     G4ThreeVector Position,
-                                     G4String MaterialString,
-                                     G4String Inside) 
+DetectorComponent::DetectorComponent(DetectorComponent_vars vars) 
 {
 	
-	this->Name = Name;
-	this->Type = Type;
-	this->Position = Position;
-	this->MaterialString = MaterialString;
-	this->Inside = Inside;
+	this->Name           = vars.Name;
+	this->Type           = vars.Type;
+	this->Position       = vars.Position;
+	this->MaterialString = vars.MaterialString;
+	this->Inside         = vars.Inside;
 	
 	this->RotationMatrix = G4RotationMatrix();
 	this->Transform = G4Transform3D(this->RotationMatrix, Position);

@@ -29,16 +29,11 @@
 #include "G4Orb.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_SolidSphere::DetectorComponent_SolidSphere(
-				G4String Name,
-                                G4double Radius,
-                                G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside)
- : DetectorComponent(Name, SOLID_SPHERE, Position, MaterialString, Inside)
+DetectorComponent_SolidSphere::DetectorComponent_SolidSphere(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
 	
-	this->Radius = Radius;
+	this->Radius = vars.solid_sphere->Radius;
 	
 }
 
