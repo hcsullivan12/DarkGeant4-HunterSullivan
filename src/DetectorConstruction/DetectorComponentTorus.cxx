@@ -28,6 +28,8 @@
 #include "G4Torus.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_Torus::DetectorComponent_Torus(DetectorComponent_vars vars)
  : DetectorComponent(vars) 
 {
@@ -52,11 +54,11 @@ DetectorComponent_Torus::~DetectorComponent_Torus() {
 void DetectorComponent_Torus::ConstructVolume() {
 	
 	G4Torus *VirtualVolume = new G4Torus(this->Name,
-                                        this->InnerRadius * m,
-                                        this->OuterRadius * m,
-					this->SweepingRadius * m,
-					this->PhiStart * deg,
-                                        this->DeltaPhi * deg);
+                                         this->InnerRadius * m,
+                                         this->OuterRadius * m,
+                                         this->SweepingRadius * m,
+                                         this->PhiStart * deg,
+                                         this->DeltaPhi * deg);
                                      
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
@@ -64,3 +66,10 @@ void DetectorComponent_Torus::ConstructVolume() {
 	
 }
 
+bool DetectorComponent_Torus::WithinVolume(G4double x, G4double y, G4double z) {
+	
+	cout << "DetectorComponent_Torus WithinVolume STUB\n";
+
+	return true;
+	
+}

@@ -283,6 +283,7 @@ class DetectorComponent {
 		~DetectorComponent();
 		
 		virtual void ConstructVolume() {;}
+		virtual bool WithinVolume(G4double x, G4double y, G4double z) {return true;}
 		
 		void ApplyVisEffects();
 		void SetWireFrame();

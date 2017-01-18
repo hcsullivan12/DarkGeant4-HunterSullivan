@@ -29,6 +29,8 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_Cylinder::DetectorComponent_Cylinder(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -70,5 +72,13 @@ void DetectorComponent_Cylinder::ConstructVolume() {
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
 
+}
+
+bool DetectorComponent_Cylinder::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_Cylinder WithinVolume STUB\n";
+
+	return true;
+	
 }
 

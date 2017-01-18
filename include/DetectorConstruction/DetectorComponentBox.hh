@@ -53,6 +53,7 @@ class DetectorComponent_Box : public DetectorComponent {
 		~DetectorComponent_Box();
 		
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

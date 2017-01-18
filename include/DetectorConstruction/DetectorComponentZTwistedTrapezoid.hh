@@ -56,6 +56,7 @@ class DetectorComponent_ZTwistedTrapezoid : public DetectorComponent {
 		~DetectorComponent_ZTwistedTrapezoid();
 		
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

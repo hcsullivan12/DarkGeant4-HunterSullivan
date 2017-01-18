@@ -50,6 +50,7 @@ class DetectorComponent_SolidSphere : public DetectorComponent {
 		~DetectorComponent_SolidSphere();
 	
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

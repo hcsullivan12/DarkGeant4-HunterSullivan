@@ -29,6 +29,8 @@
 #include "G4TwistedTrd.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_ZTwistedTrapezoid::DetectorComponent_ZTwistedTrapezoid(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -62,5 +64,13 @@ void DetectorComponent_ZTwistedTrapezoid::ConstructVolume() {
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
 
+}
+
+bool DetectorComponent_ZTwistedTrapezoid::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_ZTwistedTrapezoid WithinVolume STUB\n";
+
+	return true;
+	
 }
 

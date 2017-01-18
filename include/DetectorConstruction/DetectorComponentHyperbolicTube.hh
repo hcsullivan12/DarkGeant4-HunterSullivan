@@ -54,6 +54,7 @@ class DetectorComponent_HyperbolicTube : public DetectorComponent {
 		~DetectorComponent_HyperbolicTube();
 	
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

@@ -28,6 +28,8 @@
 #include "G4Trd.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_Trapezoid::DetectorComponent_Trapezoid(DetectorComponent_vars vars)
  : DetectorComponent(vars) 
 {
@@ -61,6 +63,14 @@ void DetectorComponent_Trapezoid::ConstructVolume() {
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
+	
+}
+
+bool DetectorComponent_Trapezoid::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_Trapezoid WithinVolume STUB\n";
+
+	return true;
 	
 }
 

@@ -52,6 +52,7 @@ class DetectorComponent_EllipticalTube : public DetectorComponent {
 		~DetectorComponent_EllipticalTube();
 	
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

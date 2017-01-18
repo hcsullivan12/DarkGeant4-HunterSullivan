@@ -29,6 +29,8 @@
 #include "G4Para.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_Parallelepiped::DetectorComponent_Parallelepiped(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -51,16 +53,24 @@ DetectorComponent_Parallelepiped::~DetectorComponent_Parallelepiped() {
 void DetectorComponent_Parallelepiped::ConstructVolume() {
 	
 	G4Para *VirtualVolume = new G4Para(this->Name,
-					this->xHalfLength * m,
-                                        this->yHalfLength * m,
-                                        this->zHalfLength * m,
-                                        this->AngleOfXZFaces * deg,
-                                        this->PolarAngleOfXYFaces * deg,
-					this->AzimuthalAngleOfXYFaces * deg);
+	                                   this->xHalfLength * m,
+                                       this->yHalfLength * m,
+                                       this->zHalfLength * m,
+                                       this->AngleOfXZFaces * deg,
+                                       this->PolarAngleOfXYFaces * deg,
+                                       this->AzimuthalAngleOfXYFaces * deg);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
 
+}
+
+bool DetectorComponent_Parallelepiped::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_Parallelepiped WithinVolume STUB\n";
+
+	return true;
+	
 }
 

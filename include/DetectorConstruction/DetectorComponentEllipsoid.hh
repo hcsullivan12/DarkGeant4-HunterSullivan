@@ -54,6 +54,7 @@ class DetectorComponent_Ellipsoid : public DetectorComponent {
 		~DetectorComponent_Ellipsoid();
 	
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

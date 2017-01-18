@@ -54,6 +54,7 @@ class DetectorComponent_Torus : public DetectorComponent {
 		~DetectorComponent_Torus();
 	
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

@@ -28,6 +28,8 @@
 #include "G4TwistedBox.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_TwistedBox::DetectorComponent_TwistedBox(DetectorComponent_vars vars)
  : DetectorComponent(vars) 
 {
@@ -59,6 +61,14 @@ void DetectorComponent_TwistedBox::ConstructVolume() {
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
+	
+}
+
+bool DetectorComponent_TwistedBox::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_TwistedBox WithinVolume STUB\n";
+
+	return true;
 	
 }
 

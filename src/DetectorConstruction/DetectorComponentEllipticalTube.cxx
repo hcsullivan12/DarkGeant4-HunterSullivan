@@ -29,6 +29,8 @@
 #include "G4EllipticalTube.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_EllipticalTube::DetectorComponent_EllipticalTube(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -57,4 +59,12 @@ void DetectorComponent_EllipticalTube::ConstructVolume() {
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
 
+}
+
+bool DetectorComponent_EllipticalTube::WithinVolume(G4double x, G4double y, G4double z) {
+	
+	cout << "DetectorComponent_EllipticalTube WithinVolume STUB\n";
+	
+	return true;
+	
 }

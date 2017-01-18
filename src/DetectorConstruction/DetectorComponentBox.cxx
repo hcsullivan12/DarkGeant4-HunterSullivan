@@ -28,6 +28,9 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 
+// C/C++ Headers
+#include <cmath>
+
 DetectorComponent_Box::DetectorComponent_Box(DetectorComponent_vars vars)
  : DetectorComponent(vars) 
 {
@@ -69,4 +72,18 @@ void DetectorComponent_Box::ConstructVolume() {
                  this->Name);
 	
 }
+
+bool DetectorComponent_Box::WithinVolume(G4double x, G4double y, G4double z) {
+
+	if (fabs(x - this->Position.x()) > half_x)
+		return false;
+	if (fabs(y - this->Position.y()) > half_y)
+		return false;
+	if (fabs(z - this->Position.z()) > half_z)
+		return false;
+
+	return true;
+	
+}
+
 

@@ -29,6 +29,8 @@
 #include "G4Orb.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_SolidSphere::DetectorComponent_SolidSphere(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -46,11 +48,19 @@ DetectorComponent_SolidSphere::~DetectorComponent_SolidSphere() {
 void DetectorComponent_SolidSphere::ConstructVolume() {
 	
 	G4Orb *VirtualVolume = new G4Orb(this->Name,
-				this->Radius * m);
+                                     this->Radius * m);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
 
+}
+
+bool DetectorComponent_SolidSphere::WithinVolume(G4double x, G4double y, G4double z) {
+	
+	cout << "DetectorComponent_SolidSphere WithinVolume STUB\n";
+	
+	return true;
+	
 }
 

@@ -51,6 +51,8 @@ class DetectorComponent_Cone : public DetectorComponent {
 		~DetectorComponent_Cone();
 		
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
+
 	
 };
 

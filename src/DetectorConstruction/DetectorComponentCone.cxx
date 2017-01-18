@@ -28,6 +28,8 @@
 #include "G4Cons.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_Cone::DetectorComponent_Cone(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -65,6 +67,14 @@ void DetectorComponent_Cone::ConstructVolume() {
                  this->Name);
 
 
+}
+
+bool DetectorComponent_Cone::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_Cone within volume STUB\n";
+
+	return true;
+	
 }
 
 

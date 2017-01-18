@@ -54,6 +54,7 @@ class DetectorComponent_TwistedBox : public DetectorComponent {
 		~DetectorComponent_TwistedBox();
 		
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

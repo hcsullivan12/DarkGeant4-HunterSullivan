@@ -29,6 +29,8 @@
 #include "G4EllipticalCone.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_EllipticalCone::DetectorComponent_EllipticalCone(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -60,3 +62,10 @@ void DetectorComponent_EllipticalCone::ConstructVolume() {
 
 }
 
+bool DetectorComponent_EllipticalCone::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_EllipticalCone WithinVolume STUB\n";
+
+	return true;
+	
+}

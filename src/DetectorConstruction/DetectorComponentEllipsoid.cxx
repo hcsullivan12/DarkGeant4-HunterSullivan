@@ -29,6 +29,8 @@
 #include "G4Ellipsoid.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_Ellipsoid::DetectorComponent_Ellipsoid(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -60,5 +62,13 @@ void DetectorComponent_Ellipsoid::ConstructVolume() {
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
 
+}
+
+bool DetectorComponent_Ellipsoid::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent-Ellipsoid WithinVolume STUB\n";
+
+	return true;
+	
 }
 

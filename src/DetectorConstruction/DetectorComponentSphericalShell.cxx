@@ -28,6 +28,8 @@
 #include "G4Sphere.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_SphericalShell::DetectorComponent_SphericalShell(DetectorComponent_vars vars)
  : DetectorComponent(vars) 
 {
@@ -63,5 +65,13 @@ void DetectorComponent_SphericalShell::ConstructVolume() {
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
+	
+}
+
+bool DetectorComponent_SphericalShell::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_sphericalShell withinVolume STUB\n";
+
+	return true;
 	
 }

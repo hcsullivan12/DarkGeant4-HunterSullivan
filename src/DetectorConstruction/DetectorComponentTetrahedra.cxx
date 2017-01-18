@@ -28,6 +28,8 @@
 #include "G4Tet.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_Tetrahedra::DetectorComponent_Tetrahedra(DetectorComponent_vars vars)
  : DetectorComponent(vars) 
 {
@@ -51,10 +53,10 @@ DetectorComponent_Tetrahedra::~DetectorComponent_Tetrahedra() {
 void DetectorComponent_Tetrahedra::ConstructVolume() {
 	
 	G4Tet *VirtualVolume = new G4Tet(this->Name,
-                                this->Point1 * m,
-				this->Point2 * m,
-				this->Point3 * m,
-                                this->Point4 * m);
+                                     this->Point1 * m,
+                                     this->Point2 * m,
+                                     this->Point3 * m,
+                                     this->Point4 * m);
                                      
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
@@ -62,3 +64,10 @@ void DetectorComponent_Tetrahedra::ConstructVolume() {
 	
 }
 
+bool DetectorComponent_Tetrahedra::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_Tetrahedra WithinVolume STUB\n";
+
+	return true;
+	
+}

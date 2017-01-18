@@ -29,6 +29,8 @@
 #include "G4Hype.hh"
 #include "G4LogicalVolume.hh"
 
+using std::cout;
+
 DetectorComponent_HyperbolicTube::DetectorComponent_HyperbolicTube(DetectorComponent_vars vars)
  : DetectorComponent(vars)
 {
@@ -61,5 +63,13 @@ void DetectorComponent_HyperbolicTube::ConstructVolume() {
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
 
+}
+
+bool DetectorComponent_HyperbolicTube::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_HyperbolicTube WithinVolume STUB\n";
+
+	return true;
+	
 }
 

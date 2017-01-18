@@ -55,6 +55,7 @@ class DetectorComponent_Parallelepiped : public DetectorComponent {
 		~DetectorComponent_Parallelepiped();
 		
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 
