@@ -94,7 +94,7 @@ void DetectorConstructionV2::InitializeDetectorComponents() {
 		
 		FindMaterial(this->Components[i]);
 		this->Components[i]->ConstructVolume();
-		this->Components[i]->ApplyColor();
+		this->Components[i]->ApplyVisEffects();
 		
 	}
 	

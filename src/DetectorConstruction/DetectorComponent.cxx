@@ -32,6 +32,7 @@ DetectorComponent::DetectorComponent(DetectorComponent_vars vars)
 	this->MaterialString = vars.MaterialString;
 	this->Inside         = vars.Inside;
 	this->colour         = vars.colour;
+	this->Wireframe      = vars.Wireframe;
 	
 	this->RotationMatrix = G4RotationMatrix();
 	this->Transform = G4Transform3D(this->RotationMatrix, Position);
@@ -59,10 +60,11 @@ void DetectorComponent::RotateZ(double delta) {
 	
 }
 
-void DetectorComponent::ApplyColor() {
+void DetectorComponent::ApplyVisEffects() {
 	
 	this->attributes = new G4VisAttributes(this->colour);
-	LogicalVolume->SetVisAttributes(attributes);
+	this->attributes->SetForceWireframe(this->Wireframe);
+	LogicalVolume->SetVisAttributes(this->attributes);
 	
 }
 

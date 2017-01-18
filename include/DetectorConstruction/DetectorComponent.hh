@@ -223,6 +223,8 @@ struct DetectorComponent_vars {
 	G4double YRotation;
 	G4double ZRotation;
 	
+	G4bool Wireframe;
+	
 	//G4Color
 	
 	DetectorComponent_Box_vars *box;
@@ -256,6 +258,8 @@ class DetectorComponent {
 		G4String Inside;
 		G4String MaterialString;
 		
+		G4bool Wireframe;
+		
 		VolumeType Type;
 		
 		G4Colour colour;
@@ -280,7 +284,8 @@ class DetectorComponent {
 		
 		virtual void ConstructVolume() {;}
 		
-		void ApplyColor();
+		void ApplyVisEffects();
+		void SetWireFrame();
 		
 		void RotateX(double delta);
 		void RotateY(double delta);

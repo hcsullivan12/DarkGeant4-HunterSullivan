@@ -166,6 +166,10 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
 	vars.Inside = GetStringFromTable_WithHalt("Inside",
                                         "Please define Inside."
                                         + string(" Halting Execution"));
+                                        
+	vars.Wireframe = GetBooleanFromTable_NoHalt("Wireframe",
+                                                "Wireframe is false",
+                                                false);
                              
 	vars.Position = GetG4ThreeVector("Position");
 	
