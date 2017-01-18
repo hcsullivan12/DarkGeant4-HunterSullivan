@@ -29,7 +29,8 @@
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> *FourVectors,
                                                string DarkGeantOutputPath,
-                                               int NumberOfEvents) 
+                                               int NumberOfEvents,
+                                               DetectorComponent *World) 
 
  : G4VUserPrimaryGeneratorAction()
 
@@ -38,10 +39,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(vector<FourVector> *FourVectors,
 	this->Stepping = new SteppingAction(DarkGeantOutputPath);
 	
 	this->ParticleGun = new G4ParticleGun(1);
-	ParticleTable = G4ParticleTable::GetParticleTable();
+	this->ParticleTable = G4ParticleTable::GetParticleTable();
 	
 	this->PresentIndex = 0;
 	this->FourVectors = FourVectors;
+	this->World = World;
 	
 	this->NumberOfEvents = NumberOfEvents;
 	
@@ -73,6 +75,15 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event *event) {
 	int i = this->PresentIndex;
 	
 	for (size_t prtcle = 0; prtcle < this->FourVectors[i].size(); prtcle++) {
+
+		if (!this->World->WithinVolume(this->FourVectors[i][prtcle].X,
+                                     this->FourVectors[i][prtcle].Y,
+                                     this->FourVectors[i][prtcle].Z))
+        {
+		
+			continue;
+			
+		}
 
 		G4ParticleDefinition *Def = GetParticleDefinition(this->FourVectors[i][prtcle]);
 		this->FourVectors[i][prtcle].T = this->FourVectors[i][prtcle].E * GeV - Def->GetPDGMass();

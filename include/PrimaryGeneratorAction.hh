@@ -36,6 +36,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 // User Headers
+#include "DetectorComponent.hh"
 #include "SteppingAction.hh"
 #include "Utilities.hh"
 
@@ -58,6 +59,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 		
 		G4ParticleTable *ParticleTable;
 		G4ParticleGun *ParticleGun;
+		
+		DetectorComponent *World;
 	
 	/*
 	 * 
@@ -69,7 +72,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 	
 		PrimaryGeneratorAction(vector<FourVector> *FourVectors,
                                string DarkGeantOutputPath,
-                               int NumberOfEvents);
+                               int NumberOfEvents,
+                               DetectorComponent *World);
 		~PrimaryGeneratorAction();
 		
 		void GeneratePrimaries(G4Event *event);
