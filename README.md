@@ -20,7 +20,7 @@ make
 ```
 If you do not have Geant4 installed, please see the wiki for hints
 
-## Basic muon run.
+## Basic proton run.
 
 The following command is subject to change with time.
 
