@@ -67,6 +67,7 @@ class ParticlesConfigLua : public LuaInstance {
 	public:
 		
 		int NumberOfEvents;
+		int PrimariesPerEvent;
 		
 		vector<FourVector> *FourVectors;
 

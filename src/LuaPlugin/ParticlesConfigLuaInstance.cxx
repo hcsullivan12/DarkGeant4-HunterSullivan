@@ -27,6 +27,8 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
  : LuaInstance(ModulePath, "Particles.lua")
 {
 	
+	this->PrimariesPerEvent = 1;
+	
 	this->FourVectorFile = false;
 	this->FileHasPosition = false;
 	this->FileHasParticleNames = false;
@@ -161,6 +163,10 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	this->NumberOfEvents = GetIntegerFromTable_WithHalt("Number_Of_Events",
                                          "Number_Of_Events not found.");
                                          
+	this->PrimariesPerEvent = GetIntegerFromTable_NoHalt("Primaries_Per_Event",
+                                                         "Primaries_Per_Event set to 1",
+                                                         1);
+                                         
 	G4double Energy = GetNumberFromTable_WithHalt("Energy",
                                                   "Energy not found.");
                                                   
@@ -196,7 +202,23 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 
 void ParticlesConfigLua::Initialize_FourVector_Vector() {
 
-	this->FourVectors = new vector<FourVector>[this->NumberOfEvents];
+	//if (this->PrimariesPerEvent == 1) {
+		
+		this->FourVectors = new vector<FourVector>[this->NumberOfEvents];
+		
+	/*} else {
+		
+		if (this->NumberOfEvents % this->PrimariesPerEvent == 0) {
+		
+			this->FourVectors = new vector<FourVector>[this->NumberOfEvents/this->PrimariesPerEvent];
+			
+		} else {
+			
+			
+			
+		}
+		
+	}*/
 	
 }
 
