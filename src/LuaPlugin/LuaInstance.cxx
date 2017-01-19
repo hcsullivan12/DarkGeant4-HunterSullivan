@@ -166,6 +166,7 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 	if (lua_type(this->L, -1) != LUA_TTABLE) {
 		
 		cout << "Is " << TableName << " a table?\n";
+		lua_pop(this->L, 1);
 		throw string("Not a table!");
 		
 	}

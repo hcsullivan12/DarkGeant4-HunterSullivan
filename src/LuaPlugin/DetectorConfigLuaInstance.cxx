@@ -180,9 +180,17 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
 		
 	} catch (string e) {
 		
-		cout << "Default colour used\n";
-		vars.colour = G4Colour(.5, .5, .5);
-		lua_pop(this->L, 1);
+		try {
+		
+			vars.colour = GetG4ThreeVector("color");
+			
+		} catch (string e) {
+		
+			cout << "Default colour used\n";
+			vars.colour = G4Colour(.5, .5, .5);	
+			
+		}
+		
 	}
 	
 	if (DetectorComponentIndex != "0") {
