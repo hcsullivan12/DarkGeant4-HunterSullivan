@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 #  dedx.py
@@ -25,6 +25,8 @@
 import matplotlib.pyplot as plt
 import pdb
 
+from multiprocessing import Process
+
 def main(args):
 	
 	plt.rcParams['font.size'] = 24.0
@@ -35,8 +37,13 @@ def main(args):
 	dedx = GenerateDeDx(lists[0], lists[1])
 	residual = GenerateResidual(lists[0], lists[1], lists[2])
 	
+	ProcessResidual = Process(target = plotdedx_residualrange, args=(dedx, residual))
+	ProcessResidual.start()
+	
 	plotdedx(dedx)
-	plotdedx_residualrange(dedx, residual)
+	ProcessResidual.join()
+	
+	#plotdedx_residualrange(dedx, residual)
 	
 	return 0
 	
@@ -62,7 +69,7 @@ def plotdedx_residualrange(dedx, residual):
 	plt.xlabel("residual range (cm)")
 	plt.ylabel("dE/dx MeV/cm")
 	
-	plt.hist2d(dedx_1d_array, residual_1d_array, (500, 500), cmap=plt.cm.jet)
+	plt.hist2d(dedx_1d_array, residual_1d_array, (2500, 2500), cmap=plt.cm.jet)
 	plt.colorbar()
 	plt.show()
 	plt.close()
