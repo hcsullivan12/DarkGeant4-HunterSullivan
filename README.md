@@ -68,6 +68,6 @@ Be sure to place associated files in the top directory, ie if you path is script
 
 ## Collaborators
 
-Emma Davenport (Lead Developer - UTA Graduate Student)
+Emma Davenport  (Lead Developer - UTA Graduate Student) DarkGeant4
 
-Hunter Sullivan (UTA Graduate Student)
+Hunter Sullivan (Developer - UTA Graduate Student) CorsikaToDarkGeant4Converter
