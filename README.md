@@ -65,3 +65,9 @@ python3 Histogram
 ```
 
 Be sure to place associated files in the top directory, ie if you path is scripts/DarkGeantHelperScripts/Histogram, be sure to place data in scripts/DarkGeantHelperScripts/
+
+## Collaborators
+
+Emma Davenport (Lead Developer - UTA Graduate Student)
+
+Hunter Sullivan (UTA Graduate Student)
