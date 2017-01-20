@@ -40,7 +40,7 @@ function GetSign()
 
 end
 
-Particle_File = "output.dat"
+Particle_File = "BDMInput.dat"
 Particle_File_Type = "Four Vector"
 Particle_Table = { Particle_Name = "proton",
                    Particles_Position = Particle_Position_Function }
