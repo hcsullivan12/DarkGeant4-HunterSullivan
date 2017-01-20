@@ -28,7 +28,7 @@ import pdb
 def main(args):
 	
 	plt.rcParams['font.size'] = 24.0
-	FileBuffer = GetFileBuffer()
+	FileBuffer = GetFileBuffer(args)
 	
 	lists = GetLists(FileBuffer)
 	
@@ -171,12 +171,20 @@ def GetAveragededx(dedx):
 		
 	return Sum/len(dedx)
 
-def GetFileBuffer():
+def GetFileBuffer(args):
+	
+	FileToOpen = "DarkGeantOutput.dat"
+	if (len(args) != 1):
+		FileToOpen = args[1]
 	
 	File = []
-	with open("DarkGeantOutput.dat", "r") as fp:
-		for line in fp:
-			File.append(line)
+	try:
+		with open(FileToOpen, "r") as fp:
+			for line in fp:
+				File.append(line)
+	except FileNotFoundError:
+		print("File not found")
+		exit(0)
 			
 	return File
 
