@@ -80,7 +80,7 @@ using std::endl;
  * */
 
 // Runtime Argument variables
-static const string VersionString = "0.4 \"Fermi\"";
+static const string VersionString = "0.5 \"Dirac\"";
 static bool TerminalOutput = true;
 static bool ShowVis = false;
 
