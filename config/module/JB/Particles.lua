@@ -21,7 +21,7 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 	for i = 1, AmountOfPositionsToGenerate
 	do
 		local z = GetSign() * math.random() * 5.15
-		PositionTable[i] = {x, y, BoxMullerTransform()}
+		PositionTable[i] = {x, y, z}
 	
 	end
 	
