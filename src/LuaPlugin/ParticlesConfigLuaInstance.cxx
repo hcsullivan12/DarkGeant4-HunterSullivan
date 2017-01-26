@@ -401,6 +401,59 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 	
 }
 
+void ParticlesConfigLua::Parse_ParticleEnergy() {
+	
+	LoadTable("Particle_Table");
+	lua_pushstring(this->L, "Energy");
+	lua_gettable(this->L, -2);
+	
+	switch (lua_type(this->L, -1)) {
+	
+		// Two numbers, high and low. Uniform distribution
+		case LUA_TTABLE:
+		
+		
+		
+		break;
+		
+		// Allow the user to define their own distribution of energy
+		case LUA_TFUNCTION:
+		
+		
+		
+		break;
+		
+		// All particles have the same energy
+		case LUA_TNUMBER:
+		
+		
+		
+		break;
+		
+		// Did not provide energy value.
+		case LUA_TNIL:
+		
+		
+		
+		break;
+		default: break;
+		
+	}
+	//Pops Particle_Table
+	lua_pop(this->L, 1);
+	
+}
+
+void ParticlesConfigLua::Parse_ParticleTypes() {
+	
+	
+}
+
+void ParticlesConfigLua::Parse_ParticleMomentum() {
+	
+	
+}
+
 /*
  * ReadFile_FourVector()
  * 

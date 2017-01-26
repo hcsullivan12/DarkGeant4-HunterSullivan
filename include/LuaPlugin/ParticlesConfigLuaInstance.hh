@@ -90,6 +90,9 @@ class ParticlesConfigLua : public LuaInstance {
 		
 		void Parse_ParticleFileType();
 		void Parse_ParticlePosition();
+		void Parse_ParticleEnergy();
+		void Parse_ParticleTypes();
+		void Parse_ParticleMomentum();
 		void Parse_ParticleFileType_FourVector();
 		
 		void Load_PositionFunction();
