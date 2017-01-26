@@ -29,35 +29,30 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 	
 	this->PrimariesPerEvent = 1;
 	
-	this->FourVectorFile = false;
-	this->FileHasPosition = false;
-	this->FileHasParticleNames = false;
+	this->FourVectorFile            = false;
+	this->FileHasPosition           = false;
+	this->FileHasParticleNames      = false;
 	this->PositionDefinedByFunction = false;
 	
-	Initialize_ParticleFile();
-	
-	if (this->ParticleFile.length() == 0) {
+	if (CheckForFile()) {
 		
-		cout << "Particle_File = nil\n";
-		Initialize_GenericFourVector();
-		
-		if (this->PositionDefinedByFunction) {
-		
-			cout << "Position is defined by function\n";
-			Initialize_ParticlePositions_byFunction();
+		if (this->FourVectorFile) {
+			
+			cout << "Reading Four Vector File " << this->ParticleFile << "\n";
+			ReadFile_FourVector();
 			
 		}
 		
-		return;
+	} else {
+		
+		Initialize_GenericFourVector();
+		Parse_ParticleEnergy();
+		Parse_ParticleMomentum();
+		Parse_ParticlePosition();
+		Parse_ParticleTypes();
+		
 	}
-		
-	Initialize_ParticleFileType();
-	if (this->FourVectorFile) {
-		
-		cout << "Reading Four Vector File " << this->ParticleFile << "\n";
-		ReadFile_FourVector();
-		
-	}
+	
 	if (this->PositionDefinedByFunction) {
 		
 		cout << "Position is defined by function\n";
@@ -71,6 +66,24 @@ ParticlesConfigLua::~ParticlesConfigLua() {
 	
 	delete [] this->FourVectors;
 	
+}
+
+bool ParticlesConfigLua::CheckForFile() {
+
+	this->ParticleFile = GetStringFromGlobal_NoHalt("Particle_File", "");
+	if (this->ParticleFile.length() == 0) {
+		
+		cout << "Particle_File not defined\n";
+		return false;
+		
+	}
+		
+	this->ParticleFileType = GetStringFromGlobal_WithHalt(
+                                                  "Particle_File_Type");
+	Parse_ParticleFileType();
+    
+	return true;
+    
 }
 
 /*
@@ -154,11 +167,7 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 void ParticlesConfigLua::Initialize_GenericFourVector() {
 
 	cout << "\nParticle_Table\n";
-
-	Parse_ParticlePosition();
 	LoadTable("Particle_Table");
-	G4String ParticleName = GetStringFromTable_WithHalt("Particle_Name",
-                                            "Particle_Name not found.");
                                              
 	this->NumberOfEvents = GetIntegerFromTable_WithHalt("Number_Of_Events",
                                          "Number_Of_Events not found.");
@@ -166,59 +175,19 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	this->PrimariesPerEvent = GetIntegerFromTable_NoHalt("Primaries_Per_Event",
                                                          "Primaries_Per_Event set to 1",
                                                          1);
-                                         
-	G4double Energy = GetNumberFromTable_WithHalt("Energy",
-                                                  "Energy not found.");
-                                                  
-	G4ThreeVector Momentum  = GetG4ThreeVector("Momentum_Direction");
-	
 	//Pops Particle_Table
 	lua_pop(this->L, 1);
 	
-	Initialize_FourVector_Vector();
+	this->FourVectors = new vector<FourVector>[this->NumberOfEvents];
 	
 	FourVector Vector;
 	Vector.ParticleName = ParticleName;
-	Vector.P_x = Momentum.x();
-	Vector.P_y = Momentum.y();
-	Vector.P_z = Momentum.z();
-	Vector.E = Energy;
-	
-	if (!this->PositionDefinedByFunction) {
-	
-		Vector.X = this->Position.x();
-		Vector.Y = this->Position.y();
-		Vector.Z = this->Position.z();
-		
-	}
 	
 	for (int i = 0;i < this->NumberOfEvents;i++) {
 	
 		this->FourVectors[i].push_back(Vector);
 		
 	}
-	
-}
-
-void ParticlesConfigLua::Initialize_FourVector_Vector() {
-
-	//if (this->PrimariesPerEvent == 1) {
-		
-		this->FourVectors = new vector<FourVector>[this->NumberOfEvents];
-		
-	/*} else {
-		
-		if (this->NumberOfEvents % this->PrimariesPerEvent == 0) {
-		
-			this->FourVectors = new vector<FourVector>[this->NumberOfEvents/this->PrimariesPerEvent];
-			
-		} else {
-			
-			
-			
-		}
-		
-	}*/
 	
 }
 

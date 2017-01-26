@@ -57,12 +57,11 @@ class ParticlesConfigLua : public LuaInstance {
 		bool FileHasPosition;
 		bool FileHasParticleNames;
 		bool PositionDefinedByFunction;
+		bool EnergyDefinedByFunction;
 		
 		string ParticleFile;
 		string ParticleFileType;
 		string PrimaryParticle_Name;
-		
-		G4ThreeVector Position; 
 	 
 	public:
 		
@@ -82,11 +81,12 @@ class ParticlesConfigLua : public LuaInstance {
 	
 	private:
 	
+		bool CheckForFile();
+	
 		void Initialize_ParticleFile();
 		void Initialize_ParticleFileType();
 		void Initialize_ParticlePositions_byFunction();
 		void Initialize_GenericFourVector();
-		void Initialize_FourVector_Vector();
 		
 		void Parse_ParticleFileType();
 		void Parse_ParticlePosition();
@@ -96,7 +96,6 @@ class ParticlesConfigLua : public LuaInstance {
 		void Parse_ParticleFileType_FourVector();
 		
 		void Load_PositionFunction();
-		
 		void ReadFile_FourVector();
 	
 };
