@@ -93,7 +93,7 @@ bool ParticlesConfigLua::CheckForFile() {
 
 void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 	
-	Load_PositionFunction();
+	Load_Function();
 	
 	for (int i = 1; i <= this->NumberOfEvents; i++) {
 		
@@ -163,17 +163,7 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	
 }
 
-void ParticlesConfigLua::Load_PositionFunction() {
-	
-	/*
-	 * Loads Particle_Table and pushes the position function
-	 * to the top of the stack.
-	 * 
-	 * */
-	
-	LoadTable("Particle_Table");
-	lua_pushstring(this->L, "Particles_Position");
-	lua_gettable(this->L, -2);
+void ParticlesConfigLua::Load_Function() {
 	
 	// Pushes how many elements we want to generate.
 	lua_pushinteger(this->L, this->TotalNumberOfPrimaries);
@@ -422,6 +412,30 @@ void ParticlesConfigLua::SetEnergyByNumber() {
 		}
 				
 	}
+	
+}
+
+void ParticlesConfigLua::SetEnergyByFunction() {
+	
+	Load_Function();
+	
+	for (int i = 1;i <= this->NumberOfEvents;i++) {
+	
+		for (int j = 0; j < this->PrimariesPerEvent;j++) {
+			
+			lua_pushinteger(this->L, this->PrimariesPerEvent*i - 2 + j);
+			lua_gettable(this->L, -2);
+			
+			this->FourVectors[i][j].E = lua_tonumber(this->L, -1);
+			
+			//pops value
+			lua_pop(this->L, 1);
+			
+		}
+		
+	}
+	//pops table
+	lua_pop(this->L, 1);
 	
 }
 

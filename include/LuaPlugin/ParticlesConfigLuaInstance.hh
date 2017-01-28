@@ -98,8 +98,10 @@ class ParticlesConfigLua : public LuaInstance {
 		
 		void SetEnergyByRange();
 		void SetEnergyByNumber();
+		void SetEnergyByFunction();
 		
-		void Load_PositionFunction();
+		void Load_Function();
+		
 		void ReadFile_FourVector();
 	
 };
