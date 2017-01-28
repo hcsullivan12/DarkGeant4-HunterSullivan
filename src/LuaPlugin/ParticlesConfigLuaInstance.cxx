@@ -104,7 +104,7 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
                                          &this->FourVectors[i-1][j].Y,
                                          &this->FourVectors[i-1][j].Z};
                                          
-			lua_pushinteger(this->L, this->PrimariesPerEvent*i - 2 + j);
+			lua_pushinteger(this->L, this->PrimariesPerEvent * (i-1) + 1 + j);
 			lua_gettable(this->L, -2);
                                          
 			for (int k = 1; k <= 3; k++) {
@@ -151,7 +151,6 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	this->FourVectors = new vector<FourVector>[this->NumberOfEvents];
 	
 	FourVector Vector;
-	Vector.ParticleName = ParticleName;
 	
 	for (int i = 0;i < this->NumberOfEvents;i++) {
 	
@@ -283,7 +282,7 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 	switch (lua_type(this->L, -1)) {
 	
 		case LUA_TTABLE:
-		
+		{
 			/*
 			 * Position table is at top of stack but GetG4ThreeVector
 			 * assumes that Position isn't loaded so we have to pop
@@ -292,19 +291,20 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 			 * */
 			cout << "LUA_TTABLE switch\n";
 			lua_pop(this->L, 1);
-			this->Position = GetG4ThreeVector("Particles_Position");
+			G4ThreeVector Position = GetG4ThreeVector("Particles_Position");
 		
 			for (int i = 0;i < this->NumberOfEvents;i++) {
 				
 				for (int j = 0;j < this->PrimariesPerEvent;j++) {
 				
-					this->FourVectors[i][j].X = this->Position.X();
-					this->FourVectors[i][j].Y = this->Position.Y();
-					this->FourVectors[i][j].Z = this->Position.Z();
+					this->FourVectors[i][j].X = Position.x();
+					this->FourVectors[i][j].Y = Position.y();
+					this->FourVectors[i][j].Z = Position.z();
 				}
 				
 			}
-		
+			
+		}
 		break;
 		case LUA_TFUNCTION:
 		
@@ -415,7 +415,7 @@ void ParticlesConfigLua::SetEnergyByRange() {
 			
 		for (int j = 0;j < this->PrimariesPerEvent;j++) {
 				
-			this->FourVectors[i][j].E = E_Low+rand()%(E_High - E_Low);
+			this->FourVectors[i][j].E = E_Low + GetRandomDouble()*(E_High - E_Low);
 			
 		}
 				
@@ -447,7 +447,7 @@ void ParticlesConfigLua::SetEnergyByFunction() {
 	
 		for (int j = 0; j < this->PrimariesPerEvent;j++) {
 			
-			lua_pushinteger(this->L, this->PrimariesPerEvent*i - 2 + j);
+			lua_pushinteger(this->L, this->PrimariesPerEvent * (i-1) + 1 + j);
 			lua_gettable(this->L, -2);
 			
 			this->FourVectors[i][j].E = lua_tonumber(this->L, -1);
@@ -465,13 +465,37 @@ void ParticlesConfigLua::SetEnergyByFunction() {
 
 void ParticlesConfigLua::SetPrimariesByString() {
 	
+	for (int i = 0;i < this->NumberOfEvents;i++) {
 	
+		for (int j = 0;j < this->PrimariesPerEvent;j++) {
+		
+			this->FourVectors[i][j].ParticleName = lua_tostring(this->L, -1);
+			
+		}
+		
+	}
 	
 }
 
 void ParticlesConfigLua::SetPrimariesByFunction() {
 	
+	Load_Function();
 	
+	for (int i = 1; i <= this->NumberOfEvents;i++) {
+	
+		for (int j = 0;j < this->PrimariesPerEvent;j++) {
+		
+			lua_pushinteger(this->L, this->PrimariesPerEvent * (i-1) + 1 + j);
+			lua_gettable(this->L, -2);
+			
+			this->FourVectors[i][j].ParticleName = lua_tostring(this->L, -1);
+			
+			// pops value
+			lua_pop(this->L, 1);
+			
+		}
+		
+	}
 	
 }
 
@@ -488,7 +512,7 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 	
 	string path = this->Module_Path + "/" + this->ParticleFile;
 	this->NumberOfEvents = DetermineNumberOfEvents(path);
-	Initialize_FourVector_Vector();
+	this->FourVectors = new vector<FourVector>[this->NumberOfEvents];
 	
 	FILE *fp = fopen(path.c_str(), "r");
 	FourVector Temp_FourVector;
@@ -543,9 +567,9 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 		string input = "%d: %s %lf %lf %lf %lf";
 		char Temp_ParticleName[256] = {'\0'};
 		
-		Temp_FourVector.X = this->Position.x();
-		Temp_FourVector.Y = this->Position.y();
-		Temp_FourVector.Z = this->Position.z();
+		//Temp_FourVector.X = this->Position.x();
+		//Temp_FourVector.Y = this->Position.y();
+		//Temp_FourVector.Z = this->Position.z();
 		
 		while (fscanf(fp, input.c_str(), &eventnum,
                                          Temp_ParticleName,
@@ -610,9 +634,9 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 		string input = "%d: %lf %lf %lf %lf";
 		
 		Temp_FourVector.ParticleName = this->PrimaryParticle_Name;
-		Temp_FourVector.X = this->Position.x();
-		Temp_FourVector.Y = this->Position.y();
-		Temp_FourVector.Z = this->Position.z();
+		//Temp_FourVector.X = this->Position.x();
+		//Temp_FourVector.Y = this->Position.y();
+		//Temp_FourVector.Z = this->Position.z();
 		
 		while (fscanf(fp, input.c_str(), &eventnum,
                                          &Temp_FourVector.E,
