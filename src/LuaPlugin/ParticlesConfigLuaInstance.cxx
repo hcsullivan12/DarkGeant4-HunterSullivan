@@ -364,68 +364,64 @@ void ParticlesConfigLua::Parse_ParticleEnergy() {
 	switch (lua_type(this->L, -1)) {
 	
 		// Two numbers, low and high. Uniform distribution
-		case LUA_TTABLE:
-		
-			lua_pushinteger(this->L, 1);
-			lua_gettable(this->L, -2);
-			double E_Low = lua_tonumber(this->L, -1);
-			lua_pop(this->L, 1);
-			
-			lua_pushinteger(this->L, 2);
-			lua_gettable(this->L, -2);
-			double E_High = lua_tonumber(this->L, -1);
-			lua_pop(this->L, 1);
-			
-			for (int i = 0;i < this->NumberOfEvents;i++) {
-			
-				for (int j = 0;j < this->PrimariesPerEvent;j++) {
-				
-					this->FourVectors[i][j].E = E_Low+rand()%(E_High - E_Low);
-					
-				}
-				
-			}
-			
-			lua_pop(this->L, 1);
-		
-		break;
+		case LUA_TTABLE: SetEnergyByRange(); break;
 		
 		// Allow the user to define their own distribution of energy
-		case LUA_TFUNCTION:
-		
-		
-		
-		break;
+		case LUA_TFUNCTION: break;
 		
 		// All particles have the same energy
-		case LUA_TNUMBER:
-		
-			double Energy = lua_tonumber(this->L, -1);
-			lua_pop(this->L, 1);
-			
-			for (int i = 0;i < this->NumberOfEvents;i++) {
-			
-				for (int j = 0;j < this->PrimariesPerEvent;j++) {
-				
-					this->FourVectors[i][j].E = Energy;
-					
-				}
-				
-			}
-		
-		break;
+		case LUA_TNUMBER: SetEnergyByNumber(); break;
 		
 		// Did not provide energy value.
-		case LUA_TNIL:
+		case LUA_TNIL: break;
 		
-		
-		
-		break;
 		default: break;
 		
 	}
-	//Pops Particle_Table
+	//Pops value and Particle_Table
+	lua_pop(this->L, 2);
+	
+}
+
+void ParticlesConfigLua::SetEnergyByRange() {
+	
+	lua_pushinteger(this->L, 1);
+	lua_gettable(this->L, -2);
+	double E_Low = lua_tonumber(this->L, -1);
 	lua_pop(this->L, 1);
+	
+	lua_pushinteger(this->L, 2);
+	lua_gettable(this->L, -2);
+	double E_High = lua_tonumber(this->L, -1);
+	lua_pop(this->L, 1);
+			
+	cout << "Energy range = " << E_Low << ":" << E_High << "\n";
+			
+	for (int i = 0;i < this->NumberOfEvents;i++) {
+			
+		for (int j = 0;j < this->PrimariesPerEvent;j++) {
+				
+			this->FourVectors[i][j].E = E_Low+rand()%(E_High - E_Low);
+			
+		}
+				
+	}
+	
+}
+
+void ParticlesConfigLua::SetEnergyByNumber() {
+
+	double Energy = lua_tonumber(this->L, -1);
+			
+	for (int i = 0;i < this->NumberOfEvents;i++) {
+			
+		for (int j = 0;j < this->PrimariesPerEvent;j++) {
+				
+			this->FourVectors[i][j].E = Energy;
+					
+		}
+				
+	}
 	
 }
 
