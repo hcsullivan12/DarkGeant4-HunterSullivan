@@ -23,6 +23,9 @@
 
 #include "ParticlesConfigLuaInstance.hh"
 
+#include <cstdlib>
+#include <ctime>
+
 ParticlesConfigLua::ParticlesConfigLua(string ModulePath) 
  : LuaInstance(ModulePath, "Particles.lua")
 {
@@ -99,7 +102,7 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
                                          &this->FourVectors[i-1][j].Y,
                                          &this->FourVectors[i-1][j].Z};
                                          
-			lua_pushinteger(this->L, 3*i - 2 + j);
+			lua_pushinteger(this->L, this->PrimariesPerEvent*i - 2 + j);
 			lua_gettable(this->L, -2);
                                          
 			for (int k = 1; k <= 3; k++) {
@@ -299,15 +302,26 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 			lua_pop(this->L, 1);
 			this->Position = GetG4ThreeVector("Particles_Position");
 		
+			for (int i = 0;i < this->NumberOfEvents;i++) {
+				
+				for (int j = 0;j < this->PrimariesPerEvent;j++) {
+				
+					this->FourVectors[i][j].X = this->Position.X();
+					this->FourVectors[i][j].Y = this->Position.Y();
+					this->FourVectors[i][j].Z = this->Position.Z();
+				}
+				
+			}
+		
 		break;
 		case LUA_TFUNCTION:
 		
 			cout << "LUA_TFUNCTION switch\n";
-			//Just saving for later.
-			this->Position = G4ThreeVector(0., 0., 0.);
 			this->PositionDefinedByFunction = true;
 			lua_pop(this->L, 1);
-		
+			
+			Initialize_ParticlePositions_byFunction();
+			
 		break;
 		case LUA_TSTRING:
 		
@@ -341,16 +355,38 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 
 void ParticlesConfigLua::Parse_ParticleEnergy() {
 	
+	srand(time(NULL));
+	
 	LoadTable("Particle_Table");
 	lua_pushstring(this->L, "Energy");
 	lua_gettable(this->L, -2);
 	
 	switch (lua_type(this->L, -1)) {
 	
-		// Two numbers, high and low. Uniform distribution
+		// Two numbers, low and high. Uniform distribution
 		case LUA_TTABLE:
 		
-		
+			lua_pushinteger(this->L, 1);
+			lua_gettable(this->L, -2);
+			double E_Low = lua_tonumber(this->L, -1);
+			lua_pop(this->L, 1);
+			
+			lua_pushinteger(this->L, 2);
+			lua_gettable(this->L, -2);
+			double E_High = lua_tonumber(this->L, -1);
+			lua_pop(this->L, 1);
+			
+			for (int i = 0;i < this->NumberOfEvents;i++) {
+			
+				for (int j = 0;j < this->PrimariesPerEvent;j++) {
+				
+					this->FourVectors[i][j].E = E_Low+rand()%(E_High - E_Low);
+					
+				}
+				
+			}
+			
+			lua_pop(this->L, 1);
 		
 		break;
 		
@@ -364,7 +400,18 @@ void ParticlesConfigLua::Parse_ParticleEnergy() {
 		// All particles have the same energy
 		case LUA_TNUMBER:
 		
-		
+			double Energy = lua_tonumber(this->L, -1);
+			lua_pop(this->L, 1);
+			
+			for (int i = 0;i < this->NumberOfEvents;i++) {
+			
+				for (int j = 0;j < this->PrimariesPerEvent;j++) {
+				
+					this->FourVectors[i][j].E = Energy;
+					
+				}
+				
+			}
 		
 		break;
 		
