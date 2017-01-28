@@ -53,13 +53,6 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
 		
 	}
 	
-	if (this->PositionDefinedByFunction) {
-		
-		cout << "Position is defined by function\n";
-		Initialize_ParticlePositions_byFunction();
-		
-	}
-	
 }
 
 ParticlesConfigLua::~ParticlesConfigLua() {
@@ -87,38 +80,6 @@ bool ParticlesConfigLua::CheckForFile() {
 }
 
 /*
- * Initialize_ParticleFile()
- * 
- * * Description
- * 
- *		...
- * 
- * */
- 
-void ParticlesConfigLua::Initialize_ParticleFile() {
-	
-	this->ParticleFile = GetStringFromGlobal_NoHalt("Particle_File","");
-	
-}
-
-/*
- * Initialize_ParticleFileType()
- * 
- * * Description
- * 
- * 		...
- * 
- * */
-
-void ParticlesConfigLua::Initialize_ParticleFileType() {
-	
-	this->ParticleFileType = GetStringFromGlobal_WithHalt(
-                                                  "Particle_File_Type");
-	Parse_ParticleFileType();
-	
-}
-
-/*
  * Initialize_ParticlePositions_ByFunction()
  * 
  * * Description
@@ -133,30 +94,32 @@ void ParticlesConfigLua::Initialize_ParticlePositions_byFunction() {
 	
 	for (int i = 1; i <= this->NumberOfEvents; i++) {
 		
-		G4double *PositionPointers[3] = {&this->FourVectors[i-1][0].X,
-                                         &this->FourVectors[i-1][0].Y,
-                                         &this->FourVectors[i-1][0].Z};
+		for (int j = 0; j < this->PrimariesPerEvent;j++) {
+		G4double *PositionPointers[3] = {&this->FourVectors[i-1][j].X,
+                                         &this->FourVectors[i-1][j].Y,
+                                         &this->FourVectors[i-1][j].Z};
                                          
-		lua_pushinteger(this->L, i);
-		lua_gettable(this->L, -2);
-                                         
-		for (int j = 1; j <= 3; j++) {
-		
-			lua_pushinteger(this->L, j);
+			lua_pushinteger(this->L, 3*i - 2 + j);
 			lua_gettable(this->L, -2);
+                                         
+			for (int k = 1; k <= 3; k++) {
+		
+				lua_pushinteger(this->L, k);
+				lua_gettable(this->L, -2);
 			
-			if (lua_type(this->L, -1) != LUA_TNUMBER) {
+				if (lua_type(this->L, -1) != LUA_TNUMBER) {
 			
-				//DO something
+					//DO something
 				
-			}
-			*(PositionPointers[j-1]) = lua_tonumber(this->L, -1);
-			//Pops value
-			lua_pop(this->L, 1);
+				}
+				*(PositionPointers[k-1]) = lua_tonumber(this->L, -1);
+				//Pops value
+				lua_pop(this->L, 1);
 			
+			}
+			//Pops table
+			lua_pop(this->L, 1);
 		}
-		//Pops table
-		lua_pop(this->L, 1);
 		
 	}
 	
@@ -175,6 +138,8 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	this->PrimariesPerEvent = GetIntegerFromTable_NoHalt("Primaries_Per_Event",
                                                          "Primaries_Per_Event set to 1",
                                                          1);
+                                                         
+	this->TotalNumberOfPrimaries = this->PrimariesPerEvent * this->NumberOfEvents;
 	//Pops Particle_Table
 	lua_pop(this->L, 1);
 	
@@ -185,7 +150,11 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 	
 	for (int i = 0;i < this->NumberOfEvents;i++) {
 	
-		this->FourVectors[i].push_back(Vector);
+		for (int j = 0;j < this->PrimariesPerEvent; j++) {
+			
+			this->FourVectors[i].push_back(Vector);
+			
+		}
 		
 	}
 	
@@ -204,7 +173,7 @@ void ParticlesConfigLua::Load_PositionFunction() {
 	lua_gettable(this->L, -2);
 	
 	// Pushes how many elements we want to generate.
-	lua_pushinteger(this->L, this->NumberOfEvents);
+	lua_pushinteger(this->L, this->TotalNumberOfPrimaries);
 	
 	if (lua_pcall(this->L, 1, 1, 0) != 0) {
 	
@@ -273,7 +242,7 @@ void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
 		
 		LoadTable("Particle_Table");
 		this->PrimaryParticle_Name = GetStringFromTable_WithHalt(
-                                                        "Particle_Name",
+                                         "Particle_Name",
                                          "Must specify Particle_Name.");
 		lua_pop(this->L, 1);
 		
