@@ -100,6 +100,9 @@ class ParticlesConfigLua : public LuaInstance {
 		void SetEnergyByNumber();
 		void SetEnergyByFunction();
 		
+		void SetPrimariesByString();
+		void SetPrimariesByFunction();
+		
 		void Load_Function();
 		
 		void ReadFile_FourVector();

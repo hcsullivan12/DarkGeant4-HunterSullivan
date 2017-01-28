@@ -30,6 +30,8 @@ ParticlesConfigLua::ParticlesConfigLua(string ModulePath)
  : LuaInstance(ModulePath, "Particles.lua")
 {
 	
+	srand(time(NULL));
+	
 	this->PrimariesPerEvent = 1;
 	
 	this->FourVectorFile            = false;
@@ -345,8 +347,6 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 
 void ParticlesConfigLua::Parse_ParticleEnergy() {
 	
-	srand(time(NULL));
-	
 	LoadTable("Particle_Table");
 	lua_pushstring(this->L, "Energy");
 	lua_gettable(this->L, -2);
@@ -370,6 +370,30 @@ void ParticlesConfigLua::Parse_ParticleEnergy() {
 	}
 	//Pops value and Particle_Table
 	lua_pop(this->L, 2);
+	
+}
+void ParticlesConfigLua::Parse_ParticleTypes() {
+	
+	LoadTable("Particle_Table");
+	lua_pushstring(this->L, "Primary_Particles");
+	lua_gettable(this->L, -2);
+	
+	switch (lua_type(this->L, -1)) {
+	
+		case LUA_TSTRING: SetPrimariesByString(); break;
+		case LUA_TFUNCTION: SetPrimariesByFunction(); break;
+		default: break;
+		
+	}
+	
+	//Pops value and Particle_Table
+	lua_pop(this->L, 2);
+	
+}
+
+void ParticlesConfigLua::Parse_ParticleMomentum() {
+	
+	
 	
 }
 
@@ -439,12 +463,14 @@ void ParticlesConfigLua::SetEnergyByFunction() {
 	
 }
 
-void ParticlesConfigLua::Parse_ParticleTypes() {
+void ParticlesConfigLua::SetPrimariesByString() {
+	
 	
 	
 }
 
-void ParticlesConfigLua::Parse_ParticleMomentum() {
+void ParticlesConfigLua::SetPrimariesByFunction() {
+	
 	
 	
 }
