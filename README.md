@@ -4,7 +4,7 @@ DarkGeant4 is a Geant4 application whose purpose is to provide a generic runtime
 
 ## Dependencies
 
-Geant4.9.6 and lua5.2+ is required. Please be sure to have lua5.2-dev packages installed on your computer, otherwise the program simply won't compile.
+Geant4.9.6 and lua5.2+ is required. Please be sure to have **lua5.2-dev** packages installed on your computer, otherwise the program simply won't compile.
 
 Also note that I'm developing against Geant4.9.6, earlier/later versions may be incomptabile with DarkGeant4.
 
