@@ -60,6 +60,6 @@ end
 
 Particle_File = "output.dat"
 Particle_File_Type = "Four Vector"
-Particle_Table = { Particle_Name = "proton",
+Particle_Table = { Primary_Particles = "proton",
                    Particles_Position = Particle_Position_Function }
 

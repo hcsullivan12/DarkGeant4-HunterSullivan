@@ -128,7 +128,7 @@ Particle_File_Type = nil
 			default = nil. Will halt execution if Particle_File is nil
 
 --]]
-Particle_Table = { Particle_Name = "proton",
+Particle_Table = { Primary_Particles = "proton",
                    Particles_Position = Particle_Position_Function,
                    Momentum_Direction = {0.0, 0.0, 1.0},
                    Energy = 10.0,
