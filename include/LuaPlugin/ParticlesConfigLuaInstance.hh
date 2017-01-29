@@ -103,6 +103,9 @@ class ParticlesConfigLua : public LuaInstance {
 		void SetPrimariesByString();
 		void SetPrimariesByFunction();
 		
+		void SetMomentumByTable();
+		void SetMomentumByFunction();
+		
 		void Load_Function();
 		
 		void ReadFile_FourVector();

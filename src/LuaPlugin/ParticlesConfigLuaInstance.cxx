@@ -303,7 +303,7 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 				}
 				
 			}
-			
+			lua_pushnil(this->L);
 		}
 		break;
 		case LUA_TFUNCTION:
@@ -389,7 +389,26 @@ void ParticlesConfigLua::Parse_ParticleTypes() {
 
 void ParticlesConfigLua::Parse_ParticleMomentum() {
 	
+	LoadTable("Particle_Table");
+	lua_pushstring(this->L, "Momentum_Direction");
+	lua_gettable(this->L, -2);
 	
+	switch (lua_type(this->L, -1)) {
+		
+		case LUA_TTABLE:
+		
+			lua_pop(this->L, 1);
+			SetMomentumByTable();
+			lua_pushnil(this->L);
+		
+		break;
+		case LUA_TFUNCTION: SetMomentumByFunction(); break;
+		default: break;
+		
+	}
+	
+	//Pops value and Particle_Table
+	lua_pop(this->L, 2);
 	
 }
 
@@ -492,6 +511,29 @@ void ParticlesConfigLua::SetPrimariesByFunction() {
 		}
 		
 	}
+	
+}
+
+void ParticlesConfigLua::SetMomentumByTable() {
+	
+	G4ThreeVector Momentum = GetG4ThreeVector("Momentum_Direction");
+	
+	for (int i = 0;i < this->NumberOfEvents;i++) {
+	
+		for (int j = 0;j < this->PrimariesPerEvent;j++) {
+		
+			this->FourVectors[i][j].P_x = Momentum.x();
+			this->FourVectors[i][j].P_y = Momentum.y();
+			this->FourVectors[i][j].P_z = Momentum.z();
+			
+		}
+		
+	}
+	
+}
+void ParticlesConfigLua::SetMomentumByFunction() {
+	
+	Load_Function();
 	
 }
 
