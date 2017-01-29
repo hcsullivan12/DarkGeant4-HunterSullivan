@@ -616,6 +616,7 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
+		SetObjectVarsWithFileInformation();
 	
 	/*
 	 * this->ParticleFileType has the following substrings:
@@ -650,6 +651,8 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
+		SetObjectVarsWithFileInformation();
+		Parse_ParticlePosition();
 		
 	/*
 	 * this->ParticleFileType has the following substrings:
@@ -682,6 +685,8 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
+		SetObjectVarsWithFileInformation();
+		Parse_ParticleTypes();
 		
 	/*
 	 * this->ParticleFileType has ***none*** the following substrings:
@@ -701,10 +706,6 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 		string input = "%d: %lf %lf %lf %lf";
 		
 		Temp_FourVector.ParticleName = this->PrimaryParticle_Name;
-		//Temp_FourVector.X = this->Position.x();
-		//Temp_FourVector.Y = this->Position.y();
-		//Temp_FourVector.Z = this->Position.z();
-		
 		while (fscanf(fp, input.c_str(), &eventnum,
                                          &Temp_FourVector.E,
                                          &Temp_FourVector.P_x,
@@ -715,10 +716,20 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 			this->FourVectors[eventnum].push_back(Temp_FourVector);
 			
 		}
+		SetObjectVarsWithFileInformation();
+		Parse_ParticlePosition();
+		Parse_ParticleTypes();
 		
 	}
 	
 	fclose(fp);
+	
+}
+
+void ParticlesConfigLua::SetObjectVarsWithFileInformation() {
+
+	this->NumberOfEvents    = (int)this->FourVectors->size();
+	this->PrimariesPerEvent = (int)this->FourVectors[0].size();
 	
 }
 
