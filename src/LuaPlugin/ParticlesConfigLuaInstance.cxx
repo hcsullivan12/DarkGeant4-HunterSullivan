@@ -310,7 +310,6 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 		
 			cout << "LUA_TFUNCTION switch\n";
 			this->PositionDefinedByFunction = true;
-			lua_pop(this->L, 1);
 			
 			Initialize_ParticlePositions_byFunction();
 			
@@ -323,25 +322,22 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 				// TODO GEANT4 provides a distribution function.
 				
 			}
-			lua_pop(this->L, 1);
 		
 		break;
 		case LUA_TNIL:
 		
 			cout << "Error. Nil value for Particles_Position\n";
-			lua_pop(this->L, -1);
 		
 		break;
 		default:
 		
-			lua_pop(this->L, 1);
 		
 		break;
 		
 	}
 	
-	// Pop Particle_Table
-	lua_pop(this->L, 1);
+	// Pop Value and Particle_Table
+	lua_pop(this->L, 2);
 	
 }
 
