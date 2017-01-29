@@ -85,6 +85,70 @@ bool ParticlesConfigLua::CheckForFile() {
 }
 
 /*
+ * Parse_ParticleFileType()
+ * 
+ * * Description
+ * 
+ * 		...
+ * 
+ * */
+
+void ParticlesConfigLua::Parse_ParticleFileType() {
+	
+	if (this->ParticleFileType.find("Four Vector") != std::string::npos) {
+		
+		this->FourVectorFile = true;
+		Parse_ParticleFileType_FourVector();
+		
+	}
+	
+}
+
+/*
+ * Parse_ParticleFileType_FourVector()
+ * 
+ * * Description
+ * 
+ * 		If this->ParticleFileType was determined to contain the string
+ * 		"Four Vector" then this function is called to determine
+ * 		whether this->ParticleFileType has other attributes.
+ * 
+ * */
+
+void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
+	
+	/*
+	 * Determines whether the string "with name" can be found
+	 * within the string this->ParticleFileType.
+	 * 
+	 * If it doesn't find the string "with name", the user is expected
+	 * to give the name of the particles via the lua script.
+	 * 
+	 * */
+	 
+	if (this->ParticleFileType.find("with name") != std::string::npos) {
+		
+		this->FileHasParticleNames = true;
+		
+	}
+	/*
+	 * Determines whether the string "with position" can be found
+	 * within the string this->ParticleFileType.
+	 * 
+	 * If it doesn't find the string "with position", the user is
+	 * expected to give the position of the particles via the lua
+	 * script.
+	 * 
+	 * */
+	if (this->ParticleFileType.find("with position") != std::string::npos) {
+		
+		this->FileHasPosition = true;
+		
+	}
+	
+}
+
+/*
  * Initialize_ParticlePositions_ByFunction()
  * 
  * * Description
@@ -166,6 +230,7 @@ void ParticlesConfigLua::Initialize_GenericFourVector() {
 
 void ParticlesConfigLua::Load_Function() {
 	
+	cout << "Function\n";
 	// Pushes how many elements we want to generate.
 	lua_pushinteger(this->L, this->TotalNumberOfPrimaries);
 	
@@ -183,84 +248,7 @@ void ParticlesConfigLua::Load_Function() {
 		exit(0);
 			
 	}
-	
-}
-
-/*
- * Parse_ParticleFileType()
- * 
- * * Description
- * 
- * 		...
- * 
- * */
-
-void ParticlesConfigLua::Parse_ParticleFileType() {
-	
-	if (this->ParticleFileType.find("Four Vector") != std::string::npos) {
-		
-		this->FourVectorFile = true;
-		Parse_ParticleFileType_FourVector();
-		
-	}
-	
-}
-
-/*
- * Parse_ParticleFileType_FourVector()
- * 
- * * Description
- * 
- * 		If this->ParticleFileType was determined to contain the string
- * 		"Four Vector" then this function is called to determine
- * 		whether this->ParticleFileType has other attributes.
- * 
- * */
-
-void ParticlesConfigLua::Parse_ParticleFileType_FourVector() {
-	
-	/*
-	 * Determines whether the string "with name" can be found
-	 * within the string this->ParticleFileType.
-	 * 
-	 * If it doesn't find the string "with name", the user is expected
-	 * to give the name of the particles via the lua script.
-	 * 
-	 * */
-	 
-	if (this->ParticleFileType.find("with name") != std::string::npos) {
-		
-		this->FileHasParticleNames = true;
-		
-	} else {
-		
-		LoadTable("Particle_Table");
-		this->PrimaryParticle_Name = GetStringFromTable_WithHalt(
-                                         "Particle_Name",
-                                         "Must specify Particle_Name.");
-		lua_pop(this->L, 1);
-		
-	}
-	
-	/*
-	 * Determines whether the string "with position" can be found
-	 * within the string this->ParticleFileType.
-	 * 
-	 * If it doesn't find the string "with position", the user is
-	 * expected to give the position of the particles via the lua
-	 * script.
-	 * 
-	 * */
-	
-	if (this->ParticleFileType.find("with position") != std::string::npos) {
-		
-		this->FileHasPosition = true;
-		
-	} else {
-
-		Parse_ParticlePosition();
-
-	}
+	cout << "Loaded function\n";
 	
 }
 
@@ -728,8 +716,12 @@ void ParticlesConfigLua::ReadFile_FourVector() {
 
 void ParticlesConfigLua::SetObjectVarsWithFileInformation() {
 
-	this->NumberOfEvents    = (int)this->FourVectors->size();
+	
 	this->PrimariesPerEvent = (int)this->FourVectors[0].size();
+	this->TotalNumberOfPrimaries = this->PrimariesPerEvent * this->NumberOfEvents;
+	
+	cout << "Number Of Events = " << this->NumberOfEvents << "\n";
+	cout << "Primaries per Event = " << this->PrimariesPerEvent << "\n";
 	
 }
 
