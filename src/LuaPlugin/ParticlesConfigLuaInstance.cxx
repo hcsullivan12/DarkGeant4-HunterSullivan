@@ -535,6 +535,35 @@ void ParticlesConfigLua::SetMomentumByFunction() {
 	
 	Load_Function();
 	
+	for (int i = 1; i <= this->NumberOfEvents;i++) {
+	
+		for (int j = 0;j < this->PrimariesPerEvent;j++) {
+			
+			G4double *Momenta[3] = {&this->FourVectors[i-1][j].P_x,
+                                    &this->FourVectors[i-1][j].P_y,
+                                    &this->FourVectors[i-1][j].P_z};
+		
+			lua_pushinteger(this->L, this->PrimariesPerEvent * (i-1) + 1 + j);
+			lua_gettable(this->L, -2);
+			
+			for (int k = 1;k < 4;k++) {
+			
+				lua_pushinteger(this->L, k);
+				lua_gettable(this->L, -2);
+				
+				*(Momenta[i-1]) = lua_tonumber(this->L, -1);
+				//Pops value
+				lua_pop(this->L, 1);
+				
+			}
+			
+			// pops value
+			lua_pop(this->L, 1);
+			
+		}
+		
+	}
+	
 }
 
 /*
