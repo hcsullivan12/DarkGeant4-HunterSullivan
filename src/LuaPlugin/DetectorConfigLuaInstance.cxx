@@ -24,6 +24,9 @@
 
 #include "DetectorConfigLuaInstance.hh"
 
+// Geant4 Headers
+#include "G4SystemOfUnits.hh"
+
 using std::exception;
 /*
  * DetectorConfigLuaInstane::DetectorConfigLuaInstance(string ModulePath)
