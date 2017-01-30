@@ -117,7 +117,7 @@ void ConfigLuaInstance::Initialize_physicslist() {
 	//	this->physicslist = new PhysicsList();
 	//else if (PhysicsListString == "QGSP")
 	//	this->physicslist = new QGSP();
-	else if (PhysicsListString == "QGSP_BERT")
+	if (PhysicsListString == "QGSP_BERT")
 		this->physicslist = new QGSP_BERT();
 	//else if (PhysicsListString == "QGSP_BERT_EMV")
 	//	this->physicslist = new QGSP_BERT_EMV();
