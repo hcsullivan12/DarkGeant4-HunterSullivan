@@ -6,6 +6,16 @@ DarkGeant4 is a Geant4 front-end whose purpose is to provide a generic Geant4 fr
 
 Geant4.9.6 and lua5.2+ is required. Please be sure to have **lua5.2-dev** packages installed on your computer, otherwise the program simply won't compile.
 
+## Supported Platforms
+
+RHEL 6/7, its derivatives and Ubuntu 16.04 are fully supported. Instructions on installing DarkGeant4 and Geant4.x can be found within the [wiki](https://github.com/Davenport-Physics/DarkGeant4/wiki/Compiling-and-Installing-Geant4.9.6) for the various platforms.
+
+Platforms not officially supported may still be able to run DG4, provided that the necessary dependencies are met.
+
+### Known working platforms
+
+Ubuntu 14.04 (cmake3 needs a ppa)
+
 ## Building DarkGeant4
 
 In the working directory, type the following commands to build the application. Be aware the commands may need some modifications to suit your particular environment.
