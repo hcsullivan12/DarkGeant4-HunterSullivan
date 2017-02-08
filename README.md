@@ -1,6 +1,6 @@
 # DarkGeant4
 
-DarkGeant4 is a Geant4 application whose purpose is to provide a generic runtime framework for testing the various Dark Matter models. This software is presently being built and features may vary over time.
+DarkGeant4 is a Geant4 front-end whose purpose is to provide a generic Geant4 framework that minimizes startup time by being user friendly.
 
 ## Dependencies
 
