@@ -6,8 +6,6 @@ DarkGeant4 is a Geant4 application whose purpose is to provide a generic runtime
 
 Geant4.9.6 and lua5.2+ is required. Please be sure to have **lua5.2-dev** packages installed on your computer, otherwise the program simply won't compile.
 
-Also note that I'm developing against Geant4.9.6, earlier/later versions may be incomptabile with DarkGeant4.
-
 ## Building DarkGeant4
 
 In the working directory, type the following commands to build the application. Be aware the commands may need some modifications to suit your particular environment.
@@ -18,11 +16,9 @@ cd build
 cmake -DGeant4_DIR=/path/to/Geant4/dir ../
 make
 ```
-If you do not have Geant4 installed, please see the wiki for hints
+If you do not have Geant4 installed, please see the [wiki](https://github.com/Davenport-Physics/DarkGeant4/wiki/Compiling-and-Installing-Geant4.9.6) for hints.
 
 ## Basic proton run.
-
-The following command is subject to change with time.
 
 ```
 ./DarkGeant4 -vis
