@@ -12,9 +12,11 @@ RHEL 6/7, its derivatives and Ubuntu 16.04 are fully supported. Instructions on 
 
 Platforms not officially supported may still be able to run DG4, provided that the necessary dependencies are met.
 
-### Known working platforms
+### Known unsupported working platforms
 
-Ubuntu 14.04 (cmake3 needs a ppa)
+Ubuntu 14.04    (cmake3 needs a ppa)
+Debian 8 Jessie (cmake3 needs backport)
+Fedora 25       (Works with stock repo's)
 
 ## Building DarkGeant4
 
