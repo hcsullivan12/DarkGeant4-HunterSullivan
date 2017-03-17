@@ -50,14 +50,14 @@ bool PassThrough(ifstream* );
 int main()
 {
 	
-	string filenames[8] = {"/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/1000keV/Point625.dat",
-                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/1000keV/1Point250.dat",
-                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/1000keV/1Point875.dat",
-                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/1000keV/2Point5.dat",
-                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/400keV/Point625.dat",
-                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/400keV/1Point250.dat",
-                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/400keV/1Point875.dat",
-                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/400keV/2Point5.dat"};
+	string filenames[8] = {"/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Ag/1000keV/Point625.dat",
+                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Ag/1000keV/1Point250.dat",
+                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Ag/1000keV/1Point875.dat",
+                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Ag/1000keV/2Point5.dat",
+                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Ag/500keV/Point625.dat",
+                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Ag/500keV/1Point250.dat",
+                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Ag/500keV/1Point875.dat",
+                           "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Ag/500keV/2Point5.dat"};
                           
 	ifstream file;
 	
