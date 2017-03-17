@@ -165,6 +165,7 @@ DetectorComponent_1 = { Material = "G4_Pb",
                         Volume_Type = "Box",
                         half_X = 1,
                         half_Y = 1,
-                        half_Z = 2,
-                        Position = { 0, 0, 2 },
-                        Inside = "World" }       
+                        half_Z = (2.5/100)/2,
+                        Position = { 0, 0, 2.5/100 },
+                        Inside = "World",
+			wireframe = true }       

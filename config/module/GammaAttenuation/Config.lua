@@ -26,8 +26,8 @@ Config
 ]]--
 
 ConfigTable = { Module_Name = "Default",
-                PhysicsList = "Default"}
+                PhysicsList = "QGSP_BERT"}
                 
-DarkGeantOutputFile = { Name = "Output.dat",
-                        Location = "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/Output.dat" }
+DarkGeantOutputFile = { Name = "2Point5.dat",
+                        Location = "/home/hunter/projects/DarkGeant4/config/module/GammaAttenuation/2Point5.dat" }
 

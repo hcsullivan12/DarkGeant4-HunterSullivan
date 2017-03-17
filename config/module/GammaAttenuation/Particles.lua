@@ -143,8 +143,8 @@ Particle_File_Type = nil
 
 --]]
 Particle_Table = { Particle_Name = "gamma",
-                   Particles_Position = {0, 0, 0},
+                   Particles_Position = {0, 0, -0.1},
                    Momentum_Direction = {0.0, 0.0, 1.0},
-                   Energy = 0.001,
-                   Number_Of_Events = 100 }
+                   Energy = 0.0004,
+                   Number_Of_Events = 10000 }
 

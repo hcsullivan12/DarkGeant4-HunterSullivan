@@ -138,15 +138,15 @@ void SteppingAction::SaveBanner(const G4Step *Step, G4Track *Track) {
 void SteppingAction::SaveFormat() {
 	
 	fprintf(this->fp,"%-5s","Step#");
-	fprintf(this->fp,"%22s","X(mm)");
-	fprintf(this->fp,"%22s","Y(mm)");
-	fprintf(this->fp,"%22s","Z(mm)");
-	fprintf(this->fp,"%22s","KinE(MeV)");
-	fprintf(this->fp,"%22s","dE(MeV)");
-	fprintf(this->fp,"%22s","StepLeng");
-	fprintf(this->fp,"%22s","TrackLeng");
-	fprintf(this->fp,"%15s","NextVolume");
-	fprintf(this->fp,"%22s","ProcName\n");
+	fprintf(this->fp,"%15s","X(mm)");
+	fprintf(this->fp,"%15s","Y(mm)");
+	fprintf(this->fp,"%15s","Z(mm)");
+	fprintf(this->fp,"%15s","KinE(MeV)");
+	fprintf(this->fp,"%15s","dE(MeV)");
+	fprintf(this->fp,"%15s","StepLeng");
+	fprintf(this->fp,"%15s","TrackLeng");
+	fprintf(this->fp,"%20s","NextVolume");
+	fprintf(this->fp,"%20s","ProcName\n");
 	
 }
 
@@ -176,15 +176,15 @@ void SteppingAction::Save0StepData(const G4Step *Step) {
 	G4StepPoint *PreStepPoint = Step->GetPreStepPoint();
 	
 	fprintf(this->fp,"%-5s","0");
-	fprintf(this->fp,"%22.10f", PreStepPoint->GetPosition().x());
-	fprintf(this->fp,"%22.10f", PreStepPoint->GetPosition().y());
-	fprintf(this->fp,"%22.10f", PreStepPoint->GetPosition().z());
-	fprintf(this->fp,"%22.10f", PreStepPoint->GetKineticEnergy());
-	fprintf(this->fp,"%22s","0.0000000000");
-	fprintf(this->fp,"%22s","0.0000000000");
-	fprintf(this->fp,"%22s","0.0000000000");
-	fprintf(this->fp,"%15s","Detector");      
-	fprintf(this->fp,"%22s","InitStep\n");
+	fprintf(this->fp,"%15.5f", PreStepPoint->GetPosition().x());
+	fprintf(this->fp,"%15.5f", PreStepPoint->GetPosition().y());
+	fprintf(this->fp,"%15.5f", PreStepPoint->GetPosition().z());
+	fprintf(this->fp,"%15.5f", PreStepPoint->GetKineticEnergy());
+	fprintf(this->fp,"%15s","0.00000");
+	fprintf(this->fp,"%15s","0.00000");
+	fprintf(this->fp,"%15s","0.00000");
+	fprintf(this->fp,"%20s","Detector");      
+	fprintf(this->fp,"%20s","InitStep\n");
 }
 
 /*
@@ -200,13 +200,13 @@ void SteppingAction::Save0StepData(const G4Step *Step) {
 void SteppingAction::SaveStepData(const G4Step *Step, G4Track *Track) {
 	
 	fprintf(this->fp,"%-5d", Track->GetCurrentStepNumber());
-	fprintf(this->fp, "%22.10f", Track->GetPosition().x());
-	fprintf(this->fp, "%22.10f", Track->GetPosition().y());
-	fprintf(this->fp, "%22.10f", Track->GetPosition().z());
-	fprintf(this->fp, "%22.10f", Track->GetKineticEnergy());
-	fprintf(this->fp, "%22.10f", Step->GetTotalEnergyDeposit());
-	fprintf(this->fp, "%22.10f", Step->GetStepLength());
-	fprintf(this->fp, "%22.10f", Track->GetTrackLength());
+	fprintf(this->fp, "%15.5f", Track->GetPosition().x());
+	fprintf(this->fp, "%15.5f", Track->GetPosition().y());
+	fprintf(this->fp, "%15.5f", Track->GetPosition().z());
+	fprintf(this->fp, "%15.5f", Track->GetKineticEnergy());
+	fprintf(this->fp, "%15.5f", Step->GetTotalEnergyDeposit());
+	fprintf(this->fp, "%15.5f", Step->GetStepLength());
+	fprintf(this->fp, "%15.5f", Track->GetTrackLength());
 	
 	/*
 	 * If the volume exists, save which volume the particle is presently
@@ -215,9 +215,9 @@ void SteppingAction::SaveStepData(const G4Step *Step, G4Track *Track) {
 	 * */
 	
 	if (Track->GetNextVolume())
-		fprintf(this->fp,"%15s", Track->GetNextVolume()->GetName().c_str());
+		fprintf(this->fp,"%20s", Track->GetNextVolume()->GetName().c_str());
 	else
-		fprintf(this->fp,"%15s","OutOfWorld");
+		fprintf(this->fp,"%20s","OutOfWorld");
 	
 	/*
 	 * If the process is defined, i.e GetPorcessDefinedStep != 0,
@@ -231,12 +231,12 @@ void SteppingAction::SaveStepData(const G4Step *Step, G4Track *Track) {
 	G4StepPoint *PostStepPoint = Step->GetPostStepPoint();
 	if (PostStepPoint->GetProcessDefinedStep() != 0) {
 		
-		fprintf(this->fp,"%22s \n",
+		fprintf(this->fp,"%19s\n",
 		PostStepPoint->GetProcessDefinedStep()->GetProcessName().c_str());
 		
 	} else {
 	
-		fprintf(this->fp,"%22s","UserLimit\n");
+		fprintf(this->fp,"%19s","UserLimit\n");
 		
 	}
 }
