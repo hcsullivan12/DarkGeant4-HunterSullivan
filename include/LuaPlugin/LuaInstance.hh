@@ -86,9 +86,9 @@ using std::vector;
                             ErrorMessage, 0, LUA_TNUMBER, \
                             &lua_tointeger_shim, true)
                             
-#define GetIntegerFromTable_NoHalt(element, ErrorMessage) \
+#define GetIntegerFromTable_NoHalt(element, ErrorMessage, DefaultValue) \
                             GetElementFromTable(element, \
-                            ErrorMessage, 0, LUA_TNUMBER, \
+                            ErrorMessage, DefaultValue, LUA_TNUMBER, \
                             &lua_tointeger_shim, false)
                             
 #define GetStringFromTable_WithHalt(element, ErrorMessage) \

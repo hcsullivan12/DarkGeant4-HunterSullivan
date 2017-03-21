@@ -29,27 +29,20 @@
 #include "G4Para.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Parallelepiped::DetectorComponent_Parallelepiped(
-				G4String Name,
-				G4double xHalfLength,
-				G4double yHalfLength,
-				G4double zHalfLength,
-				G4double AngleOfXZFaces,
-				G4double PolarAngleOfXYFaces,
-				G4double AzimuthalAngleOfXYFaces,
-                                G4ThreeVector Position,
-                                G4String MaterialString,
-                                G4String Inside)
- : DetectorComponent(Name, PARALLELEPIPED, Position, MaterialString, Inside)
+using std::cout;
+
+DetectorComponent_Parallelepiped::DetectorComponent_Parallelepiped(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
 	
-	this->xHalfLength = xHalfLength;
-	this->yHalfLength = yHalfLength;
-	this->zHalfLength = zHalfLength;
-	this->AngleOfXZFaces = AngleOfXZFaces;
-	this->PolarAngleOfXYFaces = PolarAngleOfXYFaces;
-	this->AzimuthalAngleOfXYFaces = AzimuthalAngleOfXYFaces;
+	this->xHalfLength             = vars.parallelepiped->xHalfLength;
+	this->yHalfLength             = vars.parallelepiped->yHalfLength;
+	this->zHalfLength             = vars.parallelepiped->zHalfLength;
+	this->AngleOfXZFaces          = vars.parallelepiped->AngleOfXZFaces;
+	this->PolarAngleOfXYFaces     = vars.parallelepiped->PolarAngleOfXYFaces;
+	this->AzimuthalAngleOfXYFaces = vars.parallelepiped->AzimuthalAngleOfXYFaces;
 	
+	delete vars.parallelepiped;
 }
 
 DetectorComponent_Parallelepiped::~DetectorComponent_Parallelepiped() {
@@ -60,16 +53,24 @@ DetectorComponent_Parallelepiped::~DetectorComponent_Parallelepiped() {
 void DetectorComponent_Parallelepiped::ConstructVolume() {
 	
 	G4Para *VirtualVolume = new G4Para(this->Name,
-					this->xHalfLength * m,
-                                        this->yHalfLength * m,
-                                        this->zHalfLength * m,
-                                        this->AngleOfXZFaces * deg,
-                                        this->PolarAngleOfXYFaces * deg,
-					this->AzimuthalAngleOfXYFaces * deg);
+	                                   this->xHalfLength * m,
+                                       this->yHalfLength * m,
+                                       this->zHalfLength * m,
+                                       this->AngleOfXZFaces * deg,
+                                       this->PolarAngleOfXYFaces * deg,
+                                       this->AzimuthalAngleOfXYFaces * deg);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
                  this->Name);
 
+}
+
+bool DetectorComponent_Parallelepiped::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_Parallelepiped WithinVolume STUB\n";
+
+	return true;
+	
 }
 

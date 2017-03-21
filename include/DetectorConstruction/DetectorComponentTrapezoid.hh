@@ -48,18 +48,11 @@ class DetectorComponent_Trapezoid : public DetectorComponent {
 	 * */
 	public:
 	
-		DetectorComponent_Trapezoid(G4String Name,
-				G4double xHalfLengthAtBottom,
-				G4double xHalfLengthAtTop,
-				G4double yHalfLengthAtBottom,
-				G4double yHalfLengthAtTop,
-				G4double zHalfLength,
-				G4ThreeVector Position,
-				G4String Material,
-				G4String Inside);                                   
+		DetectorComponent_Trapezoid(DetectorComponent_vars vars);                                   
 		~DetectorComponent_Trapezoid();
 	
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

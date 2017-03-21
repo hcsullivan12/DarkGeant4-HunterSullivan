@@ -70,6 +70,7 @@ using std::string;
 using std::vector;
 using std::cout;
 using std::cin;
+using std::endl;
 
 /*
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -79,7 +80,7 @@ using std::cin;
  * */
 
 // Runtime Argument variables
-static const string VersionString = "0.4 \"Fermi\"";
+static const string VersionString = "0.5 \"Dirac\"";
 static bool TerminalOutput = true;
 static bool ShowVis = false;
 
@@ -159,6 +160,8 @@ void InitializeState() {
 		ui->ApplyCommand(ExecutionVector[i]);		
 #endif
 	
+	std::cout << endl;
+	std::cout << "Press enter to start simulation" << endl;
 	std::cin.get();
 	clock_t start_time = time(NULL);
 	cout << "BeamOn!\n";
@@ -298,7 +301,8 @@ void InitializeRunManager(G4RunManager *runManager) {
 	PrimaryGeneratorAction *Generator = new PrimaryGeneratorAction(
                            ParticleConfigFileInstance->FourVectors,
                            ConfigFileInstance->DarkGeantOutputLocation,
-                           ParticleConfigFileInstance->NumberOfEvents);
+                           ParticleConfigFileInstance->NumberOfEvents,
+                           DetectorConfigFileInstance->World);
 	runManager->SetUserAction(Generator);
 	runManager->SetUserAction(Generator->GetSteppingAction());
 	

@@ -28,25 +28,19 @@
 #include "G4Torus.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Torus::DetectorComponent_Torus(
-			G4String Name,
-                        G4double InnerRadius,
-			G4double OuterRadius,
-			G4double SweepingRadius,
-			G4double PhiStart,
-			G4double DeltaPhi, 
-                        G4ThreeVector Position,
-                        G4String MaterialString,
-                        G4String Inside)
- : DetectorComponent(Name, TORUS, Position, MaterialString, Inside) 
+using std::cout;
+
+DetectorComponent_Torus::DetectorComponent_Torus(DetectorComponent_vars vars)
+ : DetectorComponent(vars) 
 {
 	
-	this->InnerRadius = InnerRadius;
-	this->OuterRadius = OuterRadius;
-	this->SweepingRadius = SweepingRadius;
-	this->PhiStart = PhiStart;
-	this->DeltaPhi = DeltaPhi;
+	this->InnerRadius    = vars.torus->InnerRadius;
+	this->OuterRadius    = vars.torus->OuterRadius;
+	this->SweepingRadius = vars.torus->SweepingRadius;
+	this->PhiStart       = vars.torus->PhiStart;
+	this->DeltaPhi       = vars.torus->DeltaPhi;
 	
+	delete vars.torus;
 }
 
 
@@ -60,11 +54,11 @@ DetectorComponent_Torus::~DetectorComponent_Torus() {
 void DetectorComponent_Torus::ConstructVolume() {
 	
 	G4Torus *VirtualVolume = new G4Torus(this->Name,
-                                        this->InnerRadius * m,
-                                        this->OuterRadius * m,
-					this->SweepingRadius * m,
-					this->PhiStart * deg,
-                                        this->DeltaPhi * deg);
+                                         this->InnerRadius * m,
+                                         this->OuterRadius * m,
+                                         this->SweepingRadius * m,
+                                         this->PhiStart * deg,
+                                         this->DeltaPhi * deg);
                                      
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
@@ -72,3 +66,10 @@ void DetectorComponent_Torus::ConstructVolume() {
 	
 }
 
+bool DetectorComponent_Torus::WithinVolume(G4double x, G4double y, G4double z) {
+	
+	cout << "DetectorComponent_Torus WithinVolume STUB\n";
+
+	return true;
+	
+}

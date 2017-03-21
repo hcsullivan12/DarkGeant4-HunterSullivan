@@ -50,18 +50,11 @@ class DetectorComponent_Torus : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_Torus(G4String Name,
-				G4double InnerRadius,
-				G4double OuterRadius,
-				G4double SweepingRadius,
-				G4double PhiStart,
-				G4double DeltaPhi,
-				G4ThreeVector Position,
-				G4String MaterialString,
-				G4String Inside);
+		DetectorComponent_Torus(DetectorComponent_vars vars);
 		~DetectorComponent_Torus();
 	
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

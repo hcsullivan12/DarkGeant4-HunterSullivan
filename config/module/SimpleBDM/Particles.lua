@@ -20,8 +20,8 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 	local y = 0
 	for i = 1, AmountOfPositionsToGenerate
 	do
-	
-		PositionTable[i] = {x, y, BoxMullerTransform()}
+		local z = GetSign() * math.random() * 5.15
+		PositionTable[i] = {x, y, z}
 	
 	end
 	
@@ -29,36 +29,19 @@ function Particle_Position_Function(AmountOfPositionsToGenerate)
 
 end
 
---[[
+function GetSign()
 
-	Box-Muller Transform allows for a uniform random distribution from
-	[0,1] to be transformed to a random guassian distribution
-	
-	U_1 = e^(-(R^2)/2)
-
---]]
-function BoxMullerTransform()
-
-	local U_1 = 0.0
-	local U_2 = 0.0
-	
-	U_2 = math.random()
-
-	--[[
-	
-		This condition is set to force a radius of 33.0 or less.
-	
-	--]]
-	repeat
-		U_1 = math.random()
-	until U_1 >= 3.726653-6
-
-	return math.sqrt(-2 * math.log(U_1)) * math.cos(2 * math.pi * U_2)
+	local rand = math.random()
+	if rand < 0.5 then
+		return -1
+	else
+		return 1
+	end
 
 end
 
-Particle_File = "output.dat"
+Particle_File = "BDMInput.dat"
 Particle_File_Type = "Four Vector"
-Particle_Table = { Particle_Name = "proton",
+Particle_Table = { Primary_Particles = "proton",
                    Particles_Position = Particle_Position_Function }
 
