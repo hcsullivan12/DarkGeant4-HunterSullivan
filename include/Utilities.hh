@@ -64,6 +64,9 @@ int DetermineNumberOfEvents(string filename);
 string ConvertIntToString(int integer);
 G4double GetParticleKineticEnergy(string particle, G4double E);
 
+// Uniform from 0.0 to 1.0
+double GetRandomDouble();
+
 template <typename T>
 void Initialize2dArray(int x_length, int y_length, T ***array) {
 	

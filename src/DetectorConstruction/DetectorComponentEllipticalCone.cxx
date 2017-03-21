@@ -29,23 +29,18 @@
 #include "G4EllipticalCone.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_EllipticalCone::DetectorComponent_EllipticalCone(
-                G4String Name,
-                G4double xSemiAxis,
-                G4double ySemiAxis,
-                G4double Height,
-                G4double zTop,
-                G4ThreeVector Position,
-                G4String MaterialString,
-                G4String Inside)
- : DetectorComponent(Name, ELLIPTICAL_CONE, Position, MaterialString, Inside)
+using std::cout;
+
+DetectorComponent_EllipticalCone::DetectorComponent_EllipticalCone(DetectorComponent_vars vars)
+ : DetectorComponent(vars)
 {
 	
-	this->xSemiAxis = xSemiAxis;
-	this->ySemiAxis = ySemiAxis;
-	this->Height = Height;
-	this->zTop = zTop;
+	this->xSemiAxis = vars.elliptical_cone->xSemiAxis;
+	this->ySemiAxis = vars.elliptical_cone->ySemiAxis;
+	this->Height    = vars.elliptical_cone->Height;
+	this->zTop      = vars.elliptical_cone->zTop;
 	
+	delete vars.elliptical_cone;
 }
 
 DetectorComponent_EllipticalCone::~DetectorComponent_EllipticalCone() {
@@ -67,3 +62,10 @@ void DetectorComponent_EllipticalCone::ConstructVolume() {
 
 }
 
+bool DetectorComponent_EllipticalCone::WithinVolume(G4double x, G4double y, G4double z) {
+
+	cout << "DetectorComponent_EllipticalCone WithinVolume STUB\n";
+
+	return true;
+	
+}

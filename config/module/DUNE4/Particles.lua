@@ -76,7 +76,7 @@ end
 
 Particle_File = nil
 Particle_File_Type = nil
-Particle_Table = { Particle_Name = "mu+",
+Particle_Table = { Primary_Particles = "mu+",
                    Particles_Position = Particle_Position_Function,
                    Momentum_Direction = {0.0, 0.0, 1.0},
                    Energy = 1000.0,

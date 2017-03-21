@@ -50,18 +50,11 @@ class DetectorComponent_HyperbolicTube : public DetectorComponent {
 
 	public:
 	
-		DetectorComponent_HyperbolicTube(G4String Name,
-                                   G4double InnerRadius,
-                                   G4double OuterRadius,
-                                   G4double InnerRadiusAngle,
-                                   G4double OuterRadiusAngle,
-                                   G4double zHalfLength,
-                                   G4ThreeVector Position,
-                                   G4String MaterialString,
-                                   G4String Inside);
+		DetectorComponent_HyperbolicTube(DetectorComponent_vars vars);
 		~DetectorComponent_HyperbolicTube();
 	
 		void ConstructVolume();
+		bool WithinVolume(G4double x, G4double y, G4double z);
 	
 };
 

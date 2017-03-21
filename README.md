@@ -1,12 +1,24 @@
 # DarkGeant4
 
-DarkGeant4 is a Geant4 application whose purpose is to provide a generic runtime framework for testing the various Dark Matter models. This software is presently being built and features may vary over time.
+DarkGeant4 is a Geant4 front-end whose purpose is to provide a generic Geant4 framework that minimizes startup time by being user friendly.
 
 ## Dependencies
 
-Geant4.9.6 and lua5.2+ is required. Please be sure to have lua5.2-dev packages installed on your computer, otherwise the program simply won't compile.
+Geant4.9.6 and lua5.2+ is required. Please be sure to have **lua5.2-dev** packages installed on your computer, otherwise the program simply won't compile.
 
-Also note that I'm developing against Geant4.9.6, earlier/later versions may be incomptabile with DarkGeant4.
+## Supported Platforms
+
+RHEL 6/7, its derivatives and Ubuntu 16.04 are fully supported. Instructions on installing DarkGeant4 and Geant4.x can be found within the [wiki](https://github.com/Davenport-Physics/DarkGeant4/wiki/Compiling-and-Installing-Geant4.9.6) for the various platforms.
+
+Platforms not officially supported may still be able to run DG4, provided that the necessary dependencies are met.
+
+### Known unsupported working platforms
+
+Ubuntu 14.04    (cmake3 needs a ppa)
+
+Debian 8 Jessie (cmake3 needs backport)
+
+Fedora 25       (Works with stock repo's)
 
 ## Building DarkGeant4
 
@@ -18,11 +30,9 @@ cd build
 cmake -DGeant4_DIR=/path/to/Geant4/dir ../
 make
 ```
-If you do not have Geant4 installed, please see the wiki for hints
+If you do not have Geant4 installed, please see the [wiki](https://github.com/Davenport-Physics/DarkGeant4/wiki/Compiling-and-Installing-Geant4.9.6) for hints.
 
-## Basic muon run.
-
-The following command is subject to change with time.
+## Basic proton run.
 
 ```
 ./DarkGeant4 -vis
@@ -65,3 +75,9 @@ python3 Histogram
 ```
 
 Be sure to place associated files in the top directory, ie if you path is scripts/DarkGeantHelperScripts/Histogram, be sure to place data in scripts/DarkGeantHelperScripts/
+
+## Collaborators
+
+Emma Davenport  (Lead Developer - UTA Graduate Student) DarkGeant4
+
+Hunter Sullivan (Developer - UTA Graduate Student) CorsikaToDarkGeant4Converter

@@ -25,6 +25,8 @@
 
 #include "G4SystemOfUnits.hh"
 
+using std::exception;
+
 static const string DefaultConfigDirectory = "config";
 
 /*
@@ -164,7 +166,8 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 	if (lua_type(this->L, -1) != LUA_TTABLE) {
 		
 		cout << "Is " << TableName << " a table?\n";
-		throw;
+		lua_pop(this->L, 1);
+		throw string("Not a table!");
 		
 	}
 	

@@ -23,6 +23,10 @@
 
 #include "Utilities.hh"
 
+// C/C++ Headers
+#include <cstdio>
+#include <ctime>
+
 string ConvertIntToString(int integer) {
 
 	char tempstring[128] = {'\0'};
@@ -66,6 +70,12 @@ int DetermineNumberOfEvents(string filename) {
 	fclose(fp);
 	
 	return NumberOfEvents+1;
+}
+
+double GetRandomDouble() {
+	
+	return ((double)rand())/((double)RAND_MAX);
+	
 }
 
 struct ParticleMasses {

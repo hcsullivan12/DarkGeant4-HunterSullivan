@@ -28,20 +28,18 @@
 #include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 
-DetectorComponent_Box::DetectorComponent_Box(
-                              G4String Name,
-                              G4double half_x,
-                              G4double half_y,
-                              G4double half_z,
-                              G4ThreeVector Position,
-                              G4String MaterialString,
-                              G4String Inside)
- : DetectorComponent(Name, BOX, Position, MaterialString, Inside) 
+// C/C++ Headers
+#include <cmath>
+
+DetectorComponent_Box::DetectorComponent_Box(DetectorComponent_vars vars)
+ : DetectorComponent(vars) 
 {
 	
-	this->half_x = half_x;
-	this->half_y = half_y;
-	this->half_z = half_z;
+	this->half_x = vars.box->half_x;
+	this->half_y = vars.box->half_y;
+	this->half_z = vars.box->half_z;
+	
+	delete vars.box;
 	
 }
 
@@ -74,4 +72,18 @@ void DetectorComponent_Box::ConstructVolume() {
                  this->Name);
 	
 }
+
+bool DetectorComponent_Box::WithinVolume(G4double x, G4double y, G4double z) {
+
+	if (fabs(x - this->Position.x()) > half_x)
+		return false;
+	if (fabs(y - this->Position.y()) > half_y)
+		return false;
+	if (fabs(z - this->Position.z()) > half_z)
+		return false;
+
+	return true;
+	
+}
+
 
