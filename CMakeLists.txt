@@ -39,6 +39,7 @@ include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 include_directories(${PROJECT_SOURCE_DIR}/include/DetectorConstruction)
 include_directories(${PROJECT_SOURCE_DIR}/include/LuaPlugin)
+include_directories(${PROJECT_SOURCE_DIR}/include/Fields)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project

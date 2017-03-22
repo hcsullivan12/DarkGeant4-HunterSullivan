@@ -28,6 +28,7 @@ class G4VSolid;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class MagneticField;
 
 //Geant4 Headers
 #include "G4Box.hh"
@@ -36,6 +37,11 @@ class G4Material;
 
 #include "G4ThreeVector.hh"
 #include "G4VUserDetectorConstruction.hh"
+
+#include "MagneticField.hh"
+
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
 
 // C/C++ headers
 #include <vector>
