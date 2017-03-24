@@ -78,7 +78,7 @@ void DetectorConfigLuaInstance::Initialize_number_of_detector_components() {
                                 "Missing Number_of_Detector_Components"
                                 + string(" in DetectorConfig table."));
 	                            
-	if (this->Number_of_Dectector_Components <= 0) {
+	if (this->Number_of_Dectector_Components < 0) {
 	
 		cout << "You did not define the variable ";
 		cout << "Number_of_Detector_Components sufficiently.\n";

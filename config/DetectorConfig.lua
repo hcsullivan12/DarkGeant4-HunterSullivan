@@ -13,7 +13,7 @@
 
 ]]--
 DetectorConfig = { Detector_Name = "Detector",
-                  Number_of_Detector_Components = 1 }
+                  Number_of_Detector_Components = 0 }
 
 
 -- **** Please note that units of length are in metres!                  
@@ -169,16 +169,10 @@ DetectorConfig = { Detector_Name = "Detector",
 
 World = { Material = "G4_AIR",
           Volume_Type = "Box",
-          half_X = 20.0,
-          half_Y = 20.0,
-          half_Z = 20.0,
+          half_X = 10.0,
+          half_Y = 10.0,
+          half_Z = 10.0,
           Inside = "None",
           Position = {0, 0, 0} }
 
-DetectorComponent_1 = { Material = "Liquid Argon",
-                        Volume_Type = "Cylinder",
-                        Inner_Radius = 0.0,
-                        Outer_Radius = 3.0,
-                        Half_Length  = 1,
-                        Position = { 0, 0, 0 },
-                        Inside = "World" }       
+

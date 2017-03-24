@@ -110,17 +110,19 @@ void DetectorConstructionV2::InitializeDetectorComponents() {
  * */
 
 void DetectorConstructionV2::InitializePhysicalVolume() {
-	
+
 	this->WorldPhysicalVolume = new G4PVPlacement(0, 
                                     G4ThreeVector(0, 0, 0),
                                     this->World->LogicalVolume,
                                     this->World->Name,
                                     0, false, 0);
 
-	G4UniformMagField* magField = new  G4UniformMagField(G4ThreeVector(0.,0.,1.0));
+	G4UniformMagField* magField = new  G4UniformMagField(G4ThreeVector(1 * tesla,0.,0.0));
 	G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
         fieldMgr->SetDetectorField(magField);
 	fieldMgr->CreateChordFinder(magField);
+
+
 	
 	for (size_t i = 0; i < this->Components.size();i++) {
 	
