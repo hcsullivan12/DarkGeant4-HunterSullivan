@@ -116,13 +116,8 @@ void DetectorConstructionV2::InitializePhysicalVolume() {
                                     this->World->LogicalVolume,
                                     this->World->Name,
                                     0, false, 0);
-
-	G4UniformMagField* magField = new  G4UniformMagField(G4ThreeVector(1 * tesla,0.,0.0));
-	G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-        fieldMgr->SetDetectorField(magField);
-	fieldMgr->CreateChordFinder(magField);
-
-
+	
+	SetWorldMagneticField();
 	
 	for (size_t i = 0; i < this->Components.size();i++) {
 	
@@ -168,6 +163,15 @@ void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
 	
 	exit(0);
 	
+}
+
+void DetectorConstructionV2::SetWorldMagneticField() {
+	cout << "SETTING WORLD MAGNETIC FIELD\n";
+	G4UniformMagField* magField = new  G4UniformMagField(this->World->MagneticField);
+	G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+        fieldMgr->SetDetectorField(magField);
+	fieldMgr->CreateChordFinder(magField);
+
 }
 
 

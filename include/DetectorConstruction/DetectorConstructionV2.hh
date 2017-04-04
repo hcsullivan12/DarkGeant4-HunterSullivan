@@ -38,10 +38,11 @@ class MagneticField;
 #include "G4ThreeVector.hh"
 #include "G4VUserDetectorConstruction.hh"
 
-#include "MagneticField.hh"
+//#include "MagneticField.hh"
 
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
+#include "G4UniformMagField.hh"
 
 // C/C++ headers
 #include <vector>
@@ -86,6 +87,8 @@ class DetectorConstructionV2 : public G4VUserDetectorConstruction {
 		void InitializeWorld();
 		void InitializeDetectorComponents();
 		void InitializePhysicalVolume();
+
+		void SetWorldMagneticField();
 		
 		void FindMaterial(DetectorComponent *Component);
 		

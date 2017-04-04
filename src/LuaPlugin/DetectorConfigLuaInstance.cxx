@@ -175,7 +175,20 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
                                                 false);
                              
 	vars.Position = GetG4ThreeVector("Position");
+
+	try {
+
+		vars.MagneticField = GetG4ThreeVector("Magnetic_Field");	
+
+	} catch(string e) {
+
+		if (DetectorComponentIndex == "0"){
+			cout << "No Magnetic Field specified for World. Magnetic Field set to (0,0,0).\n";
+		} else cout << "No Magnetic Field specified for DetectorComponent_" + DetectorComponentIndex + ". Magnetic Field set to (0,0,0).\n";
+
+		vars.MagneticField = G4ThreeVector(0,0,0);
 	
+	}
 	
 	try {
 		

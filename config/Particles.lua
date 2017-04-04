@@ -132,5 +132,5 @@ Particle_Table = { Primary_Particles = "proton",
                    Particles_Position = Particle_Position_Function,
                    Momentum_Direction = {0.0, 0.0, 1.0},
                    Energy = 4,
-                   Number_Of_Events = 20 }
+                   Number_Of_Events = 1 }
 
