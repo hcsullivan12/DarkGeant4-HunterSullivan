@@ -173,7 +173,6 @@ World = { Material = "G4_AIR",
           half_Y = 10.0,
           half_Z = 10.0,
           Inside = "None",
-          Position = {0, 0, 0}, 
-	  Magnetic_Field ={2.0, 4.0, 6.0}}
+          Position = {0, 0, 0} }
 
 
