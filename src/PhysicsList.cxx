@@ -102,7 +102,7 @@ void PhysicsList::ConstructProcess() {
 	 * */
 	AddTransportation();
 	
-	
+	/*
 	theParticleIterator->reset();
 	
 	while ((*theParticleIterator)()) {
@@ -118,6 +118,7 @@ void PhysicsList::ConstructProcess() {
 			
 		
 	}
+	*/
 	
 }
 
