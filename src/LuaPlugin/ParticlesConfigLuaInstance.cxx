@@ -279,7 +279,7 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 			 * */
 			cout << "LUA_TTABLE switch\n";
 			lua_pop(this->L, 1);
-			G4ThreeVector Position = GetG4ThreeVector("Particles_Position");
+			G4ThreeVector Position = GetG4ThreeVector("Particles_Position",m);
 		
 			for (int i = 0;i < this->NumberOfEvents;i++) {
 				
@@ -504,7 +504,7 @@ void ParticlesConfigLua::SetPrimariesByFunction() {
 
 void ParticlesConfigLua::SetMomentumByTable() {
 	
-	G4ThreeVector Momentum = GetG4ThreeVector("Momentum_Direction");
+	G4ThreeVector Momentum = GetG4ThreeVector("Momentum_Direction", m);
 	
 	for (int i = 0;i < this->NumberOfEvents;i++) {
 	

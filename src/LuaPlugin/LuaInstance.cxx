@@ -144,7 +144,7 @@ void LuaInstance::LoadTable_WithinTable(string table) {
  * 
  * */
 
-G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
+G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName, double units) {
 
 	/*
 	 * Gets an element from a preloaded Table such that the equivalent
@@ -180,7 +180,7 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 	 * 
 	 * */
 	
-	G4double PositionArray[3] = {0.0, 0.0, 0.0};
+	G4double ThreeVecArray[3] = {0.0, 0.0, 0.0};
 	for (int i = 1;i < 4;i++) {
 		
 		// Gets element i from the table loaded.
@@ -208,16 +208,16 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 		 * why we have the offset i-1.
 		 * */
 		
-		PositionArray[i-1] = lua_tonumber(this->L, -1);
+		ThreeVecArray[i-1] = lua_tonumber(this->L, -1);
 		// Pops number
 		lua_pop(this->L, 1);
 	}
 	// Pops second table.
 	lua_pop(this->L, 1);
 	
-	return G4ThreeVector(PositionArray[0] * m, 
-                         PositionArray[1] * m, 
-                         PositionArray[2] * m);
+	return G4ThreeVector(ThreeVecArray[0] * units, 
+                         ThreeVecArray[1] * units, 
+                         ThreeVecArray[2] * units);
 	
 }
 
