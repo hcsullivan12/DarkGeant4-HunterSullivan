@@ -51,7 +51,7 @@ Number_Of_Materials = 2
 		
 	
 ]]--
-Material_1 = { G4Name = "G4_AIR" }
+Material_1 = { G4Name = "G4_Galactic" }
             
               
 Material_2 = { Name = "Liquid Argon",
@@ -68,7 +68,7 @@ Material_2 = { Name = "Liquid Argon",
 		Must always be defined and must be an integer.
 
 --]]
-Number_Of_Composite_Materials = 1
+Number_Of_Composite_Materials = 0
 
 --[[
 

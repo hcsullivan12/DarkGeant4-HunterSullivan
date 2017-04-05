@@ -167,13 +167,13 @@ DetectorConfig = { Detector_Name = "Detector",
 
 ]]--
 
-World = { Material = "G4_AIR",
+World = { Material = "G4_Galactic",
           Volume_Type = "Box",
           half_X = 10.0,
           half_Y = 10.0,
           half_Z = 10.0,
           Inside = "None",
           Position = {0, 0, 0}, 
-	  Magnetic_Field ={2.0, 4.0, 6.0}}
+	  Magnetic_Field ={1, 0, 0}}
 
 

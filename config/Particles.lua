@@ -129,8 +129,8 @@ Particle_File_Type = nil
 
 --]]
 Particle_Table = { Primary_Particles = "proton",
-                   Particles_Position = Particle_Position_Function,
+                   Particles_Position = {0,0,0},
                    Momentum_Direction = {0.0, 0.0, 1.0},
-                   Energy = 4,
+                   Energy = 1,
                    Number_Of_Events = 1 }
 

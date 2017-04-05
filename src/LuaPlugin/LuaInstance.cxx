@@ -222,9 +222,9 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 
 		
 
-		return G4ThreeVector(MagneticFieldArray[0] *tesla, 
-        	                 MagneticFieldArray[1] * tesla, 
-        	                 MagneticFieldArray[2] * tesla);
+		return G4ThreeVector(MagneticFieldArray[0]*tesla, 
+        	                 MagneticFieldArray[1]*tesla, 
+        	                 MagneticFieldArray[2]*tesla);
 	} else {
 
 		G4double PositionArray[3] = {0.0, 0.0, 0.0};
