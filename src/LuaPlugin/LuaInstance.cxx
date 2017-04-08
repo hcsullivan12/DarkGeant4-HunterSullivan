@@ -211,10 +211,7 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 		
 			MagneticFieldArray[i-1] = lua_tonumber(this->L, -1);
 			// Pops number
-			lua_pop(this->L, 1);
-
-			cout << "Magnetic Field component " << i << " is " << MagneticFieldArray[i - 1] << "\n";
-			cout << tesla << "\n";			
+			lua_pop(this->L, 1);			
 
 		}
 		// Pops second table.

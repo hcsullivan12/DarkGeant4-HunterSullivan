@@ -165,11 +165,17 @@ void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
 	
 }
 
+/*
+ * SetWorldMagneticField()
+ * 
+ * * Description 
+ *
+ *
+ *            ...
+ *
+ * */
+
 void DetectorConstructionV2::SetWorldMagneticField() {
-	cout << "SETTING WORLD MAGNETIC FIELD\n";
-	cout << "X component is set to " << this->World->MagneticField.x()  << "\n";
-	cout << "Y component is set to " << this->World->MagneticField.y()  << "\n";
-	cout << "Z component is set to " << this->World->MagneticField.z()  << "\n";
 
 	G4UniformMagField* magField = new  G4UniformMagField(this->World->MagneticField);
 	G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();

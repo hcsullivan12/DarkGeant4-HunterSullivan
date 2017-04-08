@@ -28,6 +28,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Orb.hh"
 #include "G4LogicalVolume.hh"
+#include "G4UniformMagField.hh"
+#include "G4FieldManager.hh"
 
 using std::cout;
 
@@ -49,10 +51,17 @@ void DetectorComponent_SolidSphere::ConstructVolume() {
 	
 	G4Orb *VirtualVolume = new G4Orb(this->Name,
                                      this->Radius * m);
+
+	G4UniformMagField* magField =new G4UniformMagField(this->MagneticField);
+        //G4Mag_UsualEqRhs* myEquation = new G4Mag_UsualEqRhs(magField);
+        //G4MagIntegratorStepper* myStepper = new G4ClassicalRK4(myEquation);
+       // G4ChordFinder* myChordFinder = new G4ChordFinder(magField,1.0e-5*mm,myStepper);
+        G4FieldManager* fieldMgr = new G4FieldManager(magField);
 	
 	this->LogicalVolume = new G4LogicalVolume(VirtualVolume,
                  this->DetectorComponentMaterial->GetMaterialPointer(),
-                 this->Name);
+                 this->Name,
+		 fieldMgr);
 
 }
 
