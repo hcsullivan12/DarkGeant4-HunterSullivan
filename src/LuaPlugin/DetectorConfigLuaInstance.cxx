@@ -176,6 +176,12 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
                              
 	vars.Position = GetG4ThreeVector("Position");
 
+	/*
+	 * Look for magnetic field. If it's not specified, throw an exception.
+	 * Set MagneticField to {0, 0, 0}
+	 *
+	 * */
+
 	try {
 
 		vars.MagneticField = GetG4ThreeVector("Magnetic_Field");	
@@ -187,6 +193,26 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
 		} else cout << "No Magnetic Field specified for DetectorComponent_" + DetectorComponentIndex + ". Magnetic Field set to (0,0,0).\n";
 
 		vars.MagneticField = G4ThreeVector(0,0,0);
+	
+	}
+
+	/*
+	 * Look for electric field. If it's not specified, throw an exception.
+	 * Set ElectricField to {0, 0, 0}
+	 *
+	 * */
+
+	try {
+
+		vars.ElectricField = GetG4ThreeVector("Electric_Field");	
+
+	} catch(string e) {
+
+		if (DetectorComponentIndex == "0"){
+			cout << "No Electric Field specified for World. Electric Field set to (0,0,0).\n";
+		} else cout << "No Electric Field specified for DetectorComponent_" + DetectorComponentIndex + ". Electric Field set to (0,0,0).\n";
+
+		vars.ElectricField = G4ThreeVector(0,0,0);
 	
 	}
 	

@@ -13,7 +13,7 @@
 
 ]]--
 DetectorConfig = { Detector_Name = "Detector",
-                  Number_of_Detector_Components = 1 }
+                  Number_of_Detector_Components = 0 }
 
 
 -- **** Please note that units of length are in metres!                  
@@ -178,9 +178,10 @@ World = { Material = "G4_Galactic",
           half_Z = 50.0,
           Inside = "None",
           Position = {0, 0, 0}, 
-	  Magnetic_Field ={0, 0, 0}}
+	  Magnetic_Field = {.3, .4, 0},
+	  Electric_Field = {2, 4, 6}}
 
-DetectorComponent_1 = { Material = "G4_H",
+--[[DetectorComponent_1 = { Material = "G4_H",
           Volume_Type = "Cone",
           Inner_Radius_At_Bottom = 0,
 	  Outside_Radius_At_Bottom = 5,
@@ -191,6 +192,6 @@ DetectorComponent_1 = { Material = "G4_H",
 	  Delta_Angle = 360,
 	  Inside = "World",
 	  Position = {0,5,10},
-          Magnetic_Field = {0.3,0,0} }
+          Magnetic_Field = {0.3,0,0} }--]]
 
 

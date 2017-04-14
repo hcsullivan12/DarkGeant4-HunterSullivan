@@ -30,6 +30,7 @@ DetectorComponent::DetectorComponent(DetectorComponent_vars vars)
 	this->Type           = vars.Type;
 	this->Position       = vars.Position;
 	this->MagneticField  = vars.MagneticField;
+	this->ElectricField  = vars.ElectricField;
 	this->MaterialString = vars.MaterialString;
 	this->Inside         = vars.Inside;
 	this->colour         = vars.colour;

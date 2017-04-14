@@ -39,7 +39,6 @@ class G4Material;
 
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4UniformMagField.hh"
 
 // C/C++ headers
 #include <vector>
@@ -47,6 +46,7 @@ class G4Material;
 //User Headers
 #include "DetectorComponent.hh"
 #include "Material.hh"
+#include "UniformEMField.hh"
 
 using std::vector;
 
@@ -85,7 +85,7 @@ class DetectorConstructionV2 : public G4VUserDetectorConstruction {
 		void InitializeDetectorComponents();
 		void InitializePhysicalVolume();
 
-		void SetWorldMagneticField();
+		void InitializeWorldEMField();
 		
 		void FindMaterial(DetectorComponent *Component);
 		

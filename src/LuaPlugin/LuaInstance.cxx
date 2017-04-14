@@ -224,44 +224,92 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
         	                 MagneticFieldArray[2]*tesla);
 	} else {
 
-		G4double PositionArray[3] = {0.0, 0.0, 0.0};
-		for (int i = 1;i < 4;i++) {
+		if (TableName == "Electric_Field") {
+
+			G4double ElectricFieldArray[3] = {0.0, 0.0, 0.0};
+			for (int i = 1;i < 4;i++) {
 		
-			// Gets element i from the table loaded.
-			lua_pushinteger(this->L, i);
-			lua_gettable(this->L, -2);
+				// Gets element i from the table loaded.
+				lua_pushinteger(this->L, i);
+				lua_gettable(this->L, -2);
 		
-			/*
-			 * If the element i is not a number, throw an exception. The
-			 * exception is typically not handled to facilitate user
-			 * correction.
-			 * 
-			 * */
-			if (lua_type(this->L, -1) != LUA_TNUMBER) {
+				/*
+				 * If the element i is not a number, throw an exception. The
+				 * exception is typically not handled to facilitate user
+				 * correction.
+				 * 
+				 * */
+				if (lua_type(this->L, -1) != LUA_TNUMBER) {
 	
-				cout << "The elements of " << TableName << "should be ";
-				cout << "numbers!\n"; 
-				throw;
+					cout << "The elements of " << TableName << "should be ";
+					cout << "numbers!\n"; 
+					throw;
 		
+				}
+				/*
+				 * So if the element is a number, get it and set
+			 	 * ElectricFieldArray[i-1] to it.
+			 	 * 
+				 * Remember lua tables begin with 1, instead of 0 which is
+				 * why we have the offset i-1.
+				 * */
+		
+				ElectricFieldArray[i-1] = lua_tonumber(this->L, -1);
+				// Pops number
+				lua_pop(this->L, 1);			
+
 			}
-			/*
-			 * So if the element is a number, get it and set
-			 * PositionArray[i-1] to it.
-			 * 
-			 * Remember lua tables begin with 1, instead of 0 which is
-			 * why we have the offset i-1.
-			 * */
-		
-			PositionArray[i-1] = lua_tonumber(this->L, -1);
-			// Pops number
+			cout << "Electric field component 1: " << ElectricFieldArray[0] << "\n";
+			cout << "Electric field component 2: " << ElectricFieldArray[1] << "\n";
+			cout << "Electric field component 3: " << ElectricFieldArray[2] << "\n";
+			// Pops second table.
 			lua_pop(this->L, 1);
-		}
-		// Pops second table.
-		lua_pop(this->L, 1);
+
+			return G4ThreeVector(ElectricFieldArray[0]*volt/m, 
+        	     		ElectricFieldArray[1]*volt/m, 
+        	      	        ElectricFieldArray[2]*volt/m);
+		} else {
+
+			G4double PositionArray[3] = {0.0, 0.0, 0.0};
+			for (int i = 1;i < 4;i++) {
+		
+				// Gets element i from the table loaded.
+				lua_pushinteger(this->L, i);
+				lua_gettable(this->L, -2);
+		
+				/*
+				 * If the element i is not a number, throw an exception. The
+				 * exception is typically not handled to facilitate user
+				 * correction.
+				 * 
+				 * */
+				if (lua_type(this->L, -1) != LUA_TNUMBER) {
 	
-		return G4ThreeVector(PositionArray[0] * m, 
-        	                 PositionArray[1] * m, 
-        	                 PositionArray[2] * m);
+					cout << "The elements of " << TableName << "should be ";
+					cout << "numbers!\n"; 
+					throw;
+		
+				}
+				/*
+				 * So if the element is a number, get it and set
+			 	 * PositionArray[i-1] to it.
+				 * 
+				 * Remember lua tables begin with 1, instead of 0 which is
+			 	 * why we have the offset i-1.
+			 	 * */
+		
+				PositionArray[i-1] = lua_tonumber(this->L, -1);
+				// Pops number
+				lua_pop(this->L, 1);			
+
+			}
+			// Pops second table.
+			lua_pop(this->L, 1);
+
+			return G4ThreeVector(PositionArray[0]*m, 
+        	                 PositionArray[1]*m, 
+        	                 PositionArray[2]*m);
+		}
 
 	}
 }

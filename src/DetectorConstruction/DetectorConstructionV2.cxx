@@ -117,7 +117,7 @@ void DetectorConstructionV2::InitializePhysicalVolume() {
                                     this->World->Name,
                                     0, false, 0);
 	
-	SetWorldMagneticField();
+	InitializeWorldEMField();
 	
 	for (size_t i = 0; i < this->Components.size();i++) {
 	
@@ -166,7 +166,7 @@ void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
 }
 
 /*
- * SetWorldMagneticField()
+ * InitializeWorldEMField()
  * 
  * * Description 
  *
@@ -175,13 +175,10 @@ void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
  *
  * */
 
-void DetectorConstructionV2::SetWorldMagneticField() {
-
-	G4UniformMagField* magField = new  G4UniformMagField(this->World->MagneticField);
-	G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-        fieldMgr->SetDetectorField(magField);
-	fieldMgr->CreateChordFinder(magField);
-
+void DetectorConstructionV2::InitializeWorldEMField() {
+	
+	UniformEMField *WorldEMfield = new UniformEMField(this->World->MagneticField, this->World->ElectricField);
+	WorldEMfield->ConstructField(this->World->Name);
+	
 }
-
 

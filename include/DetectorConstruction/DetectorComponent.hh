@@ -216,6 +216,7 @@ struct DetectorComponent_vars {
 	
 	G4ThreeVector Position;
 	G4ThreeVector MagneticField;
+	G4ThreeVector ElectricField;
 	G4Colour colour;
 	G4LogicalVolume *LogicalVolume;
 	Material *DetectorComponentMaterial;
@@ -266,6 +267,7 @@ class DetectorComponent {
 		G4Colour colour;
 		G4ThreeVector Position;
 		G4ThreeVector MagneticField;
+		G4ThreeVector ElectricField;
 		G4LogicalVolume *LogicalVolume;
 		G4VisAttributes *attributes;
 		
