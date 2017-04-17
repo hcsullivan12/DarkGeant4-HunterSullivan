@@ -26,9 +26,10 @@
 
 #include "G4ElectroMagneticField.hh"
 #include <string>
+
 using namespace std;
 
-class UniformEMField {
+class UniformEMField : public G4ElectroMagneticField {
 	
 	/*
      * 
@@ -38,7 +39,9 @@ class UniformEMField {
      
      public:
 		
-		G4double field[6];
+		G4ThreeVector MagneticField;
+		G4ThreeVector ElectricField;
+		
      
      /*
      * 
@@ -48,11 +51,11 @@ class UniformEMField {
      
      public:
 		UniformEMField(G4ThreeVector MagneticField, G4ThreeVector ElectricField);
-		~UniformEMField();
+		virtual ~UniformEMField();
 		
-		void ConstructField(string Name);
-
-
+		virtual G4bool DoesFieldChangeEnergy() const { return true; };
+		
+		virtual void GetFieldValue(const G4double Point[4], G4double* EMField) const;
 };
 
 #endif

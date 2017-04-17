@@ -28,6 +28,7 @@ class G4VSolid;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class UniformEMField;
 
 //Geant4 Headers
 #include "G4Box.hh"

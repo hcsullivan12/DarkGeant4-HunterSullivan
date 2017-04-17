@@ -29,20 +29,17 @@
 #include "G4FieldManager.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4ChordFinder.hh"
+#include "G4TransportationManager.hh"
+#include "G4SystemOfUnits.hh"
 
-UniformEMField::UniformEMField(G4ThreeVector MagneticField, G4ThreeVector ElectricField) {
+UniformEMField::UniformEMField(G4ThreeVector MagneticField, G4ThreeVector ElectricField) : G4ElectroMagneticField(){
 	
 	/* General field array stores components of Magnetic field in first three slots,
 	 * Electric field in the last three slots 
 	 * */
-	
-	field[0] = MagneticField.x();
-	field[1] = MagneticField.y();
-	field[2] = MagneticField.z();
-	
-	field[3] = ElectricField.x();
-	field[4] = ElectricField.y();
-	field[5] = ElectricField.z();
+	 
+	this->MagneticField = MagneticField;
+	this->ElectricField = ElectricField;
 	
 }
 
@@ -50,19 +47,20 @@ UniformEMField::~UniformEMField() {
 	
 }
 
-void UniformEMField::ConstructField(string Name) {
+void UniformEMField::GetFieldValue(const G4double Point[4], G4double* EMField) const {
 	
-	if (Name == "World") {
-		G4EqMagElectricField* Equation = new G4EqMagElectricField(field);
-		
-		G4FieldManager* FieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-		FieldMgr->SetFieldChangesEnergy(true);
-		
-		G4MagIntegratorStepper* Stepper = new G4ClassicalRK4(Equation,8);
-		
-		fieldMgr->SetDetectorField(field);
-		
-		G4ChordFinder* ChordFinder = new G4ChordFinder(field, 0.01*mm, Stepper);
-		FieldMgr->SetChordFinder(ChordFinder);
-	}
+	cout << "ELECTRIC FIELD " << this->ElectricField.x() << "\n";
+	cout << "ELECTRIC FIELD " << this->ElectricField.y() << "\n";
+	cout << "ELECTRIC FIELD " << this->ElectricField.z() << "\n";
+
+
+	
+	EMField[0] = this->MagneticField.x();
+	EMField[1] = this->MagneticField.y();
+	EMField[2] = this->MagneticField.z();
+	
+	EMField[3] = this->ElectricField.x();
+	EMField[4] = this->ElectricField.y();
+	EMField[5] = this->ElectricField.z();
+	
 }

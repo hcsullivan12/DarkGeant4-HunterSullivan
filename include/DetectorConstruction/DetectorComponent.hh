@@ -35,12 +35,22 @@ class G4Material;
 #include "G4RotationMatrix.hh"
 #include "G4Transform3D.hh"
 #include "G4ThreeVector.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4EqEMFieldWithSpin.hh"
+#include "G4ClassicalRK4.hh"
+#include "G4MagIntegratorStepper.hh"
+#include "G4ChordFinder.hh"
+#include "G4PropagatorInField.hh"
+#include "G4SystemOfUnits.hh"
+
 
 // C/C++ headers
 #include <vector>
 
 //User Headers
 #include "Material.hh"
+#include "UniformEMField.hh"
 
 enum VolumeType {
 
@@ -288,6 +298,8 @@ class DetectorComponent {
 		
 		virtual void ConstructVolume() {;}
 		virtual bool WithinVolume(G4double x, G4double y, G4double z) {return true;}
+		
+		void SetEMField();
 		
 		void ApplyVisEffects();
 		void SetWireFrame();

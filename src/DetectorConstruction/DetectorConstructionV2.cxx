@@ -25,6 +25,7 @@
 
 // Geant4 Headers
 #include "G4PVPlacement.hh"
+#include "UniformEMField.hh"
 
 using std::cout;
 
@@ -117,7 +118,7 @@ void DetectorConstructionV2::InitializePhysicalVolume() {
                                     this->World->Name,
                                     0, false, 0);
 	
-	InitializeWorldEMField();
+	this->World->SetEMField();
 	
 	for (size_t i = 0; i < this->Components.size();i++) {
 	
@@ -174,11 +175,12 @@ void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
  *            ...
  *
  * */
-
+/*
 void DetectorConstructionV2::InitializeWorldEMField() {
 	
-	UniformEMField *WorldEMfield = new UniformEMField(this->World->MagneticField, this->World->ElectricField);
-	WorldEMfield->ConstructField(this->World->Name);
+	UniformEMField *WorldEMField = new UniformEMField(this->World->MagneticField, this->World->ElectricField);
+	WorldEMField->ConstructField(this->World->Name);
 	
 }
+*/
 
