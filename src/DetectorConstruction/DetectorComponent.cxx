@@ -72,7 +72,15 @@ void DetectorComponent::ApplyVisEffects() {
 
 void DetectorComponent::SetEMField() {
 	
+	cout << "IN SET EM FIELD\n";
+
+	
 	UniformEMField *Field = new UniformEMField(this->MagneticField, this->ElectricField);
+	
+	cout << " FIELD IS: \n";
+	cout << Field->ElectricField.x() << "\n";
+	cout << Field->ElectricField.y() << "\n";
+	cout << Field->ElectricField.z() << "\n";
 
 	if (this->Name == "World") {
 		
@@ -99,6 +107,7 @@ void DetectorComponent::SetEMField() {
 		FieldMgr->SetDeltaIntersection(deltaIntersection);
 
 		G4TransportationManager* TransportManager = G4TransportationManager::GetTransportationManager();
+		TransportManager->SetFieldManager(FieldMgr);
 		G4PropagatorInField* FieldPropagator = TransportManager->GetPropagatorInField();
 
 		G4double epsMin            = 2.5e-7*mm;

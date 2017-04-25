@@ -263,13 +263,9 @@ G4ThreeVector LuaInstance::GetG4ThreeVector(string TableName) {
 			// Pops second table.
 			lua_pop(this->L, 1);
 
-			cout << "Electric field component 1: " << ElectricFieldArray[0] << "\n";
-			cout << "Electric field component 2: " << ElectricFieldArray[1] << "\n";
-			cout << "Electric field component 3: " << ElectricFieldArray[2] << "\n";
-
-			return G4ThreeVector(ElectricFieldArray[0]*volt/m, 
-        	     		ElectricFieldArray[1]*volt/m, 
-        	      	        ElectricFieldArray[2]*volt/m);
+			return G4ThreeVector(ElectricFieldArray[0]*kilovolt/cm, 
+        	     		ElectricFieldArray[1]*kilovolt/cm, 
+        	      	        ElectricFieldArray[2]*kilovolt/cm);
 		} else {
 
 			G4double PositionArray[3] = {0.0, 0.0, 0.0};

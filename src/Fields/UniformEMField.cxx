@@ -49,9 +49,7 @@ UniformEMField::~UniformEMField() {
 
 void UniformEMField::GetFieldValue(const G4double Point[4], G4double* EMField) const {
 	
-	cout << "ELECTRIC FIELD " << this->ElectricField.x() << "\n";
-	cout << "ELECTRIC FIELD " << this->ElectricField.y() << "\n";
-	cout << "ELECTRIC FIELD " << this->ElectricField.z() << "\n";
+	
 
 
 	
