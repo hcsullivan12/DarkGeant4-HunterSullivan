@@ -77,8 +77,8 @@ void DetectorConstructionV2::InitializeWorld() {
 	
 	FindMaterial(this->World);
 	this->World->ConstructVolume();	
-
-	this->World->SetEMField();
+	
+	this->World->SetEMField("World");
                                     
 }
 
@@ -97,7 +97,8 @@ void DetectorConstructionV2::InitializeDetectorComponents() {
 		
 		FindMaterial(this->Components[i]);
 		this->Components[i]->ConstructVolume();
-		this->Components[i]->SetEMField();
+		std::cout << this->Components[i]->Name << std::endl;
+		this->Components[i]->SetEMField(this->Components[i]->Name);
 		this->Components[i]->ApplyVisEffects();
 		
 	}

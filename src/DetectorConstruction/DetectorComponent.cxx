@@ -82,10 +82,20 @@ void DetectorComponent::ApplyVisEffects() {
 	
 }
 
-void DetectorComponent::SetEMField() {
+void DetectorComponent::SetEMField(string Name) {
 	
 	UniformEMField* Field = new UniformEMField(this->MagneticField, this->ElectricField);
-	G4FieldManager* FieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+	G4FieldManager* FieldMgr;
+
+	if (Name == "World") {
+		std::cout << "DOING WORLD!\n";
+		std::cout <<this->Name << std::endl;
+		FieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+	}
+	else {
+		std::cout << "Doing the ELSE!\n";
+		FieldMgr = new G4FieldManager(Field);
+	}
 		
 	if (this->ElectricField.x() != 0 || this->ElectricField.y() != 0 || this->ElectricField.z() != 0) {
 			FieldMgr->SetFieldChangesEnergy(true);

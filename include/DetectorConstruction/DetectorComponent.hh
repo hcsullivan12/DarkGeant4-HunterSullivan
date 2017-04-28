@@ -39,6 +39,8 @@ class G4Material;
 
 // C/C++ headers
 #include <vector>
+#include <string>
+using namespace std;
 
 //User Headers
 #include "Material.hh"
@@ -290,7 +292,7 @@ class DetectorComponent {
 		virtual void ConstructVolume() {;}
 		virtual bool WithinVolume(G4double x, G4double y, G4double z) {return true;}
 		
-		void SetEMField();
+		void SetEMField(string Name);
 		
 		void ApplyVisEffects();
 		void SetWireFrame();
