@@ -51,7 +51,7 @@ Number_Of_Materials = 2
 		
 	
 ]]--
-Material_1 = { G4Name = "G4_Galactic" }
+Material_1 = { G4Name = "G4_AIR" }
 Material_2 = { G4Name = "G4_H" }       
               
 --[[Material_2 = { Name = "Liquid Argon",

@@ -171,15 +171,15 @@ DetectorConfig = { Detector_Name = "Detector",
 
 ]]--
 
-World = { Material = "G4_H",
+World = { Material = "G4_AIR",
           Volume_Type = "Box",
-          half_X = 50.0,
-          half_Y = 50.0,
-          half_Z = 50.0,
+          half_X = 5.0,
+          half_Y = 5.0,
+          half_Z = 5.0,
           Inside = "None",
           Position = {0, 0, 0}, 
 	  Magnetic_Field = {0, 0, 0},
-	  Electric_Field = {10, 0, 0}}
+	  Electric_Field = {100, 0, 0}}
 
 --[[DetectorComponent_1 = { Material = "G4_H",
           Volume_Type = "Cone",

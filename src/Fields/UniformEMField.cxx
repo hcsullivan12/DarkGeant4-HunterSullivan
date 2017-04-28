@@ -21,23 +21,14 @@
  * 
  */
 
-#include "G4ThreeVector.hh"
 #include "UniformEMField.hh"
-#include "G4EqMagElectricField.hh"
-#include "G4ClassicalRK4.hh"
-#include "G4ChordFinder.hh"
-#include "G4FieldManager.hh"
-#include "G4MagIntegratorStepper.hh"
-#include "G4ChordFinder.hh"
-#include "G4TransportationManager.hh"
-#include "G4SystemOfUnits.hh"
 
 UniformEMField::UniformEMField(G4ThreeVector MagneticField, G4ThreeVector ElectricField) : G4ElectroMagneticField(){
 	
 	/* General field array stores components of Magnetic field in first three slots,
 	 * Electric field in the last three slots 
 	 * */
-	 
+
 	this->MagneticField = MagneticField;
 	this->ElectricField = ElectricField;
 	
@@ -48,11 +39,7 @@ UniformEMField::~UniformEMField() {
 }
 
 void UniformEMField::GetFieldValue(const G4double Point[4], G4double* EMField) const {
-	
-	
 
-
-	
 	EMField[0] = this->MagneticField.x();
 	EMField[1] = this->MagneticField.y();
 	EMField[2] = this->MagneticField.z();

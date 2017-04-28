@@ -21,13 +21,13 @@
  * 
  */
 
+//User Headers
 #include "DetectorConstructionV2.hh"
 
 // Geant4 Headers
 #include "G4PVPlacement.hh"
-#include "UniformEMField.hh"
 
-using std::cout;
+using namespace std;
 
 DetectorConstructionV2::DetectorConstructionV2(DetectorComponent *World,
                                vector<DetectorComponent *> Components,
@@ -77,6 +77,8 @@ void DetectorConstructionV2::InitializeWorld() {
 	
 	FindMaterial(this->World);
 	this->World->ConstructVolume();	
+
+	this->World->SetEMField();
                                     
 }
 
@@ -117,8 +119,6 @@ void DetectorConstructionV2::InitializePhysicalVolume() {
                                     this->World->LogicalVolume,
                                     this->World->Name,
                                     0, false, 0);
-	
-	this->World->SetEMField();
 	
 	for (size_t i = 0; i < this->Components.size();i++) {
 	
@@ -165,22 +165,4 @@ void DetectorConstructionV2::FindMaterial(DetectorComponent *Component) {
 	exit(0);
 	
 }
-
-/*
- * InitializeWorldEMField()
- * 
- * * Description 
- *
- *
- *            ...
- *
- * */
-/*
-void DetectorConstructionV2::InitializeWorldEMField() {
-	
-	UniformEMField *WorldEMField = new UniformEMField(this->World->MagneticField, this->World->ElectricField);
-	WorldEMField->ConstructField(this->World->Name);
-	
-}
-*/
 

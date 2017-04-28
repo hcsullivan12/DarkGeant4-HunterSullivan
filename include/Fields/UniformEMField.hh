@@ -25,13 +25,11 @@
 #define UNIFORMEMFIELD_HH
 
 #include "G4ElectroMagneticField.hh"
-#include <string>
-
-using namespace std;
+#include "G4ThreeVector.hh"
 
 class UniformEMField : public G4ElectroMagneticField {
 	
-	/*
+    /*
      * 
      * Class member variables
      * 
@@ -43,7 +41,7 @@ class UniformEMField : public G4ElectroMagneticField {
 		G4ThreeVector ElectricField;
 		
      
-     /*
+    /*
      * 
      * Class member functions
      * 

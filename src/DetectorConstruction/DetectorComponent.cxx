@@ -21,7 +21,19 @@
  * 
  */
 
+//User Headers
 #include "DetectorComponent.hh"
+#include "UniformEMField.hh"
+
+//Geant4 Headers
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4EqEMFieldWithSpin.hh"
+#include "G4ClassicalRK4.hh"
+#include "G4MagIntegratorStepper.hh"
+#include "G4ChordFinder.hh"
+#include "G4PropagatorInField.hh"
+#include "G4SystemOfUnits.hh"
 
 DetectorComponent::DetectorComponent(DetectorComponent_vars vars) 
 {
@@ -72,59 +84,44 @@ void DetectorComponent::ApplyVisEffects() {
 
 void DetectorComponent::SetEMField() {
 	
-	cout << "IN SET EM FIELD\n";
-
-	
-	UniformEMField *Field = new UniformEMField(this->MagneticField, this->ElectricField);
-	
-	cout << " FIELD IS: \n";
-	cout << Field->ElectricField.x() << "\n";
-	cout << Field->ElectricField.y() << "\n";
-	cout << Field->ElectricField.z() << "\n";
-
-	if (this->Name == "World") {
+	UniformEMField* Field = new UniformEMField(this->MagneticField, this->ElectricField);
+	G4FieldManager* FieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 		
-		G4EqEMFieldWithSpin* Equation = new G4EqEMFieldWithSpin(Field);
-		G4FieldManager* FieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-		
-		if (this->ElectricField.x() != 0 || this->ElectricField.y() != 0 || this->ElectricField.z() != 0) {
+	if (this->ElectricField.x() != 0 || this->ElectricField.y() != 0 || this->ElectricField.z() != 0) {
 			FieldMgr->SetFieldChangesEnergy(true);
-		}
-
-		
-
-		G4double minStep = 0.01*mm;
-		G4MagIntegratorStepper* Stepper = new G4ClassicalRK4(Equation,8);
-		
-		G4ChordFinder* ChordFinder = new G4ChordFinder((G4MagneticField*)Field,minStep,Stepper);
-		G4double deltaChord        = 3.0*mm;
-		ChordFinder->SetDeltaChord( deltaChord );
-		
-		G4double deltaOneStep      = 0.01*mm;
-		FieldMgr->SetAccuraciesWithDeltaOneStep(deltaOneStep);
-
-		G4double deltaIntersection = 0.1*mm;
-		FieldMgr->SetDeltaIntersection(deltaIntersection);
-
-		G4TransportationManager* TransportManager = G4TransportationManager::GetTransportationManager();
-		TransportManager->SetFieldManager(FieldMgr);
-		G4PropagatorInField* FieldPropagator = TransportManager->GetPropagatorInField();
-
-		G4double epsMin            = 2.5e-7*mm;
-		G4double epsMax            = 0.05*mm;
-
-		FieldPropagator->SetMinimumEpsilonStep(epsMin);
-		FieldPropagator->SetMaximumEpsilonStep(epsMax);
-
-		FieldMgr->SetChordFinder(ChordFinder);
-		FieldMgr->SetDetectorField(Field);
 	}
-	else {
 		
+	//Set Field (allLocal pushes field to daughter volumes)
+	G4bool allLocal = true;
+	this->LogicalVolume->SetFieldManager(FieldMgr, allLocal);
+	FieldMgr->SetDetectorField(Field);
+	G4double FieldValue[6];
+	G4double Point[4];
+	Point[0] = 0.0;
+	Point[2] = 0.0;
+	Point[3] = 0.0;		
+	this->LogicalVolume->GetFieldManager()->GetDetectorField()->GetFieldValue(Point, FieldValue);
 		
-		
-	}
-	
+	//Parameter setting for accuracy
+	G4EqEMFieldWithSpin* Equation = new G4EqEMFieldWithSpin(Field);
+	G4double minStep = 0.01*mm;
+	G4MagIntegratorStepper* Stepper = new G4ClassicalRK4(Equation,12);
+	G4ChordFinder* ChordFinder = new G4ChordFinder((G4MagneticField*)Field,minStep,Stepper);
+	G4double deltaChord        = 3.0*mm;
+	ChordFinder->SetDeltaChord( deltaChord );
+	G4double deltaOneStep      = 0.01*mm;
+	FieldMgr->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+	G4double deltaIntersection = 0.1*mm;
+	FieldMgr->SetDeltaIntersection(deltaIntersection);
+	G4TransportationManager* TransportManager = G4TransportationManager::GetTransportationManager();
+	TransportManager->SetFieldManager(FieldMgr);
+	G4PropagatorInField* FieldPropagator = TransportManager->GetPropagatorInField();
+	G4double epsMin            = 2.5e-7*mm;
+	G4double epsMax            = 0.05*mm;
+	FieldPropagator->SetMinimumEpsilonStep(epsMin);
+	FieldPropagator->SetMaximumEpsilonStep(epsMax);
+	FieldMgr->SetChordFinder(ChordFinder);	
+
 }
 
 DetectorComponent::~DetectorComponent() {
