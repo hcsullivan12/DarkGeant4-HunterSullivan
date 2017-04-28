@@ -13,7 +13,7 @@
 
 ]]--
 DetectorConfig = { Detector_Name = "Detector",
-                  Number_of_Detector_Components = 0 }
+                  Number_of_Detector_Components = 1 }
 
 
 -- **** Please note that units of length are in metres!                  
@@ -159,6 +159,10 @@ DetectorConfig = { Detector_Name = "Detector",
 	* Magnetic_Field
 		
 		Sets up a uniform magnetic field. Must be specified as a vector in tesla. Default is zero field.
+
+	*Electric_Field
+
+		Sets up a uniform electric field. Must be specified as a vector in kilovolt/cm. Default is zero field.
 	
 	* Inside
 	
@@ -173,25 +177,22 @@ DetectorConfig = { Detector_Name = "Detector",
 
 World = { Material = "G4_AIR",
           Volume_Type = "Box",
-          half_X = 5.0,
-          half_Y = 5.0,
-          half_Z = 5.0,
+          half_X = 20.0,
+          half_Y = 20.0,
+          half_Z = 20.0,
           Inside = "None",
           Position = {0, 0, 0}, 
 	  Magnetic_Field = {0, 0, 0},
-	  Electric_Field = {100, 0, 0}}
+	  Electric_Field = {0, 0, 0}}
 
---[[DetectorComponent_1 = { Material = "G4_H",
-          Volume_Type = "Cone",
-          Inner_Radius_At_Bottom = 0,
-	  Outside_Radius_At_Bottom = 5,
-	  Inner_Radius_At_Top = 0,
-	  Outside_Radius_At_Top = 5,
-	  Half_Length = 5,
-	  Start_Angle = 0,
-	  Delta_Angle = 360,
-	  Inside = "World",
-	  Position = {0,5,10},
-          Magnetic_Field = {0.3,0,0} }--]]
+DetectorComponent_1 = { Material = "G4_AIR",
+          Volume_Type = "Box",
+          half_X = 2.0,
+          half_Y = 2.0,
+          half_Z = 2.0,
+          Inside = "World",
+          Position = {0, 0, 5}, 
+	  Magnetic_Field = {0, 0, 0},
+	  Electric_Field = {0, 0, 0}}
 
 

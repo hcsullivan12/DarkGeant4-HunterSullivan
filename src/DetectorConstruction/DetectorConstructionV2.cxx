@@ -97,6 +97,7 @@ void DetectorConstructionV2::InitializeDetectorComponents() {
 		
 		FindMaterial(this->Components[i]);
 		this->Components[i]->ConstructVolume();
+		this->Components[i]->SetEMField();
 		this->Components[i]->ApplyVisEffects();
 		
 	}
