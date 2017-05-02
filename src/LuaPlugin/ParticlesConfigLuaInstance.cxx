@@ -281,7 +281,7 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 			 * */
 			cout << "LUA_TTABLE switch\n";
 			lua_pop(this->L, 1);
-			G4ThreeVector Position = GetG4ThreeVector("Particles_Position",m);
+			G4ThreeVector Position = GetG4ThreeVector("Particles_Position", 1.0);
 		
 			for (int i = 0;i < this->NumberOfEvents;i++) {
 				
