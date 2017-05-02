@@ -26,6 +26,8 @@
 #include <cstdlib>
 #include <ctime>
 
+#include "G4SystemOfUnits.hh"
+
 ParticlesConfigLua::ParticlesConfigLua(string ModulePath) 
  : LuaInstance(ModulePath, "Particles.lua")
 {
@@ -504,7 +506,7 @@ void ParticlesConfigLua::SetPrimariesByFunction() {
 
 void ParticlesConfigLua::SetMomentumByTable() {
 	
-	G4ThreeVector Momentum = GetG4ThreeVector("Momentum_Direction", m);
+	G4ThreeVector Momentum = GetG4ThreeVector("Momentum_Direction", 1.0);
 	
 	for (int i = 0;i < this->NumberOfEvents;i++) {
 	
