@@ -174,18 +174,18 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
                                                 "Wireframe is false",
                                                 false);
                              
-	vars.Position = GetG4ThreeVector("Position");
+	vars.Position = GetG4ThreeVector("Position", m);
 	
 	
 	try {
 		
-		vars.colour = GetG4ThreeVector("colour");
+		vars.colour = GetG4ThreeVector("colour", 1);
 		
 	} catch (string e) {
 		
 		try {
 		
-			vars.colour = GetG4ThreeVector("color");
+			vars.colour = GetG4ThreeVector("color", 1);
 			
 		} catch (string e) {
 		
