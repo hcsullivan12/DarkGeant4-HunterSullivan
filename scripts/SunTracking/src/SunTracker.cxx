@@ -59,15 +59,36 @@ SunTracker::~SunTracker(){
 
 void SunTracker::Track(){
 	
+	UserInput();
 	
-	///USER INPUT
+	FILE* File;
+	File = fopen("SunTracking.dat", "w");
+	if (File == NULL) {
+		printf("Was not able to open SunTracking.dat\n");
+		exit(1);
+	}
+	
+	cout << "Printing to File.\n\n";
+	
+	Calculations(File);
+	
+	fclose(File);
+}
+
+/* 
+ * UserInput() 
+ * 
+ *        
+ * 
+ * */
+
+void SunTracker::UserInput() {
 	
 	cout << "\n**************************************************\n";
 	cout << "             WELCOME TO SUNTRACKER\n";
 	cout << "**************************************************\n";
 	
 	cout << "\nNumber of days to track the sun:  ";
-	int NumberOfDays;
 	cin >> NumberOfDays;
 	
 	if (NumberOfDays <= 0) {
@@ -94,14 +115,21 @@ void SunTracker::Track(){
 		exit(1);
 	}
 	
-	cout << "\nEnter the observation latitude:  ";
+	cout << "\nEnter the observation latitude (degrees):  ";
 	cin >> latitude;
 	if (latitude > 90 || latitude <= -90) {
 		cout << "\nError. Invalid latitude. Aborting.\n";
 		exit(1);
-	}///degrees
+	}
 	
-	cout << "What is the angle between detector's +z-axis and North: ";
+	cout << "Enter the observation longitude (degrees, negative for W, positive for E):  ";
+	cin >> longitude;
+	if (abs(longitude) > 180) {
+		cout << "\nError. Invalid longitude. Aborting.\n";
+		exit(1);
+	}
+	
+	cout << "\nWhat is the angle between detector's +z-axis and North: ";
 	cin >> beta;
 	
 	cout << "\n**************************************************\n";
@@ -113,10 +141,16 @@ void SunTracker::Track(){
 		cout << "\nCalling Tracker for " << NumberOfDays << " days starting at " << year << "-" << month << "-" << day << " for " << latitude << " degrees latitude\n";
 	}
 	
-	cout << "Printing to File.\n\n";
-	
-	
-	///CALCULATIONS
+}
+
+/* 
+ * Calculations() 
+ * 
+ *        
+ * 
+ * */
+
+void SunTracker::Calculations(FILE* File) {
 	 
 	///Julian Date for Start Date
 	JulianDayCalculator JDCalc(year, month, day); 
@@ -125,22 +159,15 @@ void SunTracker::Track(){
 	//cout << "Julian Date is: " << JD << endl;
 	
 	int CurrentDay = 1;
-	FILE* File;
-	File = fopen("SunTracking.dat", "w");
-	if (File == NULL) {
-		printf("Was not able to open SunTracking.dat\n");
-		exit(1);
-	}
-	
 	while (CurrentDay <= NumberOfDays) {
 		
-		Calculate();
+		CalculateRA();
 		PrintTrack(CurrentDay, File);
 		
 		CurrentDay = CurrentDay + 1;
 		JD = JD + 1;
 	} 
-	fclose(File);
+	
 }
 
 /* 
@@ -169,7 +196,7 @@ void SunTracker::CheckRange(double *value) {
  * 
  * */
 
-void SunTracker::Calculate() {
+void SunTracker::CalculateRA() {
 	
 	
 	///Eccentric Anomaly

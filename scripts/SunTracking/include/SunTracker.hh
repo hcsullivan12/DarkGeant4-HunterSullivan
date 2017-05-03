@@ -36,7 +36,9 @@ class SunTracker {
 		int year;
 		int month;
 		int day;
+		int NumberOfDays;
 		double latitude;
+		double longitude;
 		double beta; /// angle between +z-axis of detector and North
 		double JD;
 		double T;
@@ -64,8 +66,10 @@ class SunTracker {
 		~SunTracker();
 		
 		void Track();
+		void UserInput();
+		void Calculations(FILE* File);
 		void CheckRange(double* );
-		void Calculate();
+		void CalculateRA();
 		void PrintTrack(int , FILE* );
 	
 };
