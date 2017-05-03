@@ -26,6 +26,8 @@
 #include <cstdlib>
 #include <ctime>
 
+#include "G4SystemOfUnits.hh"
+
 ParticlesConfigLua::ParticlesConfigLua(string ModulePath) 
  : LuaInstance(ModulePath, "Particles.lua")
 {
@@ -279,7 +281,11 @@ void ParticlesConfigLua::Parse_ParticlePosition() {
 			 * */
 			cout << "LUA_TTABLE switch\n";
 			lua_pop(this->L, 1);
-			G4ThreeVector Position = GetG4ThreeVector("Particles_Position");
+			
+			// Normally I would pass the 'm' constant defined by the G4SystemOfUnits, but
+			// that results in a bug. So instead I simply just multiply the thing by 1.0,
+			// effectively resulting in no conversion.
+			G4ThreeVector Position = GetG4ThreeVector("Particles_Position", 1.0);
 		
 			for (int i = 0;i < this->NumberOfEvents;i++) {
 				
@@ -504,7 +510,7 @@ void ParticlesConfigLua::SetPrimariesByFunction() {
 
 void ParticlesConfigLua::SetMomentumByTable() {
 	
-	G4ThreeVector Momentum = GetG4ThreeVector("Momentum_Direction");
+	G4ThreeVector Momentum = GetG4ThreeVector("Momentum_Direction", 1.0);
 	
 	for (int i = 0;i < this->NumberOfEvents;i++) {
 	

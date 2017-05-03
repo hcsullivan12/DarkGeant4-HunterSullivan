@@ -225,7 +225,7 @@ class LuaInstance {
 		
 		bool IsGlobalNil(string var);
 		bool IsTableElementNil(string var);
-		G4ThreeVector GetG4ThreeVector(string TableName);
+		G4ThreeVector GetG4ThreeVector(string TableName, double units);
 	
 	private:
 	

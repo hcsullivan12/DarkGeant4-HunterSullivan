@@ -174,7 +174,7 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
                                                 "Wireframe is false",
                                                 false);
                              
-	vars.Position = GetG4ThreeVector("Position");
+	vars.Position = GetG4ThreeVector("Position", 1.0);
 
 	/*
 	 * Look for magnetic field. If it's not specified, throw an exception.
@@ -184,7 +184,7 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
 
 	try {
 
-		vars.MagneticField = GetG4ThreeVector("Magnetic_Field");	
+		vars.MagneticField = GetG4ThreeVector("Magnetic_Field", tesla);	
 
 	} catch(string e) {
 
@@ -204,7 +204,7 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
 
 	try {
 
-		vars.ElectricField = GetG4ThreeVector("Electric_Field");	
+		vars.ElectricField = GetG4ThreeVector("Electric_Field", kilovolt/cm);	
 
 	} catch(string e) {
 
@@ -218,13 +218,13 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
 	
 	try {
 		
-		vars.colour = GetG4ThreeVector("colour");
+		vars.colour = GetG4ThreeVector("colour", 1.0);
 		
 	} catch (string e) {
 		
 		try {
 		
-			vars.colour = GetG4ThreeVector("color");
+			vars.colour = GetG4ThreeVector("color", 1.0);
 			
 		} catch (string e) {
 		
