@@ -26,23 +26,61 @@
 #include <math.h>
 #include <cmath>
 
-CoordinateCalculator::CoordinateCalculator(double Altitude, double Azimuth) {
+CoordinateCalculator::CoordinateCalculator(double Altitude, double Azimuth, double beta) {
 	
 	this->Altitude = Altitude;
 	this->Azimuth = Azimuth;
+	this->beta = beta;
 	
 }
 
 CoordinateCalculator::~CoordinateCalculator(){
 }
 
+/* 
+ * Calculate() 
+ * 
+ *       Translates the altitude and azimuth angles to cartestian coordinates and rotates to detector's coordinates
+ *       Coordinate system: 
+ *                 z-axis --> Along longitudinal axis of detector
+ *                 y-axis --> Towards zenith
+ * 
+ * */
+
 void CoordinateCalculator::Calculate() {
+	///Initial: y axis points North, x axis points East
+	theta = 90 - Altitude;
+	phi = 90 - Azimuth;   
+	double Xnot = -sin(theta*(3.14159265359/180))*cos(phi*(3.14159265359/180)); 
+	double Ynot = -sin(theta*(3.14159265359/180))*sin(phi*(3.14159265359/180));
+	double Znot = -cos(theta*(3.14159265359/180));
 	
-	theta = (3.14159265359/2) - altitude;
-	phi = (3.14159265359/2) - azimuth;   ///y axis points North, x axis points East
+	///Rotate: x->North, z->E, y->zenith 
+	double Xprime = Ynot;
+	double Yprime = Znot;
+	double Zprime = Xnot;
 	
-	dir_x = -cos(Altitude)*sin(Azimuth);
-	dir_y = -cos(Altitude)*cos(Azimuth);
-	dir_z = -sin(Altitude);
+	///Rotate: z->logitudinal axis of detector
+	Z = Zprime*cos((90-beta)*(3.14159265359/180)) + Xprime*sin((90-beta)*(3.14159265359/180));
+	X = -Zprime*sin((90-beta)*(3.14159265359/180)) + Xprime*cos((90-beta)*(3.14159265359/180));
+	Y = Yprime;
 	
+}
+
+/* 
+ * GetjComponent() 
+ * 
+ * 
+ * */
+
+double CoordinateCalculator::GetXComponent() {
+	return X;
+}
+
+double CoordinateCalculator::GetYComponent() {
+	return Y;
+}
+
+double CoordinateCalculator::GetZComponent() {
+	return Z;
 }

@@ -101,7 +101,11 @@ void SunTracker::Track(){
 		exit(1);
 	}///degrees
 	
+	cout << "What is the angle between detector's +z-axis and North: ";
+	cin >> beta;
+	
 	cout << "\n**************************************************\n";
+	
 	if (NumberOfDays == 1){
 		cout << "\nCalling Tracker for " << NumberOfDays << " day starting at " << year << "-" << month << "-" << day << " for " << latitude << " degrees latitude\n";
 	}
@@ -212,13 +216,14 @@ void SunTracker::PrintTrack(int CurrentDay, FILE* File) {
 	
 	///Print out Altitudes and Azimuths for Sun at given latitude
 	if (CurrentDay == 1) {
-		fprintf(File, "Altitude (degrees)\tAzimuth (degrees E of N)\n");
+		fprintf(File, "Altitude (degrees)\tAzimuth (degrees E of N)\t");
+		fprintf(File, "Momentum unit vector\n");
 	}
 	
 	double h = 0;         ///Doesn't necessarily start at midnight
 	H = 0;
 	
-	while (h <= 24) {
+	while (h < 24) {
 		H = h - RA;
 		if (RA < 0) {
 			H = H + 24;
@@ -228,10 +233,13 @@ void SunTracker::PrintTrack(int CurrentDay, FILE* File) {
 		HorizonCalculator HorCalc(DEC, H, latitude);
 		HorCalc.Calculate();
 		
-		CoordinateCalculator CoordCalc(HorCalc.GetAltitude(), HorCalc.GetAzimuth());
+		CoordinateCalculator CoordCalc(HorCalc.GetAltitude(), HorCalc.GetAzimuth(), beta);
 		CoordCalc.Calculate();
 		
-		fprintf(File, "%7.2f \t\t %7.2f\n", HorCalc.GetAltitude(), HorCalc.GetAzimuth());
+		fprintf(File, "%7.2f \t\t %7.2f\t\t        ", HorCalc.GetAltitude(), HorCalc.GetAzimuth());
+		fprintf(File, "{%5.2f,", CoordCalc.GetXComponent());
+		fprintf(File, "%5.2f,", CoordCalc.GetYComponent());
+		fprintf(File, "%5.2f}\n", CoordCalc.GetZComponent());
 		
 		h = h + 0.5;
 	}

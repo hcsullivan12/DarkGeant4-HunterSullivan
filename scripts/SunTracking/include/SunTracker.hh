@@ -37,6 +37,7 @@ class SunTracker {
 		int month;
 		int day;
 		double latitude;
+		double beta; /// angle between +z-axis of detector and North
 		double JD;
 		double T;
 		double epsilon;

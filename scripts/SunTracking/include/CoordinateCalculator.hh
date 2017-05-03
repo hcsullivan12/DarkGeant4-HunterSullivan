@@ -35,12 +35,13 @@ class CoordinateCalculator {
      
      public:
      
-       CoordinateCalculator(double Altitude, double Azimuth);
+       CoordinateCalculator(double Altitude, double Azimuth, double beta);
        ~CoordinateCalculator();
        void Calculate();
-       void Rotate();
-
-
+       double GetXComponent();
+       double GetYComponent();
+       double GetZComponent();
+       
     /*
      * 
      * Class member variables
@@ -52,9 +53,9 @@ class CoordinateCalculator {
         double Azimuth;
         double theta;
         double phi;
-        double dir_x;
-        double dir_y;
-        double dir_z;
+        double X;
+        double Y;
+        double Z;
         double beta; ///angle between North and beam line direction (z axis)
      
 };
