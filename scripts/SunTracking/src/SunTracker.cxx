@@ -155,14 +155,13 @@ void SunTracker::Calculations(FILE* File) {
 	///Julian Date for Start Date
 	JulianDayCalculator JDCalc(year, month, day); 
 	JDCalc.Calculate();
-	JD = JDCalc.GetJD();
+	JD = JDCalc.GetJD() - 0.5; ///Midnight for Greenwich time
 	//cout << "Julian Date is: " << JD << endl;
 	
 	int CurrentDay = 1;
 	while (CurrentDay <= NumberOfDays) {
 		
-		CalculateRA();
-		PrintTrack(CurrentDay, File);
+		PrintDayTrack(CurrentDay, File);
 		
 		CurrentDay = CurrentDay + 1;
 		JD = JD + 1;
@@ -239,7 +238,7 @@ void SunTracker::CalculateRA() {
  * 
  * */
  
-void SunTracker::PrintTrack(int CurrentDay, FILE* File) {
+void SunTracker::PrintDayTrack(int CurrentDay, FILE* File) {
 	
 	///Print out Altitudes and Azimuths for Sun at given latitude
 	if (CurrentDay == 1) {
@@ -247,12 +246,25 @@ void SunTracker::PrintTrack(int CurrentDay, FILE* File) {
 		fprintf(File, "Momentum unit vector\n");
 	}
 	
+	UT = 0;
+	ConvertToGST();
+	LST = (longitude/15) + GST;
+	
+	while (LST > 24) {
+		LST = LST - 24;
+	}
+	
+	while (LST < 0) {
+		LST = LST + 24;
+	}
+	
 	double h = 0;         ///Doesn't necessarily start at midnight
-	H = 0;
 	
 	while (h < 24) {
-		H = h - RA;
-		if (RA < 0) {
+		
+		CalculateRA();
+		H = LST + h - RA;
+		if (H < 0) {
 			H = H + 24;
 		}
 		H = H*15; ///degrees
@@ -269,5 +281,31 @@ void SunTracker::PrintTrack(int CurrentDay, FILE* File) {
 		fprintf(File, "%5.2f}\n", CoordCalc.GetZComponent());
 		
 		h = h + 0.5;
+		JD = JD + (0.5/24);
+	}
+}
+
+void SunTracker::ConvertToGST() {
+	
+	double S = JD - 2451545;
+	double T = S/36525;
+	double TO = 6.697374558 + (2400.051336*T) + (0.000025862*T*T);
+	
+	while (TO > 24) {
+		TO = TO - 24;
+	}
+	
+	while (TO < 0) {
+		TO = TO + 24;
+	}
+	
+	GST = (UT*1.002737909) + TO;
+	
+	while (GST > 24) {
+		GST = GST - 24;
+	}
+	
+	while (GST < 0) {
+		GST = GST + 24; 
 	}
 }

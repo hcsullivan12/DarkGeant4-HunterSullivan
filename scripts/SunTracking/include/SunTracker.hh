@@ -53,6 +53,9 @@ class SunTracker {
 		double RA;
 		double DEC;
 		double H;
+		double UT;
+		double GST;
+		double LST;
      
      /*
      * 
@@ -70,7 +73,8 @@ class SunTracker {
 		void Calculations(FILE* File);
 		void CheckRange(double* );
 		void CalculateRA();
-		void PrintTrack(int , FILE* );
+		void PrintDayTrack(int , FILE* );
+		void ConvertToGST();
 	
 };
 

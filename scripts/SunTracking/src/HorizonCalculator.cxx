@@ -38,6 +38,13 @@ HorizonCalculator::HorizonCalculator(double DEC, double H, double latitude){
 HorizonCalculator::~HorizonCalculator() {
 }
 
+/* 
+ * Calculate() 
+ * 
+ *       Prints to SunTracking.dat   
+ * 
+ * */
+
 void HorizonCalculator::Calculate() {
 	
 	double sinAlt = sin(DEC*(3.14159265359/180))*sin(latitude*(3.14159265359/180)) + cos(DEC*(3.14159265359/180))*cos(latitude*(3.14159265359/180))*cos(H*(3.14159265359/180));
@@ -56,9 +63,23 @@ void HorizonCalculator::Calculate() {
 	
 }
 
+/* 
+ * GetAltitude() 
+ * 
+ *       Prints to SunTracking.dat   
+ * 
+ * */
+
 double HorizonCalculator::GetAltitude() {
 	return altitude;
 }
+
+/* 
+ * GetAzimuth() 
+ * 
+ *       Prints to SunTracking.dat   
+ * 
+ * */
 
 double HorizonCalculator::GetAzimuth() {
 	return azimuth;
