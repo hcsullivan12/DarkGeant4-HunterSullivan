@@ -160,11 +160,8 @@ void SunTracker::Calculations(FILE* File) {
 	
 	int CurrentDay = 1;
 	while (CurrentDay <= NumberOfDays) {
-		
 		PrintDayTrack(CurrentDay, File);
-		
 		CurrentDay = CurrentDay + 1;
-		JD = JD + 1;
 	} 
 	
 }
