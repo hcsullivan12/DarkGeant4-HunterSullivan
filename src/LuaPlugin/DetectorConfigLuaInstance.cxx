@@ -174,7 +174,7 @@ DetectorComponent_vars DetectorConfigLuaInstance::SetSharedAttributes(string Det
                                                 "Wireframe is false",
                                                 false);
                              
-	vars.Position = GetG4ThreeVector("Position", 1.0);
+	vars.Position = GetG4ThreeVector("Position", m);
 
 	/*
 	 * Look for magnetic field. If it's not specified, throw an exception.

@@ -88,17 +88,14 @@ void DetectorComponent::SetEMField(string Name) {
 	G4FieldManager* FieldMgr;
 
 	if (Name == "World") {
-		std::cout << "DOING WORLD!\n";
-		std::cout <<this->Name << std::endl;
 		FieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 	}
 	else {
-		std::cout << "Doing the ELSE!\n";
 		FieldMgr = new G4FieldManager(Field);
 	}
 		
 	if (this->ElectricField.x() != 0 || this->ElectricField.y() != 0 || this->ElectricField.z() != 0) {
-			FieldMgr->SetFieldChangesEnergy(true);
+		FieldMgr->SetFieldChangesEnergy(true);
 	}
 		
 	//Set Field (allLocal pushes field to daughter volumes)
