@@ -59,8 +59,8 @@ function BoxMullerTransform()
 end
 
 Particle_Table = { Primary_Particles = "proton",
-                   Particles_Position = {0,0,0},
+                   Particles_Position = {1.5,0,-2.1},
 	           Momentum_Direction = {0.0, 0.0, 1.0},
-                   Energy = 4,
-                   Number_Of_Events = 20 } 
+                   Energy = 1,
+                   Number_Of_Events = 100 } 
 
