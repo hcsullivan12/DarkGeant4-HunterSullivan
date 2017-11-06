@@ -145,7 +145,7 @@ void SteppingAction::SaveFormat() {
 	fprintf(this->fp,"%25s","dE(MeV)");
 	fprintf(this->fp,"%25s","StepLeng");
 	fprintf(this->fp,"%25s","TrackLeng");
-	fprintf(this->fp,"%20s","NextVolume");
+	fprintf(this->fp,"%25s","NextVolume");
 	fprintf(this->fp,"%20s","ProcName\n");
 	
 }
@@ -183,7 +183,7 @@ void SteppingAction::Save0StepData(const G4Step *Step) {
 	fprintf(this->fp,"%25s","0.000000000000000");
 	fprintf(this->fp,"%25s","0.000000000000000");
 	fprintf(this->fp,"%25s","0.000000000000000");
-	fprintf(this->fp,"%20s","Detector");      
+	fprintf(this->fp,"%25s","Detector");      
 	fprintf(this->fp,"%20s","InitStep\n");
 }
 
@@ -215,9 +215,9 @@ void SteppingAction::SaveStepData(const G4Step *Step, G4Track *Track) {
 	 * */
 	
 	if (Track->GetNextVolume())
-		fprintf(this->fp,"%20s", Track->GetNextVolume()->GetName().c_str());
+		fprintf(this->fp,"%25s", Track->GetNextVolume()->GetName().c_str());
 	else
-		fprintf(this->fp,"%20s","OutOfWorld");
+		fprintf(this->fp,"%25s","OutOfWorld");
 	
 	/*
 	 * If the process is defined, i.e GetPorcessDefinedStep != 0,
